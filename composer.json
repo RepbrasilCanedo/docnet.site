@@ -1,0 +1,20 @@
+{
+    "description": "Projeto DOCNET Daniel Canedo",
+    "authors": [{
+        "name": "Daniel Canedo",
+        "email": "docan2006@gmail.com"
+    }],
+    "autoload": {
+        "psr-4": {
+            "Core\\": "core",
+            "App\\": "app",
+            "Adms\\": "app/adms",
+            "Cpms\\": "app/cpms"
+        }
+    },
+    "require": {
+        "phpmailer/phpmailer": "^6.6",       
+        "dompdf/dompdf": "^0.7.0",
+        "fpdf/fpdf": "^1.8"
+    }
+}
