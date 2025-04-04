@@ -29,11 +29,9 @@
                 <a href="<?php echo URLADM; ?>edit-profile/index" class="item">
                     <span class="fa-solid fa-gear"></span> Configuração
                 </a>
-                <!--
                 <a href="<?php echo URLADM; ?>logout/index" class="item">
                     <span class="fa-solid fa-arrow-right-from-bracket"></span> Sair
                 </a>
-                 -->
             </div>
         </div>
     </div>
