@@ -11,7 +11,6 @@
         <div class="top-list-right">
                 <?php echo "<a href='" . URLADM . "add-cham/index' class='btn-success'>Abrir Tiket</a>";?>
                 <?php echo "<a href='" . URLADM . "add-cham-agend/index' class='btn-warning'>Agendar Tiket</a>";?>
-                <?php echo "<a href='https://www.youtube.com/@repbrasil/videos'class='btn-primary'>Ajuda</a>";?>
         </div>
         <div class="p-3"><?php if (!empty($_SESSION['user_nickname'])){echo $_SESSION['user_nickname'];}else{echo 'Apelido';} ?></div>
 
@@ -29,9 +28,6 @@
                 </a>
                 <a href="<?php echo URLADM; ?>edit-profile/index" class="item">
                     <span class="fa-solid fa-gear"></span> Configuração
-                </a>
-                <a href="https://www.youtube.com/@repbrasil/videos" class="item">
-                    <span class="fa-solid fa-handshake-angle"></span> Ajuda 
                 </a>
                 <a href="<?php echo URLADM; ?>logout/index" class="item">
                     <span class="fa-solid fa-arrow-right-from-bracket"></span> Sair

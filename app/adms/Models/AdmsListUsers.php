@@ -86,10 +86,9 @@ class AdmsListUsers
             $this->resultPg = $pagination->getResult();
 
             $listUsers = new \App\adms\Models\helper\AdmsRead();
-            $listUsers->fullRead("SELECT usr.id, usr.name AS name_usr, usr.email, usr.tel_1, cont.num_cont AS num_cont, emp.razao_social razao_social_emp, usr.adms_sits_user_id, usr.empresa_id,
+            $listUsers->fullRead("SELECT usr.id, usr.name AS name_usr, usr.email, usr.tel_1, emp.razao_social razao_social_emp, usr.adms_sits_user_id, usr.empresa_id,
                         sit.name AS name_sit, col.color FROM adms_users AS usr
                         INNER JOIN adms_emp_principal AS emp ON emp.id=usr.empresa_id
-                        INNER JOIN adms_contr AS cont ON cont.id=usr.contr_id  
                         INNER JOIN adms_sits_users AS sit ON sit.id=usr.adms_sits_user_id
                         INNER JOIN adms_colors AS col ON col.id=sit.adms_color_id
                         INNER JOIN adms_access_levels AS lev ON lev.id=usr.adms_access_level_id 
@@ -113,10 +112,9 @@ class AdmsListUsers
             $this->resultPg = $pagination->getResult();
 
             $listUsers = new \App\adms\Models\helper\AdmsRead();
-            $listUsers->fullRead("SELECT usr.id, usr.name AS name_usr, usr.email, usr.tel_1, cont.num_cont AS num_cont, emp.razao_social razao_social_emp, usr.adms_sits_user_id, usr.empresa_id,
+            $listUsers->fullRead("SELECT usr.id, usr.name AS name_usr, usr.email, usr.tel_1, emp.razao_social razao_social_emp, usr.adms_sits_user_id, usr.empresa_id,
                         sit.name AS name_sit, col.color FROM adms_users AS usr
                         INNER JOIN adms_emp_principal AS emp ON emp.id=usr.empresa_id
-                        INNER JOIN adms_contr AS cont ON cont.id=usr.contr_id  
                         INNER JOIN adms_sits_users AS sit ON sit.id=usr.adms_sits_user_id
                         INNER JOIN adms_colors AS col ON col.id=sit.adms_color_id
                         INNER JOIN adms_access_levels AS lev ON lev.id=usr.adms_access_level_id 
