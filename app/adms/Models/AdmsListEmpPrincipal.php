@@ -91,10 +91,9 @@ class AdmsListEmpPrincipal
 
             $listEmpresas = new \App\adms\Models\helper\AdmsRead();
             $listEmpresas->fullRead("SELECT emp.id, emp.razao_social, emp.nome_fantasia, emp.cnpj, emp.cep, emp.logradouro, emp.bairro, 
-                            emp.cidade, emp.uf, emp.contato, emp.telefone, emp.email, sit.name as name_sit, cont.num_cont as contrato
+                            emp.cidade, emp.uf, emp.contato, emp.telefone, emp.email, sit.name as name_sit
                             FROM adms_emp_principal as emp
                             INNER JOIN adms_sits_empr_unid AS sit ON sit.id=emp.situacao 
-                            INNER JOIN adms_contr AS cont ON cont.id=emp.contrato
                             LIMIT :limit OFFSET :offset", "limit={$this->limitResult}&offset={$pagination->getOffset()}");
 
             $this->resultBd = $listEmpresas->getResult();
