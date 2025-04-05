@@ -14,7 +14,7 @@ if (isset($this->data['form'])) {
 <div class="wrapper">
     <div class="row">
         <div class="top-list">
-            <span class="title-content">Listar Usuários</span>
+            <span class="title-content">Listar Colaboradores(as)</span>
             <div class="top-list-right">
                 <?php
                 if ($this->data['button']['add_users']) {

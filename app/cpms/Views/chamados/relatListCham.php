@@ -9,7 +9,7 @@ if (isset($this->data['form'])) {
     $valorForm = $this->data['form'];
 }
 
-//echo('<pre>');var_dump($_SESSION['status_chamado']);echo('</pre>');
+//echo('<pre>');var_dump($_SESSION['status_Ticket']);echo('</pre>');
 ?>
 
 
@@ -17,7 +17,7 @@ if (isset($this->data['form'])) {
 <div class="wrapper">
     <div class="row">
         <div class="top-list">
-            <span class="title-content">Relatório de Chamados</span><br>
+            <span class="title-content">Relatório de Tickets</span><br>
         </div>
 
         <div class="top-list">
@@ -29,7 +29,7 @@ if (isset($this->data['form'])) {
                         <?php if ($_SESSION['adms_access_level_id'] == 14) { ?>
                             
                             <div class="column">
-                                <label class="title-input">Status do Chamado:</label>
+                                <label class="title-input">Status do Ticket:</label>
                                 <select name="search_status" id="search_status" class="input-adm">
                                     <option value="">Todos</option>
                                     <?php
@@ -46,7 +46,7 @@ if (isset($this->data['form'])) {
                             </div>
 
                             <div class="column">
-                                <label class="title-input">Tipo do Chamado:</label>
+                                <label class="title-input">Tipo do Ticket:</label>
                                 <select name="search_tipo" id="search_tipo" class="input-adm">
                                     <option value="">Todos</option>
                                     <option value="Telefonico">Telefônico</option>
@@ -99,7 +99,7 @@ if (isset($this->data['form'])) {
                             </div>
 
                             <div class="column">
-                                <label class="title-input">Status do Chamado:</label>
+                                <label class="title-input">Status do Ticket:</label>
                                 <select name="search_status" id="search_status" class="input-adm">
                                     <option value="">Todos</option>
                                     <?php
@@ -116,7 +116,7 @@ if (isset($this->data['form'])) {
                             </div>
 
                             <div class="column">
-                                <label class="title-input">Tipo do Chamado:</label>
+                                <label class="title-input">Tipo do Ticket:</label>
                                 <select name="search_tipo" id="search_tipo" class="input-adm">
                                     <option value="">Todos</option>
                                     <option value="Telefonico">Telefônico</option>
@@ -149,7 +149,7 @@ if (isset($this->data['form'])) {
                             </div>
                             
                             <div class="column">
-                            <label class="title-input">Técnico do Suporte:</label>
+                            <label class="title-input">Colaborador(a):</label>
                             <select name="search_tec_suporte" id="search_tec_suporte" class="input-emp" style="width: 100%">
                                 <option value="">Todas</option>
                                 <?php
@@ -170,7 +170,7 @@ if (isset($this->data['form'])) {
                     <?php } else { ?>
 
                         <div class="column">
-                            <label class="title-input">Empresa:</label>
+                            <label class="title-input">Cliente:</label>
                             <select name="search_empresa" id="search_empresa" class="input-emp" style="width: 100%">
                                 <option value="">Todas</option>
                                 <?php
@@ -187,7 +187,7 @@ if (isset($this->data['form'])) {
                         </div>
 
                         <div class="column">
-                            <label class="title-input">Status do Chamado:</label>
+                            <label class="title-input">Status do Ticket:</label>
                             <select name="search_status" id="search_status" class="input-adm">
                                 <option value="">Todos</option>
                                 <?php
@@ -204,7 +204,7 @@ if (isset($this->data['form'])) {
                         </div>
 
                         <div class="column">
-                            <label class="title-input">Tipo do Chamado:</label>
+                            <label class="title-input">Tipo do Ticket:</label>
                             <select name="search_tipo" id="search_tipo" class="input-adm">
                                 <option value="">Todos</option>
                                 <option value="Telefonico">Telefônico</option>

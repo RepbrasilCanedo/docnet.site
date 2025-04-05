@@ -118,7 +118,7 @@ class CpmsRelatListCham
         if ($this->resultBd) {
             $this->result = true;
         } else {
-            $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum Chamado encontrado para o cliente do usuario!</p>";
+            $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum Ticket encontrado para o cliente do usuario!</p>";
             $this->result = false;
         }
     }
@@ -163,13 +163,13 @@ class CpmsRelatListCham
         } elseif ((empty($this->searchEmpresa)) and (!empty($this->searchStatus)) and (empty($this->searchTipo)) and (empty($this->searchDateStart)) and (empty($this->searchDateEnd)) and (empty($this->searchTecSuporte))) {
             $this->searchStatus(); //So status
         } elseif ((empty($this->searchEmpresa)) and (!empty($this->searchStatus)) and (empty($this->searchTipo)) and (!empty($this->searchDateStart)) and (!empty($this->searchDateEnd)) and (empty($this->searchTecSuporte))) {
-            $this->searchStatusDate(); //So status e periodo do chamado
+            $this->searchStatusDate(); //So status e periodo do Ticket
         } elseif ((empty($this->searchEmpresa)) and (empty($this->searchStatus)) and (!empty($this->searchTipo)) and (empty($this->searchDateStart)) and (empty($this->searchDateEnd)) and (empty($this->searchTecSuporte))) {
-            $this->searchTipo(); //So tipo do chamado
+            $this->searchTipo(); //So tipo do Ticket
         } elseif ((empty($this->searchEmpresa)) and (empty($this->searchStatus)) and (!empty($this->searchTipo)) and (!empty($this->searchDateStart)) and (!empty($this->searchDateEnd)) and (empty($this->searchTecSuporte))) {
-            $this->searchTipoDate(); //So tipo e periodo do chamado
+            $this->searchTipoDate(); //So tipo e periodo do Ticket
         } elseif ((empty($this->searchEmpresa)) and (!empty($this->searchStatus)) and (!empty($this->searchTipo)) and (!empty($this->searchDateStart)) and (!empty($this->searchDateEnd)) and (empty($this->searchTecSuporte))) {
-            $this->searchTipoStatusDate(); //So status, tipó e periodo do chamado
+            $this->searchTipoStatusDate(); //So status, tipó e periodo do Ticket
         } elseif ((!empty($this->searchEmpresa)) and (empty($this->searchStatus)) and (!empty($this->searchTipo)) and (empty($this->searchDateStart)) and (empty($this->searchDateEnd)) and (empty($this->searchTecSuporte))) {
             $this->searchEmpresaTipo(); // empresa e tipo
         } elseif ((empty($this->searchEmpresa)) and (!empty($this->searchStatus)) and (!empty($this->searchTipo)) and (empty($this->searchDateStart)) and (empty($this->searchDateEnd)) and (empty($this->searchTecSuporte))) {
@@ -203,7 +203,7 @@ class CpmsRelatListCham
         }
     }
     /**
-     * Metodo pesquisar pela empresa do chamado
+     * Metodo pesquisar pela empresa do Ticket
      * @return void
      */
     public function searchEmpresa(): void
@@ -218,7 +218,7 @@ class CpmsRelatListCham
             $_SESSION['resultado'] = '';
             $_SESSION['resultado'] = $this->resultBd[0]['num_result'];
         } else {
-            $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum Chamado encontrado!</p>";
+            $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum Ticket encontrado!</p>";
             $this->result = false;
         }
 
@@ -238,13 +238,13 @@ class CpmsRelatListCham
         if ($this->resultBd) {
             $this->generatePdf();
         } else {
-            $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum chamado encontrado!</p>";
+            $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum Ticket encontrado!</p>";
             $this->result = false;
         }
     }
 
     /**
-     * Metodo pesquisar pela empresa, status e tipo do chamado
+     * Metodo pesquisar pela empresa, status e tipo do Ticket
      * @return void
      */
     public function searchEmpresaTipoStatus(): void
@@ -283,7 +283,7 @@ class CpmsRelatListCham
                 if ($this->resultBd) {
                     $this->generatePdf();
                 } else {
-                    $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum chamado encontrado!</p>";
+                    $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum Ticket encontrado!</p>";
                     $this->result = false;
                 }
             }
@@ -316,14 +316,14 @@ class CpmsRelatListCham
             if ($this->resultBd) {
                 $this->generatePdf();
             } else {
-                $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum chamado encontrado!</p>";
+                $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum Ticket encontrado!</p>";
                 $this->result = false;
             }
         }
     }
 
     /**
-     * Metodo pesquisar pela empresas, status, tipo  e periodo do chamado
+     * Metodo pesquisar pela empresas, status, tipo  e periodo do Ticket
      * @return void
      */
     public function searchEmpresaTipoStatusDate(): void
@@ -361,7 +361,7 @@ class CpmsRelatListCham
                 if ($this->resultBd) {
                     $this->generatePdf();
                 } else {
-                    $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum chamado encontrado!</p>";
+                    $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum Ticket encontrado!</p>";
                     $this->result = false;
                 }
             }
@@ -399,13 +399,13 @@ class CpmsRelatListCham
             if ($this->resultBd) {
                 $this->generatePdf();
             } else {
-                $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum chamado encontrado!</p>";
+                $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum Ticket encontrado!</p>";
                 $this->result = false;
             }
         }
     }
     /**
-     * Metodo pesquisar pela empresa e status do chamado
+     * Metodo pesquisar pela empresa e status do Ticket
      * @return void
      */
     public function searchEmpresaStatus(): void
@@ -446,7 +446,7 @@ class CpmsRelatListCham
                 if ($this->resultBd) {
                     $this->generatePdf();
                 } else {
-                    $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum chamado encontrado!</p>";
+                    $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum Ticket encontrado!</p>";
                     $this->result = false;
                 }
             }
@@ -480,13 +480,13 @@ class CpmsRelatListCham
             if ($this->resultBd) {
                 $this->generatePdf();
             } else {
-                $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum chamado encontrado!</p>";
+                $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum Ticket encontrado!</p>";
                 $this->result = false;
             }
         }
     }
     /**
-     * Metodo pesquisar pelo status do chamado
+     * Metodo pesquisar pelo status do Ticket
      * @return void
      */
     public function searchStatus(): void
@@ -523,7 +523,7 @@ class CpmsRelatListCham
                 if ($this->resultBd) {
                    $this->generatePdf();
                 } else {
-                    $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum chamado encontrado!</p>";
+                    $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum Ticket encontrado!</p>";
                     $this->result = false;
                 }
             }
@@ -553,14 +553,14 @@ class CpmsRelatListCham
             if ($this->resultBd) {
                 $this->generatePdf();
             } else {
-                $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum chamado encontrado!</p>";
+                $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum Ticket encontrado!</p>";
                 $this->result = false;
             }
         }
     }
 
     /**
-     * Metodo pesquisar pelo status do chamado e periodo
+     * Metodo pesquisar pelo status do Ticket e periodo
      * @return void
      */
     public function searchStatusDate(): void
@@ -598,7 +598,7 @@ class CpmsRelatListCham
                 if ($this->resultBd) {
                     $this->generatePdf();
                 } else {
-                    $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum chamado encontrado!</p>";
+                    $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum Ticket encontrado!</p>";
                     $this->result = false;
                 }
             }
@@ -631,14 +631,14 @@ class CpmsRelatListCham
             if ($this->resultBd) {
                 $this->generatePdf();
             } else {
-                $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum chamado encontrado!</p>";
+                $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum Ticket encontrado!</p>";
                 $this->result = false;
             }
         }
     }
 
     /**
-     * Metodo pesquisar pelo status, tipo e periodo do chamado
+     * Metodo pesquisar pelo status, tipo e periodo do Ticket
      * @return void
      */
     public function searchTipoStatusDate(): void
@@ -676,7 +676,7 @@ class CpmsRelatListCham
                 if ($this->resultBd) {
                     $this->generatePdf();
                 } else {
-                    $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum chamado encontrado!</p>";
+                    $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum Ticket encontrado!</p>";
                     $this->result = false;
                 }
             }
@@ -710,14 +710,14 @@ class CpmsRelatListCham
             if ($this->resultBd) {
                 $this->generatePdf();
             } else {
-                $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum chamado encontrado!</p>";
+                $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum Ticket encontrado!</p>";
                 $this->result = false;
             }
         }
     }
 
     /**
-     * Metodo pesquisar pelo tipo do chamado
+     * Metodo pesquisar pelo tipo do Ticket
      * @return void
      */
     public function searchTipo(): void
@@ -756,7 +756,7 @@ class CpmsRelatListCham
                 if ($this->resultBd) {
                     $this->generatePdf();
                 } else {
-                    $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum chamado encontrado!</p>";
+                    $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum Ticket encontrado!</p>";
                     $this->result = false;
                 }
             }
@@ -790,14 +790,14 @@ class CpmsRelatListCham
             if ($this->resultBd) {
                 $this->generatePdf();
             } else {
-                $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum chamado encontrado!</p>";
+                $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum Ticket encontrado!</p>";
                 $this->result = false;
             }
         }
     }
 
     /**
-     * Metodo pesquisar pelo tipo do chamado e periodo
+     * Metodo pesquisar pelo tipo do Ticket e periodo
      * @return void
      */
     public function searchTipoDate(): void
@@ -836,7 +836,7 @@ class CpmsRelatListCham
                 if ($this->resultBd) {
                     $this->generatePdf();
                 } else {
-                    $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum chamado encontrado!</p>";
+                    $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum Ticket encontrado!</p>";
                     $this->result = false;
                 }
             }
@@ -870,7 +870,7 @@ class CpmsRelatListCham
             if ($this->resultBd) {
                 $this->generatePdf();
             } else {
-                $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum chamado encontrado!</p>";
+                $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum Ticket encontrado!</p>";
                 $this->result = false;
             }
         }
@@ -878,7 +878,7 @@ class CpmsRelatListCham
 
 
     /**
-     * Metodo pesquisar pela empresa e pelo tipo do chamado
+     * Metodo pesquisar pela empresa e pelo tipo do Ticket
      * @return void
      */
     public function searchEmpresaTipo(): void
@@ -917,7 +917,7 @@ class CpmsRelatListCham
                 if ($this->resultBd) {
                     $this->generatePdf();
                 } else {
-                    $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum chamado encontrado!</p>";
+                    $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum Ticket encontrado!</p>";
                     $this->result = false;
                 }
             }
@@ -951,14 +951,14 @@ class CpmsRelatListCham
             if ($this->resultBd) {
                 $this->generatePdf();
             } else {
-                $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum chamado encontrado!</p>";
+                $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum Ticket encontrado!</p>";
                 $this->result = false;
             }
         }
     }
 
     /**
-     * Metodo pesquisar pelo status e tipo  do chamado
+     * Metodo pesquisar pelo status e tipo  do Ticket
      * @return void
      */
     public function searchTipoStatus(): void
@@ -997,7 +997,7 @@ class CpmsRelatListCham
                 if ($this->resultBd) {
                     $this->generatePdf();
                 } else {
-                    $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum chamado encontrado!</p>";
+                    $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum Ticket encontrado!</p>";
                     $this->result = false;
                 }
             }
@@ -1031,7 +1031,7 @@ class CpmsRelatListCham
             if ($this->resultBd) {
                 $this->generatePdf();
             } else {
-                $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum chamado encontrado!</p>";
+                $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum Ticket encontrado!</p>";
                 $this->result = false;
             }
         }
@@ -1076,7 +1076,7 @@ class CpmsRelatListCham
                 if ($this->resultBd) {
                     $this->generatePdf();
                 } else {
-                    $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum chamado encontrado!</p>";
+                    $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum Ticket encontrado!</p>";
                     $this->result = false;
                 }
             }
@@ -1112,7 +1112,7 @@ class CpmsRelatListCham
             if ($this->resultBd) {
                 $this->generatePdf();
             } else {
-                $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum chamado encontrado!</p>";
+                $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum Ticket encontrado!</p>";
                 $this->result = false;
             }
         }
@@ -1157,7 +1157,7 @@ class CpmsRelatListCham
                 if ($this->resultBd) {
                     $this->generatePdf();
                 } else {
-                    $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum chamado encontrado!</p>";
+                    $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum Ticket encontrado!</p>";
                     $this->result = false;
                 }
             }
@@ -1193,14 +1193,14 @@ class CpmsRelatListCham
             if ($this->resultBd) {
                 $this->generatePdf();
             } else {
-                $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum chamado encontrado!</p>";
+                $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum Ticket encontrado!</p>";
                 $this->result = false;
             }
         }
     }
 
     /**
-     * Metodo pesquisar pela empresas, tipo  e periodo do chamado
+     * Metodo pesquisar pela empresas, tipo  e periodo do Ticket
      * @return void
      */
     public function searchChamEmpTipoDate(): void
@@ -1238,7 +1238,7 @@ class CpmsRelatListCham
                 if ($this->resultBd) {
                     $this->generatePdf();
                 } else {
-                    $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum chamado encontrado!</p>";
+                    $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum Ticket encontrado!</p>";
                     $this->result = false;
                 }
             }
@@ -1274,7 +1274,7 @@ class CpmsRelatListCham
             if ($this->resultBd) {
                 $this->generatePdf();
             } else {
-                $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum chamado encontrado!</p>";
+                $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum Ticket encontrado!</p>";
                 $this->result = false;
             }
         }
@@ -1319,7 +1319,7 @@ class CpmsRelatListCham
                 if ($this->resultBd) {
                     $this->generatePdf();
                 } else {
-                    $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum chamado encontrado!</p>";
+                    $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum Ticket encontrado!</p>";
                     $this->result = false;
                 }
             }
@@ -1355,7 +1355,7 @@ class CpmsRelatListCham
             if ($this->resultBd) {
                 $this->generatePdf();
             } else {
-                $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum chamado encontrado!</p>";
+                $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum Ticket encontrado!</p>";
                 $this->result = false;
             }
         }
@@ -1375,7 +1375,7 @@ class CpmsRelatListCham
             $_SESSION['resultado'] = '';
             $_SESSION['resultado'] = $this->resultBd[0]['num_result'];
         } else {
-            $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum Chamado encontrado!</p>";
+            $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum Ticket encontrado!</p>";
             $this->result = false;
         }
 
@@ -1392,13 +1392,13 @@ class CpmsRelatListCham
         if ($this->resultBd) {
             $this->generatePdf();
         } else {
-            $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum chamado encontrados!</p>";
+            $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum Ticket encontrados!</p>";
             $this->result = false;
         }
     }
 
     /**
-     * Metodo pesquisar pela empresas, status, tipo  e periodo do chamado e suporte do cliente.
+     * Metodo pesquisar pela empresas, status, tipo  e periodo do Ticket e suporte do cliente.
      * @return void
      */
     public function searchChamEmpTipoStatusDateTec(): void
@@ -1435,7 +1435,7 @@ class CpmsRelatListCham
                 if ($this->resultBd) {
                     $this->generatePdf();
                 } else {
-                    $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum chamado encontrado!</p>";
+                    $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum Ticket encontrado!</p>";
                     $this->result = false;
                 }
             }
@@ -1473,14 +1473,14 @@ class CpmsRelatListCham
             if ($this->resultBd) {
                 $this->generatePdf();
             } else {
-                $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum chamado encontrado!</p>";
+                $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum Ticket encontrado!</p>";
                 $this->result = false;
             }
         }
     }
 
     /**
-     * Metodo pesquisar pelo periodo do chamado e suporte do cliente.
+     * Metodo pesquisar pelo periodo do Ticket e suporte do cliente.
      * @return void
      */
     public function searchChamDateTec(): void
@@ -1517,7 +1517,7 @@ class CpmsRelatListCham
                 if ($this->resultBd) {
                     $this->generatePdf();
                 } else {
-                    $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum chamado encontrado!</p>";
+                    $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum Ticket encontrado!</p>";
                     $this->result = false;
                 }
             }
@@ -1555,14 +1555,14 @@ class CpmsRelatListCham
             if ($this->resultBd) {
                 $this->generatePdf();
             } else {
-                $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum chamado encontrado!</p>";
+                $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum Ticket encontrado!</p>";
                 $this->result = false;
             }
         }
     }
 
     /**
-     * Metodo pesquisar pelo tipo  e periodo do chamado e suporte do cliente.
+     * Metodo pesquisar pelo tipo  e periodo do Ticket e suporte do cliente.
      * @return void
      */
     public function searchChamTipoDateTec(): void
@@ -1599,7 +1599,7 @@ class CpmsRelatListCham
                 if ($this->resultBd) {
                     $this->generatePdf();
                 } else {
-                    $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum chamado encontrado!</p>";
+                    $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum Ticket encontrado!</p>";
                     $this->result = false;
                 }
             }
@@ -1637,14 +1637,14 @@ class CpmsRelatListCham
             if ($this->resultBd) {
                 $this->generatePdf();
             } else {
-                $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum chamado encontrado!</p>";
+                $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum Ticket encontrado!</p>";
                 $this->result = false;
             }
         }
     }
 
     /**
-     * Metodo pesquisar pelo status, tipo  e periodo do chamado e suporte do cliente.
+     * Metodo pesquisar pelo status, tipo  e periodo do Ticket e suporte do cliente.
      * @return void
      */
     public function searchChamTipoStatusDateTec(): void
@@ -1681,7 +1681,7 @@ class CpmsRelatListCham
                 if ($this->resultBd) {
                     $this->generatePdf();
                 } else {
-                    $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum chamado encontrado!</p>";
+                    $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum Ticket encontrado!</p>";
                     $this->result = false;
                 }
             }
@@ -1719,14 +1719,14 @@ class CpmsRelatListCham
             if ($this->resultBd) {
                 $this->generatePdf();
             } else {
-                $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum chamado encontrado!</p>";
+                $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum Ticket encontrado!</p>";
                 $this->result = false;
             }
         }
     }
 
     /**
-     * Metodo pesquisar pela empresas, periodo do chamado e suporte do cliente.
+     * Metodo pesquisar pela empresas, periodo do Ticket e suporte do cliente.
      * @return void
      */
     public function searchChamEmpDateTec(): void
@@ -1763,7 +1763,7 @@ class CpmsRelatListCham
                 if ($this->resultBd) {
                     $this->generatePdf();
                 } else {
-                    $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum chamado encontrado!</p>";
+                    $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum Ticket encontrado!</p>";
                     $this->result = false;
                 }
             }
@@ -1801,14 +1801,14 @@ class CpmsRelatListCham
             if ($this->resultBd) {
                 $this->generatePdf();
             } else {
-                $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum chamado encontrado!</p>";
+                $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum Ticket encontrado!</p>";
                 $this->result = false;
             }
         }
     }
 
     /**
-     * Metodo pesquisar pela empresas, status, tipo  e periodo do chamado e suporte do cliente.
+     * Metodo pesquisar pela empresas, status, tipo  e periodo do Ticket e suporte do cliente.
      * @return void
      */
     public function searchChamEmpStatusDateTec(): void
@@ -1845,7 +1845,7 @@ class CpmsRelatListCham
                 if ($this->resultBd) {
                     $this->generatePdf();
                 } else {
-                    $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum chamado encontrado!</p>";
+                    $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum Ticket encontrado!</p>";
                     $this->result = false;
                 }
             }
@@ -1883,14 +1883,14 @@ class CpmsRelatListCham
             if ($this->resultBd) {
                 $this->generatePdf();
             } else {
-                $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum chamado encontrado!</p>";
+                $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum Ticket encontrado!</p>";
                 $this->result = false;
             }
         }
     }
 
     /**
-     * Metodo pesquisar pela empresas, tipo  e periodo do chamado e suporte do cliente.
+     * Metodo pesquisar pela empresas, tipo  e periodo do Ticket e suporte do cliente.
      * @return void
      */
     public function searchChamEmpTipoDateTec(): void
@@ -1927,7 +1927,7 @@ class CpmsRelatListCham
                 if ($this->resultBd) {
                     $this->generatePdf();
                 } else {
-                    $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum chamado encontrado!</p>";
+                    $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum Ticket encontrado!</p>";
                     $this->result = false;
                 }
             }
@@ -1965,7 +1965,7 @@ class CpmsRelatListCham
             if ($this->resultBd) {
                 $this->generatePdf();
             } else {
-                $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum chamado encontrado!</p>";
+                $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum Ticket encontrado!</p>";
                 $this->result = false;
             }
         }
@@ -2020,15 +2020,15 @@ class CpmsRelatListCham
     // Função para gerar os dados para o pdf em DOMPDF
     private function generatePdf()
     {      
-        $total_chamados = $_SESSION['resultado'];
+        $total_tickets = $_SESSION['resultado'];
 
         $html = "<style> table {border-collapse: collapse;width: 100%;}th, td {border: 1px solid black;padding: 2px;text-align: left;} caption{padding: 8px;text-align: center;}</style>";
         $html .= "<img src='" . URLADM . "app/adms/assets/image/logo/contratos/grazy3.jpg width='140' alt='Logo do Cliente'> <br> <br> <br> <br>";
         $html .= "<table>";
-        $html .= "<caption><b> RELATORIO DE CHAMADOS DOCNET HELP DESK </b>";
-        $html .= "<caption>Total de : <b> {$total_chamados} </b> Chamados.";
+        $html .= "<caption><b> RELATORIO DE TIKETS DOCNET HELP DESK </b>";
+        $html .= "<caption>Total de : <b> {$total_tickets} </b> Ticket.";
         $html .= "<thead>";
-        $html .= "<th>Chamado</th>";
+        $html .= "<th>Ticket</th>";
         $html .= "<th>Empresa</th>";
         $html .= "<th>Contato</th>";
         $html .= "<th>Telefone</th>";
