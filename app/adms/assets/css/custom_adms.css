@@ -365,7 +365,7 @@ body {
 
 .row .box {
     /*background-color: var(--azul-padrao);*/
-    width: 17%;
+    width: 25%;
     margin: 5px 1%;
     height: 100px;
     position: relative;

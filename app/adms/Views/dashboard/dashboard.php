@@ -89,6 +89,16 @@ unset($_SESSION["status_chamado"]);
                 <?php } ?>
             </span>
             <h6>Pausados Cliente</h6>
+
+        </div><div class="box">
+            <h6>Tickets</h6>
+            <span>
+                <?php
+                if (!empty($this->data['countChamAgua'])) { ?>
+                    <h5><?= $this->data['countChamAgua'][0]['qnt_cham_agua'] ?></h5>
+                <?php } ?>
+            </span>
+            <h6>Aguardando Outros</h6>
         </div>
 
         <div class="box">

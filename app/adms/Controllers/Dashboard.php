@@ -83,6 +83,14 @@ class Dashboard
             $this->data['countChamPausa'] = false;
         }
 
+        $countChamAgua = new \App\adms\Models\AdmsDashboard();
+        $countChamAgua->countChamAgua();
+        if ($countChamAgua->getResult()) {
+            $this->data['countChamAgua'] = $countChamAgua->getResultBd();
+        } else {
+            $this->data['countChamAgua'] = false;
+        }
+
         $countChamCom = new \App\adms\Models\AdmsDashboard();
         $countChamCom->countChamCom();
         if ($countChamCom->getResult()) {

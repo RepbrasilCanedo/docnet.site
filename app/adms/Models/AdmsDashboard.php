@@ -298,6 +298,63 @@ class AdmsDashboard
             }
         }
     }
+    
+    // Chamados em aguardando outros -> 5
+    public function countChamAgua(): void
+    {
+        if (($_SESSION['adms_access_level_id'] > 1) and ($_SESSION['adms_access_level_id'] <> 7) and ($_SESSION['adms_access_level_id'] <> 2)) {
+            //Se for 4 - Cliente Administrativo
+            if ($_SESSION['adms_access_level_id'] == 4) {
+                $countChamPausa = new \App\adms\Models\helper\AdmsRead();
+                $countChamPausa->fullRead("SELECT COUNT(id) AS qnt_cham_agua, status_id, empresa_id FROM adms_cham WHERE status_id= :status_id and empresa_id = :empresa", 
+                "status_id=12&empresa={$_SESSION['emp_user']}");
+                $this->resultBd = $countChamPausa->getResult();
+                if ($this->resultBd) {
+                    $this->result = true;
+                } else {
+                    //$_SESSION['msg'] = "<p style='color: #f00'>Erro: Usuário não encontrado!</p>";
+                    $this->result = false;
+                }
+                //Se for 12 - Cliente Suporte
+            } elseif ($_SESSION['adms_access_level_id'] == 12) {
+                $countChamPausa = new \App\adms\Models\helper\AdmsRead();
+                $countChamPausa->fullRead("SELECT COUNT(id) AS qnt_cham_agua FROM adms_cham WHERE status_id= :status_id and empresa_id= :empresa_id", 
+                "status_id=12&empresa_id={$_SESSION['emp_user']}");
+
+                $this->resultBd = $countChamPausa->getResult();
+                if ($this->resultBd) {
+                    $this->result = true;
+                } else {
+                    //$_SESSION['msg'] = "<p style='color: #f00'>Erro: Usuário não encontrado!</p>";
+                    $this->result = false;
+                }
+                //Se for 14 - Cliente Final
+            } elseif ($_SESSION['adms_access_level_id'] == 14) {
+                $countChamPausa = new \App\adms\Models\helper\AdmsRead();
+                $countChamPausa->fullRead("SELECT COUNT(id) AS qnt_cham_agua, status_id FROM adms_cham 
+                WHERE status_id= :status_id and cliente_id= :id_cliente", "status_id=12&id_cliente={$_SESSION['set_clie']}");
+                $this->resultBd = $countChamPausa->getResult();
+                if ($this->resultBd) {
+                    $this->result = true;
+                } else {
+                    //$_SESSION['msg'] = "<p style='color: #f00'>Erro: Usuário não encontrado!</p>";
+                    $this->result = false;
+                }
+            }
+        } else {
+            $countChamPausa = new \App\adms\Models\helper\AdmsRead();
+            $countChamPausa->fullRead("SELECT COUNT(id) AS qnt_cham_agua
+                            FROM adms_cham WHERE status_id= :status_id", "status_id=5");
+
+            $this->resultBd = $countChamPausa->getResult();
+            if ($this->resultBd) {
+                $this->result = true;
+            } else {
+                //$_SESSION['msg'] = "<p style='color: #f00'>Erro: Usuário não encontrado!</p>";
+                $this->result = false;
+            }
+        }
+    }
     // Chamados Aguardando Setor Comercial -> 11
     public function countChamCom(): void
     {

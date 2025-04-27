@@ -37,8 +37,7 @@ class AddCham
                 $createCham = new \App\adms\Models\AdmsAddCham();
                 $createCham->create($this->dataForm);
 
-                if ($createCham->getResult()) {
-                    
+                if ($createCham->getResult()) {                    
                     $urlRedirect = URLADM . "list-cham/index";
                     header("Location: $urlRedirect");
                 } else {
