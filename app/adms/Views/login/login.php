@@ -15,8 +15,9 @@ if (isset($this->data['form'])) {
     
     <div class="wrapper-login">
         <div class="logo">
-            <img src="<?php echo URLADM; ?>app/adms/assets/image/logo/logo.png" width="200px" alt="Docnet">
+            <img src="<?php echo URLADM; ?>app/adms/assets/image/logo/logo.png" width="200px" alt="Docnet">            
         </div>
+        <h5 class="help_desk">HELP DESK</h5>
         <div class="title">
             <span>Área Restrita</span>
         </div>

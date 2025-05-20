@@ -377,7 +377,7 @@ body {
     border-radius: 5px;
     overflow: hidden;
     flex-direction: column;
-    box-shadow: 5px 3px 5px 1px rgba(0, 0, 0, 0.12);
+    box-shadow: 5px 3px 5px 1px rgba(0, 64, 255);
 }
 
 

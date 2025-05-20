@@ -106,7 +106,7 @@ class AdmsDashboard
                 //Se for 14 - Usuario final
             } elseif ($_SESSION['adms_access_level_id'] == 14) {
                 $countCham = new \App\adms\Models\helper\AdmsRead();
-                $countCham->fullRead("SELECT COUNT(id) AS qnt_cham FROM adms_cham WHERE status_id= :status_id and cliente_id= :id_cliente", 
+                $countCham->fullRead("SELECT COUNT(id) AS qnt_cham, status_id FROM adms_cham WHERE status_id= :status_id and cliente_id= :id_cliente", 
                 "status_id=2&id_cliente={$_SESSION['set_clie']}");
 
                 $this->resultBd = $countCham->getResult();
@@ -160,7 +160,7 @@ class AdmsDashboard
                 //Se for 14 - Cliente final
             } elseif ($_SESSION['adms_access_level_id'] == 14) {
                 $countCham = new \App\adms\Models\helper\AdmsRead();
-                $countCham->fullRead("SELECT COUNT(id) AS qnt_cham FROM adms_cham WHERE status_id= :status_id and cliente_id= :id_cliente", 
+                $countCham->fullRead("SELECT COUNT(id) AS qnt_cham, status_id FROM adms_cham WHERE status_id= :status_id and cliente_id= :id_cliente", 
                 "status_id=9&id_cliente={$_SESSION['set_clie']}");
 
                 $this->resultBd = $countCham->getResult();
@@ -204,7 +204,7 @@ class AdmsDashboard
                 //Se for 12 - Cliente Suporte
             } elseif ($_SESSION['adms_access_level_id'] == 12) {
                 $countChamPausa = new \App\adms\Models\helper\AdmsRead();
-                $countChamPausa->fullRead("SELECT COUNT(id) AS qnt_cham_atend FROM adms_cham WHERE status_id= :status_id and empresa_id= :empresa_id", 
+                $countChamPausa->fullRead("SELECT COUNT(id) AS qnt_cham_atend, status_id FROM adms_cham WHERE status_id= :status_id and empresa_id= :empresa_id", 
                 "status_id=3&empresa_id={$_SESSION['emp_user']}");
 
                 $this->resultBd = $countChamPausa->getResult();
@@ -261,7 +261,7 @@ class AdmsDashboard
                 //Se for 12 - Cliente Suporte
             } elseif ($_SESSION['adms_access_level_id'] == 12) {
                 $countChamPausa = new \App\adms\Models\helper\AdmsRead();
-                $countChamPausa->fullRead("SELECT COUNT(id) AS qnt_cham_pausa FROM adms_cham WHERE status_id= :status_id and empresa_id= :empresa_id", 
+                $countChamPausa->fullRead("SELECT COUNT(id) AS qnt_cham_pausa, status_id FROM adms_cham WHERE status_id= :status_id and empresa_id= :empresa_id", 
                 "status_id=5&empresa_id={$_SESSION['emp_user']}");
 
                 $this->resultBd = $countChamPausa->getResult();
@@ -286,7 +286,7 @@ class AdmsDashboard
             }
         } else {
             $countChamPausa = new \App\adms\Models\helper\AdmsRead();
-            $countChamPausa->fullRead("SELECT COUNT(id) AS qnt_cham_pausa
+            $countChamPausa->fullRead("SELECT COUNT(id) AS qnt_cham_pausa, status_id
                             FROM adms_cham WHERE status_id= :status_id", "status_id=5");
 
             $this->resultBd = $countChamPausa->getResult();
@@ -318,7 +318,7 @@ class AdmsDashboard
                 //Se for 12 - Cliente Suporte
             } elseif ($_SESSION['adms_access_level_id'] == 12) {
                 $countChamPausa = new \App\adms\Models\helper\AdmsRead();
-                $countChamPausa->fullRead("SELECT COUNT(id) AS qnt_cham_agua FROM adms_cham WHERE status_id= :status_id and empresa_id= :empresa_id", 
+                $countChamPausa->fullRead("SELECT COUNT(id) AS qnt_cham_agua, status_id FROM adms_cham WHERE status_id= :status_id and empresa_id= :empresa_id", 
                 "status_id=12&empresa_id={$_SESSION['emp_user']}");
 
                 $this->resultBd = $countChamPausa->getResult();
@@ -343,7 +343,7 @@ class AdmsDashboard
             }
         } else {
             $countChamPausa = new \App\adms\Models\helper\AdmsRead();
-            $countChamPausa->fullRead("SELECT COUNT(id) AS qnt_cham_agua
+            $countChamPausa->fullRead("SELECT COUNT(id) AS qnt_cham_agua, status_id
                             FROM adms_cham WHERE status_id= :status_id", "status_id=5");
 
             $this->resultBd = $countChamPausa->getResult();
@@ -374,7 +374,7 @@ class AdmsDashboard
                 //Se for 12 - Cliente Suporte
             } elseif ($_SESSION['adms_access_level_id'] == 12) {
                 $countChamCom = new \App\adms\Models\helper\AdmsRead();
-                $countChamCom->fullRead("SELECT COUNT(id) AS qnt_cham_com FROM adms_cham WHERE status_id= :status_id and empresa_id= :empresa_id", "status_id=11&empresa_id={$_SESSION['emp_user']}");
+                $countChamCom->fullRead("SELECT COUNT(id) AS qnt_cham_com, status_id FROM adms_cham WHERE status_id= :status_id and empresa_id= :empresa_id", "status_id=11&empresa_id={$_SESSION['emp_user']}");
                 $this->resultBd = $countChamCom->getResult();
                 if ($this->resultBd) {
                     $this->result = true;
@@ -397,7 +397,7 @@ class AdmsDashboard
             }
         } else {
             $countChamCom = new \App\adms\Models\helper\AdmsRead();
-            $countChamCom->fullRead("SELECT COUNT(id) AS qnt_cham_com
+            $countChamCom->fullRead("SELECT COUNT(id) AS qnt_cham_com, status_id
                             FROM adms_cham WHERE status_id= :status_id", "status_id=11");
 
             $this->resultBd = $countChamCom->getResult();
@@ -428,7 +428,7 @@ class AdmsDashboard
                 //Se for 12 - Cliente Suporte
             } elseif ($_SESSION['adms_access_level_id'] == 12) {
                 $countChamClie = new \App\adms\Models\helper\AdmsRead();
-                $countChamClie->fullRead("SELECT COUNT(id) AS qnt_cham_clie FROM adms_cham WHERE status_id= :status_id and empresa_id= :empresa_id", "status_id=10&empresa_id={$_SESSION['emp_user']}");
+                $countChamClie->fullRead("SELECT COUNT(id) AS qnt_cham_clie, status_id FROM adms_cham WHERE status_id= :status_id and empresa_id= :empresa_id", "status_id=10&empresa_id={$_SESSION['emp_user']}");
 
                 $this->resultBd = $countChamClie->getResult();
                 if ($this->resultBd) {
@@ -468,7 +468,7 @@ class AdmsDashboard
 
     public function countChamFinal(): void
     {
-        if (($_SESSION['adms_access_level_id'] > 1) and ($_SESSION['adms_access_level_id'] <> 7) and ($_SESSION['adms_access_level_id'] <> 2)) {
+        if (($_SESSION['adms_access_level_id'] > 2) and ($_SESSION['adms_access_level_id'] <> 7)) {
             //Se for 4 - Cliente Administrativo
             if ($_SESSION['adms_access_level_id'] == 4) {
                 $countChamFinal = new \App\adms\Models\helper\AdmsRead();
@@ -484,7 +484,7 @@ class AdmsDashboard
                 //Se for 13 - Cliente Suporte
             } elseif ($_SESSION['adms_access_level_id'] == 12) {
                 $countChamFinal = new \App\adms\Models\helper\AdmsRead();
-                $countChamFinal->fullRead("SELECT COUNT(id) AS qnt_cham_final FROM adms_cham WHERE status_id= :status_id and contrato_id= :contrato_id", "status_id=6&contrato_id={$_SESSION['set_Contr']}");
+                $countChamFinal->fullRead("SELECT COUNT(id) AS qnt_cham_final, status_id FROM adms_cham WHERE status_id= :status_id and contrato_id= :contrato_id", "status_id=6&contrato_id={$_SESSION['set_Contr']}");
 
                 $this->resultBd = $countChamFinal->getResult();
                 if ($this->resultBd) {
@@ -508,7 +508,7 @@ class AdmsDashboard
             }
         } else {
             $countChamFinal = new \App\adms\Models\helper\AdmsRead();
-            $countChamFinal->fullRead("SELECT COUNT(id) AS qnt_cham_final
+            $countChamFinal->fullRead("SELECT COUNT(id) AS qnt_cham_final, status_id
                             FROM adms_cham WHERE status_id= :status_id", "status_id=6");
 
             $this->resultBd = $countChamFinal->getResult();
@@ -540,7 +540,7 @@ class AdmsDashboard
                 //Se for 13 - Cliente Suporte
             } elseif ($_SESSION['adms_access_level_id'] == 12) {
                 $countChamRepr = new \App\adms\Models\helper\AdmsRead();
-                $countChamRepr->fullRead("SELECT COUNT(id) AS qnt_cham_repr FROM adms_cham WHERE status_id= :status_id and contrato_id= :contrato_id", "status_id=7&contrato_id={$_SESSION['set_Contr']}");
+                $countChamRepr->fullRead("SELECT COUNT(id) AS qnt_cham_repr, status_id FROM adms_cham WHERE status_id= :status_id and contrato_id= :contrato_id", "status_id=7&contrato_id={$_SESSION['set_Contr']}");
 
                 $this->resultBd = $countChamRepr->getResult();
                 if ($this->resultBd) {
@@ -564,7 +564,7 @@ class AdmsDashboard
             }
         } else {
             $countChamRepr = new \App\adms\Models\helper\AdmsRead();
-            $countChamRepr->fullRead("SELECT COUNT(id) AS qnt_cham_repr
+            $countChamRepr->fullRead("SELECT COUNT(id) AS qnt_cham_repr, status_id
                             FROM adms_cham WHERE status_id= :status_id", "status_id=7");
 
             $this->resultBd = $countChamRepr->getResult();
@@ -579,7 +579,7 @@ class AdmsDashboard
     // Chamados Aprovados pelo Cliente -> 8
     public function countChamApro(): void
     {
-        if (($_SESSION['adms_access_level_id'] > 1) and ($_SESSION['adms_access_level_id'] <> 7) and ($_SESSION['adms_access_level_id'] <> 2)) {
+        if (($_SESSION['adms_access_level_id'] > 2) and ($_SESSION['adms_access_level_id'] <> 7)) {
             //Se for 4 - Cliente Administrativo
             if ($_SESSION['adms_access_level_id'] == 4) {
                 $countChamApro = new \App\adms\Models\helper\AdmsRead();
@@ -595,7 +595,7 @@ class AdmsDashboard
                 //Se for 13 - Cliente Suporte
             } elseif ($_SESSION['adms_access_level_id'] == 12) {
                 $countChamApro = new \App\adms\Models\helper\AdmsRead();
-                $countChamApro->fullRead("SELECT COUNT(id) AS qnt_cham_apro FROM adms_cham WHERE status_id= :status_id and contrato_id= :contrato_id", "status_id=8&contrato_id={$_SESSION['set_Contr']}");
+                $countChamApro->fullRead("SELECT COUNT(id) AS qnt_cham_apro, status_id FROM adms_cham WHERE status_id= :status_id and contrato_id= :contrato_id", "status_id=8&contrato_id={$_SESSION['set_Contr']}");
 
                 $this->resultBd = $countChamApro->getResult();
                 if ($this->resultBd) {
@@ -619,7 +619,7 @@ class AdmsDashboard
             }
         } else {
             $countChamApro = new \App\adms\Models\helper\AdmsRead();
-            $countChamApro->fullRead("SELECT COUNT(id) AS qnt_cham_apro
+            $countChamApro->fullRead("SELECT COUNT(id) AS qnt_cham_apro, status_id
                             FROM adms_cham WHERE status_id= :status_id", "status_id=8");
 
             $this->resultBd = $countChamApro->getResult();
@@ -634,7 +634,7 @@ class AdmsDashboard
     public function countChamAproAval(): void
     {
         $countChamApro = new \App\adms\Models\helper\AdmsRead();
-        $countChamApro->fullRead("SELECT AVG(nota_atend) AS qnt_cham_apro_aval
+        $countChamApro->fullRead("SELECT AVG(nota_atend) AS qnt_cham_apro_aval, status_id
                             FROM adms_cham WHERE status_id= :status_id", "status_id=8");
 
         $this->resultBd = $countChamApro->getResult();
@@ -652,6 +652,7 @@ class AdmsDashboard
         $verifChamFinal = new \App\adms\Models\helper\AdmsRead();
         $verifChamFinal->fullRead("SELECT status_id FROM adms_cham WHERE status_id= :status_id and empresa_id= :empresa_id", "status_id=6&empresa_id={$_SESSION['emp_user']}");
         $this->resultBd = $verifChamFinal->getResult();
+
         if ($this->resultBd) {
             $this->result = true;
         } else {

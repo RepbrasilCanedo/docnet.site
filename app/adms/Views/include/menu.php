@@ -25,14 +25,14 @@ if (isset($this->data['sidebarActive'])) {
     <div class="sidebar">
         
     <div class="logo-adm">
-        <?php 
-        if(!empty ($_SESSION['logo_clie'])){
-            echo "<img src='" . URLADM . "app/adms/assets/image/logo/clientes/" ."/". $_SESSION['set_clie'] ."/". $_SESSION['logo_clie']. "' width='140' alt='Logo do Cliente'>";
+        <?php /*
+        if(!empty ($_SESSION['set_clie'])){
+            echo "<img src='" . URLADM . "app/adms/assets/image/logo/clientes/". $_SESSION['set_clie']."/logo.png ' width='140' alt='Logo do Cliente'>";
         } else{
             echo "<img src='" . URLADM . "app/adms/assets/image/logo/clientes/icon_user.png' width='140' alt='Logo do Cliente'>";
         }      
-        
-        ?>        
+        */
+        ?>     
     </div>
 
         <?php

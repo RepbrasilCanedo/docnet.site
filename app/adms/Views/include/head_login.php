@@ -17,7 +17,7 @@ if (!defined('D0O8C0A3N1E9D6O1')) {
     <!-- Incluir os icones do font-awesome da CDN -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
     <link rel="stylesheet" href="<?php echo URLADM; ?>app/adms/assets/css/custom_login.css">
-    <title>Docnet - Administrativo</title>
+    <title>Docnet - Help Desk</title>
 </head>
 
 <body class="d-flex">

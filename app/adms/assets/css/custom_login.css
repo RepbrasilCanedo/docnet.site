@@ -63,9 +63,9 @@ body{
 
 .wrapper-login .title {
     height: 90px;
-    background-color: var(--default-color);
+    background-color: var(--third-color);
     border-radius: 5px 5px 0 0;
-    color: var(--main-color);
+    color: var(--default-color);
     font-size: 30px;
     font-weight: 400;
     display: flex;
@@ -75,6 +75,12 @@ body{
 .wrapper-login .logo {
     margin-top: 20px;
     margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+}
+.wrapper-login .help_desk {
     display: flex;
     align-items: center;
     justify-content: center;

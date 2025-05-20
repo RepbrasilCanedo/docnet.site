@@ -8,7 +8,7 @@ if (!defined('D0O8C0A3N1E9D6O1')) {
 if (isset($this->data['form'])) {
     $valorForm = $this->data['form'];
 }
-//echo('<pre>');var_dump($this->data['listCham']);echo('</pre>');
+echo('<pre>');var_dump($_SESSION['status_ticket']);echo('</pre>');
 
 
 
@@ -26,6 +26,7 @@ if (isset($this->data['form'])) {
             <form method="POST" action="">
                 <div class="row-input-search">
                     <?php if ($_SESSION['adms_access_level_id'] > 2) { ?>
+
                         <!--14: Usuario Final -->
                         <?php if ($_SESSION['adms_access_level_id'] == 14) { ?>
 
