@@ -8,7 +8,7 @@ if (!defined('D0O8C0A3N1E9D6O1')) {
 if (isset($this->data['form'])) {
     $valorForm = $this->data['form'];
 }
-echo('<pre>');var_dump($_SESSION['status_ticket']);echo('</pre>');
+//echo('<pre>');var_dump($_SESSION['status_ticket']);echo('</pre>');
 
 
 

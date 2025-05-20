@@ -6,6 +6,7 @@ if (!defined('D0O8C0A3N1E9D6O1')) {
     header("Location: /");
     die("Erro: Página não encontrada<br>");
 }
+
 /*
 var_dump($_SESSION['emp_user']);
 var_dump($_SESSION['set_Contr']);

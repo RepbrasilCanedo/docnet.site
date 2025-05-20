@@ -33,7 +33,8 @@ unset($_SESSION["status_chamado"]);
                 <?php } ?>
             </span>
             <?php if(($this->data['countCham'][0]['qnt_cham'] > 0) and ($this->data['countCham'][0]['status_id'] == 2)) {?>
-                <h6><a href="<?php echo URLADM; ?>list-cham/index" <?php $_SESSION['status_ticket'] = 2;?> >Aberto</a></h6>                                
+                <h6><a href="<?php echo URLADM; ?>list-cham/index" <?php $_SESSION['status_ticket'] = 2;?> >Aberto</a></h6>               
+                               
             <?php } else { ?>
                 <h6>Aberto</h6>
             <?php }?>
