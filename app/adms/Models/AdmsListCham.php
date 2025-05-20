@@ -193,6 +193,7 @@ class AdmsListCham
      */
     public function listCham(int $page): void
     {
+        var_dump($_SESSION['status_ticket']);
         $this->page = (int) $page ? $page : 1;
 
 
