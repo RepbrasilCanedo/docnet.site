@@ -105,106 +105,147 @@ class AdmsListCham
      * @param integer|null $page
      * @return void
      */
-    public function listCham_old(int $page): void
-    {
-        $this->page = (int) $page ? $page : 1;
-
-
-        if (($_SESSION['adms_access_level_id'] > 2)) {
-
-            //Se for 4 -> Cliente Administrativo ou 12 - Suporte cliente
-            if (($_SESSION['adms_access_level_id'] == 4) or ($_SESSION['adms_access_level_id'] == 12)) {
-                $pagination = new \App\adms\Models\helper\AdmsPagination(URLADM . 'list-cham/index');
-                $pagination->condition($this->page, $this->limitResult);
-                $pagination->pagination("SELECT COUNT(id) AS num_result, empresa_id, cliente_id, status_id FROM adms_cham 
-                WHERE empresa_id= :empresa_id", "empresa_id={$_SESSION['emp_user']}");
-                $this->resultPg = $pagination->getResult();
-
-                $listCham = new \App\adms\Models\helper\AdmsRead();
-                $listCham->fullRead("SELECT cham.id, cham.empresa_id, cham.status_id, clie.nome_fantasia as nome_fantasia_clie, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
-                            cham.dt_cham, sta.name AS name_sta, dt_status, cham.type_cham  
-                            FROM adms_cham AS cham
-                            INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id 
-                            INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id 
-                            WHERE empresa_id= :empresa_id ORDER BY dt_cham DESC", "empresa_id={$_SESSION['emp_user']}");
-                $this->resultBd = $listCham->getResult();
-
-                if ($this->resultBd) {
-                    $this->result = true;
-                } else {
-                    $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum Ticket encontrado para a empresa do usuario!</p>";
-                    $this->result = false;
-                }
-
-            //Se for 14 - Usuario final
-            } elseif ($_SESSION['adms_access_level_id'] == 14) {
-
-                $pagination = new \App\adms\Models\helper\AdmsPagination(URLADM . 'list-cham/index');
-                $pagination->condition($this->page, $this->limitResult);
-                $pagination->pagination("SELECT COUNT(id) AS num_result, empresa_id, cliente_id, status_id FROM adms_cham 
-                WHERE empresa_id= :empresa_id and cliente_id= :id_cliente", "empresa_id={$_SESSION['emp_user']}&id_cliente={$_SESSION['set_clie']}");
-                $this->resultPg = $pagination->getResult();
-
-                $listCham = new \App\adms\Models\helper\AdmsRead();
-                $listCham->fullRead("SELECT cham.id, cham.empresa_id, clie.nome_fantasia as nome_fantasia_clie, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
-                            cham.dt_cham, sta.name AS name_sta, dt_status, cham.type_cham  
-                            FROM adms_cham AS cham
-                            INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id 
-                            INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id 
-                            WHERE empresa_id= :empresa_id and cliente_id= :id_cliente LIMIT :limit OFFSET :offset ORDER BY dt_cham DESC", "empresa_id={$_SESSION['emp_user']}&id_cliente={$_SESSION['set_clie']}&limit={$this->limitResult}&offset={$pagination->getOffset()}");
-                $this->resultBd = $listCham->getResult();
-
-                if ($this->resultBd) {
-                    $this->result = true;
-                } else {
-                    $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum Ticket encontrado para a empresa do usuario!</p>";
-                    $this->result = false;
-                }
-            }
-        } else {
-
-            $pagination = new \App\adms\Models\helper\AdmsPagination(URLADM . 'list-cham/index');
-            $pagination->condition($this->page, $this->limitResult);
-            $pagination->pagination("SELECT COUNT(id) AS num_result FROM adms_cham");
-            $this->resultPg = $pagination->getResult();
-
-            $listCham = new \App\adms\Models\helper\AdmsRead();
-            $listCham->fullRead("SELECT cham.id, cham.empresa_id, clie.nome_fantasia as nome_fantasia_clie, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
-                            cham.dt_cham, sta.name AS name_sta, dt_status, cham.type_cham  
-                            FROM adms_cham AS cham
-                            INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id 
-                            INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id 
-                            LIMIT :limit OFFSET :offset ORDER BY dt_cham DESC", 
-                            "limit={$this->limitResult}&offset={$pagination->getOffset()}");
-
-            $this->resultBd = $listCham->getResult();
-            if ($this->resultBd) {
-                $this->result = true;
-            } else {
-                $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum Ticket encontrado para a empresa do usuario!</p>";
-                $this->result = false;
-            }
-        }
-    }    /**
-     * Metodo faz a pesquisa das Empresas na tabela "adms_cham" e lista as informações na view
-     * Recebe como parametro "page" para fazer a paginação
-     * @param integer|null $page
-     * @return void
-     */
     public function listCham(int $page): void
     {
-        var_dump($_SESSION['status_ticket']);
         $this->page = (int) $page ? $page : 1;
 
+        // Testa se foi enviada a variavel global status_ticket com algum valor
+        if (!isset($_SESSION['status_ticket'])) {
 
-        if (($_SESSION['adms_access_level_id'] > 2)) {
+            if (($_SESSION['adms_access_level_id'] > 2)) {
+                //Se for 4 -> Cliente Administrativo ou 12 - Suporte cliente
+                if (($_SESSION['adms_access_level_id'] == 4) or ($_SESSION['adms_access_level_id'] == 12)) {
+                    $pagination = new \App\adms\Models\helper\AdmsPagination(URLADM . 'list-cham/index');
+                    $pagination->condition($this->page, $this->limitResult);
+                    $pagination->pagination("SELECT COUNT(id) AS num_result, empresa_id, cliente_id, status_id FROM adms_cham 
+                    WHERE empresa_id= :empresa_id", "empresa_id={$_SESSION['emp_user']}");
+                    $this->resultPg = $pagination->getResult();
 
-            //Se for 4 -> Cliente Administrativo ou 12 - Suporte cliente
-            if (($_SESSION['adms_access_level_id'] == 4) or ($_SESSION['adms_access_level_id'] == 12)) {
+                    $listCham = new \App\adms\Models\helper\AdmsRead();
+                    $listCham->fullRead("SELECT cham.id, cham.empresa_id, cham.status_id, clie.nome_fantasia as nome_fantasia_clie, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
+                            cham.dt_cham, sta.name AS name_sta, dt_status, cham.type_cham  
+                            FROM adms_cham AS cham
+                            INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id 
+                            INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id 
+                            WHERE empresa_id= :empresa_id ORDER BY dt_cham DESC LIMIT :limit OFFSET :offset", "empresa_id={$_SESSION['emp_user']}&limit={$this->limitResult}&offset={$pagination->getOffset()}");
+                    $this->resultBd = $listCham->getResult();
+
+                    if ($this->resultBd) {
+                        $this->result = true;
+                        unset($_SESSION['status_ticket']);
+                    } else {
+                        $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum Ticket encontrado para a empresa do usuario!</p>";
+                        $this->result = false;
+                    }
+
+                    //Se for 14 - Usuario final
+                } elseif ($_SESSION['adms_access_level_id'] == 14) {
+
+                    $pagination = new \App\adms\Models\helper\AdmsPagination(URLADM . 'list-cham/index');
+                    $pagination->condition($this->page, $this->limitResult);
+                    $pagination->pagination("SELECT COUNT(id) AS num_result, empresa_id, cliente_id, status_id FROM adms_cham 
+                    WHERE empresa_id= :empresa_id and cliente_id= :id_cliente", "empresa_id={$_SESSION['emp_user']}&id_cliente={$_SESSION['set_clie']}");
+                    $this->resultPg = $pagination->getResult();
+
+                    $listCham = new \App\adms\Models\helper\AdmsRead();
+                    $listCham->fullRead("SELECT cham.id, cham.empresa_id, cham.status_id, clie.nome_fantasia as nome_fantasia_clie, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
+                            cham.dt_cham, sta.name AS name_sta, dt_status, cham.type_cham  
+                            FROM adms_cham AS cham
+                            INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id 
+                            INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id 
+                            WHERE empresa_id= :empresa_id AND cliente_id= :id_cliente ORDER BY dt_cham DESC LIMIT :limit OFFSET :offset", "empresa_id={$_SESSION['emp_user']}&id_cliente={$_SESSION['set_clie']}&limit={$this->limitResult}&offset={$pagination->getOffset()}");
+                    $this->resultBd = $listCham->getResult();
+
+                    if ($this->resultBd) {
+                        $this->result = true;
+                        unset($_SESSION['status_ticket']);
+                    } else {
+                        $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum Ticket encontrado para a empresa do usuario!</p>";
+                        $this->result = false;
+                    }
+                }
+            } else {
+
                 $pagination = new \App\adms\Models\helper\AdmsPagination(URLADM . 'list-cham/index');
                 $pagination->condition($this->page, $this->limitResult);
-                $pagination->pagination("SELECT COUNT(id) AS num_result, empresa_id, cliente_id, status_id FROM adms_cham 
+                $pagination->pagination("SELECT COUNT(id) AS num_result FROM adms_cham");
+                $this->resultPg = $pagination->getResult();
+
+                $listCham = new \App\adms\Models\helper\AdmsRead();
+                $listCham->fullRead("SELECT cham.id, cham.empresa_id, cham.status_id, clie.nome_fantasia as nome_fantasia_clie, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
+                            cham.dt_cham, sta.name AS name_sta, dt_status, cham.type_cham  
+                            FROM adms_cham AS cham
+                            INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id 
+                            INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id LIMIT :limit OFFSET :offset","limit={$this->limitResult}&offset={$pagination->getOffset()}");
+                $this->resultBd = $listCham->getResult();
+
+                if ($this->resultBd) {
+                    $this->result = true;
+                    unset($_SESSION['status_ticket']);
+                } else {
+                    $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum Ticket encontrado para a empresa do usuario!</p>";
+                    $this->result = false;
+                }
+            }
+        } else {
+            if (($_SESSION['adms_access_level_id'] > 2)) {
+
+                //Se for 4 -> Cliente Administrativo ou 12 - Suporte cliente
+                if (($_SESSION['adms_access_level_id'] == 4) or ($_SESSION['adms_access_level_id'] == 12)) {
+                    $pagination = new \App\adms\Models\helper\AdmsPagination(URLADM . 'list-cham/index');
+                    $pagination->condition($this->page, $this->limitResult);
+                    $pagination->pagination("SELECT COUNT(id) AS num_result, empresa_id, cliente_id, status_id FROM adms_cham 
                 WHERE empresa_id= :empresa_id AND status_id= :status_ticket", "empresa_id={$_SESSION['emp_user']}&status_ticket={$_SESSION['status_ticket']}");
+                    $this->resultPg = $pagination->getResult();
+
+                    $listCham = new \App\adms\Models\helper\AdmsRead();
+                    $listCham->fullRead("SELECT cham.id, cham.empresa_id, cham.status_id, clie.nome_fantasia as nome_fantasia_clie, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
+                            cham.dt_cham, sta.name AS name_sta, dt_status, cham.type_cham  
+                            FROM adms_cham AS cham
+                            INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id 
+                            INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id 
+                            WHERE empresa_id= :empresa_id AND status_id= :status_ticket ORDER BY dt_cham DESC LIMIT :limit OFFSET :offset", "empresa_id={$_SESSION['emp_user']}&status_ticket={$_SESSION['status_ticket']}&limit={$this->limitResult}&offset={$pagination->getOffset()}");
+                    $this->resultBd = $listCham->getResult();
+
+                    if ($this->resultBd) {
+                        $this->result = true;
+                        unset($_SESSION['status_ticket']);
+                    } else {
+                        $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum Ticket encontrado para a empresa do usuario!</p>";
+                        $this->result = false;
+                    }
+
+                    //Se for 14 - Usuario final
+                } elseif ($_SESSION['adms_access_level_id'] == 14) {
+
+                    $pagination = new \App\adms\Models\helper\AdmsPagination(URLADM . 'list-cham/index');
+                    $pagination->condition($this->page, $this->limitResult);
+                    $pagination->pagination("SELECT COUNT(id) AS num_result, empresa_id, cliente_id, status_id FROM adms_cham 
+                    WHERE empresa_id= :empresa_id and cliente_id= :id_cliente AND status_id= :status_ticket", "empresa_id={$_SESSION['emp_user']}&id_cliente={$_SESSION['set_clie']}&status_ticket={$_SESSION['status_ticket']}");
+                    $this->resultPg = $pagination->getResult();
+
+                    $listCham = new \App\adms\Models\helper\AdmsRead();
+                    $listCham->fullRead("SELECT cham.id, cham.empresa_id, cham.status_id, clie.nome_fantasia as nome_fantasia_clie, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
+                            cham.dt_cham, sta.name AS name_sta, dt_status, cham.type_cham  
+                            FROM adms_cham AS cham
+                            INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id 
+                            INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id 
+                            WHERE empresa_id= :empresa_id AND cliente_id= :id_cliente AND status_id= :status_ticket ORDER BY dt_cham DESC LIMIT :limit OFFSET :offset", "empresa_id={$_SESSION['emp_user']}&id_cliente={$_SESSION['set_clie']}&status_ticket={$_SESSION['status_ticket']}&limit={$this->limitResult}&offset={$pagination->getOffset()}");
+                    $this->resultBd = $listCham->getResult();
+
+                    if ($this->resultBd) {
+                        $this->result = true;
+                        unset($_SESSION['status_ticket']);
+                    } else {
+                        $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum Ticket encontrado para a empresa do usuario!</p>";
+                        $this->result = false;
+                    }
+                }
+            } else {
+
+                $pagination = new \App\adms\Models\helper\AdmsPagination(URLADM . 'list-cham/index');
+                $pagination->condition($this->page, $this->limitResult);
+                $pagination->pagination("SELECT COUNT(id) AS num_result FROM adms_cham");
                 $this->resultPg = $pagination->getResult();
 
                 $listCham = new \App\adms\Models\helper\AdmsRead();
@@ -213,64 +254,16 @@ class AdmsListCham
                             FROM adms_cham AS cham
                             INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id 
                             INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id 
-                            WHERE empresa_id= :empresa_id AND status_id= :status_ticket ORDER BY dt_cham DESC", "empresa_id={$_SESSION['emp_user']}&status_ticket={$_SESSION['status_ticket']}");
+                            WHERE status_id= :status_ticket ORDER BY dt_cham DESC LIMIT :limit OFFSET :offset", "status_ticket={$_SESSION['status_ticket']}&limit={$this->limitResult}&offset={$pagination->getOffset()}");
                 $this->resultBd = $listCham->getResult();
 
                 if ($this->resultBd) {
                     $this->result = true;
+                    unset($_SESSION['status_ticket']);
                 } else {
                     $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum Ticket encontrado para a empresa do usuario!</p>";
                     $this->result = false;
                 }
-
-            //Se for 14 - Usuario final
-            } elseif ($_SESSION['adms_access_level_id'] == 14) {
-
-                $pagination = new \App\adms\Models\helper\AdmsPagination(URLADM . 'list-cham/index');
-                $pagination->condition($this->page, $this->limitResult);
-                $pagination->pagination("SELECT COUNT(id) AS num_result, empresa_id, cliente_id, status_id FROM adms_cham 
-                WHERE empresa_id= :empresa_id and cliente_id= :id_cliente AND status_id= :status_ticket", "empresa_id={$_SESSION['emp_user']}&id_cliente={$_SESSION['set_clie']}&status_ticket={$_SESSION['status_ticket']}");
-                $this->resultPg = $pagination->getResult();
-
-                $listCham = new \App\adms\Models\helper\AdmsRead();
-                $listCham->fullRead("SELECT cham.id, cham.empresa_id, clie.nome_fantasia as nome_fantasia_clie, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
-                            cham.dt_cham, sta.name AS name_sta, dt_status, cham.type_cham  
-                            FROM adms_cham AS cham
-                            INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id 
-                            INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id 
-                            WHERE empresa_id= :empresa_id and cliente_id= :id_cliente AND status_id= :status_ticket LIMIT :limit OFFSET :offset ORDER BY dt_cham DESC", "empresa_id={$_SESSION['emp_user']}&id_cliente={$_SESSION['set_clie']}&status_ticket={$_SESSION['status_ticket']}&limit={$this->limitResult}&offset={$pagination->getOffset()}");
-                $this->resultBd = $listCham->getResult();
-
-                if ($this->resultBd) {
-                    $this->result = true;
-                } else {
-                    $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum Ticket encontrado para a empresa do usuario!</p>";
-                    $this->result = false;
-                }
-            }
-        } else {
-
-            $pagination = new \App\adms\Models\helper\AdmsPagination(URLADM . 'list-cham/index');
-            $pagination->condition($this->page, $this->limitResult);
-            $pagination->pagination("SELECT COUNT(id) AS num_result FROM adms_cham");
-            $this->resultPg = $pagination->getResult();
-
-            $listCham = new \App\adms\Models\helper\AdmsRead();
-            $listCham->fullRead("SELECT cham.id, cham.empresa_id, clie.nome_fantasia as nome_fantasia_clie, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
-                            cham.dt_cham, sta.name AS name_sta, dt_status, cham.type_cham  
-                            FROM adms_cham AS cham
-                            INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id 
-                            INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id 
-                            WHERE status_id= status_ticket 
-                            LIMIT :limit OFFSET :offset ORDER BY dt_cham DESC", 
-                            "status_ticket= {$_SESSION['status_ticket']}&limit={$this->limitResult}&offset={$pagination->getOffset()}");
-
-            $this->resultBd = $listCham->getResult();
-            if ($this->resultBd) {
-                $this->result = true;
-            } else {
-                $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum Ticket encontrado para a empresa do usuario!</p>";
-                $this->result = false;
             }
         }
     }
@@ -555,15 +548,16 @@ class AdmsListCham
                 }
             }
         } else {
-                $pagination = new \App\adms\Models\helper\AdmsPagination(URLADM . 'list-cham/index', "?search_empresa={$this->searchEmpresa}&search_status={$this->searchStatus}&search_type={$this->searchTipo}&search_date_start={$this->searchDateStart}&search_date_end={$this->searchDateEnd}");
-                $pagination->condition($this->page, $this->limitResult);
-                $pagination->pagination("SELECT COUNT(id) AS num_result FROM adms_cham WHERE (cliente_id= :cliente_id) AND (status_id= :status_id) AND (type_cham = :type_cham) AND (dt_cham BETWEEN :search_date_start AND :search_date_end)",
-                    "cliente_id={$this->searchEmpresaValue}&status_id={$this->searchStatusValue}&type_cham={$this->searchTipoValue}&search_date_start={$this->searchDateStart}&search_date_end={$this->searchDateEnd}"
-                );
-                $this->resultPg = $pagination->getResult();
+            $pagination = new \App\adms\Models\helper\AdmsPagination(URLADM . 'list-cham/index', "?search_empresa={$this->searchEmpresa}&search_status={$this->searchStatus}&search_type={$this->searchTipo}&search_date_start={$this->searchDateStart}&search_date_end={$this->searchDateEnd}");
+            $pagination->condition($this->page, $this->limitResult);
+            $pagination->pagination(
+                "SELECT COUNT(id) AS num_result FROM adms_cham WHERE (cliente_id= :cliente_id) AND (status_id= :status_id) AND (type_cham = :type_cham) AND (dt_cham BETWEEN :search_date_start AND :search_date_end)",
+                "cliente_id={$this->searchEmpresaValue}&status_id={$this->searchStatusValue}&type_cham={$this->searchTipoValue}&search_date_start={$this->searchDateStart}&search_date_end={$this->searchDateEnd}"
+            );
+            $this->resultPg = $pagination->getResult();
 
-                $listCham = new \App\adms\Models\helper\AdmsRead();
-                $listCham->fullRead("SELECT cham.id, cham.empresa_id, clie.nome_fantasia as nome_fantasia_clie, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
+            $listCham = new \App\adms\Models\helper\AdmsRead();
+            $listCham->fullRead("SELECT cham.id, cham.empresa_id, clie.nome_fantasia as nome_fantasia_clie, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
                             cham.dt_cham, sta.name AS name_sta, dt_status, cham.type_cham  
                             FROM adms_cham AS cham
                             INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id 
@@ -571,13 +565,13 @@ class AdmsListCham
                             WHERE (cham.cliente_id= :cliente_id) AND (cham.status_id= :status_id ) AND (cham.type_cham= :type_cham) AND (dt_cham BETWEEN :search_date_start AND :search_date_end)  ORDER BY dt_cham DESC
                             LIMIT :limit OFFSET :offset", "cliente_id={$this->searchEmpresaValue}&status_id={$this->searchStatusValue}&type_cham={$this->searchTipoValue}&search_date_start={$this->searchDateStart}&search_date_end={$this->searchDateEnd}&limit={$this->limitResult}&offset={$pagination->getOffset()}");
 
-                $this->resultBd = $listCham->getResult();
-                if ($this->resultBd) {
-                    $this->result = true;
-                } else {
-                    $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum Ticket encontrado!</p>";
-                    $this->result = false;
-                }
+            $this->resultBd = $listCham->getResult();
+            if ($this->resultBd) {
+                $this->result = true;
+            } else {
+                $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum Ticket encontrado!</p>";
+                $this->result = false;
+            }
         }
     }
     /**
@@ -590,7 +584,7 @@ class AdmsListCham
         if ($_SESSION['adms_access_level_id'] > 2) {
 
             //Se for 4 - Cliente Administrativo
-            if (($_SESSION['adms_access_level_id'] == 4) or ($_SESSION['adms_access_level_id'] == 12)){
+            if (($_SESSION['adms_access_level_id'] == 4) or ($_SESSION['adms_access_level_id'] == 12)) {
 
                 $pagination = new \App\adms\Models\helper\AdmsPagination(URLADM . 'list-cham/index', "?search_empresa={$this->searchEmpresa}&search_status={$this->searchStatus}");
                 $pagination->condition($this->page, $this->limitResult);
@@ -616,7 +610,7 @@ class AdmsListCham
                     $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum Ticket encontrado!</p>";
                     $this->result = false;
                 }
-            } 
+            }
         } else {
             $pagination = new \App\adms\Models\helper\AdmsPagination(URLADM . 'list-cham/index', "?search_empresa={$this->searchEmpresa}&search_status={$this->searchStatus}");
             $pagination->condition($this->page, $this->limitResult);
@@ -653,7 +647,7 @@ class AdmsListCham
         if ($_SESSION['adms_access_level_id'] > 2) {
 
             //Se for 4 - Cliente Administrativo
-            if (($_SESSION['adms_access_level_id'] == 4) or ($_SESSION['adms_access_level_id'] == 12)){
+            if (($_SESSION['adms_access_level_id'] == 4) or ($_SESSION['adms_access_level_id'] == 12)) {
                 $pagination = new \App\adms\Models\helper\AdmsPagination(URLADM . 'list-cham/index', "?search_status={$this->searchStatus}");
                 $pagination->condition($this->page, $this->limitResult);
                 $pagination->pagination(
@@ -736,10 +730,10 @@ class AdmsListCham
      */
     public function searchStatusDate(): void
     {
-        if ($_SESSION['adms_access_level_id'] > 2){
+        if ($_SESSION['adms_access_level_id'] > 2) {
 
             //Se for 4 - Cliente Administrativo
-            if (($_SESSION['adms_access_level_id'] == 4) or ($_SESSION['adms_access_level_id'] == 12)){
+            if (($_SESSION['adms_access_level_id'] == 4) or ($_SESSION['adms_access_level_id'] == 12)) {
                 $pagination = new \App\adms\Models\helper\AdmsPagination(URLADM . 'list-cham/index', "?search_status={$this->searchStatus}&search_empresa={$this->searchEmpresa}&search_date_start={$this->searchDateStart}");
                 $pagination->condition($this->page, $this->limitResult);
                 $pagination->pagination(
@@ -791,16 +785,16 @@ class AdmsListCham
                 }
             }
         } else {
-                $pagination = new \App\adms\Models\helper\AdmsPagination(URLADM . 'list-cham/index', "?search_status={$this->searchStatus}&search_date_start={$this->searchDateStart}&search_date_end={$this->searchDateEnd}");
-                $pagination->condition($this->page, $this->limitResult);
-                $pagination->pagination(
-                    "SELECT COUNT(id) AS num_result FROM adms_cham WHERE (status_id= :status_id) AND (dt_cham BETWEEN :search_date_start AND :search_date_end)",
-                    "status_id={$this->searchStatusValue}&search_date_start={$this->searchDateStart}&search_date_end={$this->searchDateEnd}"
-                );;
-                $this->resultPg = $pagination->getResult();
+            $pagination = new \App\adms\Models\helper\AdmsPagination(URLADM . 'list-cham/index', "?search_status={$this->searchStatus}&search_date_start={$this->searchDateStart}&search_date_end={$this->searchDateEnd}");
+            $pagination->condition($this->page, $this->limitResult);
+            $pagination->pagination(
+                "SELECT COUNT(id) AS num_result FROM adms_cham WHERE (status_id= :status_id) AND (dt_cham BETWEEN :search_date_start AND :search_date_end)",
+                "status_id={$this->searchStatusValue}&search_date_start={$this->searchDateStart}&search_date_end={$this->searchDateEnd}"
+            );;
+            $this->resultPg = $pagination->getResult();
 
-                $listCham = new \App\adms\Models\helper\AdmsRead();
-                $listCham->fullRead("SELECT cham.id, cham.empresa_id, clie.nome_fantasia as nome_fantasia_clie, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
+            $listCham = new \App\adms\Models\helper\AdmsRead();
+            $listCham->fullRead("SELECT cham.id, cham.empresa_id, clie.nome_fantasia as nome_fantasia_clie, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
                             cham.dt_cham, sta.name AS name_sta, dt_status, cham.type_cham  
                             FROM adms_cham AS cham
                             INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id 
@@ -808,13 +802,13 @@ class AdmsListCham
                         WHERE (cham.status_id= :status_id) AND (dt_cham BETWEEN :search_date_start AND :search_date_end) ORDER BY dt_cham DESC
                         LIMIT :limit OFFSET :offset", "status_id={$this->searchStatusValue}&search_date_start={$this->searchDateStart}&search_date_end={$this->searchDateEnd}&limit={$this->limitResult}&offset={$pagination->getOffset()}");
 
-                $this->resultBd = $listCham->getResult();
-                if ($this->resultBd) {
-                    $this->result = true;
-                } else {
-                    $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum Ticket encontrado!</p>";
-                    $this->result = false;
-                }
+            $this->resultBd = $listCham->getResult();
+            if ($this->resultBd) {
+                $this->result = true;
+            } else {
+                $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum Ticket encontrado!</p>";
+                $this->result = false;
+            }
         }
     }
 
@@ -827,7 +821,7 @@ class AdmsListCham
 
         if ($_SESSION['adms_access_level_id'] > 2) {
             //Se for 4 - Cliente Administrativo
-            if (($_SESSION['adms_access_level_id'] == 4) or ($_SESSION['adms_access_level_id'] == 12)){
+            if (($_SESSION['adms_access_level_id'] == 4) or ($_SESSION['adms_access_level_id'] == 12)) {
                 $pagination = new \App\adms\Models\helper\AdmsPagination(URLADM . 'list-cham/index', "?search_status={$this->searchStatus}&search_type={$this->searchTipo}&search_date_start={$this->searchDateStart}&search_date_end={$this->searchDateEnd}");
                 $pagination->condition($this->page, $this->limitResult);
                 $pagination->pagination(
@@ -851,7 +845,7 @@ class AdmsListCham
                     $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum Ticket encontrado!</p>";
                     $this->result = false;
                 }
-            }  elseif ($_SESSION['adms_access_level_id'] == 14) {
+            } elseif ($_SESSION['adms_access_level_id'] == 14) {
                 $pagination = new \App\adms\Models\helper\AdmsPagination(URLADM . 'list-cham/index', "?search_status={$this->searchStatus}&search_type={$this->searchTipo}&search_date_start={$this->searchDateStart}&search_date_end={$this->searchDateEnd}");
                 $pagination->condition($this->page, $this->limitResult);
                 $pagination->pagination(
@@ -1116,7 +1110,8 @@ class AdmsListCham
         } else {
             $pagination = new \App\adms\Models\helper\AdmsPagination(URLADM . 'list-cham/index', "?search_empresa={$this->searchEmpresa}&search_type={$this->searchTipo}");
             $pagination->condition($this->page, $this->limitResult);
-            $pagination->pagination("SELECT COUNT(id) AS num_result FROM adms_cham WHERE (cliente_id= :cliente_id) AND (type_cham = :type_cham)",
+            $pagination->pagination(
+                "SELECT COUNT(id) AS num_result FROM adms_cham WHERE (cliente_id= :cliente_id) AND (type_cham = :type_cham)",
                 "cliente_id={$this->searchEmpresaValue}&type_cham={$this->searchTipoValue}"
             );
             $this->resultPg = $pagination->getResult();
@@ -1264,7 +1259,8 @@ class AdmsListCham
 
             $pagination = new \App\adms\Models\helper\AdmsPagination(URLADM . 'list-cham/index', "?search_empresa={$this->searchEmpresa}&search_date_start={$this->searchDateStart}&search_date_end={$this->searchDateEnd}");
             $pagination->condition($this->page, $this->limitResult);
-            $pagination->pagination("SELECT COUNT(id) AS num_result FROM adms_cham  WHERE (cliente_id= :cliente_id) AND (dt_cham BETWEEN :search_date_start AND :search_date_end)",
+            $pagination->pagination(
+                "SELECT COUNT(id) AS num_result FROM adms_cham  WHERE (cliente_id= :cliente_id) AND (dt_cham BETWEEN :search_date_start AND :search_date_end)",
                 "cliente_id={$this->searchEmpresaValue}&search_date_start={$this->searchDateStart}&search_date_end={$this->searchDateEnd}"
             );
             $this->resultPg = $pagination->getResult();
@@ -1327,7 +1323,8 @@ class AdmsListCham
 
             $pagination = new \App\adms\Models\helper\AdmsPagination(URLADM . 'list-cham/index', "?search_empresa={$this->searchEmpresa}&search_status={$this->searchStatus}&search_date_start={$this->searchDateStart}&search_date_end={$this->searchDateEnd}");
             $pagination->condition($this->page, $this->limitResult);
-            $pagination->pagination("SELECT COUNT(id) AS num_result FROM adms_cham  WHERE (cliente_id= :cliente_id) AND (status_id= :status_id) AND (dt_cham BETWEEN :search_date_start AND :search_date_end)",
+            $pagination->pagination(
+                "SELECT COUNT(id) AS num_result FROM adms_cham  WHERE (cliente_id= :cliente_id) AND (status_id= :status_id) AND (dt_cham BETWEEN :search_date_start AND :search_date_end)",
                 "cliente_id={$this->searchEmpresaValue}&status_id={$this->searchStatusValue}&search_date_start={$this->searchDateStart}&search_date_end={$this->searchDateEnd}"
             );
             $this->resultPg = $pagination->getResult();
@@ -1508,7 +1505,8 @@ class AdmsListCham
 
             $pagination = new \App\adms\Models\helper\AdmsPagination(URLADM . 'list-cham/index', "?search_date_start={$this->searchDateStart}&search_date_end={$this->searchDateEnd}");
             $pagination->condition($this->page, $this->limitResult);
-            $pagination->pagination("SELECT COUNT(id) AS num_result FROM adms_cham WHERE (dt_cham BETWEEN :search_date_start AND :search_date_end)",
+            $pagination->pagination(
+                "SELECT COUNT(id) AS num_result FROM adms_cham WHERE (dt_cham BETWEEN :search_date_start AND :search_date_end)",
                 "search_date_start={$this->searchDateStart}&search_date_end={$this->searchDateEnd}"
             );
 

@@ -37,7 +37,7 @@ if (isset($this->data['form'])) {
                                     $search_id = $valorForm['search_id'];
                                 }
                                 ?>
-                                <label class="title-input">Número Chamado:</label>
+                                <label class="title-input">Número Ticket:</label>
                                 <input type="number" name="search_id" id="search_id" class="input-adm" placeholder="Todos" value="<?= $search_id ?>">
                             </div>
 
@@ -59,7 +59,7 @@ if (isset($this->data['form'])) {
                             </div>
 
                             <div class="column">
-                                <label class="title-input">Status do Chamado:</label>
+                                <label class="title-input">Status do Ticket:</label>
                                 <select name="search_status" id="search_status" class="input-adm">
                                     <option value="">Todos</option>
                                     <?php
@@ -76,7 +76,7 @@ if (isset($this->data['form'])) {
                             </div>
 
                             <div class="column">
-                                <label class="title-input">Tipo do Chamado:</label>
+                                <label class="title-input">Tipo do Ticket:</label>
                                 <select name="search_tipo" id="search_tipo" class="input-adm">
                                     <option value="">Todos</option>
                                     <option value="Telefonico">Telefônico</option>
@@ -156,7 +156,7 @@ if (isset($this->data['form'])) {
                             </div>
 
                             <div class="column">
-                                <label class="title-input">Status do Chamado:</label>
+                                <label class="title-input">Status do Ticket:</label>
                                 <select name="search_status" id="search_status" class="input-adm">
                                     <option value="">Todos</option>
                                     <?php
@@ -173,7 +173,7 @@ if (isset($this->data['form'])) {
                             </div>
 
                             <div class="column">
-                                <label class="title-input">Tipo do Chamado:</label>
+                                <label class="title-input">Tipo do Ticket:</label>
                                 <select name="search_tipo" id="search_tipo" class="input-adm">
                                     <option value="">Todos</option>
                                     <option value="Telefonico">Telefônico</option>
@@ -216,7 +216,7 @@ if (isset($this->data['form'])) {
                                 $search_id = $valorForm['search_id'];
                             }
                             ?>
-                            <label class="title-input">Número Chamado:</label>
+                            <label class="title-input">Número Ticket:</label>
                             <input type="number" name="search_id" id="search_id" class="input-adm" placeholder="Todos" value="<?= $search_id ?>">
                         </div>
 
@@ -238,7 +238,7 @@ if (isset($this->data['form'])) {
                         </div>
 
                         <div class="column">
-                            <label class="title-input">Status do Chamado:</label>
+                            <label class="title-input">Status do Ticket:</label>
                             <select name="search_status" id="search_status" class="input-adm">
                                 <option value="">Todos</option>
                                 <?php
@@ -255,7 +255,7 @@ if (isset($this->data['form'])) {
                         </div>
 
                         <div class="column">
-                            <label class="title-input">Tipo do Chamado:</label>
+                            <label class="title-input">Tipo do Ticket:</label>
                             <select name="search_tipo" id="search_tipo" class="input-adm">
                                 <option value="">Todos</option>
                                 <option value="Telefonico">Telefônico</option>
@@ -305,9 +305,9 @@ if (isset($this->data['form'])) {
             ?>
         </div>
 
-        <?php //echo "Total de chamados: " . $_SESSION['resultado'];
+        <?php //echo "Total de Tickets: " . $_SESSION['resultado'];
         if (isset($_SESSION['resultado'])) { ?>
-            <h5>Total de chamados: <?php echo $_SESSION['resultado'] ?></h5>
+            <h5>Total de Tickets: <?php echo $_SESSION['resultado'] ?></h5>
         <?php
         }
         ?>
@@ -400,10 +400,9 @@ if (isset($this->data['form'])) {
         <?php echo $this->data['pagination']; ?>
         <?php
         if (isset($_SESSION['resultado'])) {
-            echo "Total de chamados: " . $_SESSION['resultado'];
+            echo "Total de tickets: " . $_SESSION['resultado'];
             unset($_SESSION['resultado']);
         }
-        //unset($_SESSION['resultado']);
         ?>
     </div>
 </div>
