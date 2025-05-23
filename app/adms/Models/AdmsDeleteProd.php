@@ -8,11 +8,11 @@ if (!defined('D0O8C0A3N1E9D6O1')) {
 }
 
 /**
- * Apagar equipamento no banco de dados
+ * Apagar prodamento no banco de dados
  *
 * @author Daniel Canedo - docan2006@gmail.com
  */
-class AdmsDeleteEquip
+class AdmsDeleteProd
 {
 
     /** @var bool $result Recebe true quando executar o processo com sucesso e false quando houver erro */
@@ -34,24 +34,24 @@ class AdmsDeleteEquip
 
     /**
      * Metodo recebe como parametro o ID do registro que será excluido
-     * Chama as funções viewEquip para fazer a confirmação do registro antes de excluir
+     * Chama as funções viewProd para fazer a confirmação do registro antes de excluir
      * @param integer $id
      * @return void
      */
-    public function deleteEquip(int $id): void
+    public function deleteProd(int $id): void
     {
         $this->id = (int) $id;
 
-        if (($this->viewEquip())) {
+        if (($this->viewProd())) {
 
-            $deleteEquip = new \App\adms\Models\helper\AdmsDelete();
-            $deleteEquip->exeDelete("adms_equipamentos", "WHERE id =:id", "id={$this->id}");
+            $deleteProd = new \App\adms\Models\helper\AdmsDelete();
+            $deleteProd->exeDelete("adms_produtos", "WHERE id =:id", "id={$this->id}");
 
-            if ($deleteEquip->getResult()) {
-                $_SESSION['msg'] = "<p class='alert-success'>Equipamento apagado com sucesso!</p>";
+            if ($deleteProd->getResult()) {
+                $_SESSION['msg'] = "<p class='alert-success'>Produto apagado com sucesso!</p>";
                 $this->result = true;
             } else {
-                $_SESSION['msg'] = "<p class='alert-danger'>Erro: Equipamento não apagado com sucesso!</p>";
+                $_SESSION['msg'] = "<p class='alert-danger'>Erro: Produto não apagado com sucesso!</p>";
                 $this->result = false;
             }
         } else {
@@ -60,20 +60,20 @@ class AdmsDeleteEquip
     }
 
     /**
-     * Metodo verifica se a página esta cadastrada na tabela e envia o resultado para a função deleteEquip
+     * Metodo verifica se a página esta cadastrada na tabela e envia o resultado para a função deleteProd
      * @return boolean
      */
-    private function viewEquip(): bool
+    private function viewProd(): bool
     {
 
-        $viewEquip = new \App\adms\Models\helper\AdmsRead();
-        $viewEquip->fullRead("SELECT id FROM adms_equipamentos WHERE id=:id LIMIT :limit", "id={$this->id}&limit=1");
+        $viewProd = new \App\adms\Models\helper\AdmsRead();
+        $viewProd->fullRead("SELECT id FROM adms_produtos WHERE id=:id LIMIT :limit", "id={$this->id}&limit=1");
 
-        $this->resultBd = $viewEquip->getResult();
+        $this->resultBd = $viewProd->getResult();
         if ($this->resultBd) {
             return true;
         } else {
-            $_SESSION['msg'] = "<p class='alert-danger'>Erro: Equipamento não encontrado!</p>";
+            $_SESSION['msg'] = "<p class='alert-danger'>Erro: Produto não encontrado!</p>";
             return false;
         }
     }

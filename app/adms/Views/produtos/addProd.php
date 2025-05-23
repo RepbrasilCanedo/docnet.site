@@ -140,6 +140,16 @@ if (isset($this->data['form'])) {
                                 ?>
                             </select>
                         </div>
+                        <div class="column">
+                            <?php
+                            $inf_adicionais = "";
+                            if (isset($valorForm['inf_adicionais'])) {
+                                $inf_adicionais = $valorForm['inf_adicionais'];
+                            }
+                            ?>
+                            <label class="title-input">Obs:<span class="text-danger">*</span></label>
+                            <input type="text" name="inf_adicionais" id="inf_adicionais" class="input-adm" placeholder="Observações" value="<?php echo $inf_adicionais; ?>" required>
+                        </div>
                     </div>
 
                 <?php } else { ?>
@@ -222,25 +232,6 @@ if (isset($this->data['form'])) {
                     </div>
 
                     <div class="row-input">
-
-
-                        <div class="column">
-                            <label class="title-input">Contratos:<span class="text-danger">*</span></label>
-                            <select name="cont_id" id="cont_id" class="input-adm" required>
-                                <option value="">Selecione</option>
-                                <?php
-                                foreach ($this->data['select']['emp_cont'] as $empCont) {
-                                    extract($empCont);
-
-                                    if (isset($valorForm['cont_id']) and $valorForm['cont_id'] == $id_cont) {
-                                        echo "<option value='$id_cont' selected>$num_cont</option>";
-                                    } else {
-                                        echo "<option value='$id_cont'>$num_cont </option>";
-                                    }
-                                }
-                                ?>
-                            </select>
-                        </div>
 
                         <div class="column">
                             <label class="title-input">Empresa do Produtos:<span class="text-danger">*</span></label>

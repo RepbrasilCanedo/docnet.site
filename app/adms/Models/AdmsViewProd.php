@@ -12,7 +12,7 @@ if (!defined('D0O8C0A3N1E9D6O1')) {
  *
  * @author Daniel Canedo - docan2006@gmail.com
  */
-class AdmsViewEquip
+class AdmsViewProd
 {
 
     /** @var bool $result Recebe true quando executar o processo com sucesso e false quando houver erro */
@@ -47,28 +47,26 @@ class AdmsViewEquip
      * @param integer $id
      * @return void
      */
-    public function viewEquip(int $id): void
+    public function viewProd(int $id): void
     {
         $this->id = $id;
 
-        $viewEquip = new \App\adms\Models\helper\AdmsRead();
-        $viewEquip->fullRead("SELECT equip.id as id_equip, equip.name as name_equip, typ.name as name_typ, equip.serie as serie_equip, modelo.name as name_modelo, mar.name as name_mar, 
-                    emp.nome_fantasia as nome_fantasia_emp, cont.num_cont as num_cont_equip, sit.name as name_sit, equip.created, equip.modified
-                    FROM adms_equipamentos AS equip 
-                    INNER JOIN adms_type_equip AS typ ON typ.id=equip.type_id 
-                    INNER JOIN adms_model AS modelo ON modelo.id=equip.modelo_id 
-                    INNER JOIN adms_marca AS mar ON mar.id=equip.marca_id 
-                    INNER JOIN adms_empresa AS emp ON emp.id=equip.empresa_id 
-                    LEFT JOIN adms_contr AS cont ON cont.id=equip.cont_id 
-                    INNER JOIN adms_sits_empr_unid AS sit ON sit.id=equip.sit_id
-                    WHERE equip.id=:id_equip
-                    LIMIT :limit", "id_equip={$this->id}&limit=1");
+        $viewProd = new \App\adms\Models\helper\AdmsRead();
+        $viewProd->fullRead("SELECT prod.id as id_prod, prod.name as name_prod, typ.name as name_type, prod.serie as serie_prod, 
+                prod.modelo_id as name_modelo, prod.marca_id as name_mar, clie.nome_fantasia as nome_fantasia_clie, 
+                prod.inf_adicionais as inf_adicionais, sit.name as name_sit, prod.created, prod.modified
+                FROM adms_produtos AS prod  
+                INNER JOIN adms_type_equip AS typ ON typ.id=prod.type_id 
+                INNER JOIN adms_clientes AS clie ON clie.id=prod.cliente_id 
+                INNER JOIN adms_sit_equip AS sit ON sit.id=prod.sit_id
+                WHERE prod.id= :prod_id and prod.cliente_id= :cliente_id", "prod_id={$this->id}&cliente_id={$_SESSION['emp_user']}");
 
-        $this->resultBd = $viewEquip->getResult();
+
+        $this->resultBd = $viewProd->getResult();
         if ($this->resultBd) {
             $this->result = true;
         } else {
-            $_SESSION['msg'] = "<p class='alert-danger'>Erro: Equipamento não encontrado!</p>";
+            $_SESSION['msg'] = "<p class='alert-danger'>Erro: Produto não encontrado!</p>";
             $this->result = false;
         }
     }

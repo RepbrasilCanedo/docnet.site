@@ -11,7 +11,7 @@ if(!defined('D0O8C0A3N1E9D6O1')){
  * Controller da página visualizar detalhes da página
  * @author Daniel Canedo - docan2006@gmail.com
  */
-class ViewEquip
+class ViewProd
 {
     /** @var array|string|null $data Recebe os dados que devem ser enviados para VIEW */
     private array|string|null $data;
@@ -32,18 +32,18 @@ class ViewEquip
         if (!empty($id)) {
             $this->id = (int) $id;
 
-            $viewEquip = new \App\adms\Models\AdmsViewEquip();
-            $viewEquip->viewEquip($this->id);
-            if ($viewEquip->getResult()) {
-                $this->data['viewEquip'] = $viewEquip->getResultBd();
-                $this->viewEquip();
+            $viewProd = new \App\adms\Models\AdmsViewProd();
+            $viewProd->viewProd($this->id);
+            if ($viewProd->getResult()) {
+                $this->data['viewProd'] = $viewProd->getResultBd();
+                $this->viewProd();
             } else {
-                $urlRedirect = URLADM . "list-equip/index";
+                $urlRedirect = URLADM . "list-prod/index";
                 header("Location: $urlRedirect");
             }
         } else {
-            $_SESSION['msg'] = "<p class='alert-danger'>Erro: Equipamento não encontrado!</p>";
-            $urlRedirect = URLADM . "list-equip/index";
+            $_SESSION['msg'] = "<p class='alert-danger'>Erro: Produto não encontrado!</p>";
+            $urlRedirect = URLADM . "list-prod/index";
             header("Location: $urlRedirect");
         }
     }
@@ -52,19 +52,20 @@ class ViewEquip
      * Instanciar a classe responsável em carregar a View e enviar os dados para View.
      * 
      */
-    private function viewEquip(): void
+    private function viewProd(): void
     {
-        $button = ['list_equip' => ['menu_controller' => 'list-equip', 'menu_metodo' => 'index'],
-        'edit_equip' => ['menu_controller' => 'edit-equip', 'menu_metodo' => 'index'],
-        'delete_equip' => ['menu_controller' => 'delete-equip', 'menu_metodo' => 'index']];
+        $button = ['list_prod' => ['menu_controller' => 'list-prod', 'menu_metodo' => 'index'],
+        'edit_prod' => ['menu_controller' => 'edit-prod', 'menu_metodo' => 'index'],
+        'delete_prod' => ['menu_controller' => 'delete-prod', 'menu_metodo' => 'index']];
+        
         $listBotton = new \App\adms\Models\helper\AdmsButton();
         $this->data['button'] = $listBotton->buttonPermission($button);
 
         $listMenu = new \App\adms\Models\helper\AdmsMenu();
         $this->data['menu'] = $listMenu->itemMenu(); 
         
-        $this->data['sidebarActive'] = "list-equip";
-        $loadView = new \Core\ConfigView("adms/Views/equipamentos/viewEquip", $this->data);
+        $this->data['sidebarActive'] = "list-prod";
+        $loadView = new \Core\ConfigView("adms/Views/produtos/viewProd", $this->data);
         $loadView->loadView();
     }
 }

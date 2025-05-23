@@ -109,7 +109,7 @@ class AdmsAddCham
         if ($_SESSION['adms_access_level_id'] > 2) {
 
             //Se for 4 - Cliente Administrativo
-            if ($_SESSION['adms_access_level_id'] == 4){
+            if (($_SESSION['adms_access_level_id'] == 4) or ($_SESSION['adms_access_level_id'] == 12)) {
 
                 $list->fullRead("SELECT id, nome_fantasia FROM adms_clientes 
                 WHERE empresa= :empresa", "empresa={$_SESSION['emp_user']}");
@@ -121,13 +121,17 @@ class AdmsAddCham
                 $list->fullRead("SELECT id, nome_fantasia FROM adms_clientes 
                 WHERE (empresa= :empresa) AND (id = :cliente) ORDER BY nome_fantasia ASC", "empresa={$_SESSION['emp_user']}&cliente={$_SESSION['set_clie']}");
                 $registry['cliente'] = $list->getResult();
+
+                $list->fullRead("SELECT id, name FROM adms_produtos 
+                WHERE cliente_id= :cliente_id", "cliente_id={$_SESSION['set_clie']}");
+                $registry['produto'] = $list->getResult();
             }
         } else {
 
             $list->fullRead("SELECT id, nome_fantasia FROM adms_clientes ORDER BY nome_fantasia ASC");
             $registry['cliente'] = $list->getResult();
         }
-        $this->listRegistryAdd = ['cliente' => $registry['cliente']];
+        $this->listRegistryAdd = ['cliente' => $registry['cliente'],'produto' => $registry['produto']];
 
         return $this->listRegistryAdd;
     }

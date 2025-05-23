@@ -74,6 +74,22 @@ if (isset($this->data['form'])) {
                             <option value="Outros">Outros</option>
                         </select>
                     </div>
+                    <div class="column">
+                        <label class="title-input">Produto:<span class="text-danger">*</span></label>
+                        <select name="prod_id" id="prod_id" class="input-adm" required>
+                            <option value="">Selecione</option>
+                            <?php
+                            foreach ($this->data['select']['produto'] as $nome) {
+                                extract($nome);
+                                if (isset($valorForm['id']) and $valorForm['id'] == $id) {
+                                    echo "<option value='$id' selected>$name</option>";
+                                } else {
+                                    echo "<option value='$id'>$name</option>";
+                                }
+                            }
+                            ?>
+                        </select>
+                    </div>
 
                     <div class="column">
                         <?php

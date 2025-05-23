@@ -38,7 +38,7 @@ class AdmsValEmptyField
      * 
      * @return void
      */
-    public function valField(array $data = null): void
+    public function valField(array $data): void
     {
         $this->data = $data;
         $this->data = array_map('strip_tags', $this->data);

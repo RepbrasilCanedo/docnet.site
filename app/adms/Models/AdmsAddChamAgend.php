@@ -51,7 +51,7 @@ class AdmsAddChamAgend
      * 
      * @return void
      */
-    public function create(array $data = null)
+    public function create(array $data)
     {
         $this->data = $data;
         $valEmptyField = new \App\adms\Models\helper\AdmsValEmptyField();
@@ -190,16 +190,17 @@ class AdmsAddChamAgend
                 $list->fullRead("SELECT id, nome_fantasia FROM adms_clientes 
                 WHERE id= :clie_id ORDER BY nome_fantasia ASC", "clie_id={$_SESSION['set_clie']}");
                 $registry['cliente'] = $list->getResult();
+
+                $list->fullRead("SELECT id, name FROM adms_produtos 
+                WHERE cliente_id= :cliente_id", "cliente_id={$_SESSION['set_clie']}");
+                $registry['produto'] = $list->getResult();
             }
         } else {
             $list->fullRead("SELECT id id_emp, nome_fantasia nome_fantasia_emp FROM adms_empresa as emp ORDER BY nome_fantasia ASC");
             $registry['cliente'] = $list->getResult();
             
         }
-
-
-
-        $this->listRegistryAdd = ['cliente' => $registry['cliente']];
+        $this->listRegistryAdd = ['cliente' => $registry['cliente'],'produto' => $registry['produto']];
 
         return $this->listRegistryAdd;
     }

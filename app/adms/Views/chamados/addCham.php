@@ -8,7 +8,8 @@ if (!defined('D0O8C0A3N1E9D6O1')) {
 if (isset($this->data['form'])) {
     $valorForm = $this->data['form'];
 }
-//echo "<pre>"; var_dump($valorForm);
+//echo "<pre>"; var_dump($this->data['select']['cliente']);
+//echo "<pre>"; var_dump($this->data['select']['produto']);
 ?>
 <!-- Inicio do conteudo do administrativo -->
 <div class="wrapper">
@@ -73,6 +74,22 @@ if (isset($this->data['form'])) {
                             <option value="Remoto">Remoto</option>
                             <option value="Presencial">Presencial</option>
                             <option value="Outros">Outros</option>
+                        </select>
+                    </div>
+                    <div class="column">
+                        <label class="title-input">Produto:<span class="text-danger">*</span></label>
+                        <select name="prod_id" id="prod_id" class="input-adm" required>
+                            <option value="">Selecione</option>
+                            <?php
+                            foreach ($this->data['select']['produto'] as $nome) {
+                                extract($nome);
+                                if (isset($valorForm['id']) and $valorForm['id'] == $id) {
+                                    echo "<option value='$id' selected>$name</option>";
+                                } else {
+                                    echo "<option value='$id'>$name</option>";
+                                }
+                            }
+                            ?>
                         </select>
                     </div>
 
