@@ -239,7 +239,7 @@ if (isset($this->data['form'])) {
                     <?php } ?>
 
                     <div class="column margin-top-search">
-                        <button type="submit" name="SendSearchCham" class="btn-warning" value="Pesquisar">Gerar Pdf</button>
+                        <button type="submit" name="SendSearchCham" class="btn-warning" value="Pesquisar" target="_blank">Gerar Pdf</button>
                     </div>
             </form>
 

@@ -29,6 +29,11 @@ if (isset($this->data['form'][0])) {
                         echo "<a href='" . URLADM . "view-empresas/index/" . $valorForm['id'] . "' class='btn-primary'>Visualizar</a><br><br>";
                     }
                 }
+                if (isset($valorForm['id'])) {
+                    if ($this->data['button']['list_equip']) {
+                        echo "<a href='" . URLADM . "list-equip/index/" . $valorForm['id'] . "' class='btn-primary'>Inserir Produtos</a><br><br>";
+                    }
+                }
                 ?>
             </div>
         </div>

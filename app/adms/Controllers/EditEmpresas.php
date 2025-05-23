@@ -62,7 +62,8 @@ class EditEmpresas
     private function viewEditEmpresas(): void
     {
         $button = ['list_empresas' => ['menu_controller' => 'list-empresas', 'menu_metodo' => 'index'],
-        'view_empresas' => ['menu_controller' => 'view-empresas', 'menu_metodo' => 'index']];
+        'view_empresas' => ['menu_controller' => 'view-empresas', 'menu_metodo' => 'index'], 
+        'view_produto' => ['menu_controller' => 'view-produto', 'menu_metodo' => 'index']];
         $listBotton = new \App\adms\Models\helper\AdmsButton();
         $this->data['button'] = $listBotton->buttonPermission($button);
 

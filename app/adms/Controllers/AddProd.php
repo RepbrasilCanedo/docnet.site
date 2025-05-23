@@ -8,10 +8,10 @@ if(!defined('D0O8C0A3N1E9D6O1')){
 }
 
 /**
- * Controller cadastrar Equipamentos
+ * Controller cadastrar Produtos
  * @author Daniel Canedo - docan2006@gmail.com
  */
-class AddEquip
+class AddProd
 {
 
     /** @var array|string|null $data Recebe os dados que devem ser enviados para VIEW */
@@ -21,10 +21,10 @@ class AddEquip
     private array|null $dataForm;
 
     /**
-     * Método cadastrar equipamentos
+     * Método cadastrar produtos
      * Receber os dados do formulário.
-     * Quando o usuário clicar no botão "cadastrar" do formulário da página cadastrar equipamentos. Acessa o IF e instância a classe "AdmsAddEquip" responsável em cadastrar a página no banco de dados.
-     * Equipamento cadastrado com sucesso, redireciona para a página listar registros.
+     * Quando o usuário clicar no botão "cadastrar" do formulário da página cadastrar produtos. Acessa o IF e instância a classe "AdmsAddEquip" responsável em cadastrar a página no banco de dados.
+     * Produtos cadastrado com sucesso, redireciona para a página listar registros.
      * Senão, instância a classe responsável em carregar a View e enviar os dados para View.
      * 
      * @return void
@@ -33,21 +33,21 @@ class AddEquip
     {
         $this->dataForm = filter_input_array(INPUT_POST, FILTER_DEFAULT);        
 
-        if(!empty($this->dataForm['SendAddEquip'])){
+        if(!empty($this->dataForm['SendAddProd'])){
             //var_dump($this->dataForm);
-            unset($this->dataForm['SendAddEquip']);
-            $createEquip = new \App\adms\Models\AdmsAddEquip();
-            $createEquip->create($this->dataForm);
+            unset($this->dataForm['SendAddProd']);
+            $createProd = new \App\adms\Models\AdmsAddProd();
+            $createProd->create($this->dataForm);
             
-            if($createEquip->getResult()){
-                $urlRedirect = URLADM . "list-equip/index";
+            if($createProd->getResult()){
+                $urlRedirect = URLADM . "list-prod/index";
                 header("Location: $urlRedirect");
             }else{
                 $this->data['form'] = $this->dataForm;
-                $this->viewAddEquip();
+                $this->viewAddProd();
             }   
         }else{
-            $this->viewAddEquip();
+            $this->viewAddProd();
         }  
     }
 
@@ -56,21 +56,21 @@ class AddEquip
      * Instanciar a classe responsável em carregar a View e enviar os dados para View.
      * 
      */
-    private function viewAddEquip(): void
+    private function viewAddProd(): void
     {
-        $button = ['list_equip' => ['menu_controller' => 'list-equip', 'menu_metodo' => 'index']];
+        $button = ['list_prod' => ['menu_controller' => 'list-prod', 'menu_metodo' => 'index']];
         $listBotton = new \App\adms\Models\helper\AdmsButton();
         $this->data['button'] = $listBotton->buttonPermission($button);
 
-        $listSelect = new \App\adms\Models\AdmsAddEquip();
+        $listSelect = new \App\adms\Models\AdmsAddProd();
         $this->data['select'] = $listSelect->listSelect();
 
         $listMenu = new \App\adms\Models\helper\AdmsMenu();
         $this->data['menu'] = $listMenu->itemMenu(); 
 
-        $this->data['sidebarActive'] = "list-equip"; 
+        $this->data['sidebarActive'] = "list-prod"; 
         
-        $loadView = new \Core\ConfigView("adms/Views/equipamentos/addEquip", $this->data);
+        $loadView = new \Core\ConfigView("adms/Views/produtos/addProd", $this->data);
         $loadView->loadView();
     }
 }

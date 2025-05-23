@@ -8,11 +8,11 @@ if (!defined('D0O8C0A3N1E9D6O1')) {
 }
 
 /**
- * Cadastrar Equipamento no banco de dados
+ * Cadastrar Produtos no banco de dados
  *
  * @author Daniel Canedo - docan2006@gmail.com
  */
-class AdmsAddEquip
+class AdmsAddProd
 {
     /** @var array|null $data Recebe as informações do formulário */
     private array|null $data;
@@ -44,7 +44,7 @@ class AdmsAddEquip
      * 
      * @return void
      */
-    public function create(array $data = null)
+    public function create(array $data)
     {
         $this->data = $data;
 
@@ -68,17 +68,16 @@ class AdmsAddEquip
     {
         $this->data['created'] = date("Y-m-d H:i:s");
 
-        if (($_SESSION['adms_access_level_id'] > 1) and ($_SESSION['adms_access_level_id'] <> 7) and ($_SESSION['adms_access_level_id'] <> 2)) {
-            $this->data['cont_id'] = $_SESSION['set_Contr'];
-        }
         $createEquip = new \App\adms\Models\helper\AdmsCreate();
-        $createEquip->exeCreate("adms_equipamentos", $this->data);
+        $createEquip->exeCreate("adms_produtos", $this->data);
 
         if ($createEquip->getResult()) {
-            $_SESSION['msg'] = "<p class='alert-success'>Equipamento cadastrado com sucesso!</p>";
+            $_SESSION['msg'] = "<p class='alert-success'>Produto cadastrado com sucesso!</p>";
+            $urlRedirect = URLADM . "list-prod/index";
+            header("Location: $urlRedirect");
             $this->result = true;
         } else {
-            $_SESSION['msg'] = "<p class='alert-danger'>Erro: Equipamento não cadastrado com sucesso!</p>";
+            $_SESSION['msg'] = "<p class='alert-danger'>Erro: Produto não cadastrado com sucesso!</p>";
             $this->result = false;
         }
     }
@@ -92,74 +91,53 @@ class AdmsAddEquip
     {
         $list = new \App\adms\Models\helper\AdmsRead();
 
-        if (($_SESSION['adms_access_level_id'] > 1) and ($_SESSION['adms_access_level_id'] <> 7) and ($_SESSION['adms_access_level_id'] <> 2)) {
+        if (($_SESSION['adms_access_level_id'] > 2) and ($_SESSION['adms_access_level_id'] <> 7)) {
 
-            if ($_SESSION['adms_access_level_id'] == 10) {
+            if (($_SESSION['adms_access_level_id'] == 4) or ($_SESSION['adms_access_level_id'] == 12) ){
 
                 $list->fullRead("SELECT id id_typ, name name_typ FROM adms_type_equip ORDER BY name ASC");
                 $registry['type_equip'] = $list->getResult();
 
-                $list->fullRead("SELECT id id_modelo, name name_modelo FROM adms_model ORDER BY name ASC");
-                $registry['mod_equip'] = $list->getResult();
-
-                $list->fullRead("SELECT id id_mar, name name_mar FROM adms_marca ORDER BY name ASC");
-                $registry['marca_equip'] = $list->getResult();
-
                 $list->fullRead("SELECT id id_sit, name name_sit FROM adms_sits_empr_unid ORDER BY name ASC");
                 $registry['sit_equip'] = $list->getResult();
 
-                $list->fullRead("SELECT id id_emp, nome_fantasia nome_fantasia_emp FROM adms_empresa WHERE id= :id ORDER BY nome_fantasia ASC", "id={$_SESSION['emp_user']}");
+                $list->fullRead("SELECT id id_emp, nome_fantasia nome_fantasia_emp FROM adms_clientes WHERE id= :id ORDER BY nome_fantasia ASC", "id={$_SESSION['emp_user']}");
                 $registry['emp_equip'] = $list->getResult();
 
                 $this->listRegistryAdd = [
-                    'type_equip' => $registry['type_equip'], 'mod_equip' => $registry['mod_equip'],
-                    'marca_equip' => $registry['marca_equip'], 'emp_equip' => $registry['emp_equip'], 'sit_equip' => $registry['sit_equip']
+                    'type_equip' => $registry['type_equip'], 'emp_equip' => $registry['emp_equip'], 'sit_equip' => $registry['sit_equip']
                 ];
             } else if ($_SESSION['adms_access_level_id'] == 13) {
 
                 $list->fullRead("SELECT id id_typ, name name_typ FROM adms_type_equip ORDER BY name ASC");
                 $registry['type_equip'] = $list->getResult();
 
-                $list->fullRead("SELECT id id_modelo, name name_modelo FROM adms_model ORDER BY name ASC");
-                $registry['mod_equip'] = $list->getResult();
-
-                $list->fullRead("SELECT id id_mar, name name_mar FROM adms_marca ORDER BY name ASC");
-                $registry['marca_equip'] = $list->getResult();
-
 
 
                 $list->fullRead("SELECT id id_sit, name name_sit FROM adms_sits_empr_unid ORDER BY name ASC");
                 $registry['sit_equip'] = $list->getResult();
 
-                $list->fullRead("SELECT id id_emp, nome_fantasia nome_fantasia_emp FROM adms_empresa WHERE contrato = :contrato  ORDER BY nome_fantasia ASC", "contrato={$_SESSION['set_Contr']}");
+                $list->fullRead("SELECT id id_emp, nome_fantasia nome_fantasia_emp FROM adms_clientes WHERE contrato = :contrato  ORDER BY nome_fantasia ASC", "contrato={$_SESSION['set_Contr']}");
                 $registry['emp_equip'] = $list->getResult();
 
                 $this->listRegistryAdd = [
-                    'type_equip' => $registry['type_equip'], 'mod_equip' => $registry['mod_equip'],
-                    'marca_equip' => $registry['marca_equip'], 'emp_equip' => $registry['emp_equip'], 'sit_equip' => $registry['sit_equip']
+                    'type_equip' => $registry['type_equip'],'emp_equip' => $registry['emp_equip'], 'sit_equip' => $registry['sit_equip']
                 ];
             } else if ($_SESSION['adms_access_level_id'] == 4) {
 
                 $list->fullRead("SELECT id id_typ, name name_typ FROM adms_type_equip ORDER BY name ASC");
                 $registry['type_equip'] = $list->getResult();
 
-                $list->fullRead("SELECT id id_modelo, name name_modelo FROM adms_model ORDER BY name ASC");
-                $registry['mod_equip'] = $list->getResult();
-
-                $list->fullRead("SELECT id id_mar, name name_mar FROM adms_marca ORDER BY name ASC");
-                $registry['marca_equip'] = $list->getResult();
-
 
 
                 $list->fullRead("SELECT id id_sit, name name_sit FROM adms_sits_empr_unid ORDER BY name ASC");
                 $registry['sit_equip'] = $list->getResult();
 
-                $list->fullRead("SELECT id id_emp, nome_fantasia nome_fantasia_emp FROM adms_empresa WHERE contrato = :contrato  ORDER BY nome_fantasia ASC", "contrato={$_SESSION['set_Contr']}");
+                $list->fullRead("SELECT id id_emp, nome_fantasia nome_fantasia_emp FROM adms_clientes WHERE contrato = :contrato  ORDER BY nome_fantasia ASC", "contrato={$_SESSION['set_Contr']}");
                 $registry['emp_equip'] = $list->getResult();
 
                 $this->listRegistryAdd = [
-                    'type_equip' => $registry['type_equip'], 'mod_equip' => $registry['mod_equip'],
-                    'marca_equip' => $registry['marca_equip'], 'emp_equip' => $registry['emp_equip'], 'sit_equip' => $registry['sit_equip']
+                    'type_equip' => $registry['type_equip'],'emp_equip' => $registry['emp_equip'], 'sit_equip' => $registry['sit_equip']
                 ];
             }
         } else {
@@ -167,13 +145,7 @@ class AdmsAddEquip
             $list->fullRead("SELECT id id_typ, name name_typ FROM adms_type_equip ORDER BY name ASC");
             $registry['type_equip'] = $list->getResult();
 
-            $list->fullRead("SELECT id id_modelo, name name_modelo FROM adms_model ORDER BY name ASC");
-            $registry['mod_equip'] = $list->getResult();
-
-            $list->fullRead("SELECT id id_mar, name name_mar FROM adms_marca ORDER BY name ASC");
-            $registry['marca_equip'] = $list->getResult();
-
-            $list->fullRead("SELECT id id_emp, nome_fantasia nome_fantasia_emp FROM adms_empresa ORDER BY nome_fantasia ASC");
+            $list->fullRead("SELECT id id_emp, nome_fantasia nome_fantasia_emp FROM adms_clientes ORDER BY nome_fantasia ASC");
             $registry['emp_equip'] = $list->getResult();
 
             $list->fullRead("SELECT id id_sit, name name_sit FROM adms_sits_empr_unid ORDER BY name ASC");
@@ -183,9 +155,7 @@ class AdmsAddEquip
             $registry['emp_cont'] = $list->getResult();
 
             $this->listRegistryAdd = [
-                'type_equip' => $registry['type_equip'], 'mod_equip' => $registry['mod_equip'],
-                'marca_equip' => $registry['marca_equip'], 'emp_equip' => $registry['emp_equip'], 'sit_equip' => $registry['sit_equip'], 'emp_cont' => $registry['emp_cont']
-            ];
+                'type_equip' => $registry['type_equip'],'emp_equip' => $registry['emp_equip'], 'sit_equip' => $registry['sit_equip']];
         }
 
         return $this->listRegistryAdd;

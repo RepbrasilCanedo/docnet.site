@@ -14,11 +14,11 @@ if (isset($this->data['form'])) {
 <div class="wrapper">
     <div class="row">
         <div class="top-list">
-            <span class="title-content">Listar Equipamentos</span>
+            <span class="title-content">Listar Produtos</span>
             <div class="top-list-right">
                 <?php
-                if ($this->data['button']['add_equip']) {
-                    echo "<a href='" . URLADM . "add-equip/index' class='btn-success'>Cadastrar</a> ";
+                if ($this->data['button']['add_prod']) {
+                    echo "<a href='" . URLADM . "add-prod/index' class='btn-success'>Cadastrar</a> ";
                 }
                 ?>
             </div>
@@ -27,19 +27,19 @@ if (isset($this->data['form'])) {
         <div class="top-list">
             <form method="POST" action="">
                 <div class="row-input">
-                    <?php if (($_SESSION['adms_access_level_id'] > 1) and ($_SESSION['adms_access_level_id'] <> 7)) { ?>
+                    <?php if (($_SESSION['adms_access_level_id'] > 2) and ($_SESSION['adms_access_level_id'] <> 7)) { ?>
                        
                         
                     <?php } else { ?>
-                        <?php $search_equip = "";
-                        if (isset($valorForm['search_equip'])) {
-                            $search_equip = $valorForm['search_equip'];
+                        <?php $search_prod = "";
+                        if (isset($valorForm['search_prod'])) {
+                            $search_prod = $valorForm['search_prod'];
                         }
                         ?>
                         
                         <div class="column">
-                            <label class="title-input-search">Equipamento: </label>
-                            <input type="text" name="search_equip" id="search_equip" class="input-search" placeholder="Pesquisar pelo equipamento..." value="<?php echo $search_equip; ?>">
+                            <label class="title-input-search">Produto: </label>
+                            <input type="text" name="search_prod" id="search_prod" class="input-search" placeholder="Pesquisar pelo produto..." value="<?php echo $search_prod; ?>">
                         </div>
                         <?php
                         $search_emp = "";
@@ -53,7 +53,7 @@ if (isset($this->data['form'])) {
                         </div>
                         
                     <div class="column margin-top-search">
-                        <button type="submit" name="SendSearchEquipEmp" class="btn-info" value="Pesquisar">Pesquisar</button>
+                        <button type="submit" name="SendSearchProdEmp" class="btn-info" value="Pesquisar">Pesquisar</button>
                     </div>
                     <?php } ?>
                 </div>
@@ -71,7 +71,7 @@ if (isset($this->data['form'])) {
         </div>
         <?php 
         if (isset($_SESSION['resultado'])) {
-            echo "Total de equipamentos Cadastrados:  " . $_SESSION['resultado'];
+            echo "Total de produtos Cadastrados:  " . $_SESSION['resultado'];
         }
         ?>
         <table class="table table-hover table-list">
@@ -87,14 +87,14 @@ if (isset($this->data['form'])) {
             </thead>
             <tbody class="list-body">
                 <?php
-                foreach ($this->data['listEquip'] as $equip) {
-                    extract($equip);
+                foreach ($this->data['listProd'] as $prod) {
+                    extract($prod);
                 ?>
                     <tr>
                         <td class="list-body-content table-sm-none"><?php echo $id; ?></td>
                         <td class="list-body-content"><?php echo $name; ?></td>
-                        <td class="list-body-content table-sm-none"><?php echo $name_typ; ?></td>
-                        <td class="list-body-content table-sm-none"><?php echo $nome_fantasia_emp; ?></td>
+                        <td class="list-body-content table-sm-none"><?php echo $name_type; ?></td>
+                        <td class="list-body-content table-sm-none"><?php echo $nome_fantasia_clie; ?></td>
                         <td class="list-body-content"><?php echo $name_sit; ?></td>
 
                         <td class="list-body-content">
@@ -102,14 +102,14 @@ if (isset($this->data['form'])) {
                                 <button onclick="actionDropdown(<?php echo $id; ?>)" class="dropdown-btn-action">Ações</button>
                                 <div id="actionDropdown<?php echo $id; ?>" class="dropdown-action-item">
                                     <?php
-                                    if ($this->data['button']['view_equip']) {
-                                        echo "<a href='" . URLADM . "view-equip/index/$id'>Visualizar</a>";
+                                    if ($this->data['button']['view_prod']) {
+                                        echo "<a href='" . URLADM . "view-prod/index/$id'>Visualizar</a>";
                                     }
-                                    if ($this->data['button']['edit_equip']) {
-                                        echo "<a href='" . URLADM . "edit-equip/index/$id'>Editar</a>";
+                                    if ($this->data['button']['edit_prod']) {
+                                        echo "<a href='" . URLADM . "edit-prod/index/$id'>Editar</a>";
                                     }
-                                    if ($this->data['button']['delete_equip']) {
-                                        echo "<a href='" . URLADM . "delete-equip/index/$id' onclick='return confirm(\"Tem certeza que deseja excluir este registro?\")'>Apagar</a>";
+                                    if ($this->data['button']['delete_prod']) {
+                                        echo "<a href='" . URLADM . "delete-prod/index/$id' onclick='return confirm(\"Tem certeza que deseja excluir este registro?\")'>Apagar</a>";
                                     }
                                     ?>
                                 </div>
@@ -125,7 +125,7 @@ if (isset($this->data['form'])) {
         <?php echo $this->data['pagination']; ?>
         <?php 
         if (isset($_SESSION['resultado'])) {
-            echo "Total de equipamentos Cadastrados:  " . $_SESSION['resultado'];
+            echo "Total de produtos Cadastrados:  " . $_SESSION['resultado'];
             unset($_SESSION['resultado']);
         }
         ?>
