@@ -93,7 +93,7 @@ if (!defined('D0O8C0A3N1E9D6O1')) {
 
                 <div class="view-det-adm">
                     <span class="view-adm-title">Modificado: </span>
-                    <span class="view-adm-info"><?php echo date('d/m/Y H:i:s', $modified); ?></span>
+                    <span class="view-adm-info"><?php echo date('d/m/Y H:i:s', strtotime($modified)); ?></span>
                     
                 </div>
             <?php

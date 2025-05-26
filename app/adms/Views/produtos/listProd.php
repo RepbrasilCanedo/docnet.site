@@ -8,8 +8,8 @@ if (!defined('D0O8C0A3N1E9D6O1')) {
 if (isset($this->data['form'])) {
     $valorForm = $this->data['form'];
 }
+//var_dump($this->data);
 ?>
-
 <!-- Inicio do conteudo do administrativo -->
 <div class="wrapper">
     <div class="row">
@@ -27,9 +27,32 @@ if (isset($this->data['form'])) {
         <div class="top-list">
             <form method="POST" action="">
                 <div class="row-input">
-                    <?php if (($_SESSION['adms_access_level_id'] > 2) and ($_SESSION['adms_access_level_id'] <> 7)) { ?>
-                       
+                    <?php if (($_SESSION['adms_access_level_id'] > 2) and ($_SESSION['adms_access_level_id'] <> 7)) { ?>                       
+                        <?php 
+                        $search_prod = "";
+                        if (isset($valorForm['search_prod'])) {
+                            $search_prod = $valorForm['search_prod'];
+                        }
+                        ?>
                         
+                        <div class="column">
+                            <label class="title-input-search">Produto: </label>
+                            <input type="text" name="search_prod" id="search_prod" class="input-search" placeholder="Pesquisar pelo produto..." value="<?php echo $search_prod; ?>">
+                        </div>
+                        <?php
+                        $search_emp = "";
+                        if (isset($valorForm['search_emp'])) {
+                            $search_emp = $valorForm['search_emp'];
+                        }
+                        ?>
+                        <div class="column">
+                            <label class="title-input-search">Empresa: </label>
+                            <input type="text" name="search_emp" id="search_emp" class="input-search" placeholder="Pesquisar pela empresa..." value="<?php echo $search_emp; ?>">
+                        </div>
+                        
+                    <div class="column margin-top-search">
+                        <button type="submit" name="SendSearchProdEmp" class="btn-info" value="Pesquisar">Pesquisar</button>
+                    </div>
                     <?php } else { ?>
                         <?php $search_prod = "";
                         if (isset($valorForm['search_prod'])) {
@@ -74,7 +97,7 @@ if (isset($this->data['form'])) {
             echo "Total de produtos Cadastrados:  " . $_SESSION['resultado'];
         }
         ?>
-        <table class="table table-hover table-list">
+        <table class="table table-hover table-list mb-5">
             <thead class="list-head">
                 <tr>
                     <th class="list-head-content table-sm-none">ID</th>

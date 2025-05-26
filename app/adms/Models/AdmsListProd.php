@@ -76,23 +76,22 @@ class AdmsListProd
     {
         $this->page = (int) $page ? $page : 1;
 
-
         if (($_SESSION['adms_access_level_id'] > 2) and ($_SESSION['adms_access_level_id'] <> 7)) {
             //Acessa se for Cliente Adm ou Suporte do Cliente
             if (($_SESSION['adms_access_level_id'] == 4) or ($_SESSION['adms_access_level_id'] == 12)) {
                 $pagination = new \App\adms\Models\helper\AdmsPagination(URLADM . 'list-prod/index');
                 $pagination->condition($this->page, $this->limitResult);
-                $pagination->pagination("SELECT COUNT(id) AS num_result FROM adms_produtos WHERE cliente_id = :cliente_id ", "cliente_id={$_SESSION['emp_user']}");
+                $pagination->pagination("SELECT COUNT(id) AS num_result FROM adms_produtos WHERE empresa_id = :empresa_id", "empresa_id={$_SESSION['emp_user']}");
                 $this->resultPg = $pagination->getResult();
 
                 $listProd = new \App\adms\Models\helper\AdmsRead();
-                $listProd->fullRead("SELECT prod.id, prod.name,  typ.name as name_type, prod.serie, prod.modelo_id, prod.marca_id, clie.nome_fantasia as nome_fantasia_clie, prod.inf_adicionais, sit.name as name_sit
+                $listProd->fullRead("SELECT prod.id, prod.name,  typ.name as name_type, prod.serie, prod.modelo_id, prod.marca_id, clie.nome_fantasia as nome_fantasia_clie, prod.empresa_id, prod.inf_adicionais, sit.name as name_sit
                 FROM adms_produtos AS prod  
                 INNER JOIN adms_type_equip AS typ ON typ.id=prod.type_id 
                 INNER JOIN adms_clientes AS clie ON clie.id=prod.cliente_id 
                 INNER JOIN adms_sit_equip AS sit ON sit.id=prod.sit_id
-                WHERE prod.cliente_id= :cliente_id ORDER BY prod.name ASC
-                LIMIT :limit OFFSET :offset", "cliente_id={$_SESSION['emp_user']}&limit={$this->limitResult}&offset={$pagination->getOffset()}");
+                WHERE prod.empresa_id = :empresa_id ORDER BY prod.name ASC
+                LIMIT :limit OFFSET :offset", "empresa_id={$_SESSION['emp_user']}&limit={$this->limitResult}&offset={$pagination->getOffset()}");
 
                 $this->resultBd = $listProd->getResult();
                 if ($this->resultBd) {
@@ -173,22 +172,20 @@ class AdmsListProd
     {
         $pagination = new \App\adms\Models\helper\AdmsPagination(URLADM . 'list-prod/index', "?search_prod={$this->searchProd}&search_emp={$this->searchEmp}");
         $pagination->condition($this->page, $this->limitResult);
-        $pagination->pagination("SELECT COUNT(prod.id) AS num_result
-        FROM adms_produtos AS prod  
-        WHERE (prod.name LIKE :search_prod) AND (emp.nome_fantasia LIKE :search_nome_fantasia_emp )
-        ORDER BY prod.name ASC", "search_prod={$this->searchProdValue}&search_nome_fantasia_emp={$this->searchEmpValue}");
+        $pagination->pagination("SELECT COUNT(prod.id) AS num_result FROM adms_produtos AS prod  
+        WHERE (prod.empresa_id= :empresa_id) and (prod.name LIKE :search_prod) AND (emp.nome_fantasia LIKE :search_nome_fantasia_emp ) ORDER BY prod.name ASC", 
+        "empresa_id={$_SESSION['emp_user']}&search_prod={$this->searchProdValue}&search_nome_fantasia_emp={$this->searchEmpValue}");
         $this->resultPg = $pagination->getResult();
-
         $listprod = new \App\adms\Models\helper\AdmsRead();
         $listprod->fullRead("SELECT prod.id, prod.name, typ.name name_typ,
         emp.nome_fantasia nome_fantasia_emp, sit.name name_sit
         FROM adms_produtos AS prod 
         LEFT JOIN adms_type_prod AS typ ON typ.id=prod.type_id  
-        LEFT JOIN adms_empresa AS emp ON emp.id=prod.empresa_id 
+        LEFT JOIN adms_adms_clientes AS emp ON emp.id=prod.empresa_id 
         LEFT JOIN adms_sits_empr_unid AS sit ON sit.id=prod.sit_id   
-        WHERE (prod.name LIKE :search_prod) AND (emp.nome_fantasia LIKE :search_nome_fantasia_emp )
+        WHERE (prod.empresa_id= :empresa_id) and (prod.name LIKE :search_prod) AND (emp.nome_fantasia LIKE :search_nome_fantasia_emp )
         ORDER BY prod.name ASC
-        LIMIT :limit OFFSET :offset", "search_prod={$this->searchProdValue}&search_nome_fantasia_emp={$this->searchEmpValue}&limit={$this->limitResult}&offset={$pagination->getOffset()}");
+        LIMIT :limit OFFSET :offset", "empresa_id={$_SESSION['emp_user']}&search_prod={$this->searchProdValue}&search_nome_fantasia_emp={$this->searchEmpValue}&limit={$this->limitResult}&offset={$pagination->getOffset()}");
 
         $this->resultBd = $listprod->getResult();
         if ($this->resultBd) {

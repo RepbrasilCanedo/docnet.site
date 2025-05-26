@@ -142,7 +142,7 @@ class ListCham
             $this->data['form']['search_date_start'] = $this->searchDateStart;
             $this->data['form']['search_date_end'] = $this->searchDateEnd;
         } else {
-            //$listCham->listCham($this->page);
+            $listCham->listCham($this->page);
         }
 
         if ($listCham->getResult()) {

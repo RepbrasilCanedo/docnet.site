@@ -34,6 +34,7 @@ class ViewProd
 
             $viewProd = new \App\adms\Models\AdmsViewProd();
             $viewProd->viewProd($this->id);
+            
             if ($viewProd->getResult()) {
                 $this->data['viewProd'] = $viewProd->getResultBd();
                 $this->viewProd();

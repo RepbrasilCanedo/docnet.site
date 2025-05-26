@@ -61,13 +61,13 @@ class AdmsEditProd
         $this->id = $id;
         $viewProd = new \App\adms\Models\helper\AdmsRead();
         $viewProd->fullRead("SELECT prod.id, prod.name as name_prod, typ.name as name_type, prod.serie as serie_prod, 
-                prod.modelo_id as name_modelo, prod.marca_id as name_mar, clie.nome_fantasia as nome_fantasia_clie, 
+                prod.modelo_id as name_modelo, prod.marca_id as name_mar, clie.razao_social as razao_social_clie, clie.nome_fantasia as nome_fantasia_clie, 
                 prod.inf_adicionais as inf_adicionais, sit.name as name_sit, prod.created, prod.modified
                 FROM adms_produtos AS prod  
                 INNER JOIN adms_type_equip AS typ ON typ.id=prod.type_id 
                 INNER JOIN adms_clientes AS clie ON clie.id=prod.cliente_id 
                 INNER JOIN adms_sit_equip AS sit ON sit.id=prod.sit_id
-                WHERE prod.id= :prod_id and prod.cliente_id= :cliente_id", "prod_id={$this->id}&cliente_id={$_SESSION['emp_user']}");
+                WHERE prod.id= :prod_id", "prod_id={$this->id}");
 
         $this->resultBd = $viewProd->getResult();
         if ($this->resultBd) {
@@ -175,12 +175,9 @@ class AdmsEditProd
                 $list->fullRead("SELECT id as id_sit, name as name_sit FROM adms_sit_equip");
                 $registry['sit_prod'] = $list->getResult();
 
-                $list->fullRead("SELECT id, nome_fantasia FROM adms_clientes WHERE id= :id", "id={$_SESSION['emp_user']}");
-                $registry['emp_prod'] = $list->getResult();
-
                 $this->listRegistryAdd = [
                     'type_prod' => $registry['type_prod'], 'mod_prod' => $registry['mod_prod'],
-                    'marca_prod' => $registry['marca_prod'], 'emp_prod' => $registry['emp_prod'], 'sit_prod' => $registry['sit_prod']];
+                    'marca_prod' => $registry['marca_prod'], 'sit_prod' => $registry['sit_prod']];
                     
             }
         } else {
@@ -202,7 +199,7 @@ class AdmsEditProd
 
                 $this->listRegistryAdd = [
                     'type_prod' => $registry['type_prod'], 'mod_prod' => $registry['mod_prod'],
-                    'marca_prod' => $registry['marca_prod'], 'emp_prod' => $registry['emp_prod'], 'sit_prod' => $registry['sit_prod']];
+                    'marca_prod' => $registry['marca_prod'], 'sit_prod' => $registry['sit_prod']];
         }
 
         return $this->listRegistryAdd;

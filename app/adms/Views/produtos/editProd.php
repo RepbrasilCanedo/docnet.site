@@ -12,12 +12,16 @@ if (isset($this->data['form'])) {
 if (isset($this->data['form'][0])) {
     $valorForm = $this->data['form'][0];
 }
+//var_dump($this->data['form'][0]);
 ?>
 <!-- Inicio do conteudo do administrativo -->
 <div class="wrapper">
     <div class="row">
         <div class="top-list">
-            <span class="title-content">Editar Produto</span>
+            <span class="title-content">Editar Produto do Cliente:</span>
+            <span class="title-content"><?php echo $this->data['form'][0]['razao_social_clie']; ?></span>
+            <span class="title-content">--</span>
+            <span class="title-content"><?php echo $this->data['form'][0]['nome_fantasia_clie']; ?></span>
             <div class="top-list-right">
                 <?php
                 if ($this->data['button']['list_prod']) {
@@ -89,7 +93,7 @@ if (isset($this->data['form'][0])) {
                         }
                         ?>
                         <label class="title-input">Nº Série:<span class="text-danger">*</span></label>
-                        <input type="text" name="serie" id="serie" class="input-adm" placeholder="Digite o numero de série do prodqmento" value="<?php echo $serie_prod; ?>" required>
+                        <input type="text" name="serie" id="serie" class="input-adm" placeholder="Digite o numero de série do produto" value="<?php echo $serie_prod; ?>" required>
                     </div>
                 </div>
 
@@ -117,22 +121,6 @@ if (isset($this->data['form'][0])) {
                 </div>
 
                 <div class="row-input">
-                    <div class="column">
-                        <label class="title-input">Empresa:<span class="text-danger">*</span></label>
-                        <select name="cliente_id" id="cliente_id" class="input-adm" required>
-                            <option value="">Selecione</option>
-                            <?php
-                            foreach ($this->data['select']['emp_prod'] as $empProd) {
-                                extract($empProd);
-                                if (isset($valorForm['nome_fantasia_clie']) and $valorForm['nome_fantasia_clie'] == $nome_fantasia) {
-                                    echo "<option value='$id' selected>$nome_fantasia</option>";
-                                } else {
-                                    echo "<option value='$id'>$nome_fantasia</option>";
-                                }
-                            }
-                            ?>
-                        </select>
-                    </div>
 
                     <div class="column">
                         <label class="title-input">Situação:<span class="text-danger">*</span></label>

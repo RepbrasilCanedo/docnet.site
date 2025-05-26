@@ -9,7 +9,7 @@ if (isset($this->data['form'])) {
     $valorForm = $this->data['form'];
 }
 //echo('<pre>');var_dump($_SESSION['status_ticket']);echo('</pre>');
-
+//echo('<pre>');var_dump($this->data);echo('</pre>')
 
 
 ?>
@@ -317,8 +317,7 @@ if (isset($this->data['form'])) {
                 <tr>
                     <th class="list-head-content table-sm-none">ID</th>
                     <th class="list-head-content">Cliente</th>
-                    <th class="list-head-content table-sm-none">Contato</th>
-                    <th class="list-head-content table-sm-none">Tel/Zap</th>
+                    <th class="list-head-content table-sm-none">Produto</th>
                     <th class="list-head-content table-sm-none">Data </th>
                     <th class="list-head-content">Status</th>
                     <th class="list-head-content table-sm-none">Data</th>
@@ -334,8 +333,7 @@ if (isset($this->data['form'])) {
                     <tr>
                         <td class="list-body-content table-sm-none"><?php echo $id; ?></td>
                         <td class="list-body-content"><?php echo $nome_fantasia_clie; ?></td>
-                        <td class="list-body-content table-sm-none"><?php echo $contato_cham; ?></td>
-                        <td class="list-body-content table-sm-none"><?php echo $tel_contato_cham; ?></td>
+                        <td class="list-body-content table-sm-none"><?php echo $name_prod; ?></td>
                         <td class="list-body-content table-sm-none"><?php echo date('d/m/Y H:i:s', strtotime($dt_cham)); ?>
                         </td>
                         <td class="list-body-content"><?php echo $name_sta; ?></td>

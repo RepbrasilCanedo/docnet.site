@@ -59,7 +59,7 @@ class AdmsViewProd
                 INNER JOIN adms_type_equip AS typ ON typ.id=prod.type_id 
                 INNER JOIN adms_clientes AS clie ON clie.id=prod.cliente_id 
                 INNER JOIN adms_sit_equip AS sit ON sit.id=prod.sit_id
-                WHERE prod.id= :prod_id and prod.cliente_id= :cliente_id", "prod_id={$this->id}&cliente_id={$_SESSION['emp_user']}");
+                WHERE prod.id= :prod_id", "prod_id={$this->id}");
 
 
         $this->resultBd = $viewProd->getResult();

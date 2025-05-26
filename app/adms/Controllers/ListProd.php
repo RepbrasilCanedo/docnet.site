@@ -39,10 +39,6 @@ class ListProd
      */
     public function index(string|int|null $page = null): void
     {
-
-
-        if (($_SESSION['adms_access_level_id'] > 2) and ($_SESSION['adms_access_level_id'] <> 7)) {
-
             $this->page = (int) $page ? $page : 1;
 
             $this->dataForm = filter_input_array(INPUT_POST, FILTER_DEFAULT);
@@ -51,6 +47,7 @@ class ListProd
             $this->searchEmp = filter_input(INPUT_GET, 'search_emp', FILTER_DEFAULT);
 
             $listProd = new \App\adms\Models\AdmsListProd();
+
             if (!empty($this->dataForm['SendSearchProdEmp'])) {
                 $this->page = 1;
                 $listProd->listSearchProd($this->page, $this->dataForm['search_prod'], $this->dataForm['search_emp']);
@@ -69,36 +66,7 @@ class ListProd
             } else {
                 $this->data['listProd'] = [];
                 $this->data['pagination'] = "";
-            }
-        } else {
-            $this->page = (int) $page ? $page : 1;
-
-            $this->dataForm = filter_input_array(INPUT_POST, FILTER_DEFAULT);
-
-            $this->searchProd = filter_input(INPUT_GET, 'search_prod', FILTER_DEFAULT);
-            $this->searchEmp = filter_input(INPUT_GET, 'search_emp', FILTER_DEFAULT);
-
-            $listProd = new \App\adms\Models\AdmsListProd();
-            if (!empty($this->dataForm['SendSearchProdEmp'])) {
-                $this->page = 1;
-                $listProd->listSearchProd($this->page, $this->dataForm['search_prod'], $this->dataForm['search_emp']);
-                $this->data['form'] = $this->dataForm;
-            } elseif ((!empty($this->searchProd)) or (!empty($this->searchEmp))) {
-                $listProd->listSearchProd($this->page, $this->searchProd, $this->searchEmp);
-                $this->data['form']['search_prod'] = $this->searchProd;
-                $this->data['form']['search_emp'] = $this->searchEmp;
-            } else {
-                $listProd->listProd($this->page);
-            }
-
-            if ($listProd->getResult()) {
-                $this->data['listProd'] = $listProd->getResultBd();
-                $this->data['pagination'] = $listProd->getResultPg();
-            } else {
-                $this->data['listProd'] = [];
-                $this->data['pagination'] = "";
-            }
-        }
+            }       
 
 
         $button = [

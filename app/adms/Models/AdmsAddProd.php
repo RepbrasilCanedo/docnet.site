@@ -67,6 +67,7 @@ class AdmsAddProd
     private function add(): void
     {
         $this->data['created'] = date("Y-m-d H:i:s");
+        $this->data['empresa_id'] = $_SESSION['emp_user'];
 
         $createEquip = new \App\adms\Models\helper\AdmsCreate();
         $createEquip->exeCreate("adms_produtos", $this->data);
@@ -101,44 +102,13 @@ class AdmsAddProd
                 $list->fullRead("SELECT id id_sit, name name_sit FROM adms_sits_empr_unid ORDER BY name ASC");
                 $registry['sit_equip'] = $list->getResult();
 
-                $list->fullRead("SELECT id id_emp, nome_fantasia nome_fantasia_emp FROM adms_clientes WHERE id= :id ORDER BY nome_fantasia ASC", "id={$_SESSION['emp_user']}");
+                $list->fullRead("SELECT id id_emp, nome_fantasia nome_fantasia_emp FROM adms_clientes WHERE empresa= :id ORDER BY nome_fantasia ASC", "id={$_SESSION['emp_user']}");
                 $registry['emp_equip'] = $list->getResult();
 
                 $this->listRegistryAdd = [
                     'type_equip' => $registry['type_equip'], 'emp_equip' => $registry['emp_equip'], 'sit_equip' => $registry['sit_equip']
                 ];
-            } else if ($_SESSION['adms_access_level_id'] == 13) {
-
-                $list->fullRead("SELECT id id_typ, name name_typ FROM adms_type_equip ORDER BY name ASC");
-                $registry['type_equip'] = $list->getResult();
-
-
-
-                $list->fullRead("SELECT id id_sit, name name_sit FROM adms_sits_empr_unid ORDER BY name ASC");
-                $registry['sit_equip'] = $list->getResult();
-
-                $list->fullRead("SELECT id id_emp, nome_fantasia nome_fantasia_emp FROM adms_clientes WHERE contrato = :contrato  ORDER BY nome_fantasia ASC", "contrato={$_SESSION['set_Contr']}");
-                $registry['emp_equip'] = $list->getResult();
-
-                $this->listRegistryAdd = [
-                    'type_equip' => $registry['type_equip'],'emp_equip' => $registry['emp_equip'], 'sit_equip' => $registry['sit_equip']
-                ];
-            } else if ($_SESSION['adms_access_level_id'] == 4) {
-
-                $list->fullRead("SELECT id id_typ, name name_typ FROM adms_type_equip ORDER BY name ASC");
-                $registry['type_equip'] = $list->getResult();
-
-
-
-                $list->fullRead("SELECT id id_sit, name name_sit FROM adms_sits_empr_unid ORDER BY name ASC");
-                $registry['sit_equip'] = $list->getResult();
-
-                $list->fullRead("SELECT id id_emp, nome_fantasia nome_fantasia_emp FROM adms_clientes WHERE contrato = :contrato  ORDER BY nome_fantasia ASC", "contrato={$_SESSION['set_Contr']}");
-                $registry['emp_equip'] = $list->getResult();
-
-                $this->listRegistryAdd = [
-                    'type_equip' => $registry['type_equip'],'emp_equip' => $registry['emp_equip'], 'sit_equip' => $registry['sit_equip']
-                ];
+            
             }
         } else {
 

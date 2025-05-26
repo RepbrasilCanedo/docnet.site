@@ -45,7 +45,7 @@ class AdmsAddEmpresas
      * @return void
      */
 
-    public function create(array $data = null)
+    public function create(array $data)
     {
         $this->data = $data;
 

@@ -38,9 +38,11 @@ class EditProd
         $this->dataForm = filter_input_array(INPUT_POST, FILTER_DEFAULT);
 
         if ((!empty($id)) and (empty($this->dataForm['SendEditProd']))) {
+            
             $this->id = (int) $id;
             $viewProd = new \App\adms\Models\AdmsEditProd();
             $viewProd->viewProd($this->id);
+
             if ($viewProd->getResult()) {
                 $this->data['form'] = $viewProd->getResultBd();
                 $this->viewEditProd();
