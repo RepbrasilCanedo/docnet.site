@@ -103,11 +103,7 @@ if (isset($this->data['form'])) {
                             <label class="title-input">Marca do Produtos:<span class="text-danger">*</span></label>
                             <input type="text" name="marca_id" id="marca_id" class="input-adm" placeholder="Nome do produtos" value="<?php echo $marca_id; ?>" required>
 
-                        </div>
-                    </div>
-
-                    <div class="row-input">
-                        <div class="column">
+                        </div><div class="column">
                             <label class="title-input">Empresa do Produtos:<span class="text-danger">*</span></label>
                             <select name="cliente_id" id="cliente_id" class="input-adm" required>
                                 <option value="">Selecione</option>
@@ -123,7 +119,9 @@ if (isset($this->data['form'])) {
                                 ?>
                             </select>
                         </div>
+                    </div>
 
+                    <div class="row-input">
                         <div class="column">
                             <label class="title-input">Situação do Produtos:<span class="text-danger">*</span></label>
                             <select name="sit_id" id="sit_id" class="input-adm" required>
@@ -139,7 +137,46 @@ if (isset($this->data['form'])) {
                                 }
                                 ?>
                             </select>
+                        </div>                        
+                        <div class="column">
+                            <label class="title-input">Tipo do Contrato:<span class="text-danger">*</span></label>
+                            <select name="contr_id" id="contr_id" class="input-adm" required>
+                                <option value="">Selecione</option>
+                                <?php
+                                foreach ($this->data['select']['contr_id'] as $contr_id) {
+                                    extract($contr_id);
+                                    if (isset($valorForm['contr_id']) and $valorForm['contr_id'] == $id) {
+                                        echo "<option value='$id' selected>$name</option>";
+                                    } else {
+                                        echo "<option value='$id'>$name</option>";
+                                    }
+                                }
+                                ?>
+                            </select>
                         </div>
+                        <div class="column">
+                            <?php
+                            $dias = "";
+                            if (isset($valorForm['dias'])) {
+                                $dias = $valorForm['dias'];
+                            }
+                            ?>
+                            <label class="title-input">Dias Validade:<span class="text-danger">*</span></label>
+                            <input type="text" name="dias" id="dias" class="input-adm" placeholder="Observações" value="<?php echo $dias; ?>" required>
+                        </div>
+                    </div>
+                    <div class="row-input">
+                        <div class="column">
+                            <?php
+                            $inicio_contr = "";
+                            if (isset($valorForm['inicio_contr'])) {
+                                $inicio_contr = $valorForm['inicio_contr'];
+                            }
+                            ?>
+                            <label class="title-input">Inicio Contrato:<span class="text-danger">*</span></label>
+                            <input type=date name="inicio_contr" id="inicio_contr" class="input-adm" placeholder="Observações" value="<?php echo $inicio_contr; ?>" required>
+                        </div>
+                        
                         <div class="column">
                             <?php
                             $inf_adicionais = "";
@@ -147,8 +184,8 @@ if (isset($this->data['form'])) {
                                 $inf_adicionais = $valorForm['inf_adicionais'];
                             }
                             ?>
-                            <label class="title-input">Obs:<span class="text-danger">*</span></label>
-                            <input type="text" name="inf_adicionais" id="inf_adicionais" class="input-adm" placeholder="Observações" value="<?php echo $inf_adicionais; ?>" required>
+                            <label class="title-input">Informações Adicionais:<span class="text-danger">*</span></label>
+                            <textarea name="inf_adicionais" id="inf_adicionais" class="input-adm" placeholder="Observações" value="<?php echo $inf_adicionais; ?>" required></textarea>
                         </div>
                     </div>
 

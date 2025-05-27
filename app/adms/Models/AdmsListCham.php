@@ -113,7 +113,6 @@ class AdmsListCham
         if (!isset($_SESSION['status_ticket'])) {
 
             if (($_SESSION['adms_access_level_id'] > 2)) {
-
                 //Se for 4 -> Cliente Administrativo ou 12 - Suporte cliente
                 if (($_SESSION['adms_access_level_id'] == 4) or ($_SESSION['adms_access_level_id'] == 12)) {
                     $pagination = new \App\adms\Models\helper\AdmsPagination(URLADM . 'list-cham/index');
@@ -128,8 +127,8 @@ class AdmsListCham
                             FROM adms_cham AS cham
                             INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id 
                             INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id                             
-                            INNER JOIN adms_produtos AS prod ON prod.id=cham.prod_id 
-                            WHERE cham.empresa_id= :empresa_id ORDER BY dt_cham DESC LIMIT :limit OFFSET :offset", "empresa_id={$_SESSION['emp_user']}&limit={$this->limitResult}&offset={$pagination->getOffset()}");
+                            INNER JOIN adms_produtos AS prod ON prod.id=cham.prod_id
+                            WHERE cham.empresa_id= :empresa_id ORDER BY cham.dt_cham DESC LIMIT :limit OFFSET :offset", "empresa_id={$_SESSION['emp_user']}&limit={$this->limitResult}&offset={$pagination->getOffset()}");
                     $this->resultBd = $listCham->getResult();
 
                     if ($this->resultBd) {
@@ -150,13 +149,13 @@ class AdmsListCham
                     $this->resultPg = $pagination->getResult();
 
                     $listCham = new \App\adms\Models\helper\AdmsRead();
-                    $listCham->fullRead("SELECT cham.id, cham.empresa_id, cham.id_cliente, cham.status_id, clie.nome_fantasia as nome_fantasia_clie, prod.name as name_prod, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
+                    $listCham->fullRead("SELECT cham.id, cham.empresa_id, cham.status_id, clie.nome_fantasia as nome_fantasia_clie, prod.name as name_prod, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
                             cham.dt_cham, sta.name AS name_sta, dt_status, cham.type_cham  
                             FROM adms_cham AS cham
                             INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id 
                             INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id                             
-                            INNER JOIN adms_produtos AS prod ON prod.id=cham.prod_id 
-                            WHERE cham.empresa_id= :empresa_id AND cham.cliente_id= :id_cliente ORDER BY cham.dt_cham DESC LIMIT :limit OFFSET :offset", "empresa_id={$_SESSION['emp_user']}&id_cliente={$_SESSION['set_clie']}&limit={$this->limitResult}&offset={$pagination->getOffset()}");
+                            INNER JOIN adms_produtos AS prod ON prod.id=cham.prod_id
+                            WHERE cham.empresa_id= :empresa_id AND cham.cliente_id= :id_cliente ORDER BY dt_cham DESC LIMIT :limit OFFSET :offset", "empresa_id={$_SESSION['emp_user']}&id_cliente={$_SESSION['set_clie']}&limit={$this->limitResult}&offset={$pagination->getOffset()}");
                     $this->resultBd = $listCham->getResult();
 
                     if ($this->resultBd) {
@@ -207,9 +206,9 @@ class AdmsListCham
                             cham.dt_cham, sta.name AS name_sta, dt_status, cham.type_cham  
                             FROM adms_cham AS cham
                             INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id 
-                            INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id                            
-                            INNER JOIN adms_produtos AS prod ON prod.id=cham.prod_id  
-                            WHERE empresa_id= :empresa_id AND status_id= :status_ticket ORDER BY dt_cham DESC LIMIT :limit OFFSET :offset", "empresa_id={$_SESSION['emp_user']}&status_ticket={$_SESSION['status_ticket']}&limit={$this->limitResult}&offset={$pagination->getOffset()}");
+                            INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id                             
+                            INNER JOIN adms_produtos AS prod ON prod.id=cham.prod_id 
+                            WHERE cham.empresa_id= :empresa_id AND status_id= :status_ticket ORDER BY cham.dt_cham DESC LIMIT :limit OFFSET :offset", "empresa_id={$_SESSION['emp_user']}&status_ticket={$_SESSION['status_ticket']}&limit={$this->limitResult}&offset={$pagination->getOffset()}");
                     $this->resultBd = $listCham->getResult();
 
                     if ($this->resultBd) {
@@ -234,9 +233,9 @@ class AdmsListCham
                             cham.dt_cham, sta.name AS name_sta, dt_status, cham.type_cham  
                             FROM adms_cham AS cham
                             INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id 
-                            INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id                            
-                            INNER JOIN adms_produtos AS prod ON prod.id=cham.prod_id  
-                            WHERE empresa_id= :empresa_id AND cliente_id= :id_cliente AND status_id= :status_ticket ORDER BY dt_cham DESC LIMIT :limit OFFSET :offset", "empresa_id={$_SESSION['emp_user']}&id_cliente={$_SESSION['set_clie']}&status_ticket={$_SESSION['status_ticket']}&limit={$this->limitResult}&offset={$pagination->getOffset()}");
+                            INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id                             
+                            INNER JOIN adms_produtos AS prod ON prod.id=cham.prod_id
+                            WHERE cham.empresa_id= :empresa_id AND cham.cliente_id= :id_cliente AND cham.status_id= :status_ticket ORDER BY dt_cham DESC LIMIT :limit OFFSET :offset", "empresa_id={$_SESSION['emp_user']}&id_cliente={$_SESSION['set_clie']}&status_ticket={$_SESSION['status_ticket']}&limit={$this->limitResult}&offset={$pagination->getOffset()}");
                     $this->resultBd = $listCham->getResult();
 
                     if ($this->resultBd) {

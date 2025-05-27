@@ -92,25 +92,6 @@ class AdmsAddProd
     {
         $list = new \App\adms\Models\helper\AdmsRead();
 
-        if (($_SESSION['adms_access_level_id'] > 2) and ($_SESSION['adms_access_level_id'] <> 7)) {
-
-            if (($_SESSION['adms_access_level_id'] == 4) or ($_SESSION['adms_access_level_id'] == 12) ){
-
-                $list->fullRead("SELECT id id_typ, name name_typ FROM adms_type_equip ORDER BY name ASC");
-                $registry['type_equip'] = $list->getResult();
-
-                $list->fullRead("SELECT id id_sit, name name_sit FROM adms_sits_empr_unid ORDER BY name ASC");
-                $registry['sit_equip'] = $list->getResult();
-
-                $list->fullRead("SELECT id id_emp, nome_fantasia nome_fantasia_emp FROM adms_clientes WHERE empresa= :id ORDER BY nome_fantasia ASC", "id={$_SESSION['emp_user']}");
-                $registry['emp_equip'] = $list->getResult();
-
-                $this->listRegistryAdd = [
-                    'type_equip' => $registry['type_equip'], 'emp_equip' => $registry['emp_equip'], 'sit_equip' => $registry['sit_equip']
-                ];
-            
-            }
-        } else {
 
             $list->fullRead("SELECT id id_typ, name name_typ FROM adms_type_equip ORDER BY name ASC");
             $registry['type_equip'] = $list->getResult();
@@ -121,13 +102,13 @@ class AdmsAddProd
             $list->fullRead("SELECT id id_sit, name name_sit FROM adms_sits_empr_unid ORDER BY name ASC");
             $registry['sit_equip'] = $list->getResult();
 
-            $list->fullRead("SELECT id id_cont, num_cont FROM  adms_contr AS cont ORDER BY num_cont ASC");
-            $registry['emp_cont'] = $list->getResult();
+            $list->fullRead("SELECT id, name FROM adms_contr");
+            $registry['contr_id'] = $list->getResult();
 
-            $this->listRegistryAdd = [
-                'type_equip' => $registry['type_equip'],'emp_equip' => $registry['emp_equip'], 'sit_equip' => $registry['sit_equip']];
-        }
+            $this->listRegistryAdd = ['type_equip' => $registry['type_equip'], 'emp_equip' => $registry['emp_equip'], 'sit_equip' => $registry['sit_equip'], 'contr_id' => $registry['contr_id']];
+        
 
         return $this->listRegistryAdd;
-    }
+    
+}
 }

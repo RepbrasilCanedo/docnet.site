@@ -12,7 +12,6 @@ if (isset($this->data['form'])) {
 if (isset($this->data['form'][0])) {
     $valorForm = $this->data['form'][0];
 }
-
 //echo "<pre>"; print_r($valorForm);echo "</pre>";
 ?>
 <!-- Inicio do conteudo do administrativo -->
@@ -212,9 +211,6 @@ if (isset($this->data['form'][0])) {
                     <div class="col-md-6">
                         <div class="card">
                             <div class="card-body border-top border-info border-5 input-group-sm">
-
-
-
                                 <div class="input-group">
                                     <?php
                                     $name_sta = "";
@@ -292,13 +288,25 @@ if (isset($this->data['form'][0])) {
                             <div class="card-body input-group-sm">
 
                                 <?php
+                                $name_prod = "";
+                                if (isset($valorForm['name_prod'])) {
+                                    $name_prod = $valorForm['name_prod'];
+                                }
+                                 $marca_id_prod = "";
+                                if (isset($valorForm['marca_id_prod'])) {
+                                    $marca_id_prod = $valorForm['marca_id_prod'];
+                                } 
+                                $modelo_id_prod = "";
+                                if (isset($valorForm['modelo_id_prod'])) {
+                                    $modelo_id_prod = $valorForm['modelo_id_prod'];
+                                }
                                 $inf_cham = "";
                                 if (isset($valorForm['inf_cham'])) {
                                     $inf_cham = $valorForm['inf_cham'];
                                 }
                                 ?>
-                                <h6><span class="fas fa-edit p-2"></span> Descrição do Problema Apontado pelo Cliente</h6>
-                                <p id="descricao" class="form-control" style="height: 100px;" aria-label="With textarea"><?php echo $inf_cham; ?>.</p>
+                                <h6><span class="fas fa-edit p-2"></span>Descrição do Problema Apontado pelo Cliente do produto: <?php echo $name_prod; echo ' - '; echo $marca_id_prod; echo ' - '; echo $modelo_id_prod;?></h6>
+                                <p id="descricao" class="form-control" style="height: 100px;" aria-label="With textarea"><?php echo $inf_cham; ?></p>
                             </div>
                         </div>
                     </div>
