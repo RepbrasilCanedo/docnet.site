@@ -2,6 +2,8 @@
 
 namespace App\adms\Models;
 
+use DateTime;
+
 if (!defined('D0O8C0A3N1E9D6O1')) {
     header("Location: /");
     die("Erro: Página não encontrada<br>");
@@ -31,6 +33,13 @@ class AdmsAddCham
     /** @var array $dataExitVal Recebe as informações que serão retiradas da validação*/
     private array $dataExitVal;
 
+    /** @var bool|null $data Recebe as informações do formulário */
+    private bool|null $validado;
+
+    private string $dataatual;
+    private  string $datainicial;
+    private int $dias;
+
     /**
      * @return bool Retorna true quando executar o processo com sucesso e false quando houver erro
      */
@@ -52,12 +61,14 @@ class AdmsAddCham
     public function create(array $data)
     {
         $this->data = $data;
+        //var_dump($this->$data);
 
         $valEmptyField = new \App\adms\Models\helper\AdmsValEmptyField();
         $valEmptyField->valField($this->data);
 
         if ($valEmptyField->getResult()) {
-           $this->add();
+            $this->val_prod();
+         
         } else {
             $this->result = false;
         }
@@ -65,9 +76,29 @@ class AdmsAddCham
 
     /*
     verifica intervalo de dias entre datas
-     WHERE (DATEDIFF(dt_term, dt_inicio) < 30) AND (empresa_id = :empresa_id) AND (sit_cont = :sit_cont)","empresa_id={$_SESSION['empresa_contr']}&sit_cont=1)"); */
+     WHERE (DATEDIFF(date, inicio_contr) < 30) AND (empresa_id = :empresa_id) AND (sit_cont = :sit_cont)","empresa_id={$_SESSION['empresa_contr']}&sit_cont=1)"); */
 
+     private function val_prod(): void
+     {
+               $viewProd = new \App\adms\Models\helper\AdmsRead();
+                $viewProd->fullRead("SELECT id, cliente_id, dias, inicio_contr FROM adms_produtos 
+                WHERE id= :id AND cliente_id= :cliente_id", "id={$this->data['prod_id']}& cliente_id={$this->data['cliente_id']}");
+                $this->resultBd = $viewProd->getResult();
+
+                if ($this->resultBd) {
+                            $dataUm = new DateTime($dataInicial);
+                            $dataDois = new DateTime($dataFinal);                   
+                    //var_dump($this->resultBd);
+                     $this->result = true;
+                     $this->add();
+                } else {
+                    $_SESSION['msg'] = "<p class='alert-danger'>Erro: Produto não encontrado!</p>";
+                    $this->result = false;
+                }
+        // $this->add();
+     }
     /** 
+     
      * Cadastrar a página no banco de dados
      * Retorna TRUE quando cadastrar a página com sucesso
      * Retorna FALSE quando não cadastrar a página
@@ -76,7 +107,7 @@ class AdmsAddCham
      */
     private function add(): void
     {
-        
+        date_default_timezone_set('America/Bahia');
         $this->data['usuario_id'] = $_SESSION['user_id'];
         $this->data['empresa_id'] = $_SESSION['emp_user'];
         $this->data['dt_cham'] = date("Y-m-d H:i:s");
@@ -122,7 +153,7 @@ class AdmsAddCham
                 WHERE (empresa= :empresa) AND (id = :cliente) ORDER BY nome_fantasia ASC", "empresa={$_SESSION['emp_user']}&cliente={$_SESSION['set_clie']}");
                 $registry['cliente'] = $list->getResult();
 
-                $list->fullRead("SELECT id, name FROM adms_produtos 
+                $list->fullRead("SELECT id, name, dias, inicio_contr, cliente_id, empresa_id FROM adms_produtos
                 WHERE cliente_id= :cliente_id", "cliente_id={$_SESSION['set_clie']}");
                 $registry['produto'] = $list->getResult();
             }
