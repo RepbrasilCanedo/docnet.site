@@ -86,16 +86,30 @@ class AdmsAddCham
                 $this->resultBd = $viewProd->getResult();
 
                 if ($this->resultBd) {
-                            $dataUm = new DateTime($dataInicial);
-                            $dataDois = new DateTime($dataFinal);                   
-                    //var_dump($this->resultBd);
-                     $this->result = true;
+                    // Sua data inicial
+                    $dataInicial = $this->resultBd[0]['inicio_contr'];
+
+                    // Número de dias a adicionar
+                    $diasParaAdicionar = $this->resultBd[0]['dias'];
+
+                    // Adiciona os dias e formata a nova data em uma única linha
+                    $novaData = date('d/m/Y', strtotime($dataInicial . " +{$diasParaAdicionar} days"));
+
+                    // Exibe a nova data
+                    if($novaData > date(date("Y-m-d H:i:s"))){
+                    $this->result = true;
                      $this->add();
+                    } else{
+                        $_SESSION['msg'] = "<p class='alert-danger'>Contrato de suporte vencido</p>";
+                        $this->result = false;
+                    };
+                    
+                   
                 } else {
                     $_SESSION['msg'] = "<p class='alert-danger'>Erro: Produto não encontrado!</p>";
                     $this->result = false;
                 }
-        // $this->add();
+
      }
     /** 
      
