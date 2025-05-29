@@ -100,7 +100,7 @@ class AdmsAddCham
                     $this->result = true;
                      $this->add();
                     } else{
-                        $_SESSION['msg'] = "<p class='alert-danger'>Contrato de suporte vencido</p>";
+                        $_SESSION['msg'] = "<p class='alert-danger'>Não e possivel a abertura de Ticket para este produto pois o contrato de suporte tecnico ou garantia esta vencido. Entre em contato com o setor comercial da REPBRASIL 071 98137 6244</p>";
                         $this->result = false;
                     };
                     
@@ -122,6 +122,7 @@ class AdmsAddCham
     private function add(): void
     {
         date_default_timezone_set('America/Bahia');
+        
         $this->data['usuario_id'] = $_SESSION['user_id'];
         $this->data['empresa_id'] = $_SESSION['emp_user'];
         $this->data['dt_cham'] = date("Y-m-d H:i:s");
@@ -132,12 +133,12 @@ class AdmsAddCham
         $createCham->exeCreate("adms_cham", $this->data);
 
         if ($createCham->getResult()) {
-            $_SESSION['msg'] = "<p class='alert-success'>Chamado cadastrado com sucesso!</p>";
+            $_SESSION['msg'] = "<p class='alert-success'>Ticket aberto com sucesso!</p>";
             $urlRedirect = URLADM . "list-cham/index";
             header("Location: $urlRedirect");
             $this->result = true;
         } else {
-            $_SESSION['msg'] = "<p class='alert-danger'>Erro: Chamado não cadastrado com sucesso!</p>";
+            $_SESSION['msg'] = "<p class='alert-danger'>Erro: Ticket não aberto com sucesso!</p>";
             $this->result = false;
         }
     }
