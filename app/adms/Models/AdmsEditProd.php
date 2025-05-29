@@ -18,7 +18,7 @@ class AdmsEditProd
 
     /** @var bool $result Recebe true quando executar o processo com sucesso e false quando houver erro */
     private bool $result = false;
-    
+
 
     /** @var array Recebe as informações que serão usadas no dropdown do formulário*/
     private array $listRegistryAdd;
@@ -62,11 +62,12 @@ class AdmsEditProd
         $viewProd = new \App\adms\Models\helper\AdmsRead();
         $viewProd->fullRead("SELECT prod.id, prod.name as name_prod, typ.name as name_type, prod.serie as serie_prod, 
                 prod.modelo_id as name_modelo, prod.marca_id as name_mar, clie.razao_social as razao_social_clie, clie.nome_fantasia as nome_fantasia_clie, 
-                prod.inf_adicionais as inf_adicionais, sit.name as name_sit, prod.created, prod.modified
+                contr.name as name_contr_id, prod.dias, prod.inicio_contr, prod.inf_adicionais as inf_adicionais, sit.name as name_sit, prod.created, prod.modified
                 FROM adms_produtos AS prod  
                 INNER JOIN adms_type_equip AS typ ON typ.id=prod.type_id 
                 INNER JOIN adms_clientes AS clie ON clie.id=prod.cliente_id 
-                INNER JOIN adms_sit_equip AS sit ON sit.id=prod.sit_id
+                INNER JOIN adms_sit_equip AS sit ON sit.id=prod.sit_id                 
+                INNER JOIN adms_contr AS contr ON contr.id=prod.contr_id
                 WHERE prod.id= :prod_id", "prod_id={$this->id}");
 
         $this->resultBd = $viewProd->getResult();
@@ -76,7 +77,6 @@ class AdmsEditProd
             $_SESSION['msg'] = "<p class='alert-danger'>Erro: Produto  não encontrado!</p>";
             $this->result = false;
         }
-        
     }
 
     /**
@@ -105,6 +105,7 @@ class AdmsEditProd
      */
     private function edit(): void
     {
+        date_default_timezone_set('America/Bahia');
         $this->data['modified'] = date("Y-m-d H:i:s");
 
         $upProd = new \App\adms\Models\helper\AdmsUpdate();
@@ -161,7 +162,7 @@ class AdmsEditProd
 
         if (($_SESSION['adms_access_level_id'] > 2) and ($_SESSION['adms_access_level_id'] <> 7)) {
 
-            if (($_SESSION['adms_access_level_id'] == 4) or ($_SESSION['adms_access_level_id'] == 12)){
+            if (($_SESSION['adms_access_level_id'] == 4) or ($_SESSION['adms_access_level_id'] == 12)) {
 
                 $list->fullRead("SELECT id as id_typ, name as name_typ FROM adms_type_equip");
                 $registry['type_prod'] = $list->getResult();
@@ -175,31 +176,44 @@ class AdmsEditProd
                 $list->fullRead("SELECT id as id_sit, name as name_sit FROM adms_sit_equip");
                 $registry['sit_prod'] = $list->getResult();
 
+                $list->fullRead("SELECT id, name FROM adms_contr");
+                $registry['contr_id'] = $list->getResult();
+
                 $this->listRegistryAdd = [
-                    'type_prod' => $registry['type_prod'], 'mod_prod' => $registry['mod_prod'],
-                    'marca_prod' => $registry['marca_prod'], 'sit_prod' => $registry['sit_prod']];
-                    
+                    'type_prod' => $registry['type_prod'],
+                    'mod_prod' => $registry['mod_prod'],
+                    'marca_prod' => $registry['marca_prod'],
+                    'sit_prod' => $registry['sit_prod'],
+                    'contr_id' => $registry['contr_id']
+                ];
             }
         } else {
 
-                $list->fullRead("SELECT id as id_typ, name as name_typ FROM adms_type_equip");
-                $registry['type_prod'] = $list->getResult();
+            $list->fullRead("SELECT id as id_typ, name as name_typ FROM adms_type_equip");
+            $registry['type_prod'] = $list->getResult();
 
-                $list->fullRead("SELECT id id_modelo, name name_modelo FROM adms_model ORDER BY name ASC");
-                $registry['mod_prod'] = $list->getResult();
+            $list->fullRead("SELECT id id_modelo, name name_modelo FROM adms_model ORDER BY name ASC");
+            $registry['mod_prod'] = $list->getResult();
 
-                $list->fullRead("SELECT id id_mar, name name_mar FROM adms_marca ORDER BY name ASC");
-                $registry['marca_prod'] = $list->getResult();
+            $list->fullRead("SELECT id id_mar, name name_mar FROM adms_marca ORDER BY name ASC");
+            $registry['marca_prod'] = $list->getResult();
 
-                $list->fullRead("SELECT id as id_sit, name as name_sit FROM adms_sit_equip");
-                $registry['sit_prod'] = $list->getResult();
+            $list->fullRead("SELECT id as id_sit, name as name_sit FROM adms_sit_equip");
+            $registry['sit_prod'] = $list->getResult();
 
-                $list->fullRead("SELECT id, nome_fantasia FROM adms_clientes WHERE id= :id", "id={$_SESSION['emp_user']}");
-                $registry['emp_prod'] = $list->getResult();
+            $list->fullRead("SELECT id, nome_fantasia FROM adms_clientes WHERE id= :id", "id={$_SESSION['emp_user']}");
+            $registry['emp_prod'] = $list->getResult();
 
-                $this->listRegistryAdd = [
-                    'type_prod' => $registry['type_prod'], 'mod_prod' => $registry['mod_prod'],
-                    'marca_prod' => $registry['marca_prod'], 'sit_prod' => $registry['sit_prod']];
+            $list->fullRead("SELECT id, name FROM adms_contr");
+            $registry['contr_id'] = $list->getResult();
+
+            $this->listRegistryAdd = [
+                'type_prod' => $registry['type_prod'],
+                'mod_prod' => $registry['mod_prod'],
+                'marca_prod' => $registry['marca_prod'],
+                'sit_prod' => $registry['sit_prod'],
+                'contr_id' => $registry['contr_id']
+            ];
         }
 
         return $this->listRegistryAdd;

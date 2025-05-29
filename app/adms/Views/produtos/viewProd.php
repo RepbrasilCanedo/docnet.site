@@ -3,6 +3,7 @@ if (!defined('D0O8C0A3N1E9D6O1')) {
     header("Location: /");
     die("Erro: Página não encontrada<br>");
 }
+//var_dump($this->data['viewProd']);
 ?>
 <!-- Inicio do conteudo do administrativo -->
 <div class="wrapper">
@@ -42,7 +43,7 @@ if (!defined('D0O8C0A3N1E9D6O1')) {
             ?>
 
                 <div class="view-det-adm">
-                    <span class="view-adm-title">ID: </span>
+                    <span class="view-adm-title">Número Contrato: </span>
                     <span class="view-adm-info"><?php echo $id_prod; ?></span>
                 </div>
 
@@ -82,6 +83,21 @@ if (!defined('D0O8C0A3N1E9D6O1')) {
                 </div>
 
                 <div class="view-det-adm">
+                    <span class="view-adm-title">Tio de Contrato: </span>
+                    <span class="view-adm-info"><?php echo $name_contr_id; ?></span>
+                </div>
+
+                <div class="view-det-adm">
+                    <span class="view-adm-title">Período: </span>
+                    <span class="view-adm-info"><?php echo $dias; ?></span>
+                </div>
+
+                <div class="view-det-adm">
+                    <span class="view-adm-title">Data Início Contrato: </span>
+                    <span class="view-adm-info"><?php echo date('d/m/Y', strtotime($inicio_contr));  ?></span>
+                </div>
+
+                <div class="view-det-adm">
                     <span class="view-adm-title">Obs: </span>
                     <span class="view-adm-info"><?php echo $inf_adicionais; ?></span>
                 </div>
@@ -93,7 +109,7 @@ if (!defined('D0O8C0A3N1E9D6O1')) {
 
                 <div class="view-det-adm">
                     <span class="view-adm-title">Modificado: </span>
-                    <span class="view-adm-info"><?php echo date('d/m/Y H:i:s', strtotime($modified)); ?></span>
+                    <span class="view-adm-info"><?php if(isset($modified)){echo date('d/m/Y H:i:s', strtotime($modified));} ?></span>
                     
                 </div>
             <?php
