@@ -41,13 +41,13 @@ class Dashboard
         $this->dataForm = filter_input_array(INPUT_POST, FILTER_DEFAULT);
         
 
-        $logoContrato = new \App\adms\Models\AdmsDashboard();
-        $logoContrato->logoContrato();
+        $logoCliente = new \App\adms\Models\AdmsDashboard();
+        $logoCliente->logoCliente();
 
-        if ($logoContrato->getResult()) {
-            $this->data['logoContrato'] = $logoContrato->getResultBd();
+        if ($logoCliente->getResult()) {
+            $this->data['logoCliente'] = $logoCliente->getResultBd();
         } else {
-            $this->data['logoContrato'] = false;
+            $this->data['logoCliente'] = false;
         }
 
         $countCham = new \App\adms\Models\AdmsDashboard();

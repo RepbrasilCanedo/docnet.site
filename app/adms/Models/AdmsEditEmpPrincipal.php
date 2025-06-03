@@ -56,10 +56,9 @@ class AdmsEditEmpPrincipal
 
         $viewEmpresas = new \App\adms\Models\helper\AdmsRead();
         $viewEmpresas->fullRead("SELECT emp.id, emp.razao_social, emp.nome_fantasia, emp.cnpj, emp.cep, emp.logradouro, emp.bairro, 
-                            emp.cidade, emp.uf, emp.contato, emp.telefone, emp.email, sit.name as situacao, cont.num_cont as contrato
+                            emp.cidade, emp.uf, emp.contato, emp.telefone, emp.email, sit.name as situacao, emp.logo
                             FROM adms_emp_principal as emp
                             INNER JOIN adms_sits_empr_unid AS sit ON sit.id=emp.situacao 
-                            INNER JOIN adms_contr AS cont ON cont.id=emp.contrato 
                             WHERE emp.id=:id LIMIT :limit", "id={$this->id}&limit=1");
 
         $this->resultBd = $viewEmpresas->getResult();
@@ -79,7 +78,7 @@ class AdmsEditEmpPrincipal
      * @param array|null $data
      * @return void
      */
-    public function update(array $data = null): void
+    public function update(array $data): void
     {
         $this->data = $data;
 

@@ -56,14 +56,16 @@ class AdmsDashboard
      * Verifica se o cliente tem logo cadastrada o banco de dados
      */
     
-    public function logoContrato(): void
+    public function logoCliente(): void
     {
-        $logoContrato = new \App\adms\Models\helper\AdmsRead();
-        $logoContrato->fullRead("SELECT id, clie_cont, logo_clie FROM adms_contr
-                                WHERE id= :contr_id", "contr_id= {$_SESSION['set_Contr']}");
+        $logoCliente = new \App\adms\Models\helper\AdmsRead();
+        $logoCliente->fullRead("SELECT id, nome_fantasia, logo FROM  adms_emp_principal
+                                WHERE id= :id", "id= {$_SESSION['emp_user']}");
 
-        $this->resultBd = $logoContrato->getResult();
+        $this->resultBd = $logoCliente->getResult();
         if ($this->resultBd) {
+            $_SESSION['logo_emp_prin']='';
+            $_SESSION['logo_emp_prin']=$this->resultBd[0]['logo'];
             $this->result = true;
         } else {
             $this->result = false;
@@ -80,19 +82,7 @@ class AdmsDashboard
     {
         if (($_SESSION['adms_access_level_id'] > 2)) {
             //Se for 4 - Cliente Administrativo
-            if ($_SESSION['adms_access_level_id'] == 4) {
-                $countCham = new \App\adms\Models\helper\AdmsRead();
-                $countCham->fullRead("SELECT COUNT(id) AS qnt_cham, status_id, empresa_id FROM adms_cham WHERE status_id= :status_id and empresa_id = :empresa", 
-                                    "status_id=2&empresa={$_SESSION['emp_user']}");
-
-                $this->resultBd = $countCham->getResult();
-                if ($this->resultBd) {
-                    $this->result = true;
-                } else {
-                    $this->result = false;
-                }
-                //Se for 13 - Suporte Cliente
-            } elseif ($_SESSION['adms_access_level_id'] == 12) {
+            if (($_SESSION['adms_access_level_id'] == 4) or  ($_SESSION['adms_access_level_id'] == 12)){
                 $countCham = new \App\adms\Models\helper\AdmsRead();
                 $countCham->fullRead("SELECT COUNT(id) AS qnt_cham, status_id, empresa_id FROM adms_cham WHERE status_id= :status_id and empresa_id = :empresa", 
                                     "status_id=2&empresa={$_SESSION['emp_user']}");
@@ -135,22 +125,11 @@ class AdmsDashboard
     {
         // Chamados Agendados
         if ($_SESSION['adms_access_level_id'] > 2) {
-            //Se for 4 - Cliente Administrativo
-            if ($_SESSION['adms_access_level_id'] == 4) {
+            //Se for 4 - Cliente Administrativo e Cliente Suporte
+            if (($_SESSION['adms_access_level_id'] == 4) or ($_SESSION['adms_access_level_id'] == 12)){
                 $countCham = new \App\adms\Models\helper\AdmsRead();
                 $countCham->fullRead("SELECT COUNT(id) AS qnt_cham, status_id, empresa_id FROM adms_cham WHERE status_id= :status_id and empresa_id = :empresa", 
                 "status_id=9&empresa={$_SESSION['emp_user']}");
-                $this->resultBd = $countCham->getResult();
-                if ($this->resultBd) {
-                    $this->result = true;
-                } else {
-                    $this->result = false;
-                }
-                //Se for 13 - Cliente Suporte
-            } elseif ($_SESSION['adms_access_level_id'] == 12) {
-                $countCham = new \App\adms\Models\helper\AdmsRead();
-                $countCham->fullRead("SELECT COUNT(id) AS qnt_cham, status_id, empresa_id FROM adms_cham WHERE status_id= :status_id and empresa_id = :empresa", 
-                                    "status_id=9&empresa={$_SESSION['emp_user']}");
                 $this->resultBd = $countCham->getResult();
                 if ($this->resultBd) {
                     $this->result = true;
@@ -189,7 +168,7 @@ class AdmsDashboard
     {
         if (($_SESSION['adms_access_level_id'] > 1) and ($_SESSION['adms_access_level_id'] <> 7) and ($_SESSION['adms_access_level_id'] <> 2)) {
             //Se for 4 - Cliente Administrativo
-            if ($_SESSION['adms_access_level_id'] == 4) {
+            if (($_SESSION['adms_access_level_id'] == 4) or ($_SESSION['adms_access_level_id'] == 12)){
                 $countChamAtend = new \App\adms\Models\helper\AdmsRead();
                 $countChamAtend->fullRead("SELECT COUNT(id) AS qnt_cham_atend, status_id, empresa_id FROM adms_cham WHERE status_id= :status_id and empresa_id = :empresa", 
                 "status_id=3&empresa={$_SESSION['emp_user']}");
@@ -200,20 +179,6 @@ class AdmsDashboard
                     //$_SESSION['msg'] = "<p style='color: #f00'>Erro: Usuário não encontrado!</p>";
                     $this->result = false;
                 } 
-
-                //Se for 12 - Cliente Suporte
-            } elseif ($_SESSION['adms_access_level_id'] == 12) {
-                $countChamPausa = new \App\adms\Models\helper\AdmsRead();
-                $countChamPausa->fullRead("SELECT COUNT(id) AS qnt_cham_atend, status_id FROM adms_cham WHERE status_id= :status_id and empresa_id= :empresa_id", 
-                "status_id=3&empresa_id={$_SESSION['emp_user']}");
-
-                $this->resultBd = $countChamPausa->getResult();
-                if ($this->resultBd) {
-                    $this->result = true;
-                } else {
-                    //$_SESSION['msg'] = "<p style='color: #f00'>Erro: Usuário não encontrado!</p>";
-                    $this->result = false;
-                }
 
                 //Se for 14 - Cliente final
             } elseif ($_SESSION['adms_access_level_id'] == 14) {
@@ -247,23 +212,10 @@ class AdmsDashboard
     {
         if (($_SESSION['adms_access_level_id'] > 1) and ($_SESSION['adms_access_level_id'] <> 7) and ($_SESSION['adms_access_level_id'] <> 2)) {
             //Se for 4 - Cliente Administrativo
-            if ($_SESSION['adms_access_level_id'] == 4) {
+            if (($_SESSION['adms_access_level_id'] == 4) or ($_SESSION['adms_access_level_id'] == 12)){
                 $countChamPausa = new \App\adms\Models\helper\AdmsRead();
                 $countChamPausa->fullRead("SELECT COUNT(id) AS qnt_cham_pausa, status_id, empresa_id FROM adms_cham WHERE status_id= :status_id and empresa_id = :empresa", 
                 "status_id=5&empresa={$_SESSION['emp_user']}");
-                $this->resultBd = $countChamPausa->getResult();
-                if ($this->resultBd) {
-                    $this->result = true;
-                } else {
-                    //$_SESSION['msg'] = "<p style='color: #f00'>Erro: Usuário não encontrado!</p>";
-                    $this->result = false;
-                }
-                //Se for 12 - Cliente Suporte
-            } elseif ($_SESSION['adms_access_level_id'] == 12) {
-                $countChamPausa = new \App\adms\Models\helper\AdmsRead();
-                $countChamPausa->fullRead("SELECT COUNT(id) AS qnt_cham_pausa, status_id FROM adms_cham WHERE status_id= :status_id and empresa_id= :empresa_id", 
-                "status_id=5&empresa_id={$_SESSION['emp_user']}");
-
                 $this->resultBd = $countChamPausa->getResult();
                 if ($this->resultBd) {
                     $this->result = true;
@@ -304,23 +256,10 @@ class AdmsDashboard
     {
         if (($_SESSION['adms_access_level_id'] > 1) and ($_SESSION['adms_access_level_id'] <> 7) and ($_SESSION['adms_access_level_id'] <> 2)) {
             //Se for 4 - Cliente Administrativo
-            if ($_SESSION['adms_access_level_id'] == 4) {
+            if (($_SESSION['adms_access_level_id'] == 4) or ($_SESSION['adms_access_level_id'] == 12)){
                 $countChamPausa = new \App\adms\Models\helper\AdmsRead();
                 $countChamPausa->fullRead("SELECT COUNT(id) AS qnt_cham_agua, status_id, empresa_id FROM adms_cham WHERE status_id= :status_id and empresa_id = :empresa", 
                 "status_id=12&empresa={$_SESSION['emp_user']}");
-                $this->resultBd = $countChamPausa->getResult();
-                if ($this->resultBd) {
-                    $this->result = true;
-                } else {
-                    //$_SESSION['msg'] = "<p style='color: #f00'>Erro: Usuário não encontrado!</p>";
-                    $this->result = false;
-                }
-                //Se for 12 - Cliente Suporte
-            } elseif ($_SESSION['adms_access_level_id'] == 12) {
-                $countChamPausa = new \App\adms\Models\helper\AdmsRead();
-                $countChamPausa->fullRead("SELECT COUNT(id) AS qnt_cham_agua, status_id FROM adms_cham WHERE status_id= :status_id and empresa_id= :empresa_id", 
-                "status_id=12&empresa_id={$_SESSION['emp_user']}");
-
                 $this->resultBd = $countChamPausa->getResult();
                 if ($this->resultBd) {
                     $this->result = true;
@@ -360,21 +299,10 @@ class AdmsDashboard
     {
         if (($_SESSION['adms_access_level_id'] > 1) and ($_SESSION['adms_access_level_id'] <> 7) and ($_SESSION['adms_access_level_id'] <> 2)) {
             //Se for 4 - Cliente Administrativo
-            if ($_SESSION['adms_access_level_id'] == 4) {
+            if (($_SESSION['adms_access_level_id'] == 4) or ($_SESSION['adms_access_level_id'] == 12)){
                 $countChamCom = new \App\adms\Models\helper\AdmsRead();
                 $countChamCom->fullRead("SELECT COUNT(id) AS qnt_cham_com, status_id, empresa_id FROM adms_cham WHERE status_id= :status_id and empresa_id = :empresa", 
                 "status_id=11&empresa={$_SESSION['emp_user']}");
-                $this->resultBd = $countChamCom->getResult();
-                if ($this->resultBd) {
-                    $this->result = true;
-                } else {
-                    //$_SESSION['msg'] = "<p style='color: #f00'>Erro: Usuário não encontrado!</p>";
-                    $this->result = false;
-                }
-                //Se for 12 - Cliente Suporte
-            } elseif ($_SESSION['adms_access_level_id'] == 12) {
-                $countChamCom = new \App\adms\Models\helper\AdmsRead();
-                $countChamCom->fullRead("SELECT COUNT(id) AS qnt_cham_com, status_id FROM adms_cham WHERE status_id= :status_id and empresa_id= :empresa_id", "status_id=11&empresa_id={$_SESSION['emp_user']}");
                 $this->resultBd = $countChamCom->getResult();
                 if ($this->resultBd) {
                     $this->result = true;
@@ -414,22 +342,10 @@ class AdmsDashboard
     {
         if (($_SESSION['adms_access_level_id'] > 1) and ($_SESSION['adms_access_level_id'] <> 7) and ($_SESSION['adms_access_level_id'] <> 2)) {
             //Se for 4 - Cliente Administrativo
-            if ($_SESSION['adms_access_level_id'] == 4) {
+            if (($_SESSION['adms_access_level_id'] == 4) or ($_SESSION['adms_access_level_id'] == 12)){
                 $countChamClie = new \App\adms\Models\helper\AdmsRead();
                 $countChamClie->fullRead("SELECT COUNT(id) AS qnt_cham_clie, status_id, empresa_id FROM adms_cham WHERE status_id= :status_id and empresa_id = :empresa", 
                 "status_id=10&empresa={$_SESSION['emp_user']}");
-                $this->resultBd = $countChamClie->getResult();
-                if ($this->resultBd) {
-                    $this->result = true;
-                } else {
-                    //$_SESSION['msg'] = "<p style='color: #f00'>Erro: Usuário não encontrado!</p>";
-                    $this->result = false;
-                }
-                //Se for 12 - Cliente Suporte
-            } elseif ($_SESSION['adms_access_level_id'] == 12) {
-                $countChamClie = new \App\adms\Models\helper\AdmsRead();
-                $countChamClie->fullRead("SELECT COUNT(id) AS qnt_cham_clie, status_id FROM adms_cham WHERE status_id= :status_id and empresa_id= :empresa_id", "status_id=10&empresa_id={$_SESSION['emp_user']}");
-
                 $this->resultBd = $countChamClie->getResult();
                 if ($this->resultBd) {
                     $this->result = true;
@@ -470,22 +386,10 @@ class AdmsDashboard
     {
         if (($_SESSION['adms_access_level_id'] > 2) and ($_SESSION['adms_access_level_id'] <> 7)) {
             //Se for 4 - Cliente Administrativo
-            if ($_SESSION['adms_access_level_id'] == 4) {
+            if (($_SESSION['adms_access_level_id'] == 4) or ($_SESSION['adms_access_level_id'] == 12)){
                 $countChamFinal = new \App\adms\Models\helper\AdmsRead();
                 $countChamFinal->fullRead("SELECT COUNT(id) AS qnt_cham_final, status_id, empresa_id FROM adms_cham WHERE status_id= :status_id and empresa_id = :empresa", 
                 "status_id=6&empresa={$_SESSION['emp_user']}");
-                $this->resultBd = $countChamFinal->getResult();
-                if ($this->resultBd) {
-                    $this->result = true;
-                } else {
-                    //$_SESSION['msg'] = "<p style='color: #f00'>Erro: Usuário não encontrado!</p>";
-                    $this->result = false;
-                }
-                //Se for 13 - Cliente Suporte
-            } elseif ($_SESSION['adms_access_level_id'] == 12) {
-                $countChamFinal = new \App\adms\Models\helper\AdmsRead();
-                $countChamFinal->fullRead("SELECT COUNT(id) AS qnt_cham_final, status_id FROM adms_cham WHERE status_id= :status_id and contrato_id= :contrato_id", "status_id=6&contrato_id={$_SESSION['set_Contr']}");
-
                 $this->resultBd = $countChamFinal->getResult();
                 if ($this->resultBd) {
                     $this->result = true;
@@ -526,22 +430,10 @@ class AdmsDashboard
     {
         if (($_SESSION['adms_access_level_id'] > 1) and ($_SESSION['adms_access_level_id'] <> 7) and ($_SESSION['adms_access_level_id'] <> 2)) {
             //Se for 4 - Cliente Administrativo
-            if ($_SESSION['adms_access_level_id'] == 4) {
+            if (($_SESSION['adms_access_level_id'] == 4) or ($_SESSION['adms_access_level_id'] == 12)){
                 $countChamRepr = new \App\adms\Models\helper\AdmsRead();
                 $countChamRepr->fullRead("SELECT COUNT(id) AS qnt_cham_repr, status_id, empresa_id FROM adms_cham WHERE status_id= :status_id and empresa_id = :empresa", 
                 "status_id=7&empresa={$_SESSION['emp_user']}");
-                $this->resultBd = $countChamRepr->getResult();
-                if ($this->resultBd) {
-                    $this->result = true;
-                } else {
-                    //$_SESSION['msg'] = "<p style='color: #f00'>Erro: Usuário não encontrado!</p>";
-                    $this->result = false;
-                }
-                //Se for 13 - Cliente Suporte
-            } elseif ($_SESSION['adms_access_level_id'] == 12) {
-                $countChamRepr = new \App\adms\Models\helper\AdmsRead();
-                $countChamRepr->fullRead("SELECT COUNT(id) AS qnt_cham_repr, status_id FROM adms_cham WHERE status_id= :status_id and contrato_id= :contrato_id", "status_id=7&contrato_id={$_SESSION['set_Contr']}");
-
                 $this->resultBd = $countChamRepr->getResult();
                 if ($this->resultBd) {
                     $this->result = true;
@@ -581,22 +473,10 @@ class AdmsDashboard
     {
         if (($_SESSION['adms_access_level_id'] > 2) and ($_SESSION['adms_access_level_id'] <> 7)) {
             //Se for 4 - Cliente Administrativo
-            if ($_SESSION['adms_access_level_id'] == 4) {
+            if (($_SESSION['adms_access_level_id'] == 4) or ($_SESSION['adms_access_level_id'] == 12)){
                 $countChamApro = new \App\adms\Models\helper\AdmsRead();
                 $countChamApro->fullRead("SELECT COUNT(id) AS qnt_cham_apro, status_id, empresa_id FROM adms_cham WHERE status_id= :status_id and empresa_id = :empresa", 
                 "status_id=8&empresa={$_SESSION['emp_user']}");
-                $this->resultBd = $countChamApro->getResult();
-                if ($this->resultBd) {
-                    $this->result = true;
-                } else {
-                    //$_SESSION['msg'] = "<p style='color: #f00'>Erro: Usuário não encontrado!</p>";
-                    $this->result = false;
-                }
-                //Se for 13 - Cliente Suporte
-            } elseif ($_SESSION['adms_access_level_id'] == 12) {
-                $countChamApro = new \App\adms\Models\helper\AdmsRead();
-                $countChamApro->fullRead("SELECT COUNT(id) AS qnt_cham_apro, status_id FROM adms_cham WHERE status_id= :status_id and contrato_id= :contrato_id", "status_id=8&contrato_id={$_SESSION['set_Contr']}");
-
                 $this->resultBd = $countChamApro->getResult();
                 if ($this->resultBd) {
                     $this->result = true;

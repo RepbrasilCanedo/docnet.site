@@ -18,6 +18,9 @@ if (!defined('D0O8C0A3N1E9D6O1')) {
                 if ($this->data['button']['edit_emp_principal']) {
                     echo "<a href='" . URLADM . "edit-emp-principal/index/". $this->data['viewEmpPrincipal'][0]['id'] ."'class='btn-warning'>Editar</a>";
                 }
+                if ($this->data['button']['edit_profile_logo']) {
+                    echo "<a href='" . URLADM . "edit-profile-logo/index' class='btn-success'>Inserir Logo</a>";
+                }
                 ?>
             </div>
         </div>

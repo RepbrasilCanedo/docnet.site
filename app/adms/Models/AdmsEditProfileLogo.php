@@ -49,10 +49,7 @@ class AdmsEditProfileLogo
     {
 
         $viewLogo = new \App\adms\Models\helper\AdmsRead();
-        $viewLogo->fullRead(
-            "SELECT id, logo_clie, modified 
-        FROM adms_contr  WHERE id=:id LIMIT :limit",
-            "id={$_SESSION['id_contrato']}&limit=1"
+        $viewLogo->fullRead("SELECT id, logo_clie, modified FROM adms_contr  WHERE id=:id LIMIT :limit", "id={$_SESSION['id_contrato']}&limit=1"
         );
 
         $this->resultBd = $viewLogo->getResult();
@@ -74,7 +71,7 @@ class AdmsEditProfileLogo
      * @param array|null $data
      * @return void
      */
-    public function update(array $data = null): void
+    public function update(array $data): void
     {
         $this->data = $data;
 

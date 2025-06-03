@@ -20,7 +20,9 @@ if (isset($this->data['form'])) {
                 <?php
                 if ($this->data['button']['add_emp_principal']) {
                     echo "<a href='" . URLADM . "add-emp-principal/index' class='btn-success'>Cadastrar</a>";
-                }                
+                }else if ($this->data['button']['edit_profile_logo']) {
+                    echo "<a href='" . URLADM . "edit-profile-logo/index' class='btn-warning'>Inserir Logo</a>";
+                }               
                 ?>
             </div>
         </div>

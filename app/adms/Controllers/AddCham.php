@@ -33,7 +33,8 @@ class AddCham
     {
         $this->dataForm = filter_input_array(INPUT_POST, FILTER_DEFAULT);
         if (!empty($this->dataForm['SendAddCham'])) {
-            unset($this->dataForm['SendAddCham']);           
+            unset($this->dataForm['SendAddCham']);   
+                    
                 $createCham = new \App\adms\Models\AdmsAddCham();
                 $createCham->create($this->dataForm);
 

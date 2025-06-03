@@ -9,12 +9,7 @@ $sidebar_active = "";
 if (isset($this->data['sidebarActive'])) {
     $sidebar_active = $this->data['sidebarActive'];
 }
-//var_dump($this->data);
-/*if(isset($this->data['logoContrato'])){
-    $_SESSION['img_contr']='';
-    $_SESSION['img_contr']= $this->data['logoContrato'][0]['logo_clie'];
-}*/
-
+//var_dump($this->data['logoCliente'][0]['logo']);
 
 ?>
 
@@ -25,13 +20,14 @@ if (isset($this->data['sidebarActive'])) {
     <div class="sidebar">
         
     <div class="logo-adm">
-        <?php /*
+        <?php 
         if(!empty ($_SESSION['set_clie'])){
-            echo "<img src='" . URLADM . "app/adms/assets/image/logo/clientes/". $_SESSION['set_clie']."/logo.png ' width='140' alt='Logo do Cliente'>";
+            //echo "<img src='" . URLADM . "app/adms/assets/image/logo/clientes/". $_SESSION['emp_user']."/logo.png ' width='140' alt='Logo do Cliente'>";
+            echo "<img src='" . URLADM . "app/adms/assets/image/logo/clientes/". $_SESSION['emp_user']."/{$_SESSION['logo_emp_prin']}' width='140' alt='Logo do Cliente'>";
         } else{
             echo "<img src='" . URLADM . "app/adms/assets/image/logo/clientes/icon_user.png' width='140' alt='Logo do Cliente'>";
         }      
-        */
+        
         ?>     
     </div>
 

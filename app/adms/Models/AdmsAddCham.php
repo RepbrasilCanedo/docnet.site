@@ -61,25 +61,49 @@ class AdmsAddCham
     public function create(array $data)
     {
         $this->data = $data;
-        //var_dump($this->$data);
 
         $valEmptyField = new \App\adms\Models\helper\AdmsValEmptyField();
         $valEmptyField->valField($this->data);
 
         if ($valEmptyField->getResult()) {
-            $this->val_prod();
+            $this->valClieAtivo();
          
         } else {
             $this->result = false;
         }
     }
+    /**
+     * Metodo para pesquisar se a empresa esta ativa 
+     *
+     * @return array
+     */
+    private function valClieAtivo(): void
+    {
+        $valContAtivo = new \App\adms\Models\helper\AdmsRead();
+        $valContAtivo->fullRead("SELECT id,  situacao  FROM adms_clientes WHERE id= :id and situacao = :situacao","id={$this->data['cliente_id']}&situacao=1");  
+        
+        $this->resultBd = $valContAtivo->getResult();   
 
-    /*
-    verifica intervalo de dias entre datas
-     WHERE (DATEDIFF(date, inicio_contr) < 30) AND (empresa_id = :empresa_id) AND (sit_cont = :sit_cont)","empresa_id={$_SESSION['empresa_contr']}&sit_cont=1)"); */
+        if ($valContAtivo->getResult()) {
+            $this->val_prod();
+            $this->result = true;
+        } else {
+            $_SESSION['msg'] = "<p class='alert-danger'>Erro: Este chamado não pode ser ABERTO pois o cliente esncontra-se INATIVO<b>!</p>";
+            $this->result = false;
+        }
+    }
 
+        
+        
+     /**
+     * Metodo para verifica se o produto esta com contrato ativo e dentro do periodo de validade
+     *
+     * @return array
+     */
      private function val_prod(): void
      {
+            if ($_SESSION['adms_access_level_id'] == 14) {
+
                $viewProd = new \App\adms\Models\helper\AdmsRead();
                 $viewProd->fullRead("SELECT id, cliente_id, dias, inicio_contr FROM adms_produtos 
                 WHERE id= :id AND cliente_id= :cliente_id", "id={$this->data['prod_id']}& cliente_id={$this->data['cliente_id']}");
@@ -109,6 +133,9 @@ class AdmsAddCham
                     $_SESSION['msg'] = "<p class='alert-danger'>Erro: Produto não encontrado!</p>";
                     $this->result = false;
                 }
+            } else{
+                $this->add();
+            }
 
      }
     /** 
@@ -122,13 +149,17 @@ class AdmsAddCham
     private function add(): void
     {
         date_default_timezone_set('America/Bahia');
+
+            $this->data['usuario_id'] = $_SESSION['user_id'];
+            $this->data['empresa_id'] = $_SESSION['emp_user'];
+            $this->data['dt_cham'] = date("Y-m-d H:i:s");
+            $this->data['status_id'] = 2;
+            $this->data['dt_status'] = date("Y-m-d H:i:s");
+            $this->data['created'] = date("Y-m-d H:i:s");
+            
+            var_dump($this->data);
+
         
-        $this->data['usuario_id'] = $_SESSION['user_id'];
-        $this->data['empresa_id'] = $_SESSION['emp_user'];
-        $this->data['dt_cham'] = date("Y-m-d H:i:s");
-        $this->data['status_id'] = 2;
-        $this->data['dt_status'] = date("Y-m-d H:i:s");
-        $this->data['created'] = date("Y-m-d H:i:s");
         $createCham = new \App\adms\Models\helper\AdmsCreate();
         $createCham->exeCreate("adms_cham", $this->data);
 
@@ -161,6 +192,12 @@ class AdmsAddCham
                 WHERE empresa= :empresa", "empresa={$_SESSION['emp_user']}");
                 $registry['cliente'] = $list->getResult();
 
+                $list->fullRead("SELECT id, name, dias, inicio_contr, cliente_id, empresa_id FROM adms_produtos 
+                WHERE empresa_id= :empresa", "empresa={$_SESSION['emp_user']}");
+                $registry['produto'] = $list->getResult();
+
+                $this->listRegistryAdd = ['cliente' => $registry['cliente'],'produto' => $registry['produto']];
+
                 //Se for 14 - Usuario(a) final
             } elseif ($_SESSION['adms_access_level_id'] == 14) {
 
@@ -171,13 +208,17 @@ class AdmsAddCham
                 $list->fullRead("SELECT id, name, dias, inicio_contr, cliente_id, empresa_id FROM adms_produtos
                 WHERE cliente_id= :cliente_id", "cliente_id={$_SESSION['set_clie']}");
                 $registry['produto'] = $list->getResult();
+
+                $this->listRegistryAdd = ['cliente' => $registry['cliente'],'produto' => $registry['produto']];
             }
         } else {
 
             $list->fullRead("SELECT id, nome_fantasia FROM adms_clientes ORDER BY nome_fantasia ASC");
             $registry['cliente'] = $list->getResult();
+
+            $this->listRegistryAdd = ['cliente' => $registry['cliente']];
         }
-        $this->listRegistryAdd = ['cliente' => $registry['cliente'],'produto' => $registry['produto']];
+        
 
         return $this->listRegistryAdd;
     }

@@ -14,7 +14,7 @@ if (isset($this->data['form'])) {
 <div class="wrapper">
     <div class="row">
         <div class="top-list">
-            <span class="title-content">Agendar Chamado </span>
+            <span class="title-content">Agendar Atendimento do Ticket </span>
             <div class="top-list-right">
                 <?php
                 if ($this->data['button']['list_cham']) {
@@ -66,7 +66,7 @@ if (isset($this->data['form'])) {
                         </select>
                     </div>
                     <div class="column">
-                        <label class="title-input">Tipo de Chamado:<span class="text-danger">*</span></label>
+                        <label class="title-input">Tipo de Atendimento:<span class="text-danger">*</span></label>
                         <select name="type_cham" id="type_cham" class="input-adm" required>
                             <option value="Telefonico">Telefônico</option>
                             <option value="Remoto">Remoto</option>
@@ -98,7 +98,7 @@ if (isset($this->data['form'])) {
                             $dia_cham = $valorForm['dia_cham'];
                         }
                         ?>
-                        <label class="title-input">Dia do chamado:<span class="text-danger">*</span></label>
+                        <label class="title-input">Dia do Atendimento:<span class="text-danger">*</span></label>
                         <input type="date" name="dia_cham" id="dia_cham" rows="5" cols="50" class="input-adm" placeholder="Problema Detectado" value="<?php echo $dia_cham; ?>" required>
 
                     </div>
@@ -110,7 +110,7 @@ if (isset($this->data['form'])) {
                             $hr_cham = $valorForm['hr_cham'];
                         }
                         ?>
-                        <label class="title-input">Horário do chamado:<span class="text-danger">*</span></label>
+                        <label class="title-input">Horário do Atendimento:<span class="text-danger">*</span></label>
                         <input type="time" name="hr_cham" id="hr_cham" rows="5" cols="50" class="input-adm" placeholder="Problema Detectado" value="<?php echo $hr_cham; ?>" required>
 
                     </div>

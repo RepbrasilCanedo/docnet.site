@@ -33,6 +33,7 @@ class AddChamAgend
     {
         $this->dataForm = filter_input_array(INPUT_POST, FILTER_DEFAULT);  
 
+
         if(!empty($this->dataForm['empresa_id'])){
             $_SESSION['empresa_contr']=$this->dataForm['empresa_id'];
         }

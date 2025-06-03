@@ -56,7 +56,8 @@ class ViewEmpPrincipal
     {
         $button = [
             'edit_emp_principal' => ['menu_controller' => 'edit-emp-principal', 'menu_metodo' => 'index'],
-            'list_emp_principal' => ['menu_controller' => 'list-emp-principal', 'menu_metodo' => 'index']
+            'list_emp_principal' => ['menu_controller' => 'list-emp-principal', 'menu_metodo' => 'index'],
+            'edit_profile_logo' => ['menu_controller' => 'edit-profile-logo', 'menu_metodo' => 'index']
         ];
         $listBotton = new \App\adms\Models\helper\AdmsButton();
         $this->data['button'] = $listBotton->buttonPermission($button);

@@ -56,81 +56,75 @@ class AdmsAddChamAgend
         $this->data = $data;
         $valEmptyField = new \App\adms\Models\helper\AdmsValEmptyField();
         $valEmptyField->valField($this->data);
+
         if ($valEmptyField->getResult()) {
-            $this->add();
-            //$this->listHist(); 
+            $this->valClieAtivo();
         } else {
             $this->result = false;
         }
-    }
-
-    /**
-     * Metodo para pesquisar se existe alguma chamado Finalizado para o cliente
-     *
-     * @return array
-     */
-    private function listHist(): void
-    {
-        $listHist = new \App\adms\Models\helper\AdmsRead();
-        $listHist->fullRead("SELECT empresa_id, status_id FROM adms_cham  WHERE status_id=6 and empresa_id = :empresa_id", "empresa_id={$_SESSION['emp_user']}");
-        $this->resultBd = $listHist->getResult();
-
-        if ($listHist->getResult()) {
-            $_SESSION['msg'] = "<p class='alert-danger'>Erro: Este chamado não pode ser ABERTO pois existe chamado FINALIZADO para a empresa deste USUÁRIO que precisa ser AVALIADO!</p>";
-            $this->result = true;
-        } else {
-            $this->add();
-            $this->result = false;
-        }
-    }
-
-
-
+    }    
     
-/**
-     * Metodo para pesquisar se a empresa esta vinculada a outra empresa com contrato ativo possui contrato ativo ou vencido
+    /**
+     * Metodo para pesquisar se a empresa esta ativa 
      *
      * @return array
      */
-    private function valEmpContr(): void
+    private function valClieAtivo(): void
     {
         $valContAtivo = new \App\adms\Models\helper\AdmsRead();
-        $valContAtivo->fullRead("SELECT id, contrato, situacao FROM adms_empresa 
-        WHERE id= :empresa_contr","empresa_contr={$_SESSION['empresa_contr']})");  
+        $valContAtivo->fullRead("SELECT id,  situacao  FROM adms_clientes WHERE id= :id and situacao = :situacao","id={$this->data['cliente_id']}&situacao=1");  
         
         $this->resultBd = $valContAtivo->getResult();   
 
         if ($valContAtivo->getResult()) {
-            $_SESSION['contrato_matriz']='';
-            $_SESSION['contrato_matriz']=$this->resultBd['0']['contrato'];
-            $this->valContAtivo();
-            $this->result = false;
-        } else {
-            $_SESSION['msg'] = "<p class='alert-danger'>Erro: Este chamado não pode ser ABERTO entre em cotato com o setor comercial da REP BRASIL. --> <b>(WhatsApp 71 98137 6244)<b>!</p>";
+            $this->val_prod();
             $this->result = true;
+        } else {
+            $_SESSION['msg'] = "<p class='alert-danger'>Erro: Este chamado não pode ser ABERTO pois o cliente esncontra-se INATIVO<b>!</p>";
+            $this->result = false;
         }
     }
-    /**
-     * Metodo para pesquisar se o cliente possui contrato ativo ou vencido
+
+     /**
+     * Metodo para verifica se o produto esta com contrato ativo e dentro do periodo de validade
      *
      * @return array
      */
-    private function valContAtivo(): void
-    {        
-        $valContAtivo = new \App\adms\Models\helper\AdmsRead();
-        $valContAtivo->fullRead("SELECT id, clie_cont, service_id, num_cont, dt_inicio, dt_term, sit_cont, tipo_cont FROM adms_contr 
-        WHERE (dt_term > CURDATE()) AND (id= :num_cont) AND (sit_cont = :sit_cont)","num_cont={$_SESSION['contrato_matriz']}&sit_cont=1)");  
-        
-        $this->resultBd = $valContAtivo->getResult();       
+     private function val_prod(): void
+     {
+               $viewProd = new \App\adms\Models\helper\AdmsRead();
+                $viewProd->fullRead("SELECT id, cliente_id, dias, inicio_contr FROM adms_produtos 
+                WHERE id= :id AND cliente_id= :cliente_id", "id={$this->data['prod_id']}& cliente_id={$this->data['cliente_id']}");
+                $this->resultBd = $viewProd->getResult();
 
-        if ($valContAtivo->getResult()) {
-            $this->add();
-            $this->result = false;
-        } else {
-            $_SESSION['msg'] = "<p class='alert-danger'>Erro: Este chamado não pode ser ABERTO entre em cotato com o setor comercial da REP BRASIL. --> <b>(WhatsApp 71 98137 6244)<b>!</p>";
-            $this->result = true;
-        }
-    }
+                if ($this->resultBd) {
+                    // Sua data inicial
+                    $dataInicial = $this->resultBd[0]['inicio_contr'];
+
+                    // Número de dias a adicionar
+                    $diasParaAdicionar = $this->resultBd[0]['dias'];
+
+                    // Adiciona os dias e formata a nova data em uma única linha
+                    $novaData = date('d/m/Y', strtotime($dataInicial . " +{$diasParaAdicionar} days"));
+
+                    // Exibe a nova data
+                    if($novaData > date(date("Y-m-d H:i:s"))){
+                    $this->result = true;
+                     $this->add();
+                    } else{
+                        $_SESSION['msg'] = "<p class='alert-danger'>Não e possivel a abertura de Ticket para este produto pois o contrato de suporte tecnico ou garantia esta vencido. Entre em contato com o setor comercial da REPBRASIL 071 98137 6244</p>";
+                        $this->result = false;
+                    };
+                    
+                   
+                } else {
+                    $_SESSION['msg'] = "<p class='alert-danger'>Erro: Produto não encontrado!</p>";
+                    $this->result = false;
+                }
+
+     }
+
+
     /** 
      * Cadastrar a página no banco de dados
      * Retorna TRUE quando cadastrar a página com sucesso
@@ -140,16 +134,20 @@ class AdmsAddChamAgend
      */
     private function add(): void
     {
-        $this->data['usuario_id'] = $_SESSION['user_id'];
-        $this->data['empresa_id'] = $_SESSION['emp_user'];
+        date_default_timezone_set('America/Bahia');
+
+        // concatena o dia junto com o horario do agendamento
         $diaAgendado=$this->data['dia_cham'];
         unset($this->data['dia_cham']);
         $horaAgendado=$this->data['hr_cham'];
         unset($this->data['hr_cham']);
         $agendamento=$diaAgendado . " ". $horaAgendado;
+        
+        $this->data['usuario_id'] = $_SESSION['user_id'];
+        $this->data['empresa_id'] = $_SESSION['emp_user'];        
         $this->data['dt_cham'] = date("Y-m-d H:i:s");;
         $this->data['status_id'] = 9;
-        $this->data['dt_status'] = $agendamento;
+        $this->data['dt_status'] =$agendamento;
         $this->data['created'] = date("Y-m-d H:i:s");
 
         $createChamAgend = new \App\adms\Models\helper\AdmsCreate();
@@ -181,10 +179,14 @@ class AdmsAddChamAgend
             if ($_SESSION['adms_access_level_id'] == 4) {
 
                 $list->fullRead("SELECT id, nome_fantasia FROM adms_clientes 
-                WHERE empresa= :clie_id ORDER BY nome_fantasia ASC", "clie_id={$_SESSION['emp_user']}");
+                WHERE empresa= :empresa_id ORDER BY nome_fantasia ASC", "empresa_id={$_SESSION['emp_user']}");
                 $registry['cliente'] = $list->getResult();
 
-                //Se for 14 - Usuário final
+                $list->fullRead("SELECT id, name FROM adms_produtos 
+                WHERE empresa_id= :empresa_id", "empresa_id={$_SESSION['emp_user']}");
+                $registry['produto'] = $list->getResult();
+
+            //Se for 14 - Usuário final
             } elseif ($_SESSION['adms_access_level_id'] == 14) {
 
                 $list->fullRead("SELECT id, nome_fantasia FROM adms_clientes 
@@ -198,6 +200,9 @@ class AdmsAddChamAgend
         } else {
             $list->fullRead("SELECT id id_emp, nome_fantasia nome_fantasia_emp FROM adms_empresa as emp ORDER BY nome_fantasia ASC");
             $registry['cliente'] = $list->getResult();
+
+            $list->fullRead("SELECT id, name FROM adms_produtos");
+            $registry['produto'] = $list->getResult();;
             
         }
         $this->listRegistryAdd = ['cliente' => $registry['cliente'],'produto' => $registry['produto']];

@@ -9,13 +9,13 @@ if (isset($this->data['form'])) {
     $valorForm = $this->data['form'];
 }
 //echo "<pre>"; var_dump($this->data['select']['cliente']);
-//echo "<pre>"; var_dump($this->data['select']['produto']);
+
 ?>
 <!-- Inicio do conteudo do administrativo -->
 <div class="wrapper">
     <div class="row">
         <div class="top-list">
-            <span class="title-content">Abertura Chamado </span>
+            <span class="title-content">Abertura de Ticket </span>
             <div class="top-list-right">
                 <?php
                 if ($this->data['button']['list_cham']) {
@@ -39,7 +39,6 @@ if (isset($this->data['form'])) {
             <form method="POST" action="" id="form-add-cham" class="form-adm">
 
                 <div class="row-input">
-
                     <div class="column">
                         <label class="title-input">Contato:<span class="text-danger">*</span></label>
                         <input type="text" name="contato" id="contato" class="input-adm" placeholder="Digite o nome do contato" value="<?php $contato ?>" required>
@@ -67,7 +66,7 @@ if (isset($this->data['form'])) {
                     </div>
 
                     <div class="column">
-                        <label class="title-input">Tipo de Chamado:<span class="text-danger">*</span></label>
+                        <label class="title-input">Tipo de Ticket:<span class="text-danger">*</span></label>
                         <select name="type_cham" id="type_cham" class="input-adm" required>
                             <option value="">Selecione</option>
                             <option value="Telefonico">Telefônico</option>
@@ -76,23 +75,25 @@ if (isset($this->data['form'])) {
                             <option value="Outros">Outros</option>
                         </select>
                     </div>
-                    <div class="column">
-                        <label class="title-input">Produto:<span class="text-danger">*</span></label>
-                        <select name="prod_id" id="prod_id" class="input-adm" required>
-                            <option value="">Selecione</option>
-                            <?php
-                            foreach ($this->data['select']['produto'] as $nome) {
-                                extract($nome);
-                                if (isset($valorForm['id']) and $valorForm['id'] == $id) {
-                                    echo "<option value='$id' selected>$name</option>";
-                                } else {
-                                    echo "<option value='$id'>$name</option>";
-                                }
-                            }
-                            ?>
-                        </select>
-                    </div>
 
+                    <?php if ($_SESSION['adms_access_level_id'] == 14) {?>
+                        <div class="column">
+                            <label class="title-input">Produto:<span class="text-danger">*</span></label>
+                            <select name="prod_id" id="prod_id" class="input-adm" required>
+                                <option value="">Selecione</option>
+                                <?php
+                                foreach ($this->data['select']['produto'] as $nome) {
+                                    extract($nome);
+                                    if (isset($valorForm['id']) and $valorForm['id'] == $id) {
+                                        echo "<option value='$id' selected>$name</option>";
+                                    } else {
+                                        echo "<option value='$id'>$name</option>";
+                                    }
+                                }
+                                ?>
+                            </select>
+                        </div>
+                    <?php } ?>         
                 </div>
 
                 <div class="column">
@@ -107,7 +108,7 @@ if (isset($this->data['form'])) {
 
                 </div>
 
-                <p class="text-danger mb-5 fs-4">* Campo Obrigatório</p>
+                <p class="text-danger mb-5 fs-5">* Campo Obrigatório</p>
 
                 <button type="submit" name="SendAddCham" class="btn-success" value="Cadastrar">Cadastrar</button>
 
@@ -115,4 +116,5 @@ if (isset($this->data['form'])) {
         </div>
     </div>
 </div>
+
 <!-- Fim do conteudo do administrativo -->
