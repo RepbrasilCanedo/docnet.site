@@ -122,7 +122,7 @@ class AdmsAddCham
                     // Exibe a nova data
                     if($novaData > date(date("Y-m-d H:i:s"))){
                     $this->result = true;
-                     $this->add();
+                    $this->add();
                     } else{
                         $_SESSION['msg'] = "<p class='alert-danger'>Não e possivel a abertura de Ticket para este produto pois o contrato de suporte tecnico ou garantia esta vencido. Entre em contato com o setor comercial da REPBRASIL 071 98137 6244</p>";
                         $this->result = false;
@@ -150,14 +150,14 @@ class AdmsAddCham
     {
         date_default_timezone_set('America/Bahia');
 
-            $this->data['usuario_id'] = $_SESSION['user_id'];
-            $this->data['empresa_id'] = $_SESSION['emp_user'];
-            $this->data['dt_cham'] = date("Y-m-d H:i:s");
-            $this->data['status_id'] = 2;
-            $this->data['dt_status'] = date("Y-m-d H:i:s");
-            $this->data['created'] = date("Y-m-d H:i:s");
+        $this->data['usuario_id'] = $_SESSION['user_id'];
+        $this->data['empresa_id'] = $_SESSION['emp_user'];
+        $this->data['dt_cham'] = date("Y-m-d H:i:s");
+        $this->data['status_id'] = 2;
+        $this->data['dt_status'] = date("Y-m-d H:i:s");
+        $this->data['created'] = date("Y-m-d H:i:s");
             
-            var_dump($this->data);
+        var_dump($this->data);
 
         
         $createCham = new \App\adms\Models\helper\AdmsCreate();

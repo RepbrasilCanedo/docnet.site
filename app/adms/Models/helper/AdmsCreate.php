@@ -13,7 +13,7 @@ use PDOException;
 /**
  * Classe gernérica para cadastrar registro no banco de dados
  *
-  * @author Daniel Canedo - docan2006@gmail.com
+ * @author Daniel Canedo - docan2006@gmail.com
  */
 class AdmsCreate extends AdmsConn
 {
@@ -39,8 +39,9 @@ class AdmsCreate extends AdmsConn
      * Retornar o status do cadastro, retorna o último id quando cadatrar com sucesso e null quando houver erro
      * @return string|null Retorna o último id inserido
      */
-    function getResult():string
+    function getResult():string|null
     {
+        var_dump($this->result);
         return $this->result;
     }
 
@@ -84,7 +85,10 @@ class AdmsCreate extends AdmsConn
             $this->insert->execute($this->data);
             $this->result = $this->conn->lastInsertId();
         }catch(PDOException $err){
-            $this->result = null;
+        $this->result = null;
+        echo "<pre>ERRO PDO: " . $err->getMessage() . "</pre>";
+        var_dump($this->data);
+        exit;
         }
     }
 
