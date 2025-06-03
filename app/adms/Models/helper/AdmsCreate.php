@@ -41,7 +41,6 @@ class AdmsCreate extends AdmsConn
      */
     function getResult():string|null
     {
-        var_dump($this->result);
         return $this->result;
     }
 
@@ -86,9 +85,6 @@ class AdmsCreate extends AdmsConn
             $this->result = $this->conn->lastInsertId();
         }catch(PDOException $err){
         $this->result = null;
-        echo "<pre>ERRO PDO: " . $err->getMessage() . "</pre>";
-        var_dump($this->data);
-        exit;
         }
     }
 
