@@ -72,7 +72,7 @@ class AdmsAprovCham
      * @param array|null $data
      * @return void
      */
-    public function update(array $data = null): void
+    public function update(array $data): void
     {
         $this->data = $data;
 
@@ -92,7 +92,7 @@ class AdmsAprovCham
      * @param array|null $data
      * @return void
      */
-    public function updateReprov(array $data = null): void
+    public function updateReprov(array $data): void
     {
         $this->data = $data;
 
@@ -111,6 +111,7 @@ class AdmsAprovCham
      */
     private function edit(): void
     { 
+        date_default_timezone_set('America/Bahia');
         $this->data['status_id'] = 8;
         $this->data['dt_status'] = date("Y-m-d H:i:s");
         $this->data['fech_cham']=date("Y-m-d H:i:s");
@@ -134,6 +135,7 @@ class AdmsAprovCham
      */
     private function editReprov(): void
     { 
+        date_default_timezone_set('America/Bahia');
         $this->data['modified'] = date("Y-m-d H:i:s");
         $this->data['status_id'] = 7;
         $this->data['dt_status'] = date("Y-m-d H:i:s");

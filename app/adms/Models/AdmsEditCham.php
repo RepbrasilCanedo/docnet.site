@@ -60,11 +60,10 @@ class AdmsEditCham
         $_SESSION['set_cham'] = $this->id;
 
         $viewCham = new \App\adms\Models\helper\AdmsRead();
-        $viewCham->fullRead("SELECT cham.id, clie.nome_fantasia as nome_fantasia_clie, prod.name as name_prod, prod.marca_id as marca_id_prod, prod.modelo_id as modelo_id_prod, cham.contato, cham.tel_contato, usr.name AS name_usr, 
+        $viewCham->fullRead("SELECT cham.id, clie.nome_fantasia as nome_fantasia_clie, prod.name as name_prod, prod.marca_id as marca_id_prod, prod.modelo_id as modelo_id_prod, cham.contato, cham.tel_contato, 
                             cham.dt_cham, cham.suporte_id, sta.name as name_sta, cham.dt_status, cham.dt_term_cham, cham.inf_cham, cham.type_cham, cham.fech_cham, cham.image, cham.motivo_repr, cham.created
                             FROM adms_cham as cham 
-                            INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id 
-                            INNER JOIN adms_users_final AS usr ON usr.id=cham.usuario_id
+                            INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id
                             INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id                             
                             INNER JOIN adms_produtos AS prod ON prod.id=cham.prod_id 
                             WHERE cham.id= :cham_id ORDER BY cham.id DESC LIMIT :limit","cham_id={$_SESSION['set_cham']}&limit=1");
@@ -260,6 +259,7 @@ class AdmsEditCham
     public function addHistChamInic(): void
     {
 
+        date_default_timezone_set('America/Bahia');
         $this->data['status'] = 'Em Atendimento';
         $this->data['dt_status'] = date("Y-m-d H:i:s");
         $this->data['cham_id'] = $_SESSION['set_cham'];
@@ -290,6 +290,7 @@ class AdmsEditCham
     public function addHistChamPaus(): void
     {
 
+        date_default_timezone_set('America/Bahia');
         $this->data['status'] = 'Pausado';
         $this->data['dt_status'] = date("Y-m-d H:i:s");
         $this->data['cham_id'] = $_SESSION['set_cham'];
@@ -318,6 +319,7 @@ class AdmsEditCham
      */
     public function addHistChamClie(): void
     {
+        date_default_timezone_set('America/Bahia');
 
         $this->data['status'] = 'Aguardando Cliente';
         $this->data['dt_status'] = date("Y-m-d H:i:s");
@@ -347,6 +349,7 @@ class AdmsEditCham
      */
     public function addHistChamAguar(): void
     {
+        date_default_timezone_set('America/Bahia');
 
         $this->data['status'] = 'Aguardando Outros';
         $this->data['dt_status'] = date("Y-m-d H:i:s");
@@ -377,6 +380,7 @@ class AdmsEditCham
      */
     public function addHistChamFin(): void
     {
+        date_default_timezone_set('America/Bahia');
 
         $this->data['status'] = 'Finalizado';
         $this->data['dt_status'] = date("Y-m-d H:i:s");
@@ -404,6 +408,7 @@ class AdmsEditCham
      */
     private function edit(): void
     {
+        date_default_timezone_set('America/Bahia');
 
 
         $this->data['modified'] = date("Y-m-d H:i:s");
@@ -429,6 +434,7 @@ class AdmsEditCham
      */
     private function editPausa(): void
     {
+        date_default_timezone_set('America/Bahia');
         $this->data['modified'] = date("Y-m-d H:i:s");
         $this->data['status_id'] = 5; //Pausado
         $this->data['dt_status'] = date("Y-m-d H:i:s");
@@ -452,6 +458,7 @@ class AdmsEditCham
      */
     private function editPausaCom(): void
     {
+        date_default_timezone_set('America/Bahia');
         $this->data['modified'] = date("Y-m-d H:i:s");
         $this->data['status_id'] = 11; //Aguardando Comercial
         $this->data['suporte_id'] = $_SESSION['user_id'];
@@ -475,6 +482,7 @@ class AdmsEditCham
      */
     private function editPend(): void
     {
+        date_default_timezone_set('America/Bahia');
         $this->data['modified'] = date("Y-m-d H:i:s");
         $this->data['status_id'] = 10; //Aguardando Cliente
         $this->data['suporte_id'] = $_SESSION['user_id'];
@@ -497,6 +505,7 @@ class AdmsEditCham
      */
     private function editAguar(): void
     {
+        date_default_timezone_set('America/Bahia');
         $this->data['modified'] = date("Y-m-d H:i:s");
         $this->data['status_id'] = 12; //Aguardando Outros
         $this->data['suporte_id'] = $_SESSION['user_id'];
@@ -520,6 +529,8 @@ class AdmsEditCham
      */
     private function editFinal(): void
     {
+        date_default_timezone_set('America/Bahia');
+        
         $this->data['modified'] = date("Y-m-d H:i:s");
         $this->data['status_id'] = 6; //Finalizado
         $this->data['suporte_id'] = $_SESSION['user_id'];
@@ -540,7 +551,6 @@ class AdmsEditCham
 
     public function listTable(): array
     {
-
 
         $listTable = new \App\adms\Models\helper\AdmsRead();
         $listTable->fullRead("SELECT hist.status, hist.dt_status, hist.cham_id, usr.name as name_usr_hist, hist.obs 

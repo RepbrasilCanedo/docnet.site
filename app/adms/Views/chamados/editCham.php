@@ -176,16 +176,6 @@ if (isset($this->data['form'][0])) {
                                 </div>
                                 <div class="input-group">
                                     <?php
-                                    $name_usr = "";
-                                    if (isset($valorForm['name_usr'])) {
-                                        $name_usr = $valorForm['name_usr'];
-                                    }
-                                    ?>
-                                    <span class="input-group-text">Usuário Logado:</span>
-                                    <span class="form-control"><?php echo $name_usr; ?></span>
-                                </div>
-                                <div class="input-group">
-                                    <?php
                                     $id = "";
                                     if (isset($valorForm['id'])) {
                                         $id = $valorForm['id'];

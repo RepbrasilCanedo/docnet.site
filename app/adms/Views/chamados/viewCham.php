@@ -65,11 +65,6 @@ if (!defined('D0O8C0A3N1E9D6O1')) {
                             </div>
 
                             <div class="view-det-adm">
-                                <span class="view-adm-title">Usuário Logado: </span>
-                                <span class="view-adm-info"><?php echo $name_usr . "  Tel/Zap:  " . $tel_1_usr; ?></span>
-                            </div>
-
-                            <div class="view-det-adm">
                                 <span class="view-adm-title">Contato: </span>
                                 <span class="view-adm-info"><?php echo $contato; ?></span>
                             </div>
@@ -104,24 +99,20 @@ if (!defined('D0O8C0A3N1E9D6O1')) {
                                 <span class="view-adm-info"><?php echo date('d/m/Y H:i:s', strtotime($dt_cham)); ?></span>
                             </div>
 
+
                             <div class="view-det-adm">
-                                <span class="view-adm-title">Conclusão: </span>
+                                <span class="view-adm-title">Duração: </span>
+                                <span class="view-adm-info"><?php echo date('H:i:s', (strtotime($dt_cham) - strtotime($dt_status))); ?></span>
+                            </div>
+
+                            <div class="view-det-adm">
+                                <span class="view-adm-title">Aprovação Chamado: </span>
                                 <span class="view-adm-info">
                                     <?php
                                     if (!empty($fech_cham)) {
                                         echo date('d/m/Y H:i:s', strtotime($fech_cham));
                                     } ?>
                                 </span>
-                            </div>
-
-
-                            <div class="view-det-adm">
-                                <span class="view-adm-title">Duração: </span>
-                                <?php
-                                if (!empty($fech_cham) and !empty($dt_cham)) {
-                                }
-                                ?>
-
                             </div>
                         </div>
                     </div>
