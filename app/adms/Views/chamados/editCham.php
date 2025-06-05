@@ -18,7 +18,8 @@ if (isset($this->data['form'][0])) {
 <div class="wrapper">
     <div class="row">
         <div class="top-list">
-            <span class="title-content">Atendimento : </span>
+            <div class="d-flex flex-wrap align-items-center mb-3">
+            <span class="me-2">Atendimento : </span>
             <div class="top-list-center">
                 <?php
                 $name_sta = "";
@@ -26,8 +27,9 @@ if (isset($this->data['form'][0])) {
                     $name_sta = $valorForm['name_sta'];
                 }
                 ?>
-                <h1><?php echo $name_sta; ?></h1>
+                <h1 class="mb-3"><?php echo $name_sta; ?></h1>
 
+            </div>
             </div>
             <div class="top-list-right">
                 <?php

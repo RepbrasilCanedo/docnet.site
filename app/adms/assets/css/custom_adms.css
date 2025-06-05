@@ -941,6 +941,21 @@ select.input-search:focus{
     }
 }
 
+/* Botões de atendimento*/
+@media (max-width: 540px) {
+  .btn-sm {
+    display: block;
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  .col-md-12 {
+    padding: 0;
+  }
+}
+
+
+
 /* Fim pesquisar */
 
 /* Inicio texto */
