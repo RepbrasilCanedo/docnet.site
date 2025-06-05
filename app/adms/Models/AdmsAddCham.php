@@ -100,10 +100,8 @@ class AdmsAddCham
      *
      * @return array
      */
-     private function val_prod(): void
+          private function val_prod(): void
      {
-            if ($_SESSION['adms_access_level_id'] == 14) {
-
                $viewProd = new \App\adms\Models\helper\AdmsRead();
                 $viewProd->fullRead("SELECT id, cliente_id, dias, inicio_contr FROM adms_produtos 
                 WHERE id= :id AND cliente_id= :cliente_id", "id={$this->data['prod_id']}& cliente_id={$this->data['cliente_id']}");
@@ -120,9 +118,9 @@ class AdmsAddCham
                     $novaData = date('d/m/Y', strtotime($dataInicial . " +{$diasParaAdicionar} days"));
 
                     // Exibe a nova data
-                    if($novaData > date(date("Y-m-d H:i:s"))){
+                    if($novaData < date(date("Y-m-d H:i:s"))){
                     $this->result = true;
-                    $this->add();
+                     $this->add();
                     } else{
                         $_SESSION['msg'] = "<p class='alert-danger'>Não e possivel a abertura de Ticket para este produto pois o contrato de suporte tecnico ou garantia esta vencido. Entre em contato com o setor comercial da REPBRASIL 071 98137 6244</p>";
                         $this->result = false;
@@ -133,9 +131,6 @@ class AdmsAddCham
                     $_SESSION['msg'] = "<p class='alert-danger'>Erro: Produto não encontrado!</p>";
                     $this->result = false;
                 }
-            } else{
-                $this->add();
-            }
 
      }
     /** 
@@ -157,7 +152,6 @@ class AdmsAddCham
         $this->data['dt_status'] = date("Y-m-d H:i:s");
         $this->data['created'] = date("Y-m-d H:i:s");
             
-        var_dump($this->data);
 
         
         $createCham = new \App\adms\Models\helper\AdmsCreate();

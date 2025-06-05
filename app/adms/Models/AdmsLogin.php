@@ -42,7 +42,7 @@ class AdmsLogin
      * 
      * @return void
      */
-    public function login(array $data = null): void
+    public function login(array $data): void
     {
         $this->data = $data;
 

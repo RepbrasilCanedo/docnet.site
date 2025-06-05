@@ -108,7 +108,7 @@ class AdmsAddChamAgend
                     $novaData = date('d/m/Y', strtotime($dataInicial . " +{$diasParaAdicionar} days"));
 
                     // Exibe a nova data
-                    if($novaData > date(date("Y-m-d H:i:s"))){
+                    if($novaData < date(date("Y-m-d H:i:s"))){
                     $this->result = true;
                      $this->add();
                     } else{

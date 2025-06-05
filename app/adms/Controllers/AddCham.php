@@ -32,6 +32,7 @@ class AddCham
     public function index(): void
     {
         $this->dataForm = filter_input_array(INPUT_POST, FILTER_DEFAULT);
+        
         if (!empty($this->dataForm['SendAddCham'])) {
             unset($this->dataForm['SendAddCham']);   
                     
