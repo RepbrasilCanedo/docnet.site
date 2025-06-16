@@ -33,8 +33,9 @@ class CpmsGeneratePdf
 
         // Renderizar o PDF
         $dompdf->render();
+        
+       $dompdf->stream("exemplo.pdf", array("Attachment" => 0)); // Attachment 0 força a abertura no navegador
 
-        $dompdf->stream("relatorio_chamados.pdf", array("Attachment" => 0));
         } catch (\Exception $e) {
             echo 'Erro ao gerar o PDF: ' . $e->getMessage();
         }

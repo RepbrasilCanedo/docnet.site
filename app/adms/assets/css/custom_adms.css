@@ -941,6 +941,7 @@ select.input-search:focus{
     }
 }
 
+
 /* Botões de atendimento*/
 @media (max-width: 540px) {
   .btn-sm {
@@ -953,8 +954,6 @@ select.input-search:focus{
     padding: 0;
   }
 }
-
-
 
 /* Fim pesquisar */
 

@@ -133,7 +133,7 @@ class CpmsRelatListCham
      * @param string|null $search_color
      * @return void
      */
-    public function listSearchCham(int $page, string|null $search_empresa, string|null $search_status, string|null $search_Tipo, string|null $search_Date_Start, string|null $search_Date_End, string|null $search_Tec_Suporte): void
+    public function listSearchCham(int $page, string|null $search_empresa, string|null $search_status, string|null $search_Tipo, string|null $search_Date_Start, string|null $search_Date_End, string|null $searchTecSuporte): void
     {
         $this->page = (int) $page ? $page : 1;
         $this->searchEmpresa = $search_empresa;
@@ -141,7 +141,7 @@ class CpmsRelatListCham
         $this->searchTipo = $search_Tipo;
         $this->searchDateStart = $search_Date_Start;
         $this->searchDateEnd = $search_Date_End;
-        $this->searchTecSuporte = $search_Tec_Suporte;
+        $this->searchTecSuporte = $searchTecSuporte;
 
         $this->searchEmpresaValue = $this->searchEmpresa;
         $this->searchStatusValue = $this->searchStatus;
