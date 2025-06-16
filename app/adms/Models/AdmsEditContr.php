@@ -106,6 +106,7 @@ class AdmsEditContr
      */
     private function edit(): void
     {
+        date_default_timezone_set('America/Bahia');
         $this->data['anexo'] = $_SESSION['anex_Contr'];
         $this->data['modified'] = date("Y-m-d H:i:s");
 

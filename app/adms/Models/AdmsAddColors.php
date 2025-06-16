@@ -40,7 +40,7 @@ class AdmsAddColors
      * 
      * @return void
      */
-    public function create(array $data = null): void
+    public function create(array $data): void
     {
         $this->data = $data;
 

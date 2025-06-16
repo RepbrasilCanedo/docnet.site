@@ -14,7 +14,7 @@ if (isset($this->data['form'])) {
 <div class="wrapper">
     <div class="row">
         <div class="top-list">
-            <span class="title-content">Listar Produtos</span>
+            <span class="title-content">Listar Equipamentos</span>
             <div class="top-list-right">
                 <?php
                 if ($this->data['button']['add_prod']) {
@@ -36,7 +36,7 @@ if (isset($this->data['form'])) {
                         ?>
                         
                         <div class="column">
-                            <label class="title-input-search">Produto: </label>
+                            <label class="title-input-search">Equipamento: </label>
                             <input type="text" name="search_prod" id="search_prod" class="input-search" placeholder="Pesquisar pelo produto..." value="<?php echo $search_prod; ?>">
                         </div>
                         <?php
@@ -61,7 +61,7 @@ if (isset($this->data['form'])) {
                         ?>
                         
                         <div class="column">
-                            <label class="title-input-search">Produto: </label>
+                            <label class="title-input-search">Equipamento: </label>
                             <input type="text" name="search_prod" id="search_prod" class="input-search" placeholder="Pesquisar pelo produto..." value="<?php echo $search_prod; ?>">
                         </div>
                         <?php
@@ -94,7 +94,7 @@ if (isset($this->data['form'])) {
         </div>
         <?php 
         if (isset($_SESSION['resultado'])) {
-            echo "Total de produtos Cadastrados:  " . $_SESSION['resultado'];
+            echo "Total de Equipamentos Cadastrados:  " . $_SESSION['resultado'];
         }
         ?>
         <table class="table table-hover table-list mb-5">
@@ -148,7 +148,7 @@ if (isset($this->data['form'])) {
         <?php echo $this->data['pagination']; ?>
         <?php 
         if (isset($_SESSION['resultado'])) {
-            echo "Total de produtos Cadastrados:  " . $_SESSION['resultado'];
+            echo "Total de Equipamentos Cadastrados:  " . $_SESSION['resultado'];
             unset($_SESSION['resultado']);
         }
         ?>

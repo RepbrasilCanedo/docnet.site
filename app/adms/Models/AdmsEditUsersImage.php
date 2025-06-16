@@ -165,6 +165,7 @@ class AdmsEditUsersImage
      */
     private function edit(): void
     {
+        date_default_timezone_set('America/Bahia');
         $this->data['image'] = $this->nameImg;
         $this->data['modified'] = date("Y-m-d H:i:s");
 

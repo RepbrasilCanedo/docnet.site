@@ -64,6 +64,7 @@ class AdmsAddAccessLevels
      */
     private function add(): void
     {
+        date_default_timezone_set('America/Bahia');
         if ($this->viewLastAccessLevels()) {
             $this->data['created'] = date("Y-m-d H:i:s");
 

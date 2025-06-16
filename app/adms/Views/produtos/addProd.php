@@ -13,7 +13,7 @@ if (isset($this->data['form'])) {
 <div class="wrapper">
     <div class="row">
         <div class="top-list">
-            <span class="title-content">Cadastrar Produtos</span>
+            <span class="title-content">Cadastrar Equipamento</span>
             <div class="top-list-right">
                 <?php
                 if ($this->data['button']['list_prod']) {
@@ -46,12 +46,12 @@ if (isset($this->data['form'])) {
                                 $name = $valorForm['name'];
                             }
                             ?>
-                            <label class="title-input">Nome Produto:<span class="text-danger">*</span></label>
+                            <label class="title-input">Nome Equipamento:<span class="text-danger">*</span></label>
                             <input type="text" name="name" id="name" class="input-adm" placeholder="Nome do produtos" value="<?php echo $name; ?>" required>
 
                         </div>
                         <div class="column">
-                            <label class="title-input">Tipo do Produtos:<span class="text-danger">*</span></label>
+                            <label class="title-input">Tipo do Equipamento:<span class="text-danger">*</span></label>
                             <select name="type_id" id="type_id" class="input-adm" required>
                                 <option value="">Selecione</option>
                                 <?php
@@ -87,7 +87,7 @@ if (isset($this->data['form'])) {
                                 $modelo_id = $valorForm['modelo_id'];
                             }
                             ?>
-                            <label class="title-input">Modelo do Produtos:<span class="text-danger">*</span></label>
+                            <label class="title-input">Modelo do Equipamento:<span class="text-danger">*</span></label>
                             <input type="text" name="modelo_id" id="modelo_id" class="input-adm" placeholder="Modelo do produtos" value="<?php echo $modelo_id; ?>" required>
 
                         </div>
@@ -100,11 +100,11 @@ if (isset($this->data['form'])) {
                                 $marca_id = $valorForm['marca_id'];
                             }
                             ?>
-                            <label class="title-input">Marca do Produtos:<span class="text-danger">*</span></label>
+                            <label class="title-input">Marca do Equipamento:<span class="text-danger">*</span></label>
                             <input type="text" name="marca_id" id="marca_id" class="input-adm" placeholder="Nome do produtos" value="<?php echo $marca_id; ?>" required>
 
                         </div><div class="column">
-                            <label class="title-input">Empresa do Produtos:<span class="text-danger">*</span></label>
+                            <label class="title-input">Empresa do Equipamento:<span class="text-danger">*</span></label>
                             <select name="cliente_id" id="cliente_id" class="input-adm" required>
                                 <option value="">Selecione</option>
                                 <?php
@@ -123,7 +123,7 @@ if (isset($this->data['form'])) {
 
                     <div class="row-input">
                         <div class="column">
-                            <label class="title-input">Situação do Produtos:<span class="text-danger">*</span></label>
+                            <label class="title-input">Situação do Equipamento:<span class="text-danger">*</span></label>
                             <select name="sit_id" id="sit_id" class="input-adm" required>
                                 <option value="">Selecione</option>
                                 <?php
@@ -199,12 +199,12 @@ if (isset($this->data['form'])) {
                                 $name = $valorForm['name'];
                             }
                             ?>
-                            <label class="title-input">Nome Produtos:<span class="text-danger">*</span></label>
+                            <label class="title-input">Nome Equipamento:<span class="text-danger">*</span></label>
                             <input type="text" name="name" id="name" class="input-adm" placeholder="Nome do produtos" value="<?php echo $name; ?>" required>
 
                         </div>
                         <div class="column">
-                            <label class="title-input">Tipo do Produtos:<span class="text-danger">*</span></label>
+                            <label class="title-input">Tipo do Equipamento:<span class="text-danger">*</span></label>
                             <select name="type_id" id="type_id" class="input-adm" required>
                                 <option value="">Selecione</option>
                                 <?php
@@ -234,7 +234,7 @@ if (isset($this->data['form'])) {
 
                     <div class="row-input">
                         <div class="column">
-                            <label class="title-input">Modelo do Produtos:<span class="text-danger">*</span></label>
+                            <label class="title-input">Modelo do Equipamento:<span class="text-danger">*</span></label>
                             <select name="modelo_id" id="modelo_id" class="input-adm" required>
                                 <option value="">Selecione</option>
                                 <?php
@@ -251,7 +251,7 @@ if (isset($this->data['form'])) {
                         </div>
 
                         <div class="column">
-                            <label class="title-input">Marca do Produtos:<span class="text-danger">*</span></label>
+                            <label class="title-input">Marca do Equipamento:<span class="text-danger">*</span></label>
                             <select name="marca_id" id="marca_id" class="input-adm" required>
                                 <option value="">Selecione</option>
                                 <?php
@@ -271,7 +271,7 @@ if (isset($this->data['form'])) {
                     <div class="row-input">
 
                         <div class="column">
-                            <label class="title-input">Empresa do Produtos:<span class="text-danger">*</span></label>
+                            <label class="title-input">Empresa do Equipamento:<span class="text-danger">*</span></label>
                             <select name="empresa_id" id="empresa_id" class="input-adm" required>
                                 <option value="">Selecione</option>
                                 <?php
@@ -288,7 +288,7 @@ if (isset($this->data['form'])) {
                         </div>
 
                         <div class="column">
-                            <label class="title-input">Situação do Produtos:<span class="text-danger">*</span></label>
+                            <label class="title-input">Situação do Equipamento:<span class="text-danger">*</span></label>
                             <select name="sit_id" id="sit_id" class="input-adm" required>
                                 <option value="">Selecione</option>
                                 <?php

@@ -126,6 +126,7 @@ class AdmsEditUsers
      */
     private function edit(): void
     {
+        date_default_timezone_set('America/Bahia');
         $this->data['password'] = password_hash($this->data['password'], PASSWORD_DEFAULT);
         $this->data['conf_email'] = password_hash($this->data['password'] . date("Y-m-d H:i:s"), PASSWORD_DEFAULT);
         $this->data['modified'] = date("Y-m-d H:i:s");

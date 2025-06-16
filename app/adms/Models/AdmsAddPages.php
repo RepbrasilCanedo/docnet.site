@@ -70,6 +70,7 @@ class AdmsAddPages
      */
     private function add(): void
     {
+        date_default_timezone_set('America/Bahia');
         $this->data['icon'] = $this->dataExitVal['icon'];
         $this->data['obs'] = $this->dataExitVal['obs'];
         $this->data['created'] = date("Y-m-d H:i:s");

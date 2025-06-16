@@ -67,6 +67,7 @@ class AdmsAddProd
     private function add(): void
     {
         date_default_timezone_set('America/Bahia');
+        
         $this->data['created'] = date("Y-m-d H:i:s");
         $this->data['empresa_id'] = $_SESSION['emp_user'];
 
@@ -93,18 +94,17 @@ class AdmsAddProd
     {
         $list = new \App\adms\Models\helper\AdmsRead();
 
-
-            $list->fullRead("SELECT id id_typ, name name_typ FROM adms_type_equip ORDER BY name ASC");
-            $registry['type_equip'] = $list->getResult();
-
-            $list->fullRead("SELECT id id_emp, nome_fantasia nome_fantasia_emp FROM adms_clientes ORDER BY nome_fantasia ASC");
-            $registry['emp_equip'] = $list->getResult();
-
             $list->fullRead("SELECT id id_sit, name name_sit FROM adms_sits_empr_unid ORDER BY name ASC");
             $registry['sit_equip'] = $list->getResult();
 
+            $list->fullRead("SELECT id id_typ, name name_typ FROM adms_type_equip ORDER BY name ASC");
+            $registry['type_equip'] = $list->getResult();            
+
             $list->fullRead("SELECT id, name FROM adms_contr");
             $registry['contr_id'] = $list->getResult();
+
+            $list->fullRead("SELECT id id_emp, nome_fantasia nome_fantasia_emp FROM adms_clientes WHERE empresa= :empresa ORDER BY nome_fantasia ASC", "empresa={$_SESSION['emp_user']}");
+            $registry['emp_equip'] = $list->getResult();
 
             $this->listRegistryAdd = ['type_equip' => $registry['type_equip'], 'emp_equip' => $registry['emp_equip'], 'sit_equip' => $registry['sit_equip'], 'contr_id' => $registry['contr_id']];
         

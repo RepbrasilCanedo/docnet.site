@@ -173,7 +173,7 @@ if (isset($this->data['form'][0])) {
                             <?php
                             foreach ($this->data['select']['sit_page'] as $sitPage) {
                                 extract($sitPage);
-                                if (isset($valorForm['type_id']) and $valorForm['adms_sits_pgs_id'] == $id_sit) {
+                                if (isset($valorForm['name_sit']) and $valorForm['name_sit'] == $name_sit) {
                                     echo "<option value='$id_sit' selected>$name_sit</option>";
                                 } else {
                                     echo "<option value='$id_sit'>$name_sit</option>";

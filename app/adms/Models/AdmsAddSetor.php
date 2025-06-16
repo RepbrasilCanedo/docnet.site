@@ -62,6 +62,7 @@ class AdmsAddSetor
      */
     private function add(): void
     {
+        date_default_timezone_set('America/Bahia');
         $this->data['created'] = date("Y-m-d H:i:s");
 
         if (($_SESSION['adms_access_level_id'] > 1) and ($_SESSION['adms_access_level_id'] <> 7) and ($_SESSION['adms_access_level_id'] <> 2)) {

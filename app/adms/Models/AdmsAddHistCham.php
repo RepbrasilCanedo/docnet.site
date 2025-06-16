@@ -64,6 +64,8 @@ class AdmsAddHistCham
      */
     private function add(): void
     {
+        date_default_timezone_set('America/Bahia');
+        
         $this->data['status'] =$_SESSION['set_status'];
         $this->data['dt_status'] = date("Y-m-d H:i:s");
         $this->data['cham_id'] = $_SESSION['set_cham'];

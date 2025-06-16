@@ -317,7 +317,7 @@ if (isset($this->data['form'])) {
                 <tr>
                     <th class="list-head-content table-sm-none">ID</th>
                     <th class="list-head-content">Cliente</th>
-                    <th class="list-head-content table-sm-none">Produto</th>
+                    <th class="list-head-content table-sm-none">Equipamento</th>
                     <th class="list-head-content table-sm-none">Data </th>
                     <th class="list-head-content">Status</th>
                     <th class="list-head-content table-sm-none">Data</th>

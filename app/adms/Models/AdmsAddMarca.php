@@ -40,7 +40,7 @@ class AdmsAddMarca
      * 
      * @return void
      */
-    public function create(array $data = null): void
+    public function create(array $data): void
     {
         $this->data = $data;
 
@@ -62,6 +62,7 @@ class AdmsAddMarca
      */
     private function add(): void
     {
+        date_default_timezone_set('America/Bahia');
         $this->data['created'] = date("Y-m-d H:i:s");
 
         $createSit = new \App\adms\Models\helper\AdmsCreate();

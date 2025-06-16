@@ -58,7 +58,8 @@ class AdmsAddConfEmails
      * @return void
      */
     private function add(): void
-    {        
+    {
+        date_default_timezone_set('America/Bahia');        
         $this->data['created'] = date("Y-m-d H:i:s");
 
         $createUser = new \App\adms\Models\helper\AdmsCreate();

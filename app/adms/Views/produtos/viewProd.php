@@ -9,7 +9,7 @@ if (!defined('D0O8C0A3N1E9D6O1')) {
 <div class="wrapper">
     <div class="row">
         <div class="top-list">
-            <span class="title-content">Detalhes do Produto</span>
+            <span class="title-content">Detalhes do Equipamento</span>
             <div class="top-list-right">
                 <?php
                 if ($this->data['button']['list_prod']) {

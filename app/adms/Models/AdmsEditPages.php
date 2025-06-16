@@ -81,7 +81,7 @@ class AdmsEditPages
      * @param array|null $data
      * @return void
      */
-    public function update(array $data = null): void
+    public function update(array $data): void
     {
         $this->data = $data;
 
@@ -104,6 +104,7 @@ class AdmsEditPages
      */
     private function edit(): void
     {
+        date_default_timezone_set('America/Bahia');
         $this->data['icon'] = $this->dataExitVal['icon'];
         $this->data['obs'] = $this->dataExitVal['obs'];
         $this->data['modified'] = date("Y-m-d H:i:s");

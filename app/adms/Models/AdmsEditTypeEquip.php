@@ -72,7 +72,7 @@ class AdmsEditTypeEquip
      * @param array|null $data
      * @return void
      */
-    public function update(array $data = null): void
+    public function update(array $data): void
     {
         $this->data = $data;
 
@@ -91,6 +91,8 @@ class AdmsEditTypeEquip
      */
     private function edit(): void
     {
+        
+        date_default_timezone_set('America/Bahia');
         $this->data['modified'] = date("Y-m-d H:i:s");
 
         $upTypeEquip = new \App\adms\Models\helper\AdmsUpdate();

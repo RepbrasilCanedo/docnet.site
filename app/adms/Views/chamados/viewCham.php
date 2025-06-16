@@ -120,7 +120,7 @@ if (!defined('D0O8C0A3N1E9D6O1')) {
                     <div class="col-md-6 mt-3">
                         <div class="card card-body border-top border-info border-2 input-group-sm">
                             <div class="view-det-adm">
-                                <span class="view-adm-title">Produto : </span>
+                                <span class="view-adm-title">Equipamento : </span>
                                 <span class="view-adm-info"><?php echo $name_prod; echo ' - '; echo $marca_id_prod; echo ' - '; echo $modelo_id_prod; ?></span>
                             </div>
                         </div>

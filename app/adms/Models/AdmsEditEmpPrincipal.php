@@ -97,6 +97,7 @@ class AdmsEditEmpPrincipal
      */
     private function edit(): void
     {
+        date_default_timezone_set('America/Bahia');
         
         $this->data['modified'] = date("Y-m-d H:i:s");
 

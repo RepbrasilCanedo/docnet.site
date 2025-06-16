@@ -44,7 +44,7 @@ class AdmsAddContr
      * 
      * @return void
      */
-    public function create(array $data = null)
+    public function create(array $data)
     {
         $this->data = $data;
 
@@ -66,6 +66,8 @@ class AdmsAddContr
      */
     private function add(): void
     {
+        date_default_timezone_set('America/Bahia');
+        
         $this->data['created'] = date("Y-m-d H:i:s");
 
         $createContr = new \App\adms\Models\helper\AdmsCreate();
