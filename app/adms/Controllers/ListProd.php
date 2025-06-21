@@ -82,6 +82,9 @@ class ListProd
         $listMenu = new \App\adms\Models\helper\AdmsMenu();
         $this->data['menu'] = $listMenu->itemMenu();
 
+        $listSelect = new \App\adms\Models\AdmsListProd();
+        $this->data['select'] = $listSelect->listSelect();
+
         $this->data['pag'] = $this->page;
         $this->data['sidebarActive'] = "list-prod";
         $loadView = new \Core\ConfigView("adms/Views/produtos/listProd", $this->data);

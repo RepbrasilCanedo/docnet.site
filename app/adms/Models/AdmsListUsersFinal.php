@@ -104,7 +104,7 @@ class AdmsListUsersFinal
                         INNER JOIN adms_sits_users AS sit ON sit.id=usr.adms_sits_user_id
                         INNER JOIN adms_colors AS col ON col.id=sit.adms_color_id
                         INNER JOIN adms_access_levels AS lev ON lev.id=usr.adms_access_level_id 
-                        WHERE empresa_id = :empresa_id and lev.order_levels >:order_levels
+                        WHERE usr.empresa_id = :empresa_id and lev.order_levels >:order_levels
                         ORDER BY usr.id DESC
                         LIMIT :limit OFFSET :offset", "empresa_id={$_SESSION['emp_user']}&order_levels={$_SESSION['order_levels']}&limit={$this->limitResult}&offset={$pagination->getOffset()}");
 
@@ -245,7 +245,7 @@ class AdmsListUsersFinal
             $pagination = new \App\adms\Models\helper\AdmsPagination(URLADM . 'list-users/index', "?search_name={$this->searchEmpresa}");
             $pagination->condition($this->page, $this->limitResult);
             $pagination->pagination("SELECT COUNT(id) AS num_result FROM adms_users_final
-                                    WHERE (emp.razao_social LIKE :empresa_user)", "empresa_user={$this->searchEmpresaValue}"
+                                    WHERE (cliente_id= :empresa_user)", "empresa_user={$this->searchEmpresaValue}"
             );
             $this->resultPg = $pagination->getResult();
     
@@ -256,7 +256,7 @@ class AdmsListUsersFinal
                         INNER JOIN adms_sits_users AS sit ON sit.id=usr.adms_sits_user_id
                         INNER JOIN adms_colors AS col ON col.id=sit.adms_color_id
                         INNER JOIN adms_access_levels AS lev ON lev.id=usr.adms_access_level_id 
-                        WHERE (emp.razao_social  LIKE :empresa_user)
+                        WHERE (usr.cliente_id  LIKE :empresa_user)
                         ORDER BY usr.id DESC
                         LIMIT :limit OFFSET :offset", "empresa_user={$this->searchEmpresaValue}&limit={$this->limitResult}&offset={$pagination->getOffset()}");
     
@@ -308,8 +308,8 @@ class AdmsListUsersFinal
             $pagination = new \App\adms\Models\helper\AdmsPagination(URLADM . 'list-users/index', "?search_email={$this->searchEmail}");
             $pagination->condition($this->page, $this->limitResult);
             $pagination->pagination("SELECT COUNT(id) AS num_result FROM adms_users_final
-                                    WHERE (contr_id= :contr_id) AND (usr.email LIKE :search_email)",
-                                    "contr_id={$_SESSION['set_Contr']}&search_email={$this->searchEmailValue}"
+                                    WHERE (empresa_id= :cliente_id) AND (email LIKE :search_email)",
+                                    "cliente_id={$_SESSION['emp_user']}&search_email={$this->searchEmailValue}"
             );
             $this->resultPg = $pagination->getResult();
     
@@ -320,9 +320,9 @@ class AdmsListUsersFinal
                         INNER JOIN adms_sits_users AS sit ON sit.id=usr.adms_sits_user_id
                         INNER JOIN adms_colors AS col ON col.id=sit.adms_color_id
                         INNER JOIN adms_access_levels AS lev ON lev.id=usr.adms_access_level_id 
-                        WHERE (contr_id= :contr_id) AND (usr.email LIKE :search_email)
+                        WHERE (usr.empresa_id = :cliente_id) AND (usr.email LIKE :search_email)
                         ORDER BY usr.id DESC
-                        LIMIT :limit OFFSET :offset", "contr_id={$_SESSION['set_Contr']}&search_email={$this->searchEmailValue}&limit={$this->limitResult}&offset={$pagination->getOffset()}");
+                        LIMIT :limit OFFSET :offset", "cliente_id={$_SESSION['emp_user']}&search_email={$this->searchEmailValue}&limit={$this->limitResult}&offset={$pagination->getOffset()}");
     
             $this->resultBd = $listUsers->getResult();
             if ($this->resultBd) {
@@ -367,9 +367,7 @@ class AdmsListUsersFinal
      * @return array
      */
     public function listSelect()
-    {
-        
-
+    {      
         $list = new \App\adms\Models\helper\AdmsRead();
 
         if ($_SESSION['adms_access_level_id'] > 2) {

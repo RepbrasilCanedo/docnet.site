@@ -41,7 +41,7 @@ class AdmsAddHistCham
      * 
      * @return void
      */
-    public function create(array $data = null)
+    public function create(array $data)
     {
         $this->data = $data;
         echo "<pre>"; var_dump($this->data);

@@ -20,6 +20,9 @@ class EditProfileLogo
     /** @var array $dataForm Recebe os dados do formulario */
     private array|null $dataForm;
 
+    /** @var int|string|null $id Recebe o id do registro */
+    private int|string|null $id;
+
     /**
      * Método editar imagem do perfil.
      * Receber os dados do formulário.
@@ -32,21 +35,26 @@ class EditProfileLogo
      * 
      * @return void
      */
-    public function index(): void
+    public function index(int|string|null $id = null): void
     {
 
-        $this->dataForm = filter_input_array(INPUT_POST, FILTER_DEFAULT);   
-        
+        $this->id = (int) $id;
+        $_SESSION['emp_logo']='';
+        $_SESSION['emp_logo'] = $this->id;
+
+        $this->dataForm = filter_input_array(INPUT_POST, FILTER_DEFAULT);  
+
         if (!empty($this->dataForm['SendEditProfLogo'])) {
            $this->editProfLogo();
         } else {
             $viewProfImg = new \App\adms\Models\AdmsEditProfileLogo();
             $viewProfImg->viewProfileLogo();
+            
             if ($viewProfImg->getResult()) {
                 $this->data['form'] = $viewProfImg->getResultBd();
                 $this->viewEditProfLogo();
             } else {
-                $urlRedirect = URLADM . "login/index";
+                $urlRedirect = URLADM . "list-emp-principal/index";
                 header("Location: $urlRedirect");
             }
         }
@@ -66,7 +74,7 @@ class EditProfileLogo
         $listMenu = new \App\adms\Models\helper\AdmsMenu();
         $this->data['menu'] = $listMenu->itemMenu(); 
         
-        $loadView = new \Core\ConfigView("adms/Views/contratos/editProfileLogo", $this->data);
+        $loadView = new \Core\ConfigView("adms/Views/empresas/editProfileLogo", $this->data);
         $loadView->loadView();
     }
 
@@ -88,7 +96,7 @@ class EditProfileLogo
             $editProfImg->update($this->dataForm);
             
             if ($editProfImg->getResult()) {
-                $urlRedirect = URLADM . "dashboard/index";
+                $urlRedirect = URLADM . "list-emp-principal/index";
                 header("Location: $urlRedirect");
             } else {
                 $this->data['form'] = $this->dataForm;

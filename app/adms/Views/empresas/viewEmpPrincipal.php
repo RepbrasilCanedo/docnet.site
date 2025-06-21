@@ -19,7 +19,7 @@ if (!defined('D0O8C0A3N1E9D6O1')) {
                     echo "<a href='" . URLADM . "edit-emp-principal/index/". $this->data['viewEmpPrincipal'][0]['id'] ."'class='btn-warning'>Editar</a>";
                 }
                 if ($this->data['button']['edit_profile_logo']) {
-                    echo "<a href='" . URLADM . "edit-profile-logo/index' class='btn-success'>Inserir Logo</a>";
+                    echo "<a href='" . URLADM . "edit-profile-logo/index/". $this->data['viewEmpPrincipal'][0]['id'] ."' class='btn-success'>Editar Logo</a>";
                 }
                 ?>
             </div>
@@ -39,6 +39,19 @@ if (!defined('D0O8C0A3N1E9D6O1')) {
             if (!empty($this->data['viewEmpPrincipal'])) {
                 extract($this->data['viewEmpPrincipal'][0]);
             ?>
+                <div class="view-det-adm">
+                    <span class="view-adm-title">Logo: </span>
+                    <span class="view-adm-info">
+                        <?php
+                        if ((!empty($logo_emp)) and (file_exists("app/adms/assets/image/logo/clientes/$id/$logo_emp"))) {
+                            echo "<img src='" . URLADM . "app/adms/assets/image/logo/clientes/$id/$logo_emp' width='100' height='100'><br><br>";
+                        } else {
+                            echo "<img src='" . URLADM . "app/adms/assets/image/logo/clientes/icon_user.png' width='100' height='100'><br><br>";
+                        }
+                        
+                        ?>
+                    </span>
+                </div>
 
                 <div class="view-det-adm">
                     <span class="view-adm-title">ID: </span>

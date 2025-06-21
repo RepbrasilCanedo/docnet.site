@@ -8,6 +8,7 @@ if (!defined('D0O8C0A3N1E9D6O1')) {
 if (isset($this->data['form'])) {
     $valorForm = $this->data['form'];
 }
+
 ?>
 
 <!-- Inicio do conteudo do administrativo -->
@@ -27,6 +28,22 @@ if (isset($this->data['form'])) {
         <div class="top-list">
             <form method="POST" action="">
                 <div class="row-input-search">
+                    <div class="column">
+                        <label class="title-input-search">Cliente: </label>
+                        <select name="search_empresa" id="search_empresa" class="input-adm">
+                            <option value="">Selecione</option>
+                            <?php
+                            foreach ($this->data['select']['nome_clie'] as $nome_emp) {
+                                extract($nome_emp);
+                                if (isset($valorForm['search_empresa']) and $valorForm['search_empresa'] == $id) {
+                                    echo "<option value='$id' selected>$nome_fantasia</option>";
+                                } else {
+                                    echo "<option value='$id'>$nome_fantasia</option>";
+                                }
+                            }
+                            ?>
+                        </select>
+                    </div>
                     <?php
                     $search_name = "";
                     if (isset($valorForm['search_name'])) {
@@ -44,22 +61,6 @@ if (isset($this->data['form'])) {
                         $search_empresa = $valorForm['search_empresa'];
                     }
                     ?>
-                    <div class="column">
-                        <label class="title-input-search">Cliente: </label>
-                        <select name="search_empresa" id="search_empresa" class="input-adm">
-                            <option value="">Selecione</option>
-                            <?php
-                            foreach ($this->data['select']['nome_clie'] as $nome_emp) {
-                                extract($nome_emp);
-                                if (isset($valorForm['search_empresa']) and $valorForm['search_empresa'] == $id) {
-                                    echo "<option value='$id' selected>$nome_fantasia</option>";
-                                } else {
-                                    echo "<option value='$id'>$nome_fantasia</option>";
-                                }
-                            }
-                            ?>
-                        </select>
-                    </div>
 
                     <?php
                     $search_email = "";

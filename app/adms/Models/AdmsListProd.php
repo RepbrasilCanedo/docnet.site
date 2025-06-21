@@ -27,6 +27,9 @@ class AdmsListProd
     /** @var int $page Recebe a quantidade de registros que deve retornar do banco de dados */
     private int $limitResult = 40;
 
+    /** @var array Recebe as informações que serão usadas no dropdown do formulário*/
+    private array|null $listRegistryAdd;
+
     /** @var string|null $page Recebe a páginação */
     private string|null $resultPg;
 
@@ -150,7 +153,7 @@ class AdmsListProd
 
 
         $this->searchProdValue = "%" . $this->searchProd . "%";
-        $this->searchEmpValue = "%" . $this->searchEmp . "%";
+        $this->searchEmpValue = $this->searchEmp . "%";
 
         if ((!empty($this->searchProdValue)) and (!empty($this->searchProdValue))) {
             $this->searchProdEmp();
@@ -173,9 +176,10 @@ class AdmsListProd
         $pagination = new \App\adms\Models\helper\AdmsPagination(URLADM . 'list-prod/index', "?search_prod={$this->searchProd}&search_emp={$this->searchEmp}");
         $pagination->condition($this->page, $this->limitResult);
         $pagination->pagination("SELECT COUNT(prod.id) AS num_result FROM adms_produtos AS prod  
-        WHERE (prod.empresa_id= :empresa_id) and (prod.name LIKE :search_prod) AND (emp.nome_fantasia LIKE :search_nome_fantasia_emp ) ORDER BY prod.name ASC", 
-        "empresa_id={$_SESSION['emp_user']}&search_prod={$this->searchProdValue}&search_nome_fantasia_emp={$this->searchEmpValue}");
+        WHERE (prod.empresa_id= :empresa_id) and (prod.name LIKE :search_prod)", 
+        "prod.empresa_id={$_SESSION['emp_user']}&search_prod={$this->searchProdValue}");
         $this->resultPg = $pagination->getResult();
+
         $listprod = new \App\adms\Models\helper\AdmsRead();
         $listprod->fullRead("SELECT prod.id, prod.name, typ.name name_typ,
         emp.nome_fantasia nome_fantasia_emp, sit.name name_sit
@@ -259,5 +263,34 @@ class AdmsListProd
             $_SESSION['msg'] = "<p style='color: #f00'>Erro: Nenhum produto encontrada!</p>";
             $this->result = false;
         }
+    }
+    
+
+
+     /**
+     * Metodo para pesquisar as informações que serão usadas no dropdown do formulário
+     *
+     * @return array
+     */
+    public function listSelect()
+    {      
+        $list = new \App\adms\Models\helper\AdmsRead();
+
+        if ($_SESSION['adms_access_level_id'] > 2) {
+
+                $list->fullRead("SELECT id, nome_fantasia FROM adms_clientes
+                WHERE empresa= :empresa  ORDER BY nome_fantasia", "empresa={$_SESSION['emp_user']}");
+                $registry['nome_clie'] = $list->getResult();
+                
+        } else {
+
+            $list->fullRead("SELECT id, nome_fantasia FROM adms_clientes ORDER BY nome_fantasia");
+            $registry['nome_clie'] = $list->getResult();
+
+            
+        }
+
+        $this->listRegistryAdd = ['nome_clie' => $registry['nome_clie']];
+        return $this->listRegistryAdd;
     }
 }

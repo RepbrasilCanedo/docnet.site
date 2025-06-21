@@ -87,6 +87,9 @@ class ListUsersFinal
         $listMenu = new \App\adms\Models\helper\AdmsMenu();
         $this->data['menu'] = $listMenu->itemMenu();
 
+        $listSelect = new \App\adms\Models\AdmsListUsersFinal();
+        $this->data['select'] = $listSelect->listSelect();
+
         $this->data['sidebarActive'] = "list-users-final";
 
         $loadView = new \Core\ConfigView("adms/Views/users/listUsersFinal", $this->data);

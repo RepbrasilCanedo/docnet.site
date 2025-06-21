@@ -53,7 +53,7 @@ class AdmsViewEmpPrincipal
         
         $viewEmpPrincipal = new \App\adms\Models\helper\AdmsRead();
         $viewEmpPrincipal->fullRead("SELECT emp.id, emp.razao_social, emp.nome_fantasia, emp.cnpj, emp.cep, emp.logradouro, emp.bairro, emp.cidade, 
-                emp.uf, emp.contato, emp.telefone, emp.email, sit.name AS name_sit, emp.created, emp.modified
+                emp.uf, emp.contato, emp.telefone, emp.email, sit.name AS name_sit, emp.logo as logo_emp, emp.created, emp.modified
                 FROM adms_emp_principal AS emp
                 INNER JOIN adms_sits_empr_unid AS sit ON sit.id=emp.situacao
                 WHERE emp.id=:id_emp 

@@ -69,7 +69,7 @@ class AdmsAddProd
         date_default_timezone_set('America/Bahia');
         
         $this->data['created'] = date("Y-m-d H:i:s");
-        $this->data['empresa_id'] = $_SESSION['emp_user'];
+        $this->data['empresa_id'] = $_SESSION['emp_user']; 
 
         $createEquip = new \App\adms\Models\helper\AdmsCreate();
         $createEquip->exeCreate("adms_produtos", $this->data);

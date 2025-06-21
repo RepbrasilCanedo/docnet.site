@@ -107,18 +107,20 @@ class CpmsRelatListCham
     {
 
         $listCham = new \App\adms\Models\helper\AdmsRead();
-        $listCham->fullRead("SELECT cham.id, cham.empresa_id, clie.nome_fantasia as nome_fantasia_clie, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
-                            cham.dt_cham, sta.name AS name_sta, dt_status, cham.type_cham  
-                            FROM adms_cham AS cham
-                            INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id 
-                            INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id 
+        $listCham->fullRead("SELECT cham.id as id_cham, princ.logo as logo_princ, cham.empresa_id as empresa_id_cham, clie.nome_fantasia as nome_fantasia_emp, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
+                                    cham.dt_cham as dt_cham_cham, sta.name AS name_sta_cham, cham.dt_status as dt_status_cham, cham.type_cham as type_cham_cham, user.name as name_user
+                                    FROM adms_cham AS cham
+                                    INNER JOIN adms_emp_principal AS princ ON princ.id=cham.empresa_id 
+                                    INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id 
+                                    INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id
+                                    INNER JOIN adms_users AS user ON user.id=cham.suporte_id  
                             WHERE empresa_id= :empresa_id and cliente_id= :id_cliente", "empresa_id={$_SESSION['emp_user']}&id_cliente={$_SESSION['set_clie']}");
 
         $this->resultBd = $listCham->getResult();
         if ($this->resultBd) {
             $this->result = true;
         } else {
-            $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum Ticket encontrado para o cliente do usuario!</p>";
+           $_SESSION['msg'] = "<p class='alert-primary'>Alerta: Selecione uma opção para impressão de seu relatório!</p>";
             $this->result = false;
         }
     }
@@ -133,7 +135,7 @@ class CpmsRelatListCham
      * @param string|null $search_color
      * @return void
      */
-    public function listSearchCham(int $page, string|null $search_empresa, string|null $search_status, string|null $search_Tipo, string|null $search_Date_Start, string|null $search_Date_End, string|null $searchTecSuporte): void
+    public function listSearchCham(int $page, string|null $search_empresa, string|null $search_status, string|null $search_Tipo, string|null $search_Date_Start, string|null $search_Date_End, string|null $search_Tec_Suporte): void
     {
         $this->page = (int) $page ? $page : 1;
         $this->searchEmpresa = $search_empresa;
@@ -141,7 +143,7 @@ class CpmsRelatListCham
         $this->searchTipo = $search_Tipo;
         $this->searchDateStart = $search_Date_Start;
         $this->searchDateEnd = $search_Date_End;
-        $this->searchTecSuporte = $searchTecSuporte;
+        $this->searchTecSuporte = $search_Tec_Suporte;
 
         $this->searchEmpresaValue = $this->searchEmpresa;
         $this->searchStatusValue = $this->searchStatus;
@@ -209,8 +211,7 @@ class CpmsRelatListCham
     public function searchEmpresa(): void
     {
         $contCham = new \App\adms\Models\helper\AdmsRead();
-        $contCham->fullRead(
-            "SELECT COUNT(id) AS num_result FROM adms_cham WHERE (empresa_id= :empresa_id) AND (cliente_id= :cliente_id)",
+        $contCham->fullRead("SELECT COUNT(id) AS num_result FROM adms_cham WHERE (empresa_id= :empresa_id) AND (cliente_id= :cliente_id)",
             "empresa_id={$_SESSION['emp_user']}&cliente_id={$this->searchEmpresaValue}"
         );
         $this->resultBd = $contCham->getResult();
@@ -223,18 +224,19 @@ class CpmsRelatListCham
         }
 
         $listCham = new \App\adms\Models\helper\AdmsRead();
-        $listCham->fullRead(
-            "SELECT cham.id as id_cham, cham.empresa_id as empresa_id_cham, clie.nome_fantasia as nome_fantasia_clie, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
-                                    cham.dt_cham as dt_cham_cham, sta.name AS name_sta_cham, cham.dt_status as dt_status_cham, cham.type_cham as type_cham_cham, cham.suporte_id as suporte_id_cham
+                $listCham->fullRead("SELECT cham.id as id_cham, princ.logo as logo_princ, cham.empresa_id as empresa_id_cham, clie.nome_fantasia as nome_fantasia_emp, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
+                                    cham.dt_cham as dt_cham_cham, sta.name AS name_sta_cham, cham.dt_status as dt_status_cham, cham.type_cham as type_cham_cham, user.name as name_user
                                     FROM adms_cham AS cham
+                                    INNER JOIN adms_emp_principal AS princ ON princ.id=cham.empresa_id 
                                     INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id 
                                     INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id
-                                    WHERE (empresa_id= :empresa_id) AND (cliente_id= :cliente_id)",
-            "empresa_id={$_SESSION['emp_user']}&cliente_id={$this->searchEmpresaValue}"
-        );
+                                    INNER JOIN adms_users AS user ON user.id=cham.suporte_id 
+                                    WHERE (cham.empresa_id= :empresa_id) AND (cham.cliente_id= :cliente_id)",
+                                    "empresa_id={$_SESSION['emp_user']}&cliente_id={$this->searchEmpresaValue}");
 
 
         $this->resultBd = $listCham->getResult();
+        
         if ($this->resultBd) {
             $this->generatePdf();
         } else {
@@ -269,13 +271,14 @@ class CpmsRelatListCham
                 }
 
                 $listCham = new \App\adms\Models\helper\AdmsRead();
-                $listCham->fullRead(
-                    "SELECT cham.id as id_cham, cham.empresa_id as empresa_id_cham, clie.nome_fantasia as nome_fantasia_clie, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
-                                    cham.dt_cham as dt_cham_cham, sta.name AS name_sta_cham, cham.dt_status as dt_status_cham, cham.type_cham as type_cham_cham, cham.suporte_id as suporte_id_cham
+                $listCham->fullRead("SELECT cham.id as id_cham, princ.logo as logo_princ, cham.empresa_id as empresa_id_cham, clie.nome_fantasia as nome_fantasia_emp, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
+                                    cham.dt_cham as dt_cham_cham, sta.name AS name_sta_cham, cham.dt_status as dt_status_cham, cham.type_cham as type_cham_cham, user.name as name_user
                                     FROM adms_cham AS cham
+                                    INNER JOIN adms_emp_principal AS princ ON princ.id=cham.empresa_id 
                                     INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id 
                                     INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id
-                        WHERE (empresa_id= :empresa_id) AND (cliente_id= :cliente_id) AND (status_id= :status_id) AND (type_cham= :type_cham) ORDER BY dt_cham",
+                                    INNER JOIN adms_users AS user ON user.id=cham.suporte_id  
+                        WHERE (cham.empresa_id= :empresa_id) AND (cham.cliente_id= :cliente_id) AND (cham.status_id= :status_id) AND (cham.type_cham= :type_cham) ORDER BY dt_cham",
                     "empresa_id={$_SESSION['emp_user']}&cliente_id={$this->searchEmpresaValue}&status_id={$this->searchStatusValue}&type_cham={$this->searchTipoValue}"
                 );
 
@@ -304,11 +307,13 @@ class CpmsRelatListCham
             }
 
             $listCham = new \App\adms\Models\helper\AdmsRead();
-            $listCham->fullRead("SELECT  cham.id as id_cham, emp.nome_fantasia as nome_fantasia_emp, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham,
-                        usr.name AS name_usr, usr.tel_1 as tel_1_usr, cham.dt_cham, sta.name AS name_sta, dt_status, cham.type_cham FROM adms_cham AS cham
-                        INNER JOIN adms_empresa AS emp ON emp.id=cham.empresa_id 
-                        INNER JOIN adms_users AS usr ON usr.id=cham.usuario_id 
-                        INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id 
+            $listCham->fullRead("SELECT cham.id as id_cham, princ.logo as logo_princ, cham.empresa_id as empresa_id_cham, clie.nome_fantasia as nome_fantasia_emp, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
+                                    cham.dt_cham as dt_cham_cham, sta.name AS name_sta_cham, cham.dt_status as dt_status_cham, cham.type_cham as type_cham_cham, user.name as name_user
+                                    FROM adms_cham AS cham
+                                    INNER JOIN adms_emp_principal AS princ ON princ.id=cham.empresa_id 
+                                    INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id 
+                                    INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id
+                                    INNER JOIN adms_users AS user ON user.id=cham.suporte_id  
                         WHERE cham.empresa_id= :empresa_id AND cham.status_id= :status_id AND cham.type_cham= :type_cham 
                         ", "empresa_id={$this->searchEmpresaValue}&status_id={$this->searchStatusValue}&type_cham={$this->searchTipoValue}");
 
@@ -349,12 +354,14 @@ class CpmsRelatListCham
                 }
 
                 $listUsers = new \App\adms\Models\helper\AdmsRead();
-                $listUsers->fullRead("SELECT cham.id as id_cham, cham.empresa_id as empresa_id_cham, clie.nome_fantasia as nome_fantasia_clie, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
-                                    cham.dt_cham as dt_cham_cham, sta.name AS name_sta_cham, cham.dt_status as dt_status_cham, cham.type_cham as  type_cham_cham, cham.suporte_id as suporte_id_cham
+                $listUsers->fullRead("SELECT cham.id as id_cham, princ.logo as logo_princ, cham.empresa_id as empresa_id_cham, clie.nome_fantasia as nome_fantasia_emp, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
+                                    cham.dt_cham as dt_cham_cham, sta.name AS name_sta_cham, cham.dt_status as dt_status_cham, cham.type_cham as type_cham_cham, user.name as name_user
                                     FROM adms_cham AS cham
+                                    INNER JOIN adms_emp_principal AS princ ON princ.id=cham.empresa_id 
                                     INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id 
                                     INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id
-                WHERE (empresa_id= :empresa_id) AND (cliente_id= :cliente_id) AND (status_id= :status_id) AND (type_cham = :type_cham) AND (dt_cham BETWEEN :search_date_start AND :search_date_end)
+                                    INNER JOIN adms_users AS user ON user.id=cham.suporte_id  
+                WHERE (cham.empresa_id= :empresa_id) AND (cham.cliente_id= :cliente_id) AND (status_id= :status_id) AND (type_cham = :type_cham) AND (dt_cham BETWEEN :search_date_start AND :search_date_end)
                 ORDER BY cham.dt_cham ASC", "empresa_id={$_SESSION['emp_user']}&cliente_id={$this->searchEmpresaValue}&status_id={$this->searchStatusValue}&type_cham={$this->searchTipoValue}&search_date_start={$this->searchDateStart}&search_date_end={$this->searchDateEnd}");
 
                 $this->resultBd = $listUsers->getResult();
@@ -383,13 +390,13 @@ class CpmsRelatListCham
             }
 
             $listUsers = new \App\adms\Models\helper\AdmsRead();
-            $listUsers->fullRead(
-                "SELECT  cham.id as id_cham, emp.nome_fantasia as nome_fantasia_emp, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham,
-            usr.name AS name_usr, usr.tel_1 as tel_1_usr, cham.dt_cham, sta.name AS name_sta, dt_status, cham.type_cham  
-            FROM adms_cham AS cham
-            INNER JOIN adms_empresa AS emp ON emp.id=cham.empresa_id 
-            INNER JOIN adms_users AS usr ON usr.id=cham.usuario_id 
-            INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id  
+            $listUsers->fullRead("SELECT cham.id as id_cham, princ.logo as logo_princ, cham.empresa_id as empresa_id_cham, clie.nome_fantasia as nome_fantasia_emp, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
+                                    cham.dt_cham as dt_cham_cham, sta.name AS name_sta_cham, cham.dt_status as dt_status_cham, cham.type_cham as type_cham_cham, user.name as name_user
+                                    FROM adms_cham AS cham
+                                    INNER JOIN adms_emp_principal AS princ ON princ.id=cham.empresa_id 
+                                    INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id 
+                                    INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id
+                                    INNER JOIN adms_users AS user ON user.id=cham.suporte_id  
             WHERE cham.empresa_id= :empresa_id AND cham.status_id= :status_id AND cham.type_cham = :type_cham AND cham.dt_cham BETWEEN :search_date_start AND :search_date_end
             ORDER BY cham.dt_cham ASC",
                 "empresa_id={$this->searchEmpresaValue}&status_id={$this->searchStatusValue}&type_cham={$this->searchTipoValue}&search_date_start={$this->searchDateStart}&search_date_end={$this->searchDateEnd}"
@@ -432,12 +439,14 @@ class CpmsRelatListCham
                 }
 
                 $listCham = new \App\adms\Models\helper\AdmsRead();
-                $listCham->fullRead("SELECT cham.id as id_cham, cham.empresa_id as empresa_id_cham, clie.nome_fantasia as nome_fantasia_clie, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
-                                    cham.dt_cham as dt_cham_cham, sta.name AS name_sta_cham, cham.dt_status as dt_status_cham, cham.type_cham as type_cham_cham, cham.suporte_id as suporte_id_cham
+                $listCham->fullRead("SELECT cham.id as id_cham, princ.logo as logo_princ, cham.empresa_id as empresa_id_cham, clie.nome_fantasia as nome_fantasia_emp, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
+                                    cham.dt_cham as dt_cham_cham, sta.name AS name_sta_cham, cham.dt_status as dt_status_cham, cham.type_cham as type_cham_cham, user.name as name_user
                                     FROM adms_cham AS cham
+                                    INNER JOIN adms_emp_principal AS princ ON princ.id=cham.empresa_id 
                                     INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id 
                                     INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id
-                WHERE (empresa_id= :empresa_id) AND (cliente_id= :cliente_id) AND (status_id= :status_id)
+                                    INNER JOIN adms_users AS user ON user.id=cham.suporte_id  
+                WHERE (cham.empresa_id= :empresa_id) AND (cham.cliente_id= :cliente_id) AND (cham.status_id= :status_id)
                 ORDER BY cham.dt_cham ASC", "empresa_id={$_SESSION['emp_user']}&cliente_id={$this->searchEmpresaValue}&status_id={$this->searchStatusValue}");
 
 
@@ -468,12 +477,13 @@ class CpmsRelatListCham
             }
 
             $listCham = new \App\adms\Models\helper\AdmsRead();
-            $listCham->fullRead("SELECT  cham.id as id_cham, emp.nome_fantasia as nome_fantasia_emp, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham,
-                        usr.name AS name_usr, usr.tel_1 as tel_1_usr, cham.dt_cham, sta.name AS name_sta, dt_status, cham.type_cham FROM adms_cham AS cham
-                        INNER JOIN adms_empresa AS emp ON emp.id=cham.empresa_id 
-                        INNER JOIN adms_users AS usr ON usr.id=cham.usuario_id 
-                        INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id 
-                        WHERE cham.empresa_id= :empresa_id AND cham.status_id= :status_id
+            $listCham->fullRead("SELECT cham.id as id_cham, princ.logo as logo_princ, cham.empresa_id as empresa_id_cham, clie.nome_fantasia as nome_fantasia_emp, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
+                                    cham.dt_cham as dt_cham_cham, sta.name AS name_sta_cham, cham.dt_status as dt_status_cham, cham.type_cham as type_cham_cham, user.name as name_user
+                                    FROM adms_cham AS cham
+                                    INNER JOIN adms_emp_principal AS princ ON princ.id=cham.empresa_id 
+                                    INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id 
+                                    INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id
+                                    INNER JOIN adms_users AS user ON user.id=cham.suporte_id  
                         ", "empresa_id={$this->searchEmpresaValue}&status_id={$this->searchStatusValue}");
 
             $this->resultBd = $listCham->getResult();
@@ -497,8 +507,7 @@ class CpmsRelatListCham
             if (($_SESSION['adms_access_level_id'] == 4) or ($_SESSION['adms_access_level_id'] == 12)) {
 
                 $contCham = new \App\adms\Models\helper\AdmsRead();
-                $contCham->fullRead(
-                    "SELECT COUNT(id) AS num_result FROM adms_cham WHERE empresa_id= :empresa_id AND status_id= :status_id",
+                $contCham->fullRead("SELECT COUNT(id) AS num_result FROM adms_cham WHERE empresa_id= :empresa_id AND status_id= :status_id",
                     "empresa_id={$_SESSION['emp_user']}&status_id={$this->searchStatusValue}"
                 );
                 $this->resultBd = $contCham->getResult();
@@ -510,18 +519,21 @@ class CpmsRelatListCham
                     $this->result = false;
                 }
 
-                $listCham = new \App\adms\Models\helper\AdmsRead();
-                $listCham->fullRead("SELECT cham.id as id_cham, cham.empresa_id as empresa_id_cham, clie.nome_fantasia as nome_fantasia_clie, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
-                                    cham.dt_cham as dt_cham_cham, sta.name AS name_sta_cham, cham.dt_status as dt_status_cham, cham.type_cham as type_cham_cham, cham.suporte_id as suporte_id_cham
+                 $listCham = new \App\adms\Models\helper\AdmsRead();
+                $listCham->fullRead("SELECT cham.id as id_cham, princ.logo as logo_princ, cham.empresa_id as empresa_id_cham, clie.nome_fantasia as nome_fantasia_emp, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
+                                    cham.dt_cham as dt_cham_cham, sta.name AS name_sta_cham, cham.dt_status as dt_status_cham, cham.type_cham as type_cham_cham, user.name as name_user
                                     FROM adms_cham AS cham
+                                    INNER JOIN adms_emp_principal AS princ ON princ.id=cham.empresa_id 
                                     INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id 
                                     INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id
-                WHERE (empresa_id= :empresa_id)AND (status_id= :status_id)
-                ORDER BY dt_cham ASC", "empresa_id={$_SESSION['emp_user']}&status_id={$this->searchStatusValue}");
+                                    INNER JOIN adms_users AS user ON user.id=cham.suporte_id    
+                                    WHERE (cham.empresa_id= :empresa_id) AND (cham.status_id= :status_id)
+                                    ORDER BY cham.dt_cham ASC", "empresa_id={$_SESSION['emp_user']}&status_id={$this->searchStatusValue}");
+
 
                 $this->resultBd = $listCham->getResult();
                 if ($this->resultBd) {
-                   $this->generatePdf();
+                    $this->generatePdf();
                 } else {
                     $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum Ticket encontrado!</p>";
                     $this->result = false;
@@ -541,11 +553,13 @@ class CpmsRelatListCham
             }
 
             $listCham = new \App\adms\Models\helper\AdmsRead();
-            $listCham->fullRead("SELECT  cham.id as id_cham, emp.nome_fantasia as nome_fantasia_emp, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham,
-                        usr.name AS name_usr, usr.tel_1 as tel_1_usr, cham.dt_cham, sta.name AS name_sta, dt_status, cham.type_cham FROM adms_cham AS cham
-                        INNER JOIN adms_empresa AS emp ON emp.id=cham.empresa_id
-                        INNER JOIN adms_users AS usr ON usr.id=cham.usuario_id 
-                        INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id 
+            $listCham->fullRead("SELECT cham.id as id_cham, princ.logo as logo_princ, cham.empresa_id as empresa_id_cham, clie.nome_fantasia as nome_fantasia_emp, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
+                                    cham.dt_cham as dt_cham_cham, sta.name AS name_sta_cham, cham.dt_status as dt_status_cham, cham.type_cham as type_cham_cham, user.name as name_user
+                                    FROM adms_cham AS cham
+                                    INNER JOIN adms_emp_principal AS princ ON princ.id=cham.empresa_id 
+                                    INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id 
+                                    INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id
+                                    INNER JOIN adms_users AS user ON user.id=cham.suporte_id  
                         WHERE cham.status_id= :status_id", "status_id={$this->searchStatusValue}");
 
             $this->resultBd = $listCham->getResult();
@@ -586,12 +600,14 @@ class CpmsRelatListCham
                 }
 
                 $listUsers = new \App\adms\Models\helper\AdmsRead();
-                $listUsers->fullRead("SELECT cham.id as id_cham, cham.empresa_id as empresa_id_cham, clie.nome_fantasia as nome_fantasia_clie, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
-                                    cham.dt_cham as dt_cham_cham, sta.name AS name_sta_cham, cham.dt_status as dt_status_cham, cham.type_cham as type_cham_cham, cham.suporte_id as suporte_id_cham
+                $listUsers->fullRead("SELECT cham.id as id_cham, princ.logo as logo_princ, cham.empresa_id as empresa_id_cham, clie.nome_fantasia as nome_fantasia_emp, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
+                                    cham.dt_cham as dt_cham_cham, sta.name AS name_sta_cham, cham.dt_status as dt_status_cham, cham.type_cham as type_cham_cham, user.name as name_user
                                     FROM adms_cham AS cham
+                                    INNER JOIN adms_emp_principal AS princ ON princ.id=cham.empresa_id 
                                     INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id 
                                     INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id
-                WHERE (empresa_id= :empresa_id) AND (status_id= :status_id) AND (dt_cham BETWEEN :search_date_start AND :search_date_end)
+                                    INNER JOIN adms_users AS user ON user.id=cham.suporte_id  
+                WHERE (cham.empresa_id= :empresa_id) AND (cham.status_id= :status_id) AND (cham.dt_cham BETWEEN :search_date_start AND :search_date_end)
                 ORDER BY cham.dt_cham ASC", "empresa_id={$_SESSION['emp_user']}&status_id={$this->searchStatusValue}&search_date_start={$this->searchDateStart}&search_date_end={$this->searchDateEnd}");
 
                 $this->resultBd = $listUsers->getResult();
@@ -619,12 +635,14 @@ class CpmsRelatListCham
             }
 
             $listCham = new \App\adms\Models\helper\AdmsRead();
-            $listCham->fullRead("SELECT  cham.id as id_cham, emp.nome_fantasia as nome_fantasia_emp, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham,
-                        usr.name AS name_usr, usr.tel_1 as tel_1_usr, cham.dt_cham, sta.name AS name_sta, dt_status, cham.type_cham FROM adms_cham AS cham
-                        INNER JOIN adms_empresa AS emp ON emp.id=cham.empresa_id 
-                        INNER JOIN adms_users AS usr ON usr.id=cham.usuario_id 
-                        INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id 
-                        WHERE cham.status_id= :status_id AND dt_cham BETWEEN :search_date_start AND :search_date_end
+            $listCham->fullRead("SELECT cham.id as id_cham, princ.logo as logo_princ, cham.empresa_id as empresa_id_cham, clie.nome_fantasia as nome_fantasia_emp, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
+                                    cham.dt_cham as dt_cham_cham, sta.name AS name_sta_cham, cham.dt_status as dt_status_cham, cham.type_cham as type_cham_cham, user.name as name_user
+                                    FROM adms_cham AS cham
+                                    INNER JOIN adms_emp_principal AS princ ON princ.id=cham.empresa_id 
+                                    INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id 
+                                    INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id
+                                    INNER JOIN adms_users AS user ON user.id=cham.suporte_id  
+                        WHERE cham.status_id= :status_id AND cham.dt_cham BETWEEN :search_date_start AND :search_date_end
                         ", "status_id={$this->searchStatusValue}&search_date_start={$this->searchDateStart}&search_date_end={$this->searchDateEnd}");
 
             $this->resultBd = $listCham->getResult();
@@ -664,12 +682,14 @@ class CpmsRelatListCham
                 }
 
                 $listUsers = new \App\adms\Models\helper\AdmsRead();
-                $listUsers->fullRead("SELECT cham.id as id_cham, cham.empresa_id as empresa_id_cham, clie.nome_fantasia as nome_fantasia_clie, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
-                                    cham.dt_cham as dt_cham_cham, sta.name AS name_sta_cham, cham.dt_status as dt_status_cham, cham.type_cham as type_cham_cham, cham.suporte_id as suporte_id_cham
+                $listUsers->fullRead("SELECT cham.id as id_cham, princ.logo as logo_princ, cham.empresa_id as empresa_id_cham, clie.nome_fantasia as nome_fantasia_emp, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
+                                    cham.dt_cham as dt_cham_cham, sta.name AS name_sta_cham, cham.dt_status as dt_status_cham, cham.type_cham as type_cham_cham, user.name as name_user
                                     FROM adms_cham AS cham
+                                    INNER JOIN adms_emp_principal AS princ ON princ.id=cham.empresa_id 
                                     INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id 
                                     INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id
-                WHERE (empresa_id= :empresa_id) AND (status_id= :status_id) AND (type_cham = :type_cham) AND (dt_cham BETWEEN :search_date_start AND :search_date_end)
+                                    INNER JOIN adms_users AS user ON user.id=cham.suporte_id  
+                WHERE (cham.empresa_id= :empresa_id) AND (status_id= :status_id) AND (type_cham = :type_cham) AND (cham.dt_cham BETWEEN :search_date_start AND :search_date_end)
                 ORDER BY cham.dt_cham ASC", "empresa_id={$_SESSION['emp_user']}&status_id={$this->searchStatusValue}&type_cham={$this->searchTipoValue}&search_date_start={$this->searchDateStart}&search_date_end={$this->searchDateEnd}");
 
                 $this->resultBd = $listUsers->getResult();
@@ -697,11 +717,13 @@ class CpmsRelatListCham
             }
 
             $listCham = new \App\adms\Models\helper\AdmsRead();
-            $listCham->fullRead("SELECT  cham.id as id_cham, emp.nome_fantasia as nome_fantasia_emp, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
-                        usr.name AS name_usr, usr.tel_1 as tel_1_usr, cham.dt_cham, sta.name AS name_sta, dt_status, cham.type_cham FROM adms_cham AS cham
-                        INNER JOIN adms_empresa AS emp ON emp.id=cham.empresa_id                         
-                        INNER JOIN adms_users AS usr ON usr.id=cham.usuario_id 
-                        INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id 
+            $listCham->fullRead("SELECT cham.id as id_cham, princ.logo as logo_princ, cham.empresa_id as empresa_id_cham, clie.nome_fantasia as nome_fantasia_emp, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
+                                    cham.dt_cham as dt_cham_cham, sta.name AS name_sta_cham, cham.dt_status as dt_status_cham, cham.type_cham as type_cham_cham, user.name as name_user
+                                    FROM adms_cham AS cham
+                                    INNER JOIN adms_emp_principal AS princ ON princ.id=cham.empresa_id 
+                                    INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id 
+                                    INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id
+                                    INNER JOIN adms_users AS user ON user.id=cham.suporte_id  
                         WHERE cham.status_id= :status_id AND cham.type_cham= :type_cham AND cham.dt_cham BETWEEN :search_date_start AND :search_date_end
                         ", "status_id={$this->searchStatusValue}&type_cham={$this->searchTipoValue}&search_date_start={$this->searchDateStart}&search_date_end={$this->searchDateEnd}");
 
@@ -744,12 +766,14 @@ class CpmsRelatListCham
                 }
 
                 $listUsers = new \App\adms\Models\helper\AdmsRead();
-                $listUsers->fullRead("SELECT cham.id as id_cham, cham.empresa_id as empresa_id_cham, clie.nome_fantasia as nome_fantasia_clie, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
-                                    cham.dt_cham as dt_cham_cham, sta.name AS name_sta_cham, cham.dt_status as dt_status_cham, cham.type_cham as type_cham_cham, cham.suporte_id as suporte_id_cham
+                $listUsers->fullRead("SELECT cham.id as id_cham, princ.logo as logo_princ, cham.empresa_id as empresa_id_cham, clie.nome_fantasia as nome_fantasia_emp, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
+                                    cham.dt_cham as dt_cham_cham, sta.name AS name_sta_cham, cham.dt_status as dt_status_cham, cham.type_cham as type_cham_cham, user.name as name_user
                                     FROM adms_cham AS cham
+                                    INNER JOIN adms_emp_principal AS princ ON princ.id=cham.empresa_id 
                                     INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id 
                                     INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id
-                                    WHERE (empresa_id= :empresa_id) AND (type_cham = :type_cham)
+                                    INNER JOIN adms_users AS user ON user.id=cham.suporte_id   
+                                    WHERE (cham.empresa_id= :empresa_id) AND (type_cham = :type_cham)
                                     ORDER BY cham.dt_cham ASC", "empresa_id={$_SESSION['emp_user']}&type_cham={$this->searchTipoValue}");
 
                 $this->resultBd = $listUsers->getResult();
@@ -778,11 +802,13 @@ class CpmsRelatListCham
             }
 
             $listCham = new \App\adms\Models\helper\AdmsRead();
-            $listCham->fullRead("SELECT  cham.id as id_cham, emp.nome_fantasia as nome_fantasia_emp, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
-                        usr.name AS name_usr, usr.tel_1 as tel_1_usr, cham.dt_cham, sta.name AS name_sta, dt_status, cham.type_cham FROM adms_cham AS cham
-                        INNER JOIN adms_empresa AS emp ON emp.id=cham.empresa_id                         
-                        INNER JOIN adms_users AS usr ON usr.id=cham.usuario_id 
-                        INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id 
+            $listCham->fullRead("SELECT cham.id as id_cham, princ.logo as logo_princ, cham.empresa_id as empresa_id_cham, clie.nome_fantasia as nome_fantasia_emp, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
+                                    cham.dt_cham as dt_cham_cham, sta.name AS name_sta_cham, cham.dt_status as dt_status_cham, cham.type_cham as type_cham_cham, user.name as name_user
+                                    FROM adms_cham AS cham
+                                    INNER JOIN adms_emp_principal AS princ ON princ.id=cham.empresa_id 
+                                    INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id 
+                                    INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id
+                                    INNER JOIN adms_users AS user ON user.id=cham.suporte_id  
                         WHERE cham.type_cham= :type_cham 
                         ", "type_cham={$this->searchTipo}");
 
@@ -824,12 +850,14 @@ class CpmsRelatListCham
                 }
 
                 $listUsers = new \App\adms\Models\helper\AdmsRead();
-                $listUsers->fullRead("SELECT cham.id as id_cham, cham.empresa_id as empresa_id_cham, clie.nome_fantasia as nome_fantasia_clie, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
-                                    cham.dt_cham as dt_cham_cham, sta.name AS name_sta_cham, cham.dt_status as dt_status_cham, cham.type_cham as type_cham_cham, cham.suporte_id as suporte_id_cham
+                $listUsers->fullRead("SELECT cham.id as id_cham, princ.logo as logo_princ, cham.empresa_id as empresa_id_cham, clie.nome_fantasia as nome_fantasia_emp, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
+                                    cham.dt_cham as dt_cham_cham, sta.name AS name_sta_cham, cham.dt_status as dt_status_cham, cham.type_cham as type_cham_cham, user.name as name_user
                                     FROM adms_cham AS cham
+                                    INNER JOIN adms_emp_principal AS princ ON princ.id=cham.empresa_id 
                                     INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id 
                                     INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id
-                WHERE (empresa_id= :empresa_id) AND (type_cham = :type_cham) AND (dt_cham BETWEEN :search_date_start AND :search_date_end)
+                                    INNER JOIN adms_users AS user ON user.id=cham.suporte_id  
+                WHERE (cham.empresa_id= :empresa_id) AND (type_cham = :type_cham) AND (cham.dt_cham BETWEEN :search_date_start AND :search_date_end)
                 ORDER BY cham.dt_cham ASC", "empresa_id={$_SESSION['emp_user']}&type_cham={$this->searchTipoValue}&search_date_start={$this->searchDateStart}&search_date_end={$this->searchDateEnd}");
 
                 $this->resultBd = $listUsers->getResult();
@@ -858,11 +886,13 @@ class CpmsRelatListCham
             }
 
             $listCham = new \App\adms\Models\helper\AdmsRead();
-            $listCham->fullRead("SELECT  cham.id as id_cham, emp.nome_fantasia as nome_fantasia_emp, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
-                        usr.name AS name_usr, usr.tel_1 as tel_1_usr, cham.dt_cham, sta.name AS name_sta, dt_status, cham.type_cham FROM adms_cham AS cham
-                        INNER JOIN adms_empresa AS emp ON emp.id=cham.empresa_id                         
-                        INNER JOIN adms_users AS usr ON usr.id=cham.usuario_id 
-                        INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id 
+            $listCham->fullRead("SELECT cham.id as id_cham, princ.logo as logo_princ, cham.empresa_id as empresa_id_cham, clie.nome_fantasia as nome_fantasia_emp, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
+                                    cham.dt_cham as dt_cham_cham, sta.name AS name_sta_cham, cham.dt_status as dt_status_cham, cham.type_cham as type_cham_cham, user.name as name_user
+                                    FROM adms_cham AS cham
+                                    INNER JOIN adms_emp_principal AS princ ON princ.id=cham.empresa_id 
+                                    INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id 
+                                    INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id
+                                    INNER JOIN adms_users AS user ON user.id=cham.suporte_id  
                         WHERE cham.type_cham= :type_cham AND cham.dt_cham BETWEEN :search_date_start AND :search_date_end ORDER BY cham.dt_cham 
                         ", "type_cham={$this->searchTipoValue}&search_date_start={$this->searchDateStart}&search_date_end={$this->searchDateEnd}");
 
@@ -905,12 +935,14 @@ class CpmsRelatListCham
                 }
 
                 $listUsers = new \App\adms\Models\helper\AdmsRead();
-                $listUsers->fullRead("SELECT cham.id as id_cham, cham.empresa_id as empresa_id_cham, clie.nome_fantasia as nome_fantasia_clie, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
-                                    cham.dt_cham as dt_cham_cham, sta.name AS name_sta_cham, cham.dt_status as dt_status_cham, cham.type_cham as type_cham_cham, cham.suporte_id as suporte_id_cham
+                $listUsers->fullRead("SELECT cham.id as id_cham, princ.logo as logo_princ, cham.empresa_id as empresa_id_cham, clie.nome_fantasia as nome_fantasia_emp, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
+                                    cham.dt_cham as dt_cham_cham, sta.name AS name_sta_cham, cham.dt_status as dt_status_cham, cham.type_cham as type_cham_cham, user.name as name_user
                                     FROM adms_cham AS cham
+                                    INNER JOIN adms_emp_principal AS princ ON princ.id=cham.empresa_id 
                                     INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id 
                                     INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id
-                WHERE (empresa_id= :empresa_id) AND (cliente_id= :cliente_id) AND (type_cham = :type_cham)
+                                    INNER JOIN adms_users AS user ON user.id=cham.suporte_id  
+                WHERE (cham.empresa_id= :empresa_id) AND (cham.cliente_id= :cliente_id) AND (cham.type_cham = :type_cham)
                 ORDER BY cham.dt_cham ASC", "empresa_id={$_SESSION['emp_user']}&cliente_id={$this->searchEmpresaValue}&type_cham={$this->searchTipoValue}");
 
                 $this->resultBd = $listUsers->getResult();
@@ -939,11 +971,13 @@ class CpmsRelatListCham
             }
 
             $listCham = new \App\adms\Models\helper\AdmsRead();
-            $listCham->fullRead("SELECT  cham.id as id_cham, emp.nome_fantasia as nome_fantasia_emp, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
-                        usr.name AS name_usr, usr.tel_1 as tel_1_usr, cham.dt_cham, sta.name AS name_sta, dt_status, cham.type_cham FROM adms_cham AS cham
-                        INNER JOIN adms_empresa AS emp ON emp.id=cham.empresa_id                         
-                        INNER JOIN adms_users AS usr ON usr.id=cham.usuario_id 
-                        INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id 
+            $listCham->fullRead("SELECT cham.id as id_cham, princ.logo as logo_princ, cham.empresa_id as empresa_id_cham, clie.nome_fantasia as nome_fantasia_emp, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
+                                    cham.dt_cham as dt_cham_cham, sta.name AS name_sta_cham, cham.dt_status as dt_status_cham, cham.type_cham as type_cham_cham, user.name as name_user
+                                    FROM adms_cham AS cham
+                                    INNER JOIN adms_emp_principal AS princ ON princ.id=cham.empresa_id 
+                                    INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id 
+                                    INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id
+                                    INNER JOIN adms_users AS user ON user.id=cham.suporte_id    
                         WHERE cham.empresa_id= :empresa_id AND cham.type_cham= :type_cham
                         ", "empresa_id={$this->searchEmpresaValue}&type_cham={$this->searchTipoValue}");
 
@@ -985,12 +1019,14 @@ class CpmsRelatListCham
                 }
 
                 $listUsers = new \App\adms\Models\helper\AdmsRead();
-                $listUsers->fullRead("SELECT cham.id as id_cham, cham.empresa_id as empresa_id_cham, clie.nome_fantasia as nome_fantasia_clie, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
-                                    cham.dt_cham as dt_cham_cham, sta.name AS name_sta_cham, cham.dt_status as dt_status_cham, cham.type_cham as type_cham_cham, cham.suporte_id as suporte_id_cham
+                $listUsers->fullRead("SELECT cham.id as id_cham, princ.logo as logo_princ, cham.empresa_id as empresa_id_cham, clie.nome_fantasia as nome_fantasia_emp, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
+                                    cham.dt_cham as dt_cham_cham, sta.name AS name_sta_cham, cham.dt_status as dt_status_cham, cham.type_cham as type_cham_cham, user.name as name_user
                                     FROM adms_cham AS cham
+                                    INNER JOIN adms_emp_principal AS princ ON princ.id=cham.empresa_id 
                                     INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id 
                                     INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id
-                WHERE (empresa_id= :empresa_id)  AND (status_id= :status_id) AND (type_cham = :type_cham)
+                                    INNER JOIN adms_users AS user ON user.id=cham.suporte_id  
+                WHERE (cham.empresa_id= :empresa_id)  AND (cham.status_id= :status_id) AND (cham.type_cham = :type_cham)
                 ORDER BY cham.dt_cham ASC", "empresa_id={$_SESSION['emp_user']}&status_id={$this->searchStatusValue}&type_cham={$this->searchTipoValue}");
 
                 $this->resultBd = $listUsers->getResult();
@@ -1019,11 +1055,13 @@ class CpmsRelatListCham
             }
 
             $listCham = new \App\adms\Models\helper\AdmsRead();
-            $listCham->fullRead("SELECT  cham.id as id_cham, emp.nome_fantasia as nome_fantasia_emp, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
-                        usr.name AS name_usr, usr.tel_1 as tel_1_usr, cham.dt_cham, sta.name AS name_sta, dt_status, cham.type_cham FROM adms_cham AS cham
-                        INNER JOIN adms_empresa AS emp ON emp.id=cham.empresa_id                         
-                        INNER JOIN adms_users AS usr ON usr.id=cham.usuario_id 
-                        INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id 
+            $listCham->fullRead("SELECT cham.id as id_cham, princ.logo as logo_princ, cham.empresa_id as empresa_id_cham, clie.nome_fantasia as nome_fantasia_emp, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
+                                    cham.dt_cham as dt_cham_cham, sta.name AS name_sta_cham, cham.dt_status as dt_status_cham, cham.type_cham as type_cham_cham, user.name as name_user
+                                    FROM adms_cham AS cham
+                                    INNER JOIN adms_emp_principal AS princ ON princ.id=cham.empresa_id 
+                                    INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id 
+                                    INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id
+                                    INNER JOIN adms_users AS user ON user.id=cham.suporte_id  
                         WHERE cham.status_id= :status_id AND cham.type_cham= :type_cham 
                         ", "status_id={$this->searchStatusValue}&type_cham={$this->searchTipoValue}");
 
@@ -1064,12 +1102,14 @@ class CpmsRelatListCham
                 }
 
                 $listUsers = new \App\adms\Models\helper\AdmsRead();
-                $listUsers->fullRead("SELECT cham.id as id_cham, cham.empresa_id as empresa_id_cham, clie.nome_fantasia as nome_fantasia_clie, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
-                                    cham.dt_cham as dt_cham_cham, sta.name AS name_sta_cham, cham.dt_status as dt_status_cham, cham.type_cham as type_cham_cham, cham.suporte_id as suporte_id_cham
+                $listUsers->fullRead("SELECT cham.id as id_cham, princ.logo as logo_princ, cham.empresa_id as empresa_id_cham, clie.nome_fantasia as nome_fantasia_emp, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
+                                    cham.dt_cham as dt_cham_cham, sta.name AS name_sta_cham, cham.dt_status as dt_status_cham, cham.type_cham as type_cham_cham, user.name as name_user
                                     FROM adms_cham AS cham
+                                    INNER JOIN adms_emp_principal AS princ ON princ.id=cham.empresa_id 
                                     INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id 
                                     INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id
-                WHERE (empresa_id= :empresa_id) AND (cliente_id= :cliente_id) AND (dt_cham BETWEEN :search_date_start AND :search_date_end)
+                                    INNER JOIN adms_users AS user ON user.id=cham.suporte_id  
+                WHERE (cham.empresa_id= :empresa_id) AND (cham.cliente_id= :cliente_id) AND (cham.dt_cham BETWEEN :search_date_start AND :search_date_end)
                 ORDER BY cham.dt_cham ASC", "empresa_id={$_SESSION['emp_user']}&cliente_id={$this->searchEmpresaValue}&search_date_start={$this->searchDateStart}&search_date_end={$this->searchDateEnd}");
 
                 $this->resultBd = $listUsers->getResult();
@@ -1098,12 +1138,13 @@ class CpmsRelatListCham
             }
 
             $listUsers = new \App\adms\Models\helper\AdmsRead();
-            $listUsers->fullRead("SELECT  cham.id as id_cham, emp.nome_fantasia as nome_fantasia_emp, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
-            usr.name AS name_usr, usr.tel_1 as tel_1_usr, cham.dt_cham, sta.name AS name_sta, dt_status, cham.type_cham  
-            FROM adms_cham AS cham
-            INNER JOIN adms_empresa AS emp ON emp.id=cham.empresa_id             
-            INNER JOIN adms_users AS usr ON usr.id=cham.usuario_id 
-            INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id  
+            $listUsers->fullRead("SELECT cham.id as id_cham, princ.logo as logo_princ, cham.empresa_id as empresa_id_cham, clie.nome_fantasia as nome_fantasia_emp, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
+                                    cham.dt_cham as dt_cham_cham, sta.name AS name_sta_cham, cham.dt_status as dt_status_cham, cham.type_cham as type_cham_cham, user.name as name_user
+                                    FROM adms_cham AS cham
+                                    INNER JOIN adms_emp_principal AS princ ON princ.id=cham.empresa_id 
+                                    INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id 
+                                    INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id
+                                    INNER JOIN adms_users AS user ON user.id=cham.suporte_id   
             WHERE cham.empresa_id= :empresa_id AND cham.dt_cham BETWEEN :search_date_start AND :search_date_end
             ORDER BY cham.dt_cham ASC
             ", "empresa_id={$this->searchEmpresaValue}&search_date_start={$this->searchDateStart}&search_date_end={$this->searchDateEnd}");
@@ -1145,12 +1186,14 @@ class CpmsRelatListCham
                 }
 
                 $listUsers = new \App\adms\Models\helper\AdmsRead();
-                $listUsers->fullRead("SELECT cham.id as id_cham, cham.empresa_id as empresa_id_cham, clie.nome_fantasia as nome_fantasia_clie, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
-                                    cham.dt_cham as dt_cham_cham, sta.name AS name_sta_cham, cham.dt_status as dt_status_cham, cham.type_cham as type_cham_cham, cham.suporte_id as suporte_id_cham
+                $listUsers->fullRead("SELECT cham.id as id_cham, princ.logo as logo_princ, cham.empresa_id as empresa_id_cham, clie.nome_fantasia as nome_fantasia_emp, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
+                                    cham.dt_cham as dt_cham_cham, sta.name AS name_sta_cham, cham.dt_status as dt_status_cham, cham.type_cham as type_cham_cham, user.name as name_user
                                     FROM adms_cham AS cham
+                                    INNER JOIN adms_emp_principal AS princ ON princ.id=cham.empresa_id 
                                     INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id 
                                     INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id
-                WHERE (empresa_id= :empresa_id) AND (cliente_id= :cliente_id) AND (status_id= :status_id) AND (dt_cham BETWEEN :search_date_start AND :search_date_end)
+                                    INNER JOIN adms_users AS user ON user.id=cham.suporte_id  
+                WHERE (cham.empresa_id= :empresa_id) AND (cham.cliente_id= :cliente_id) AND (cham.status_id= :status_id) AND (cham.dt_cham BETWEEN :search_date_start AND :search_date_end)
                 ORDER BY cham.dt_cham ASC", "empresa_id={$_SESSION['emp_user']}&cliente_id={$this->searchEmpresaValue}&status_id={$this->searchStatusValue}&search_date_start={$this->searchDateStart}&search_date_end={$this->searchDateEnd}");
 
                 $this->resultBd = $listUsers->getResult();
@@ -1179,12 +1222,13 @@ class CpmsRelatListCham
             }
 
             $listUsers = new \App\adms\Models\helper\AdmsRead();
-            $listUsers->fullRead("SELECT  cham.id as id_cham, emp.nome_fantasia as nome_fantasia_emp, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
-            usr.name AS name_usr, usr.tel_1 as tel_1_usr, cham.dt_cham, sta.name AS name_sta, dt_status, cham.type_cham  
-            FROM adms_cham AS cham
-            INNER JOIN adms_empresa AS emp ON emp.id=cham.empresa_id             
-            INNER JOIN adms_users AS usr ON usr.id=cham.usuario_id 
-            INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id  
+            $listUsers->fullRead("SELECT cham.id as id_cham, princ.logo as logo_princ, cham.empresa_id as empresa_id_cham, clie.nome_fantasia as nome_fantasia_emp, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
+                                    cham.dt_cham as dt_cham_cham, sta.name AS name_sta_cham, cham.dt_status as dt_status_cham, cham.type_cham as type_cham_cham, user.name as name_user
+                                    FROM adms_cham AS cham
+                                    INNER JOIN adms_emp_principal AS princ ON princ.id=cham.empresa_id 
+                                    INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id 
+                                    INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id
+                                    INNER JOIN adms_users AS user ON user.id=cham.suporte_id   
             WHERE cham.empresa_id= :empresa_id AND cham.status_id= :status_id AND cham.dt_cham BETWEEN :search_date_start AND :search_date_end
             ORDER BY cham.dt_cham ASC
             ", "empresa_id={$this->searchEmpresaValue}&status_id={$this->searchStatusValue}&search_date_start={$this->searchDateStart}&search_date_end={$this->searchDateEnd}");
@@ -1226,12 +1270,14 @@ class CpmsRelatListCham
                 }
 
                 $listUsers = new \App\adms\Models\helper\AdmsRead();
-                $listUsers->fullRead("SELECT cham.id as id_cham, cham.empresa_id as empresa_id_cham, clie.nome_fantasia as nome_fantasia_clie, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
-                                    cham.dt_cham as dt_cham_cham, sta.name AS name_sta_cham, cham.dt_status as dt_status_cham, cham.type_cham as type_cham_cham, cham.suporte_id as suporte_id_cham
+                $listUsers->fullRead("SELECT cham.id as id_cham, princ.logo as logo_princ, cham.empresa_id as empresa_id_cham, clie.nome_fantasia as nome_fantasia_emp, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
+                                    cham.dt_cham as dt_cham_cham, sta.name AS name_sta_cham, cham.dt_status as dt_status_cham, cham.type_cham as type_cham_cham, user.name as name_user
                                     FROM adms_cham AS cham
+                                    INNER JOIN adms_emp_principal AS princ ON princ.id=cham.empresa_id 
                                     INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id 
                                     INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id
-                WHERE (empresa_id= :empresa_id) AND (cliente_id= :cliente_id) AND (type_cham = :type_cham) AND (dt_cham BETWEEN :search_date_start AND :search_date_end)
+                                    INNER JOIN adms_users AS user ON user.id=cham.suporte_id    
+                WHERE (cham.empresa_id= :empresa_id) AND (cham.cliente_id= :cliente_id) AND (cham.type_cham = :type_cham) AND (cham.dt_cham BETWEEN :search_date_start AND :search_date_end)
                 ORDER BY cham.dt_cham ASC", "empresa_id={$_SESSION['emp_user']}&cliente_id={$this->searchEmpresaValue}&type_cham={$this->searchTipoValue}&search_date_start={$this->searchDateStart}&search_date_end={$this->searchDateEnd}");
 
                 $this->resultBd = $listUsers->getResult();
@@ -1260,12 +1306,13 @@ class CpmsRelatListCham
             }
 
             $listUsers = new \App\adms\Models\helper\AdmsRead();
-            $listUsers->fullRead("SELECT  cham.id as id_cham, emp.nome_fantasia as nome_fantasia_emp, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
-            usr.name AS name_usr, usr.tel_1 as tel_1_usr, cham.dt_cham, sta.name AS name_sta, dt_status, cham.type_cham  
-            FROM adms_cham AS cham
-            INNER JOIN adms_empresa AS emp ON emp.id=cham.empresa_id             
-            INNER JOIN adms_users AS usr ON usr.id=cham.usuario_id 
-            INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id  
+            $listUsers->fullRead("SELECT cham.id as id_cham, princ.logo as logo_princ, cham.empresa_id as empresa_id_cham, clie.nome_fantasia as nome_fantasia_emp, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
+                                    cham.dt_cham as dt_cham_cham, sta.name AS name_sta_cham, cham.dt_status as dt_status_cham, cham.type_cham as type_cham_cham, user.name as name_user
+                                    FROM adms_cham AS cham
+                                    INNER JOIN adms_emp_principal AS princ ON princ.id=cham.empresa_id 
+                                    INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id 
+                                    INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id
+                                    INNER JOIN adms_users AS user ON user.id=cham.suporte_id   
             WHERE cham.empresa_id= :empresa_id AND cham.type_cham = :type_cham AND cham.dt_cham BETWEEN :search_date_start AND :search_date_end
             ORDER BY cham.dt_cham ASC
             ", "empresa_id={$this->searchEmpresaValue}&type_cham={$this->searchTipoValue}&search_date_start={$this->searchDateStart}&search_date_end={$this->searchDateEnd}");
@@ -1292,8 +1339,7 @@ class CpmsRelatListCham
             if (($_SESSION['adms_access_level_id'] == 4) or ($_SESSION['adms_access_level_id'] == 12)){
 
                 $contCham = new \App\adms\Models\helper\AdmsRead();
-                $contCham->fullRead(
-                    "SELECT COUNT(id) AS num_result FROM adms_cham WHERE empresa_id= :empresa_id AND dt_cham BETWEEN :search_date_start AND :search_date_end",
+                $contCham->fullRead("SELECT COUNT(id) AS num_result FROM adms_cham WHERE empresa_id= :empresa_id AND dt_cham BETWEEN :search_date_start AND :search_date_end",
                     "empresa_id={$_SESSION['emp_user']}&search_date_end={$this->searchDateEnd}"
                 );
                 $this->resultBd = $contCham->getResult();
@@ -1307,12 +1353,14 @@ class CpmsRelatListCham
                 }
 
                 $listUsers = new \App\adms\Models\helper\AdmsRead();
-                $listUsers->fullRead("SELECT cham.id as id_cham, cham.empresa_id as empresa_id_cham, clie.nome_fantasia as nome_fantasia_clie, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
-                                    cham.dt_cham as dt_cham_cham, sta.name AS name_sta_cham, cham.dt_status as dt_status_cham, cham.type_cham as type_cham_cham, cham.suporte_id as suporte_id_cham
+                $listUsers->fullRead("SELECT cham.id as id_cham, princ.logo as logo_princ, cham.empresa_id as empresa_id_cham, clie.nome_fantasia as nome_fantasia_emp, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
+                                    cham.dt_cham as dt_cham_cham, sta.name AS name_sta_cham, cham.dt_status as dt_status_cham, cham.type_cham as type_cham_cham, user.name as name_user
                                     FROM adms_cham AS cham
+                                    INNER JOIN adms_emp_principal AS princ ON princ.id=cham.empresa_id 
                                     INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id 
                                     INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id
-                WHERE (empresa_id= :empresa_id) AND (dt_cham BETWEEN :search_date_start AND :search_date_end)
+                                    INNER JOIN adms_users AS user ON user.id=cham.suporte_id  
+                WHERE (cham.empresa_id= :empresa_id) AND (cham.dt_cham BETWEEN :search_date_start AND :search_date_end)
                 ORDER BY cham.dt_cham ASC", "empresa_id={$_SESSION['emp_user']}&search_date_start={$this->searchDateStart}&search_date_end={$this->searchDateEnd}");
 
                 $this->resultBd = $listUsers->getResult();
@@ -1341,12 +1389,13 @@ class CpmsRelatListCham
             }
 
             $listUsers = new \App\adms\Models\helper\AdmsRead();
-            $listUsers->fullRead("SELECT  cham.id as id_cham, emp.nome_fantasia as nome_fantasia_emp, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
-            usr.name AS name_usr, usr.tel_1 as tel_1_usr, cham.inf_cham as inf_cham, cham.dt_cham, sta.name AS name_sta, dt_status, cham.type_cham  
-            FROM adms_cham AS cham
-            INNER JOIN adms_empresa AS emp ON emp.id=cham.empresa_id             
-            INNER JOIN adms_users AS usr ON usr.id=cham.usuario_id 
-            INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id  
+            $listUsers->fullRead("SELECT cham.id as id_cham, princ.logo as logo_princ, cham.empresa_id as empresa_id_cham, clie.nome_fantasia as nome_fantasia_emp, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
+                                    cham.dt_cham as dt_cham_cham, sta.name AS name_sta_cham, cham.dt_status as dt_status_cham, cham.type_cham as type_cham_cham, user.name as name_user
+                                    FROM adms_cham AS cham
+                                    INNER JOIN adms_emp_principal AS princ ON princ.id=cham.empresa_id 
+                                    INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id 
+                                    INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id
+                                    INNER JOIN adms_users AS user ON user.id=cham.suporte_id   
             WHERE cham.dt_cham BETWEEN :search_date_start AND :search_date_end
             ORDER BY cham.dt_cham ASC
             ", "search_date_start={$this->searchDateStart}&search_date_end={$this->searchDateEnd}");
@@ -1380,12 +1429,14 @@ class CpmsRelatListCham
         }
 
         $listCham = new \App\adms\Models\helper\AdmsRead();
-        $listCham->fullRead("SELECT cham.id as id_cham, cham.empresa_id as empresa_id_cham, clie.nome_fantasia as nome_fantasia_clie, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
-                                    cham.dt_cham as dt_cham_cham, sta.name AS name_sta_cham, cham.dt_status as dt_status_cham, cham.type_cham as type_cham_cham, cham.suporte_id as suporte_id_cham
+        $listCham->fullRead("SELECT cham.id as id_cham, princ.logo as logo_princ, cham.empresa_id as empresa_id_cham, clie.nome_fantasia as nome_fantasia_emp, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
+                                    cham.dt_cham as dt_cham_cham, sta.name AS name_sta_cham, cham.dt_status as dt_status_cham, cham.type_cham as type_cham_cham, user.name as name_user
                                     FROM adms_cham AS cham
+                                    INNER JOIN adms_emp_principal AS princ ON princ.id=cham.empresa_id 
                                     INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id 
-                                    INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id                                   
-                                    WHERE (empresa_id= :empresa_id) AND (suporte_id= :suporte_id)",
+                                    INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id
+                                    INNER JOIN adms_users AS user ON user.id=cham.suporte_id                                  
+                                    WHERE (cham.empresa_id= :empresa_id) AND (cham.suporte_id= :suporte_id)",
                                     "empresa_id={$_SESSION['emp_user']}&suporte_id={$this->searchTecSuporte}");
 
         $this->resultBd = $listCham->getResult();
@@ -1423,12 +1474,14 @@ class CpmsRelatListCham
                 }
 
                 $listUsers = new \App\adms\Models\helper\AdmsRead();
-                $listUsers->fullRead("SELECT cham.id as id_cham, cham.empresa_id as empresa_id_cham, clie.nome_fantasia as nome_fantasia_clie, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
-                                    cham.dt_cham as dt_cham_cham, sta.name AS name_sta_cham, cham.dt_status as dt_status_cham, cham.type_cham as type_cham_cham, cham.suporte_id as suporte_id_cham
+                $listUsers->fullRead("SELECT cham.id as id_cham, princ.logo as logo_princ, cham.empresa_id as empresa_id_cham, clie.nome_fantasia as nome_fantasia_emp, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
+                                    cham.dt_cham as dt_cham_cham, sta.name AS name_sta_cham, cham.dt_status as dt_status_cham, cham.type_cham as type_cham_cham, user.name as name_user
                                     FROM adms_cham AS cham
+                                    INNER JOIN adms_emp_principal AS princ ON princ.id=cham.empresa_id 
                                     INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id 
-                                    INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id  
-                                    WHERE (empresa_id= :empresa_id) AND (cliente_id= :cliente_id) AND (status_id= :status_id) AND (type_cham = :type_cham) AND (dt_cham BETWEEN :search_date_start AND :search_date_end) AND (suporte_id= :suporte_id)", 
+                                    INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id
+                                    INNER JOIN adms_users AS user ON user.id=cham.suporte_id   
+                                    WHERE (cham.empresa_id= :empresa_id) AND (cham.cliente_id= :cliente_id) AND (cham.status_id= :status_id) AND (cham.type_cham = :type_cham) AND (cham.dt_cham BETWEEN :search_date_start AND :search_date_end) AND (cham.suporte_id= :suporte_id)", 
                                     "empresa_id={$_SESSION['emp_user']}&cliente_id={$this->searchEmpresa}&status_id={$this->searchStatus}&type_cham={$this->searchTipo}&search_date_start={$this->searchDateStart}&search_date_end={$this->searchDateEnd}&suporte_id={$this->searchTecSuporte}");
 
                 $this->resultBd = $listUsers->getResult();
@@ -1457,13 +1510,13 @@ class CpmsRelatListCham
             }
 
             $listUsers = new \App\adms\Models\helper\AdmsRead();
-            $listUsers->fullRead(
-                "SELECT  cham.id as id_cham, emp.nome_fantasia as nome_fantasia_emp, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham,
-            usr.name AS name_usr, usr.tel_1 as tel_1_usr, cham.dt_cham, sta.name AS name_sta, dt_status, cham.type_cham  
-            FROM adms_cham AS cham
-            INNER JOIN adms_empresa AS emp ON emp.id=cham.empresa_id 
-            INNER JOIN adms_users AS usr ON usr.id=cham.usuario_id 
-            INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id  
+            $listUsers->fullRead("SELECT cham.id as id_cham, princ.logo as logo_princ, cham.empresa_id as empresa_id_cham, clie.nome_fantasia as nome_fantasia_emp, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
+                                    cham.dt_cham as dt_cham_cham, sta.name AS name_sta_cham, cham.dt_status as dt_status_cham, cham.type_cham as type_cham_cham, user.name as name_user
+                                    FROM adms_cham AS cham
+                                    INNER JOIN adms_emp_principal AS princ ON princ.id=cham.empresa_id 
+                                    INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id 
+                                    INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id
+                                    INNER JOIN adms_users AS user ON user.id=cham.suporte_id  
             WHERE cham.empresa_id= :empresa_id AND cham.status_id= :status_id AND cham.type_cham = :type_cham AND cham.dt_cham BETWEEN :search_date_start AND :search_date_end
             ORDER BY cham.dt_cham ASC",
                 "empresa_id={$this->searchEmpresaValue}&status_id={$this->searchStatusValue}&type_cham={$this->searchTipoValue}&search_date_start={$this->searchDateStart}&search_date_end={$this->searchDateEnd}"
@@ -1505,12 +1558,14 @@ class CpmsRelatListCham
                 }
 
                 $listUsers = new \App\adms\Models\helper\AdmsRead();
-                $listUsers->fullRead("SELECT cham.id as id_cham, cham.empresa_id as empresa_id_cham, clie.nome_fantasia as nome_fantasia_clie, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
-                                    cham.dt_cham as dt_cham_cham, sta.name AS name_sta_cham, cham.dt_status as dt_status_cham, cham.type_cham as type_cham_cham, cham.suporte_id as suporte_id_cham
+                $listUsers->fullRead("SELECT cham.id as id_cham, princ.logo as logo_princ, cham.empresa_id as empresa_id_cham, clie.nome_fantasia as nome_fantasia_emp, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
+                                    cham.dt_cham as dt_cham_cham, sta.name AS name_sta_cham, cham.dt_status as dt_status_cham, cham.type_cham as type_cham_cham, user.name as name_user
                                     FROM adms_cham AS cham
+                                    INNER JOIN adms_emp_principal AS princ ON princ.id=cham.empresa_id 
                                     INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id 
-                                    INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id  
-                                    WHERE (empresa_id= :empresa_id) AND (dt_cham BETWEEN :search_date_start AND :search_date_end) AND (suporte_id= :suporte_id)", 
+                                    INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id
+                                    INNER JOIN adms_users AS user ON user.id=cham.suporte_id   
+                                    WHERE (cham.empresa_id= :empresa_id) AND (cham.dt_cham BETWEEN :search_date_start AND :search_date_end) AND (cham.suporte_id= :suporte_id)", 
                                     "empresa_id={$_SESSION['emp_user']}&search_date_start={$this->searchDateStart}&search_date_end={$this->searchDateEnd}&suporte_id={$this->searchTecSuporte}");
 
                 $this->resultBd = $listUsers->getResult();
@@ -1539,13 +1594,13 @@ class CpmsRelatListCham
             }
 
             $listUsers = new \App\adms\Models\helper\AdmsRead();
-            $listUsers->fullRead(
-                "SELECT  cham.id as id_cham, emp.nome_fantasia as nome_fantasia_emp, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham,
-            usr.name AS name_usr, usr.tel_1 as tel_1_usr, cham.dt_cham, sta.name AS name_sta, dt_status, cham.type_cham  
-            FROM adms_cham AS cham
-            INNER JOIN adms_empresa AS emp ON emp.id=cham.empresa_id 
-            INNER JOIN adms_users AS usr ON usr.id=cham.usuario_id 
-            INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id  
+            $listUsers->fullRead("SELECT cham.id as id_cham, princ.logo as logo_princ, cham.empresa_id as empresa_id_cham, clie.nome_fantasia as nome_fantasia_emp, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
+                                    cham.dt_cham as dt_cham_cham, sta.name AS name_sta_cham, cham.dt_status as dt_status_cham, cham.type_cham as type_cham_cham, user.name as name_user
+                                    FROM adms_cham AS cham
+                                    INNER JOIN adms_emp_principal AS princ ON princ.id=cham.empresa_id 
+                                    INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id 
+                                    INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id
+                                    INNER JOIN adms_users AS user ON user.id=cham.suporte_id  
             WHERE cham.empresa_id= :empresa_id AND cham.status_id= :status_id AND cham.type_cham = :type_cham AND cham.dt_cham BETWEEN :search_date_start AND :search_date_end
             ORDER BY cham.dt_cham ASC",
                 "empresa_id={$this->searchEmpresaValue}&status_id={$this->searchStatusValue}&type_cham={$this->searchTipoValue}&search_date_start={$this->searchDateStart}&search_date_end={$this->searchDateEnd}"
@@ -1587,12 +1642,14 @@ class CpmsRelatListCham
                 }
 
                 $listUsers = new \App\adms\Models\helper\AdmsRead();
-                $listUsers->fullRead("SELECT cham.id as id_cham, cham.empresa_id as empresa_id_cham, clie.nome_fantasia as nome_fantasia_clie, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
-                                    cham.dt_cham as dt_cham_cham, sta.name AS name_sta_cham, cham.dt_status as dt_status_cham, cham.type_cham as type_cham_cham, cham.suporte_id as suporte_id_cham
+                $listUsers->fullRead("SELECT cham.id as id_cham, princ.logo as logo_princ, cham.empresa_id as empresa_id_cham, clie.nome_fantasia as nome_fantasia_emp, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
+                                    cham.dt_cham as dt_cham_cham, sta.name AS name_sta_cham, cham.dt_status as dt_status_cham, cham.type_cham as type_cham_cham, user.name as name_user
                                     FROM adms_cham AS cham
+                                    INNER JOIN adms_emp_principal AS princ ON princ.id=cham.empresa_id 
                                     INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id 
-                                    INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id  
-                                    WHERE (empresa_id= :empresa_id) AND (type_cham = :type_cham) AND (dt_cham BETWEEN :search_date_start AND :search_date_end) AND (suporte_id= :suporte_id)", 
+                                    INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id
+                                    INNER JOIN adms_users AS user ON user.id=cham.suporte_id   
+                                    WHERE (cham.empresa_id= :empresa_id) AND (cham.type_cham = :type_cham) AND (cham.dt_cham BETWEEN :search_date_start AND :search_date_end) AND (cham.suporte_id= :suporte_id)", 
                                     "empresa_id={$_SESSION['emp_user']}&type_cham={$this->searchTipo}&search_date_start={$this->searchDateStart}&search_date_end={$this->searchDateEnd}&suporte_id={$this->searchTecSuporte}");
 
                 $this->resultBd = $listUsers->getResult();
@@ -1621,13 +1678,13 @@ class CpmsRelatListCham
             }
 
             $listUsers = new \App\adms\Models\helper\AdmsRead();
-            $listUsers->fullRead(
-                "SELECT  cham.id as id_cham, emp.nome_fantasia as nome_fantasia_emp, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham,
-            usr.name AS name_usr, usr.tel_1 as tel_1_usr, cham.dt_cham, sta.name AS name_sta, dt_status, cham.type_cham  
-            FROM adms_cham AS cham
-            INNER JOIN adms_empresa AS emp ON emp.id=cham.empresa_id 
-            INNER JOIN adms_users AS usr ON usr.id=cham.usuario_id 
-            INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id  
+            $listUsers->fullRead("SELECT cham.id as id_cham, princ.logo as logo_princ, cham.empresa_id as empresa_id_cham, clie.nome_fantasia as nome_fantasia_emp, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
+                                    cham.dt_cham as dt_cham_cham, sta.name AS name_sta_cham, cham.dt_status as dt_status_cham, cham.type_cham as type_cham_cham, user.name as name_user
+                                    FROM adms_cham AS cham
+                                    INNER JOIN adms_emp_principal AS princ ON princ.id=cham.empresa_id 
+                                    INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id 
+                                    INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id
+                                    INNER JOIN adms_users AS user ON user.id=cham.suporte_id    
             WHERE cham.empresa_id= :empresa_id AND cham.status_id= :status_id AND cham.type_cham = :type_cham AND cham.dt_cham BETWEEN :search_date_start AND :search_date_end
             ORDER BY cham.dt_cham ASC",
                 "empresa_id={$this->searchEmpresaValue}&status_id={$this->searchStatusValue}&type_cham={$this->searchTipoValue}&search_date_start={$this->searchDateStart}&search_date_end={$this->searchDateEnd}"
@@ -1669,12 +1726,14 @@ class CpmsRelatListCham
                 }
 
                 $listUsers = new \App\adms\Models\helper\AdmsRead();
-                $listUsers->fullRead("SELECT cham.id as id_cham, cham.empresa_id as empresa_id_cham, clie.nome_fantasia as nome_fantasia_clie, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
-                                    cham.dt_cham as dt_cham_cham, sta.name AS name_sta_cham, cham.dt_status as dt_status_cham, cham.type_cham as type_cham_cham, cham.suporte_id as suporte_id_cham
+                $listUsers->fullRead("SELECT cham.id as id_cham, princ.logo as logo_princ, cham.empresa_id as empresa_id_cham, clie.nome_fantasia as nome_fantasia_emp, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
+                                    cham.dt_cham as dt_cham_cham, sta.name AS name_sta_cham, cham.dt_status as dt_status_cham, cham.type_cham as type_cham_cham, user.name as name_user
                                     FROM adms_cham AS cham
+                                    INNER JOIN adms_emp_principal AS princ ON princ.id=cham.empresa_id 
                                     INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id 
-                                    INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id  
-                                    WHERE (empresa_id= :empresa_id) AND (status_id= :status_id) AND (type_cham = :type_cham) AND (dt_cham BETWEEN :search_date_start AND :search_date_end) AND (suporte_id= :suporte_id)", 
+                                    INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id
+                                    INNER JOIN adms_users AS user ON user.id=cham.suporte_id   
+                                    WHERE (cham.empresa_id= :empresa_id) AND (cham.status_id= :status_id) AND (cham.type_cham = :type_cham) AND (cham.dt_cham BETWEEN :search_date_start AND :search_date_end) AND (cham.suporte_id= :suporte_id)", 
                                     "empresa_id={$_SESSION['emp_user']}&status_id={$this->searchStatus}&type_cham={$this->searchTipo}&search_date_start={$this->searchDateStart}&search_date_end={$this->searchDateEnd}&suporte_id={$this->searchTecSuporte}");
 
                 $this->resultBd = $listUsers->getResult();
@@ -1703,13 +1762,13 @@ class CpmsRelatListCham
             }
 
             $listUsers = new \App\adms\Models\helper\AdmsRead();
-            $listUsers->fullRead(
-                "SELECT  cham.id as id_cham, emp.nome_fantasia as nome_fantasia_emp, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham,
-            usr.name AS name_usr, usr.tel_1 as tel_1_usr, cham.dt_cham, sta.name AS name_sta, dt_status, cham.type_cham  
-            FROM adms_cham AS cham
-            INNER JOIN adms_empresa AS emp ON emp.id=cham.empresa_id 
-            INNER JOIN adms_users AS usr ON usr.id=cham.usuario_id 
-            INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id  
+            $listUsers->fullRead("SELECT cham.id as id_cham, princ.logo as logo_princ, cham.empresa_id as empresa_id_cham, clie.nome_fantasia as nome_fantasia_emp, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
+                                    cham.dt_cham as dt_cham_cham, sta.name AS name_sta_cham, cham.dt_status as dt_status_cham, cham.type_cham as type_cham_cham, user.name as name_user
+                                    FROM adms_cham AS cham
+                                    INNER JOIN adms_emp_principal AS princ ON princ.id=cham.empresa_id 
+                                    INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id 
+                                    INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id
+                                    INNER JOIN adms_users AS user ON user.id=cham.suporte_id  
             WHERE cham.empresa_id= :empresa_id AND cham.status_id= :status_id AND cham.type_cham = :type_cham AND cham.dt_cham BETWEEN :search_date_start AND :search_date_end
             ORDER BY cham.dt_cham ASC",
                 "empresa_id={$this->searchEmpresaValue}&status_id={$this->searchStatusValue}&type_cham={$this->searchTipoValue}&search_date_start={$this->searchDateStart}&search_date_end={$this->searchDateEnd}"
@@ -1751,11 +1810,13 @@ class CpmsRelatListCham
                 }
 
                 $listUsers = new \App\adms\Models\helper\AdmsRead();
-                $listUsers->fullRead("SELECT cham.id as id_cham, cham.empresa_id as empresa_id_cham, clie.nome_fantasia as nome_fantasia_clie, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
-                                    cham.dt_cham as dt_cham_cham, sta.name AS name_sta_cham, cham.dt_status as dt_status_cham, cham.type_cham as type_cham_cham, cham.suporte_id as suporte_id_cham
+                $listUsers->fullRead("SELECT cham.id as id_cham, princ.logo as logo_princ, cham.empresa_id as empresa_id_cham, clie.nome_fantasia as nome_fantasia_emp, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
+                                    cham.dt_cham as dt_cham_cham, sta.name AS name_sta_cham, cham.dt_status as dt_status_cham, cham.type_cham as type_cham_cham, user.name as name_user
                                     FROM adms_cham AS cham
+                                    INNER JOIN adms_emp_principal AS princ ON princ.id=cham.empresa_id 
                                     INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id 
-                                    INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id  
+                                    INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id
+                                    INNER JOIN adms_users AS user ON user.id=cham.suporte_id  
                                     WHERE (empresa_id= :empresa_id) AND (cliente_id= :cliente_id) AND (dt_cham BETWEEN :search_date_start AND :search_date_end) AND (suporte_id= :suporte_id)", 
                                     "empresa_id={$_SESSION['emp_user']}&cliente_id={$this->searchEmpresa}&search_date_start={$this->searchDateStart}&search_date_end={$this->searchDateEnd}&suporte_id={$this->searchTecSuporte}");
 
@@ -1785,13 +1846,13 @@ class CpmsRelatListCham
             }
 
             $listUsers = new \App\adms\Models\helper\AdmsRead();
-            $listUsers->fullRead(
-                "SELECT  cham.id as id_cham, emp.nome_fantasia as nome_fantasia_emp, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham,
-            usr.name AS name_usr, usr.tel_1 as tel_1_usr, cham.dt_cham, sta.name AS name_sta, dt_status, cham.type_cham  
-            FROM adms_cham AS cham
-            INNER JOIN adms_empresa AS emp ON emp.id=cham.empresa_id 
-            INNER JOIN adms_users AS usr ON usr.id=cham.usuario_id 
-            INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id  
+            $listUsers->fullRead("SELECT cham.id as id_cham, princ.logo as logo_princ, cham.empresa_id as empresa_id_cham, clie.nome_fantasia as nome_fantasia_emp, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
+                                    cham.dt_cham as dt_cham_cham, sta.name AS name_sta_cham, cham.dt_status as dt_status_cham, cham.type_cham as type_cham_cham, user.name as name_user
+                                    FROM adms_cham AS cham
+                                    INNER JOIN adms_emp_principal AS princ ON princ.id=cham.empresa_id 
+                                    INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id 
+                                    INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id
+                                    INNER JOIN adms_users AS user ON user.id=cham.suporte_id  
             WHERE cham.empresa_id= :empresa_id AND cham.status_id= :status_id AND cham.type_cham = :type_cham AND cham.dt_cham BETWEEN :search_date_start AND :search_date_end
             ORDER BY cham.dt_cham ASC",
                 "empresa_id={$this->searchEmpresaValue}&status_id={$this->searchStatusValue}&type_cham={$this->searchTipoValue}&search_date_start={$this->searchDateStart}&search_date_end={$this->searchDateEnd}"
@@ -1833,11 +1894,13 @@ class CpmsRelatListCham
                 }
 
                 $listUsers = new \App\adms\Models\helper\AdmsRead();
-                $listUsers->fullRead("SELECT cham.id as id_cham, cham.empresa_id as empresa_id_cham, clie.nome_fantasia as nome_fantasia_clie, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
-                                    cham.dt_cham as dt_cham_cham, sta.name AS name_sta_cham, cham.dt_status as dt_status_cham, cham.type_cham as type_cham_cham, cham.suporte_id as suporte_id_cham
+                $listUsers->fullRead("SELECT cham.id as id_cham, princ.logo as logo_princ, cham.empresa_id as empresa_id_cham, clie.nome_fantasia as nome_fantasia_emp, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
+                                    cham.dt_cham as dt_cham_cham, sta.name AS name_sta_cham, cham.dt_status as dt_status_cham, cham.type_cham as type_cham_cham, user.name as name_user
                                     FROM adms_cham AS cham
+                                    INNER JOIN adms_emp_principal AS princ ON princ.id=cham.empresa_id 
                                     INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id 
-                                    INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id  
+                                    INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id
+                                    INNER JOIN adms_users AS user ON user.id=cham.suporte_id   
                                     WHERE (empresa_id= :empresa_id) AND (cliente_id= :cliente_id) AND (status_id= :status_id) AND (dt_cham BETWEEN :search_date_start AND :search_date_end) AND (suporte_id= :suporte_id)", 
                                     "empresa_id={$_SESSION['emp_user']}&cliente_id={$this->searchEmpresa}&status_id={$this->searchStatus}&search_date_start={$this->searchDateStart}&search_date_end={$this->searchDateEnd}&suporte_id={$this->searchTecSuporte}");
 
@@ -1867,13 +1930,13 @@ class CpmsRelatListCham
             }
 
             $listUsers = new \App\adms\Models\helper\AdmsRead();
-            $listUsers->fullRead(
-                "SELECT  cham.id as id_cham, emp.nome_fantasia as nome_fantasia_emp, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham,
-            usr.name AS name_usr, usr.tel_1 as tel_1_usr, cham.dt_cham, sta.name AS name_sta, dt_status, cham.type_cham  
-            FROM adms_cham AS cham
-            INNER JOIN adms_empresa AS emp ON emp.id=cham.empresa_id 
-            INNER JOIN adms_users AS usr ON usr.id=cham.usuario_id 
-            INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id  
+            $listUsers->fullRead("SELECT cham.id as id_cham, princ.logo as logo_princ, cham.empresa_id as empresa_id_cham, clie.nome_fantasia as nome_fantasia_emp, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
+                                    cham.dt_cham as dt_cham_cham, sta.name AS name_sta_cham, cham.dt_status as dt_status_cham, cham.type_cham as type_cham_cham, user.name as name_user
+                                    FROM adms_cham AS cham
+                                    INNER JOIN adms_emp_principal AS princ ON princ.id=cham.empresa_id 
+                                    INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id 
+                                    INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id
+                                    INNER JOIN adms_users AS user ON user.id=cham.suporte_id   
             WHERE cham.empresa_id= :empresa_id AND cham.status_id= :status_id AND cham.type_cham = :type_cham AND cham.dt_cham BETWEEN :search_date_start AND :search_date_end
             ORDER BY cham.dt_cham ASC",
                 "empresa_id={$this->searchEmpresaValue}&status_id={$this->searchStatusValue}&type_cham={$this->searchTipoValue}&search_date_start={$this->searchDateStart}&search_date_end={$this->searchDateEnd}"
@@ -1915,11 +1978,13 @@ class CpmsRelatListCham
                 }
 
                 $listUsers = new \App\adms\Models\helper\AdmsRead();
-                $listUsers->fullRead("SELECT cham.id as id_cham, cham.empresa_id as empresa_id_cham, clie.nome_fantasia as nome_fantasia_clie, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
-                                    cham.dt_cham as dt_cham_cham, sta.name AS name_sta_cham, cham.dt_status as dt_status_cham, cham.type_cham as type_cham_cham, cham.suporte_id as suporte_id_cham
+                $listUsers->fullRead("SELECT cham.id as id_cham, princ.logo as logo_princ, cham.empresa_id as empresa_id_cham, clie.nome_fantasia as nome_fantasia_emp, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
+                                    cham.dt_cham as dt_cham_cham, sta.name AS name_sta_cham, cham.dt_status as dt_status_cham, cham.type_cham as type_cham_cham, user.name as name_user
                                     FROM adms_cham AS cham
+                                    INNER JOIN adms_emp_principal AS princ ON princ.id=cham.empresa_id 
                                     INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id 
-                                    INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id  
+                                    INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id
+                                    INNER JOIN adms_users AS user ON user.id=cham.suporte_id  
                                     WHERE (empresa_id= :empresa_id) AND (cliente_id= :cliente_id) AND (type_cham = :type_cham) AND (dt_cham BETWEEN :search_date_start AND :search_date_end) AND (suporte_id= :suporte_id)", 
                                     "empresa_id={$_SESSION['emp_user']}&cliente_id={$this->searchEmpresa}&type_cham={$this->searchTipo}&search_date_start={$this->searchDateStart}&search_date_end={$this->searchDateEnd}&suporte_id={$this->searchTecSuporte}");
 
@@ -1949,13 +2014,13 @@ class CpmsRelatListCham
             }
 
             $listUsers = new \App\adms\Models\helper\AdmsRead();
-            $listUsers->fullRead(
-                "SELECT  cham.id as id_cham, emp.nome_fantasia as nome_fantasia_emp, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham,
-            usr.name AS name_usr, usr.tel_1 as tel_1_usr, cham.dt_cham, sta.name AS name_sta, dt_status, cham.type_cham  
-            FROM adms_cham AS cham
-            INNER JOIN adms_empresa AS emp ON emp.id=cham.empresa_id 
-            INNER JOIN adms_users AS usr ON usr.id=cham.usuario_id 
-            INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id  
+            $listUsers->fullRead("SELECT cham.id as id_cham, princ.logo as logo_princ, cham.empresa_id as empresa_id_cham, clie.nome_fantasia as nome_fantasia_emp, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
+                                    cham.dt_cham as dt_cham_cham, sta.name AS name_sta_cham, cham.dt_status as dt_status_cham, cham.type_cham as type_cham_cham, user.name as name_user
+                                    FROM adms_cham AS cham
+                                    INNER JOIN adms_emp_principal AS princ ON princ.id=cham.empresa_id 
+                                    INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id 
+                                    INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id
+                                    INNER JOIN adms_users AS user ON user.id=cham.suporte_id  
             WHERE cham.empresa_id= :empresa_id AND cham.status_id= :status_id AND cham.type_cham = :type_cham AND cham.dt_cham BETWEEN :search_date_start AND :search_date_end
             ORDER BY cham.dt_cham ASC",
                 "empresa_id={$this->searchEmpresaValue}&status_id={$this->searchStatusValue}&type_cham={$this->searchTipoValue}&search_date_start={$this->searchDateStart}&search_date_end={$this->searchDateEnd}"
@@ -2020,41 +2085,55 @@ class CpmsRelatListCham
     // Função para gerar os dados para o pdf em DOMPDF
     private function generatePdf()
     {      
+        
         $total_tickets = $_SESSION['resultado'];
+        unset( $_SESSION['resultado']);
 
+        $image_clie=($this->resultBd[0]['empresa_id_cham']);
+        $logo_clie=($this->resultBd[0]['logo_princ']);
+      
         $html = "<style> table {border-collapse: collapse;width: 100%;}th, td {border: 1px solid black;padding: 2px;text-align: left;} caption{padding: 8px;text-align: center;}</style>";
-        $html .= "<img src='" . URLADM . "app/adms/assets/image/logo/contratos/grazy3.jpg width='140' alt='Logo do Cliente'> <br> <br> <br> <br>";
+        $html .= "<img src='" . URLADM . "app/adms/assets/image/logo/clientes/$image_clie/$logo_clie' width='70' alt='Logo do Cliente'";
         $html .= "<table>";
-        $html .= "<caption><b> RELATORIO DE TIKETS DOCNET HELP DESK </b>";
+        $html .= "<caption><b> RELATORIO DE TICKETS DOCNET HELP DESK </b>";
         $html .= "<caption>Total de : <b> {$total_tickets} </b> Ticket.";
         $html .= "<thead>";
         $html .= "<th>Ticket</th>";
-        $html .= "<th>Empresa</th>";
+        $html .= "<th>Cliente</th>";
         $html .= "<th>Contato</th>";
         $html .= "<th>Telefone</th>";
-        $html .= "<th>Suporte</th>";
-        $html .= "<th>Data</th>";
-        $html .= "<th>Status</th>";
+        $html .= "<th>Colaborador</th>";
+        $html .= "<th>Data Ticket</th>";
+        $html .= "<th>Status Atual</th>";
         $html .= "<th>Tipo</th>";
         $html .= "</thead>";
 
         foreach ($this->resultBd as $user) {
-            extract($user);
-            $dt_cham_formatada = date('d/m/Y', strtotime($dt_cham_cham));
+        extract($user);  
+        
             $html .= "<tbody>";
             $html .= "<td>$id_cham</td>";
-            $html .= "<td>$nome_fantasia_clie</td>";
+            $html .= "<td>$nome_fantasia_emp</td>";
             $html .= "<td>$contato_cham</td>";
             $html .= "<td>$tel_contato_cham</td>";
-            $html .= "<td>$suporte_id_cham</td>";
+            $html .= "<td>$name_user</td>";
+            $dt_cham_formatada = date('d/m/Y', strtotime($dt_cham_cham));
             $html .= "<td>$dt_cham_formatada</td>";
             $html .= "<td>$name_sta_cham</td>";
             $html .= "<td>$type_cham_cham</td>";
             $html .= "</tbody>";
         }
-        $html .= "</table>";
+        
+        $html .= "</table><br>";
+        
+        date_default_timezone_set('America/Bahia');
+        $dataGeracao = date('d/m/Y H:i:s');
+        $html .= "<caption><b> Data de emissão: $dataGeracao </b>";
 
         $generatePdf = new \App\cpms\Models\helper\CpmsGeneratePdf();
         $generatePdf->generatePdf($html);
+    
+        
     }
+      
 }

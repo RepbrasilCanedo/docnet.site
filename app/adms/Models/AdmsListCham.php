@@ -113,6 +113,7 @@ class AdmsListCham
         if (!isset($_SESSION['status_ticket'])) {
 
             if (($_SESSION['adms_access_level_id'] > 2)) {
+
                 //Se for 4 -> Cliente Administrativo ou 12 - Suporte cliente
                 if (($_SESSION['adms_access_level_id'] == 4) or ($_SESSION['adms_access_level_id'] == 12)) {
                     $pagination = new \App\adms\Models\helper\AdmsPagination(URLADM . 'list-cham/index');
@@ -139,7 +140,7 @@ class AdmsListCham
                         $this->result = false;
                     }
 
-                    //Se for 14 - Usuario final
+                //Se for 14 - Usuario final
                 } elseif ($_SESSION['adms_access_level_id'] == 14) {
 
                     $pagination = new \App\adms\Models\helper\AdmsPagination(URLADM . 'list-cham/index');
@@ -358,15 +359,14 @@ class AdmsListCham
                 $this->resultPg = $pagination->getResult();
 
                 $listCham = new \App\adms\Models\helper\AdmsRead();
-                $listCham->fullRead(
-                    "SELECT cham.id, cham.empresa_id, clie.nome_fantasia as nome_fantasia_clie, prod.name as name_prod, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
+                $listCham->fullRead("SELECT cham.id, cham.empresa_id, clie.nome_fantasia as nome_fantasia_clie, prod.name as name_prod, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
                                     cham.dt_cham, sta.name AS name_sta, dt_status, cham.type_cham  
                                     FROM adms_cham AS cham
                                     INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id 
                                     INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id                            
-                            INNER JOIN adms_produtos AS prod ON prod.id=cham.prod_id 
-                                    WHERE (empresa_id= :empresa_id) and (cham.id= :cham_id) LIMIT :limit OFFSET :offset",
-                    "empresa_id={$_SESSION['emp_user']}&cham_id={$this->searchIdValue}&limit={$this->limitResult}&offset={$pagination->getOffset()}"
+                                    INNER JOIN adms_produtos AS prod ON prod.id=cham.prod_id 
+                                    WHERE (cham.empresa_id= :empresa_id) and (cham.id= :cham_id) LIMIT :limit OFFSET :offset",
+                                    "empresa_id={$_SESSION['emp_user']}&cham_id={$this->searchIdValue}&limit={$this->limitResult}&offset={$pagination->getOffset()}"
                 );
 
                 $this->resultBd = $listCham->getResult();
@@ -384,16 +384,13 @@ class AdmsListCham
             $this->resultPg = $pagination->getResult();
 
             $listCham = new \App\adms\Models\helper\AdmsRead();
-            $listCham->fullRead(
-                "SELECT cham.id, cham.empresa_id, clie.nome_fantasia as nome_fantasia_clie, prod.name as name_prod, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
+            $listCham->fullRead("SELECT cham.id, cham.empresa_id, clie.nome_fantasia as nome_fantasia_clie, prod.name as name_prod, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
                                     cham.dt_cham, sta.name AS name_sta, dt_status, cham.type_cham  
                                     FROM adms_cham AS cham
                                     INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id 
                                     INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id                            
-                            INNER JOIN adms_produtos AS prod ON prod.id=cham.prod_id 
-                                    WHERE cham.id= :cham_id LIMIT :limit",
-                "cham_id={$this->searchIdValue}&limit=1"
-            );
+                                    INNER JOIN adms_produtos AS prod ON prod.id=cham.prod_id 
+                                    WHERE cham.id= :cham_id LIMIT :limit","cham_id={$this->searchIdValue}&limit=1");
             $this->resultBd = $listCham->getResult();
             if ($this->resultBd) {
                 $this->result = true;
@@ -483,7 +480,7 @@ class AdmsListCham
                 INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id 
                 INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id                            
                             INNER JOIN adms_produtos AS prod ON prod.id=cham.prod_id 
-                WHERE (empresa_id= :empresa_id) AND (cliente_id= :cliente_id) AND (status_id= :status_id) AND (type_cham= :type_cham) ORDER BY dt_cham DESC
+                WHERE (cham.empresa_id= :empresa_id) AND (cham.cliente_id= :cliente_id) AND (cham.status_id= :status_id) AND (cham.type_cham= :type_cham) ORDER BY dt_cham DESC
                 LIMIT :limit OFFSET :offset", "empresa_id={$_SESSION['emp_user']}&cliente_id={$this->searchEmpresaValue}&status_id={$this->searchStatusValue}&type_cham={$this->searchTipoValue}&limit={$this->limitResult}&offset={$pagination->getOffset()}");
 
                 $this->resultBd = $listCham->getResult();
@@ -548,7 +545,7 @@ class AdmsListCham
                 INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id 
                 INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id                             
                             INNER JOIN adms_produtos AS prod ON prod.id=cham.prod_id 
-                WHERE (empresa_id= :empresa_id) AND (cliente_id= :cliente_id) AND (status_id= :status_id) AND (type_cham = :type_cham) AND (dt_cham BETWEEN :search_date_start AND :search_date_end)
+                WHERE (cham.empresa_id= :empresa_id) AND (cham.cliente_id= :cliente_id) AND (cham.status_id= :status_id) AND (cham.type_cham = :type_cham) AND (cham.dt_cham BETWEEN :search_date_start AND :search_date_end)
                  ORDER BY dt_cham DESC
                 LIMIT :limit OFFSET :offset", "empresa_id={$_SESSION['emp_user']}&cliente_id={$this->searchEmpresaValue}&status_id={$this->searchStatusValue}&type_cham={$this->searchTipoValue}&search_date_start={$this->searchDateStart}&search_date_end={$this->searchDateEnd}&limit={$this->limitResult}&offset={$pagination->getOffset()}");
 
@@ -679,7 +676,7 @@ class AdmsListCham
                             INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id 
                             INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id                              
                             INNER JOIN adms_produtos AS prod ON prod.id=cham.prod_id 
-                            WHERE (empresa_id= :empresa_id) and (cham.status_id= :status_id) ORDER BY dt_cham DESC
+                            WHERE (cham.empresa_id= :empresa_id) and (cham.status_id= :status_id) ORDER BY dt_cham DESC
                             LIMIT :limit OFFSET :offset", "empresa_id={$_SESSION['emp_user']}&status_id={$this->searchStatusValue}&limit={$this->limitResult}&offset={$pagination->getOffset()}");
 
                 $this->resultBd = $listCham->getResult();
@@ -821,7 +818,7 @@ class AdmsListCham
                             INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id 
                             INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id                             
                             INNER JOIN adms_produtos AS prod ON prod.id=cham.prod_id 
-                        WHERE (cham.status_id= :status_id) AND (dt_cham BETWEEN :search_date_start AND :search_date_end) ORDER BY dt_cham DESC
+                        WHERE (cham.status_id= :status_id) AND (cham.dt_cham BETWEEN :search_date_start AND :search_date_end) ORDER BY dt_cham DESC
                         LIMIT :limit OFFSET :offset", "status_id={$this->searchStatusValue}&search_date_start={$this->searchDateStart}&search_date_end={$this->searchDateEnd}&limit={$this->limitResult}&offset={$pagination->getOffset()}");
 
             $this->resultBd = $listCham->getResult();
@@ -948,7 +945,7 @@ class AdmsListCham
                             INNER JOIN adms_clientes AS emp ON emp.id=cham.cliente_id 
                             INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id                             
                             INNER JOIN adms_produtos AS prod ON prod.id=cham.prod_id  
-                            WHERE (empresa_id= :empresa_id) and (cham.type_cham= :type_cham) ORDER BY dt_cham DESC
+                            WHERE (cham.empresa_id= :empresa_id) and (cham.type_cham= :type_cham) ORDER BY dt_cham DESC
                             LIMIT :limit OFFSET :offset", "empresa_id={$_SESSION['emp_user']}&type_cham={$this->searchTipoValue}&limit={$this->limitResult}&offset={$pagination->getOffset()}");
 
                 $this->resultBd = $listCham->getResult();
@@ -1128,7 +1125,7 @@ class AdmsListCham
                             INNER JOIN adms_clientes AS emp ON emp.id=cham.cliente_id 
                             INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id                             
                             INNER JOIN adms_produtos AS prod ON prod.id=cham.prod_id 
-                            WHERE (empresa_id= :empresa_id ) AND (cliente_id= :cliente_id ) AND (type_cham= :type_cham) ORDER BY dt_cham DESC
+                            WHERE (cham.empresa_id= :empresa_id ) AND (cham.cliente_id= :cliente_id ) AND (cham.type_cham= :type_cham) ORDER BY dt_cham DESC
                             LIMIT :limit OFFSET :offset", "empresa_id={$_SESSION['emp_user']}&cliente_id={$this->searchEmpresaValue}&type_cham={$this->searchTipoValue}&&limit={$this->limitResult}&offset={$pagination->getOffset()}");
 
                 $this->resultBd = $listCham->getResult();
@@ -1191,7 +1188,7 @@ class AdmsListCham
                             INNER JOIN adms_clientes AS emp ON emp.id=cham.cliente_id 
                             INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id                             
                             INNER JOIN adms_produtos AS prod ON prod.id=cham.prod_id 
-                            WHERE (empresa_id = :empresa_id) AND (status_id= :status_id) AND (type_cham = :type_cham) ORDER BY dt_cham DESC
+                            WHERE (cham.empresa_id = :empresa_id) AND (cham.status_id= :status_id) AND (cham.type_cham = :type_cham) ORDER BY dt_cham DESC
                             LIMIT :limit OFFSET :offset", "empresa_id={$_SESSION['emp_user']}&status_id={$this->searchStatusValue}&type_cham={$this->searchTipoValue}&limit={$this->limitResult}&offset={$pagination->getOffset()}");
 
                 $this->resultBd = $listCham->getResult();
@@ -1217,7 +1214,7 @@ class AdmsListCham
                                 INNER JOIN adms_clientes AS emp ON emp.id=cham.cliente_id 
                                 INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id                             
                             INNER JOIN adms_produtos AS prod ON prod.id=cham.prod_id 
-                            WHERE (cliente_id = :cliente_id) AND (cham.status_id= :status_id) AND (cham.type_cham= :type_cham) ORDER BY dt_cham DESC 
+                            WHERE (cham.cliente_id = :cliente_id) AND (cham.cham.status_id= :status_id) AND (cham.cham.type_cham= :type_cham) ORDER BY dt_cham DESC 
                             LIMIT :limit OFFSET :offset", "cliente_id={$_SESSION['set_clie']}&status_id={$this->searchStatusValue}&type_cham={$this->searchTipoValue}&limit={$this->limitResult}&offset={$pagination->getOffset()}");
 
                 $this->resultBd = $listCham->getResult();
@@ -1243,7 +1240,7 @@ class AdmsListCham
                             INNER JOIN adms_clientes AS emp ON emp.id=cham.cliente_id 
                             INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id                             
                             INNER JOIN adms_produtos AS prod ON prod.id=cham.prod_id 
-                            WHERE (status_id= :status_id) AND (type_cham = :type_cham) ORDER BY dt_cham DESC
+                            WHERE (cham.status_id= :status_id) AND (cham.type_cham = :type_cham) ORDER BY dt_cham DESC
                             LIMIT :limit OFFSET :offset", "status_id={$this->searchStatusValue}&type_cham={$this->searchTipoValue}&limit={$this->limitResult}&offset={$pagination->getOffset()}");
 
             $this->resultBd = $listCham->getResult();
@@ -1280,7 +1277,7 @@ class AdmsListCham
                             INNER JOIN adms_clientes AS emp ON emp.id=cham.cliente_id 
                             INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id                              
                             INNER JOIN adms_produtos AS prod ON prod.id=cham.prod_id 
-                WHERE (empresa_id = :empresa_id) AND (cliente_id = :cliente_id) AND (cham.dt_cham BETWEEN :search_date_start AND :search_date_end)
+                WHERE (cham.empresa_id = :empresa_id) AND (cham.cliente_id = :cliente_id) AND (cham.dt_cham BETWEEN :search_date_start AND :search_date_end)
                  ORDER BY dt_cham DESC
                 LIMIT :limit OFFSET :offset", "empresa_id={$_SESSION['emp_user']}&cliente_id={$this->searchEmpresaValue}&search_date_start={$this->searchDateStart}&search_date_end={$this->searchDateEnd}&limit={$this->limitResult}&offset={$pagination->getOffset()}");
 
@@ -1345,7 +1342,7 @@ class AdmsListCham
                             INNER JOIN adms_clientes AS emp ON emp.id=cham.cliente_id 
                             INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id                             
                             INNER JOIN adms_produtos AS prod ON prod.id=cham.prod_id  
-                            WHERE (empresa_id = :empresa_id) AND (cliente_id = :cliente_id) AND (status_id= :status_id) AND (cham.dt_cham BETWEEN :search_date_start AND :search_date_end)
+                            WHERE (cham.empresa_id = :empresa_id) AND (cham.cliente_id = :cliente_id) AND (cham.status_id= :status_id) AND (cham.dt_cham BETWEEN :search_date_start AND :search_date_end)
                              ORDER BY dt_cham DESC
                             LIMIT :limit OFFSET :offset", "empresa_id={$_SESSION['emp_user']}&cliente_id={$this->searchEmpresaValue}&status_id={$this->searchStatusValue}&search_date_start={$this->searchDateStart}&search_date_end={$this->searchDateEnd}&limit={$this->limitResult}&offset={$pagination->getOffset()}");
 
@@ -1412,7 +1409,7 @@ class AdmsListCham
                                     INNER JOIN adms_clientes AS emp ON emp.id=cham.cliente_id 
                                     INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id                              
                             INNER JOIN adms_produtos AS prod ON prod.id=cham.prod_id  
-                                    WHERE (empresa_id= :empresa_id) AND (cliente_id= :cliente_id) AND (cham.type_cham= :type_cham) AND (cham.dt_cham BETWEEN :search_date_start AND :search_date_end)
+                                    WHERE (cham.empresa_id= :empresa_id) AND (cham.cliente_id= :cliente_id) AND (cham.cham.type_cham= :type_cham) AND (cham.dt_cham BETWEEN :search_date_start AND :search_date_end)
                                      ORDER BY dt_cham DESC
                                     LIMIT :limit OFFSET :offset", "empresa_id={$_SESSION['emp_user']}&cliente_id={$this->searchEmpresaValue}&type_cham={$this->searchTipoValue}&search_date_start={$this->searchDateStart}&search_date_end={$this->searchDateEnd}&limit={$this->limitResult}&offset={$pagination->getOffset()}");
 
@@ -1477,7 +1474,7 @@ class AdmsListCham
                                     INNER JOIN adms_clientes AS emp ON emp.id=cham.cliente_id 
                                     INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id                             
                             INNER JOIN adms_produtos AS prod ON prod.id=cham.prod_id  
-                WHERE (empresa_id = :empresa_id) AND (cham.dt_cham BETWEEN :search_date_start AND :search_date_end)
+                WHERE (cham.empresa_id = :empresa_id) AND (cham.dt_cham BETWEEN :search_date_start AND :search_date_end)
                  ORDER BY dt_cham DESC
                 LIMIT :limit OFFSET :offset", "empresa_id={$_SESSION['emp_user']}&search_date_start={$this->searchDateStart}&search_date_end={$this->searchDateEnd}&limit={$this->limitResult}&offset={$pagination->getOffset()}");
 

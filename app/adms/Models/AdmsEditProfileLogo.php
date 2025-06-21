@@ -49,15 +49,14 @@ class AdmsEditProfileLogo
     {
 
         $viewLogo = new \App\adms\Models\helper\AdmsRead();
-        $viewLogo->fullRead("SELECT id, logo_clie, modified FROM adms_contr  WHERE id=:id LIMIT :limit", "id={$_SESSION['id_contrato']}&limit=1"
-        );
+        $viewLogo->fullRead("SELECT id, logo, modified FROM adms_emp_principal WHERE id=:id LIMIT :limit", "id={$_SESSION['emp_logo']}&limit=1");
 
         $this->resultBd = $viewLogo->getResult();
         if ($this->resultBd) {
             $this->result = true;
             return true;
         } else {
-            $_SESSION['msg'] = "<p class='alert-danger'>Erro: Contrato não encontrado!</p>";
+            $_SESSION['msg'] = "<p class='alert-danger'>Erro: Cliente não encontrado!</p>";
             $this->result = false;
             return false;
         }
@@ -102,6 +101,7 @@ class AdmsEditProfileLogo
     {
         $valExtImg = new \App\adms\Models\helper\AdmsValExtImg();
         $valExtImg->validateExtImg($this->dataImagem['type']);
+
         if (($this->viewProfileLogo()) and ($valExtImg->getResult())) {
             $this->upload();
         } else {
@@ -120,8 +120,9 @@ class AdmsEditProfileLogo
         $slugImg = new \App\adms\Models\helper\AdmsSlug();
         $this->nameImg = $slugImg->slug($this->dataImagem['name']);
 
-        $this->directory = "app/adms/assets/image/logo/contratos/" . $_SESSION['id_contrato'] . "/";
-
+        $this->directory = "app/adms/assets/image/logo/clientes/" . $_SESSION['emp_logo'] . "/";
+        
+        
         $uploadImgRes = new \App\adms\Models\helper\AdmsUploadImgRes();
         $uploadImgRes->upload($this->dataImagem, $this->directory, $this->nameImg, 300, 300);
 
@@ -140,19 +141,20 @@ class AdmsEditProfileLogo
      */
     private function edit(): void
     {
+        date_default_timezone_set('America/Bahia');
 
-        $this->data['logo_clie'] = $this->nameImg;
+        $this->data['logo'] = $this->nameImg;
         $this->data['modified'] = date("Y-m-d H:i:s");
 
         $upLogo = new \App\adms\Models\helper\AdmsUpdate();
-        $upLogo->exeUpdate("adms_contr", $this->data, "WHERE id=:id", "id=" . $_SESSION['id_contrato']);
+        $upLogo->exeUpdate("adms_emp_principal", $this->data, "WHERE id=:id", "id={$_SESSION['emp_logo']}");
         
         
 
         if ($upLogo->getResult()) {            
             $this->deleteImage();
         } else {
-            $_SESSION['msg'] = "<p class='alert-danger'>Erro: Imagem não editada com sucesso!</p>";
+            $_SESSION['msg'] = "<p class='alert-danger'>Erro: Logo não editada com sucesso!</p>";
             $this->result = false;
         }
     }
@@ -163,14 +165,14 @@ class AdmsEditProfileLogo
      */
     private function deleteImage(): void
     {
-        if (((!empty($this->resultBd[0]['logo_clie'])) or ($this->resultBd[0]['logo_clie'] != null)) and ($this->resultBd[0]['logo_clie'] != $this->nameImg)) {
-            $this->delImg = "app/adms/assets/image/logo/contratos/" . $_SESSION['id_contrato'] . "/" . $this->resultBd[0]['logo_clie'];
+        if (((!empty($this->resultBd[0]['logo'])) or ($this->resultBd[0]['logo'] != null)) and ($this->resultBd[0]['logo'] != $this->nameImg)) {
+            $this->delImg = "app/adms/assets/image/logo/clientes/". $_SESSION['emp_logo']. "/" . $this->resultBd[0]['logo'];
             if (file_exists($this->delImg)) {
                 unlink($this->delImg);
             }
         }
 
-        $_SESSION['msg'] = "<p class='alert-success'>Imagem editada com sucesso!</p>";
+        $_SESSION['msg'] = "<p class='alert-success'>Logo editada com sucesso!</p>";
         $this->result = true;
     }
 }

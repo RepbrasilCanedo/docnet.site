@@ -107,8 +107,9 @@ if (isset($this->data['form'])) {
                                 <label class="title-input-search">Data Final: </label>
                                 <input type="date" name="search_date_end" id="search_date_end" class="input-search" value="<?php echo $search_date_end; ?>">
                             </div>
-                            <!--4: Cliente Administrador ou tecnico do cliente-->
-                        <?php } elseif (($_SESSION['adms_access_level_id'] == 4) or ($_SESSION['adms_access_level_id'] == 12)) { ?>
+                            
+                            <!--4: Cliente Administrador ou tecnico do cliente-->                        
+                            <?php } elseif (($_SESSION['adms_access_level_id'] == 4) or ($_SESSION['adms_access_level_id'] == 12)) { ?>
 
                             <div class="column">
                                 <?php
