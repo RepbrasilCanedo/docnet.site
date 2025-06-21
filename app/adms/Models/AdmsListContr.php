@@ -87,31 +87,27 @@ class AdmsListContr
      * @param integer|null $page
      * @return void
      */
-    public function listContr(int $page = null): void
+    public function listContr(int $page): void
     {
         $this->page = (int) $page ? $page : 1;
         
-        if (($_SESSION['adms_access_level_id'] > 2) and ($_SESSION['adms_access_level_id'] <> 7)) {
+        if ($_SESSION['adms_access_level_id'] > 2) {
             
             //Se for 4 -> Cliente Administrativo e suporte cliente
             if ($_SESSION['adms_access_level_id'] == 4) {
 
                 $pagination = new \App\adms\Models\helper\AdmsPagination(URLADM . 'list-contr/index');
                 $pagination->condition($this->page, $this->limitResult);
-                $pagination->pagination("SELECT COUNT(cont.id) AS num_result FROM adms_contr cont WHERE cont.id= :cont_id", "cont_id={$_SESSION['set_Contr']}");
+                $pagination->pagination("SELECT COUNT(id) AS num_result FROM adms_contr WHERE empresa_id= :empresa_id", "empresa_id={$_SESSION['emp_user']}");
                 $this->resultPg = $pagination->getResult();
 
                 $listContr = new \App\adms\Models\helper\AdmsRead();
-                $listContr->fullRead("SELECT cont.id, emp.razao_social AS razao_social, serv.name AS servico, cont.num_cont, cont.anexo, cont.dt_term, 
-                sit.name AS situacao, typ.name AS tipo
+                $listContr->fullRead("SELECT cont.id as id_cont, cont.name as name_cont, sit.name AS situacao, emp.nome_fantasia AS nome_fantasia_emp
                 FROM adms_contr AS cont 
-                INNER JOIN adms_empresa AS emp ON emp.id=cont.clie_cont    
-                INNER JOIN adms_contr_service AS serv ON serv.id=cont.service_id   
+                INNER JOIN adms_emp_principal AS emp ON emp.id=cont.empresa_id      
                 INNER JOIN adms_contr_sit AS sit ON sit.id=cont.sit_cont   
-                INNER JOIN adms_contr_type AS typ ON typ.id=cont.tipo_cont 
-                WHERE cont.id= :cont_id  
-                ORDER BY cont.dt_term ASC
-                LIMIT :limit OFFSET :offset", "cont_id={$_SESSION['set_Contr']}&limit={$this->limitResult}&offset={$pagination->getOffset()}");
+                WHERE cont.empresa_id = :empresa_id  
+                LIMIT :limit OFFSET :offset", "empresa_id={$_SESSION['emp_user']}&limit={$this->limitResult}&offset={$pagination->getOffset()}");
 
                 $this->resultBd = $listContr->getResult();
                 if ($this->resultBd) {
@@ -128,13 +124,10 @@ class AdmsListContr
             $this->resultPg = $pagination->getResult();
 
             $listContr = new \App\adms\Models\helper\AdmsRead();
-            $listContr->fullRead("SELECT cont.id, emp.razao_social AS razao_social, serv.name AS servico, 
-            cont.num_cont, cont.anexo, cont.dt_term, sit.name AS situacao, typ.name AS tipo 
-            FROM adms_contr AS cont 
-            INNER JOIN adms_empresa AS emp ON emp.id=cont.clie_cont   
-            INNER JOIN adms_contr_service AS serv ON serv.id=cont.service_id   
-            INNER JOIN adms_contr_sit AS sit ON sit.id=cont.sit_cont   
-            INNER JOIN adms_contr_type AS typ ON typ.id=cont.tipo_cont ORDER BY razao_social ASC
+            $listContr->fullRead("SELECT cont.id as id_cont, cont.name as name_cont, sit.name AS situacao, emp.nome_fantasia AS nome_fantasia_emp
+                FROM adms_contr AS cont 
+                INNER JOIN adms_emp_principal AS emp ON emp.id=cont.empresa_id      
+                INNER JOIN adms_contr_sit AS sit ON sit.id=cont.sit_cont  
             LIMIT :limit OFFSET :offset", "limit={$this->limitResult}&offset={$pagination->getOffset()}");
 
             $this->resultBd = $listContr->getResult();
@@ -146,177 +139,6 @@ class AdmsListContr
             }
         }
     }
-
-
-    /**
-     * Metodo faz a pesquisa dos contratos na tabela adms_contr e lista as informacoes na view
-     * Recebe o paramentro "page" para que seja feita a paginacao do resultado
-     * Recebe o paramentro "search_id para que seja feita a pesquisa pelo Id
-     * Recebe o paramentro "search_type" para que seja feita a pesquisa pelo tipo do contrato
-     * Recebe o paramentro "search_serv para que seja feita a pesquisa pelo serviço do contrato
-     * Recebe o paramentro "search_emp" para que seja feita a pesquisa pela empresa do contrato
-     
-     * @param integer|null $page
-     * @param string|null $search_id
-     * @param string|null $search_type
-     * @param string|null $search_serv
-     * @param string|null $search_emp
-     * @return void
-     */
-    public function listSearchContr(int $page = null, string|null $search_id, string|null $search_type, string|null $search_serv, string|null $search_emp): void
-    {
-        $this->page = (int) $page ? $page : 1;
-
-        $this->searchId = (int) $search_id;
-        $this->searchType = (int)$search_type;
-        $this->searchServ = (int)$search_serv;
-        $this->searchEmp = (int)$search_emp;
-
-        $this->searchIdValue = $this->searchId;
-        $this->searchTypeValue = $this->searchType;
-        $this->searchServValue = $this->searchServ;
-        $this->searchEmpValue = $this->searchEmp;
-        //        var_dump($this->searchTypeValue);
-
-        if (!empty($this->searchId)){
-            $this->searchContrId();
-        } elseif (empty($this->searchId) and (!empty($this->searchType)) and (empty($this->searchServ)) and (empty($this->searchEmp))) {
-            $this->searchType();
-        } elseif (empty($this->searchId) and (empty($this->searchType)) and (!empty($this->searchServ)) and (empty($this->searchEmp))) {
-            $this->searchServ();
-        } elseif (empty($this->searchId) and (empty($this->searchType)) and (empty($this->searchServ)) and (!empty($this->searchEmp))) {
-            $this->searchEmp();
-        } else {
-            $this->listContr();
-        }
-    }
-
-    /**
-     * Metodo pesquisar pela empresa e pelo status do chamado
-     * @return void
-     */
-    public function searchContrId(): void
-    {
-        $pagination = new \App\adms\Models\helper\AdmsPagination(URLADM . 'list-contr/index');
-        $pagination->condition($this->page, $this->limitResult);
-        $pagination->pagination("SELECT COUNT(id) AS num_result FROM adms_contr  WHERE id= :search_id", "search_id={$this->searchIdValue}");
-
-        $this->resultPg = $pagination->getResult();
-
-        $listCham = new \App\adms\Models\helper\AdmsRead();
-        $listCham->fullRead("SELECT cont.id, emp.razao_social AS razao_social, serv.name AS servico, cont.num_cont, cont.dt_term, 
-            sit.name AS situacao, typ.name AS tipo, cont.anexo FROM adms_contr AS cont
-            INNER JOIN adms_empresa AS emp ON emp.id=cont.clie_cont 
-            INNER JOIN adms_contr_service AS serv ON serv.id=cont.service_id   
-            INNER JOIN adms_contr_sit AS sit ON sit.id=cont.sit_cont   
-            INNER JOIN adms_contr_type AS typ ON typ.id=cont.tipo_cont 
-            WHERE cont.id = :search_id", "search_id={$this->searchIdValue}");
-
-        $this->resultBd = $listCham->getResult();
-        if ($this->resultBd) {
-            $this->result = true;
-        } else {
-            $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum chamado encontrado!</p>";
-            $this->result = false;
-        }
-    }
-
-    /**
-     * Metodo pesquisar pela empresa e pelo status do chamado
-     * @return void
-     */
-    public function searchType(): void
-    {
-        $pagination = new \App\adms\Models\helper\AdmsPagination(URLADM . 'list-contr/index');
-        $pagination->condition($this->page, $this->limitResult);
-        $pagination->pagination("SELECT COUNT(id) AS num_result FROM adms_contr where tipo_cont= :search_type", "search_type={$this->searchTypeValue}");
-        $this->resultPg = $pagination->getResult();
-
-        $listCham = new \App\adms\Models\helper\AdmsRead();
-        $listCham->fullRead("SELECT cont.id, emp.razao_social AS razao_social, serv.name AS servico, cont.num_cont, cont.dt_term, 
-        sit.name AS situacao, typ.name AS tipo, cont.anexo FROM adms_contr AS cont
-        INNER JOIN adms_empresa AS emp ON emp.id=cont.clie_cont 
-        INNER JOIN adms_contr_service AS serv ON serv.id=cont.service_id   
-        INNER JOIN adms_contr_sit AS sit ON sit.id=cont.sit_cont   
-        INNER JOIN adms_contr_type AS typ ON typ.id=cont.tipo_cont 
-        WHERE tipo_cont= :tipo
-        LIMIT :limit OFFSET :offset", "tipo={$this->searchTypeValue}&limit={$this->limitResult}&offset={$pagination->getOffset()}");
-
-        $this->resultBd = $listCham->getResult();
-        if ($this->resultBd) {
-            $this->result = true;
-        } else {
-            $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum contrato encontrado!</p>";
-            $this->result = false;
-        }
-    }
-
-    /**
-     * Metodo pesquisar pela empresa e pelo status do chamado
-     * @return void
-     */
-    public function searchServ(): void
-    {
-        $pagination = new \App\adms\Models\helper\AdmsPagination(URLADM . 'list-contr/index', "?search_serv={$this->searchServ}");
-        $pagination->condition($this->page, $this->limitResult);
-        $pagination->pagination("SELECT COUNT(id) AS num_result FROM adms_contr where service_id= :search_serv", "search_serv={$this->searchServValue}");
-        $this->resultPg = $pagination->getResult();
-
-        $listCham = new \App\adms\Models\helper\AdmsRead();
-
-        $listCham->fullRead("SELECT cont.id, emp.razao_social AS razao_social, serv.name AS servico, cont.num_cont, cont.dt_term, 
-        sit.name AS situacao, typ.name AS tipo, cont.anexo FROM adms_contr AS cont 
-        INNER JOIN adms_empresa AS emp ON emp.id=cont.clie_cont 
-        INNER JOIN adms_contr_service AS serv ON serv.id=cont.service_id   
-        INNER JOIN adms_contr_sit AS sit ON sit.id=cont.sit_cont   
-        INNER JOIN adms_contr_type AS typ ON typ.id=cont.tipo_cont 
-        WHERE service_id= :search_serv
-        LIMIT :limit OFFSET :offset", "search_serv={$this->searchServValue}&limit={$this->limitResult}&offset={$pagination->getOffset()}");
-
-        $this->resultBd = $listCham->getResult();
-        if ($this->resultBd) {
-            $this->result = true;
-        } else {
-            $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum contrato encontrado!</p>";
-            $this->result = false;
-        }
-    }
-
-
-    /**
-     * Metodo pesquisar pela empresa e pelo status do chamado
-     * @return void
-     */
-    public function searchEmp(): void
-    {
-        $pagination = new \App\adms\Models\helper\AdmsPagination(URLADM . 'list-contr/index', "?search_emp={$this->searchEmp}");
-        $pagination->condition($this->page, $this->limitResult);
-        $pagination->pagination("SELECT COUNT(id) AS num_result FROM adms_contr WHERE clie_cont= :search_emp", "search_emp={$this->searchEmpValue}");
-        $this->resultPg = $pagination->getResult();
-
-        $listCham = new \App\adms\Models\helper\AdmsRead();
-
-        $listCham->fullRead("SELECT cont.id, emp.razao_social AS razao_social, serv.name AS servico, cont.num_cont, cont.dt_term, 
-            sit.name AS situacao, typ.name AS tipo, cont.anexo 
-            FROM adms_contr AS cont 
-            INNER JOIN adms_empresa AS emp ON emp.id=cont.clie_cont 
-            INNER JOIN adms_contr_service AS serv ON serv.id=cont.service_id   
-            INNER JOIN adms_contr_sit AS sit ON sit.id=cont.sit_cont   
-            INNER JOIN adms_contr_type AS typ ON typ.id=cont.tipo_cont 
-            WHERE clie_cont= :search_emp
-            LIMIT :limit OFFSET :offset", "search_emp={$this->searchEmpValue}&limit={$this->limitResult}&offset={$pagination->getOffset()}");
-
-        $this->resultBd = $listCham->getResult();
-
-        if ($this->resultBd) {
-            $this->result = true;
-        } else {
-            $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum contrato encontrado!</p>";
-            $this->result = false;
-        }
-    }
-
-
 
     /**
      * Metodo para pesquisar as informações que serão usadas no dropdown do formulário

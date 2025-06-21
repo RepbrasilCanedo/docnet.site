@@ -61,15 +61,12 @@ class AdmsEditContr
         $this->id = $id;
 
         $viewContr = new \App\adms\Models\helper\AdmsRead();
-        $viewContr->fullRead("SELECT cont.id, emp.nome_fantasia as nome_fantasia_emp, cont.clie_cont, 
-        serv.name AS servico, cont.num_cont, cont.dt_inicio, cont.dt_term, sit.name AS situacao, typ.name AS tipo, cont.anexo, cont.obs, cont.modified
-        FROM adms_contr AS cont 
-        INNER JOIN adms_empresa AS emp ON emp.id=cont.clie_cont  
-        INNER JOIN adms_contr_service AS serv ON serv.id=cont.service_id   
-        INNER JOIN adms_contr_sit AS sit ON sit.id=cont.sit_cont   
-        INNER JOIN adms_contr_type AS typ ON typ.id=cont.tipo_cont
-        WHERE cont.id=:id
-        LIMIT :limit", "id={$this->id}&limit=1");
+        $viewContr->fullRead("SELECT cont.id as id_cont, cont.name as name_cont, cont.empresa_id, sit.name AS situacao, emp.nome_fantasia AS nome_fantasia_emp
+                FROM adms_contr AS cont 
+                INNER JOIN adms_emp_principal AS emp ON emp.id=cont.empresa_id      
+                INNER JOIN adms_contr_sit AS sit ON sit.id=cont.sit_cont 
+                 WHERE cont.id=:id
+                LIMIT :limit", "id={$this->id}&limit=1");
 
         $this->resultBd = $viewContr->getResult();
         if ($this->resultBd) {
@@ -87,7 +84,7 @@ class AdmsEditContr
      * @param array|null $data
      * @return void
      */
-    public function update(array $data = null): void
+    public function update(array $data): void
     {
         $this->data = $data;
 
@@ -107,7 +104,7 @@ class AdmsEditContr
     private function edit(): void
     {
         date_default_timezone_set('America/Bahia');
-        $this->data['anexo'] = $_SESSION['anex_Contr'];
+
         $this->data['modified'] = date("Y-m-d H:i:s");
 
         $upContr = new \App\adms\Models\helper\AdmsUpdate();
@@ -131,17 +128,10 @@ class AdmsEditContr
     {
         $list = new \App\adms\Models\helper\AdmsRead();
 
-        $list->fullRead("SELECT id id_service, name name_service FROM adms_contr_service ORDER BY name ASC");
-        $registry['name_service'] = $list->getResult();
-
         $list->fullRead("SELECT id id_sit, name name_sit FROM adms_contr_sit ORDER BY name ASC");
         $registry['name_sit'] = $list->getResult();
 
-        $list->fullRead("SELECT id id_tipo, name name_tipo FROM adms_contr_type ORDER BY name ASC");
-        $registry['name_tipo'] = $list->getResult();
-
-        $this->listRegistryEdit = ['name_service' => $registry['name_service'],
-        'name_sit' => $registry['name_sit'], 'name_tipo' => $registry['name_tipo']];
+        $this->listRegistryEdit = ['name_sit' => $registry['name_sit']];
 
         return $this->listRegistryEdit;
     }

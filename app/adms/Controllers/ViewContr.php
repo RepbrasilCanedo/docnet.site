@@ -57,8 +57,8 @@ class ViewContr
     {
         $button = ['list_contr' => ['menu_controller' => 'list-contr', 'menu_metodo' => 'index'],
         'edit_contr' => ['menu_controller' => 'edit-contr', 'menu_metodo' => 'index'],
-        'edit_profile_logo' => ['menu_controller' => 'edit-profile-logo', 'menu_metodo' => 'index'],
         'delete_contr' => ['menu_controller' => 'delete-contr', 'menu_metodo' => 'index']];
+        
         $listBotton = new \App\adms\Models\helper\AdmsButton();
         $this->data['button'] = $listBotton->buttonPermission($button);
 

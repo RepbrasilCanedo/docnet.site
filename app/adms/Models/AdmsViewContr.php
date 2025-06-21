@@ -55,45 +55,16 @@ class AdmsViewContr
         $this->id = $id;
 
         $viewContr = new \App\adms\Models\helper\AdmsRead();
-        $viewContr->fullRead("SELECT cont.id, emp.razao_social as razao_social_emp, serv.name AS servico, cont.num_cont, cont.anexo, cont.dt_inicio, cont.dt_term, 
-                                            sit.name AS situacao, typ.name AS tipo, cont.logo_clie, cont.obs, cont.created, cont.modified
-                                            FROM adms_contr AS cont 
-                                            INNER JOIN adms_empresa AS emp ON emp.id=cont.clie_cont 
-                                            INNER JOIN adms_contr_service AS serv ON serv.id=cont.service_id   
-                                            INNER JOIN adms_contr_sit AS sit ON sit.id=cont.sit_cont   
-                                            INNER JOIN adms_contr_type AS typ ON typ.id=cont.tipo_cont
-                                            WHERE cont.id=:cont
-                                            LIMIT :limit", "cont={$this->id}&limit=1");
+        $viewContr->fullRead("SELECT cont.id as id_cont, cont.name as name_cont, sit.name AS situacao, emp.nome_fantasia AS nome_fantasia_emp, cont.created as created, cont.modified  as modified
+                FROM adms_contr AS cont 
+                INNER JOIN adms_emp_principal AS emp ON emp.id=cont.empresa_id      
+                INNER JOIN adms_contr_sit AS sit ON sit.id=cont.sit_cont   
+                WHERE cont.id = :cont_id", "cont_id={$this->id}");
+
 
         $this->resultBd = $viewContr->getResult();
         if ($this->resultBd) {
             +$this->result = true;
-        } else {
-            $_SESSION['msg'] = "<p class='alert-danger'>Erro: Contratos não encontrado!</p>";
-            $this->result = false;
-        }
-    }
-
-    /**
-     * Metodo para contar a quantidade de chamados atendidos pelo contrato
-     * Recebe o ID da página que será usado como parametro na pesquisa
-     * Retorna FALSE se houver algum erro
-     * @param integer $id
-     * @return void
-     */
-    public function viewChamContr(): void
-    {
-
-        $viewChamContr = new \App\adms\Models\helper\AdmsRead();
-        $viewChamContr->fullRead("SELECT AVG(nota_atend) FROM adms_cham WHERE contrato_id= :id_contrato",
-        "id_contrato=1");
-
-        $this->resultContCham = $viewChamContr->getResult();
-
-        echo "<pre>"; var_dump($this->resultContCham);
-        
-        if ($this->resultBd) {
-            $this->result = true;
         } else {
             $_SESSION['msg'] = "<p class='alert-danger'>Erro: Contratos não encontrado!</p>";
             $this->result = false;

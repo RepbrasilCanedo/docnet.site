@@ -45,39 +45,21 @@ class ListContr
      */
     public function index(string|int|null $page = null): void
     {
-            $this->page = (int) $page ? $page : 1;
+        $this->page = (int) $page ? $page : 1;
 
-            $this->dataForm = filter_input_array(INPUT_POST, FILTER_DEFAULT);
+        $this->dataForm = filter_input_array(INPUT_POST, FILTER_DEFAULT);
 
-            $this->searchId = filter_input(INPUT_GET, 'search_id', FILTER_DEFAULT);
-            $this->searchType = filter_input(INPUT_GET, 'search_type', FILTER_DEFAULT);
-            $this->searchServ = filter_input(INPUT_GET, 'search_serv', FILTER_DEFAULT);
-            $this->searchEmp = filter_input(INPUT_GET, 'search_emp', FILTER_DEFAULT);
-            //var_dump($this->dataForm);
 
-            $listContr = new \App\adms\Models\AdmsListContr();
+        $listContr = new \App\adms\Models\AdmsListContr();
+        $listContr->listContr($this->page);
 
-            if (!empty($this->dataForm['SendSearchContrEmp'])) {
-                $this->page = 1;
-                $listContr->listSearchContr($this->page, $this->dataForm['search_id'], $this->dataForm['search_type'], $this->dataForm['search_serv'], $this->dataForm['search_emp']);
-                $this->data['form'] = $this->dataForm;
-            } elseif ((!empty($this->searchId)) or (!empty($this->searchType)) or (!empty($this->searchServ)) or (!empty($this->searchEmp))) {
-                $listContr->listSearchContr($this->page, $this->searchId, $this->searchType, $this->searchServ, $this->searchEmp);
-                $this->data['form']['search_id'] = $this->searchId;
-                $this->data['form']['search_type'] = $this->searchType;
-                $this->data['form']['search_serv'] = $this->searchServ;
-                $this->data['form']['search_emp'] = $this->searchEmp;
-            } else {
-                $listContr->listContr($this->page);
-            }
-
-            if ($listContr->getResult()) {
-                $this->data['listContr'] = $listContr->getResultBd();
-                $this->data['pagination'] = $listContr->getResultPg();
-            } else {
-                $this->data['listContr'] = [];
-                $this->data['pagination'] = "";
-            }
+        if ($listContr->getResult()) {
+            $this->data['listContr'] = $listContr->getResultBd();
+            $this->data['pagination'] = $listContr->getResultPg();
+        } else {
+            $this->data['listContr'] = [];
+            $this->data['pagination'] = "";
+        }
 
 
         $button = [
@@ -97,7 +79,7 @@ class ListContr
         $this->data['menu'] = $listMenu->itemMenu();
 
         $this->data['pag'] = $this->page;
-        
+
         $this->data['sidebarActive'] = "list-contr";
         $loadView = new \Core\ConfigView("adms/Views/contratos/listContr", $this->data);
         $loadView->loadView();

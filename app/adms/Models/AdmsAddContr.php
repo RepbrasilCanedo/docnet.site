@@ -67,7 +67,7 @@ class AdmsAddContr
     private function add(): void
     {
         date_default_timezone_set('America/Bahia');
-        
+        $this->data['empresa_id']=$_SESSION['emp_user'];
         $this->data['created'] = date("Y-m-d H:i:s");
 
         $createContr = new \App\adms\Models\helper\AdmsCreate();
@@ -91,20 +91,10 @@ class AdmsAddContr
     {
         $list = new \App\adms\Models\helper\AdmsRead();
 
-        $list->fullRead("SELECT id clie_id, nome_fantasia fantasia_name FROM adms_empresa ORDER BY nome_fantasia ASC");
-        $registry['clie_cont'] = $list->getResult();
-
-        $list->fullRead("SELECT id id_service, name name_service FROM adms_contr_service ORDER BY name ASC");
-        $registry['name_service'] = $list->getResult();
-
         $list->fullRead("SELECT id id_sit, name name_sit FROM adms_contr_sit ORDER BY name ASC");
         $registry['name_sit'] = $list->getResult();
 
-        $list->fullRead("SELECT id id_tipo, name name_tipo FROM adms_contr_type ORDER BY name ASC");
-        $registry['name_tipo'] = $list->getResult();
-
-        $this->listRegistryAdd = ['clie_cont' => $registry['clie_cont'], 'name_service' => $registry['name_service'],
-        'name_sit' => $registry['name_sit'], 'name_tipo' => $registry['name_tipo']];
+        $this->listRegistryAdd = ['name_sit' => $registry['name_sit']];
 
         return $this->listRegistryAdd;
     }

@@ -16,14 +16,7 @@ if (!defined('D0O8C0A3N1E9D6O1')) {
                 }
                 if (!empty($this->data['viewContr'])) {
                     if ($this->data['button']['edit_contr']) {
-                        echo "<a href='" . URLADM . "edit-contr/index/" . $this->data['viewContr'][0]['id'] . "' class='btn-warning'>Editar</a> ";
-                    }
-                    if ($this->data['button']['edit_profile_logo']) {
-                        unset($_SESSION['logo_contr']);
-                        $_SESSION['logo_contr'] = $this->data['viewContr'][0]['id'];
-                        unset($_SESSION['id_contrato']);
-                        $_SESSION['id_contrato'] = $this->data['viewContr'][0]['id'];
-                        echo "<a href='" . URLADM . "edit-profile-logo/index/" . $this->data['viewContr'][0]['id'] . "' class='btn-success'>Editar Logo Cliente</a> ";
+                        echo "<a href='" . URLADM . "edit-contr/index/" . $this->data['viewContr'][0]['id_cont'] . "' class='btn-warning'>Editar</a> ";
                     }
                 }
                 ?>
@@ -44,67 +37,20 @@ if (!defined('D0O8C0A3N1E9D6O1')) {
             if (!empty($this->data['viewContr'])) {
                 extract($this->data['viewContr'][0]);
             ?>
-                <div class="view-det-adm">
-                    <span class="view-adm-title">Logo: </span>
-                    <span class="view-adm-info">
-                        <?php
-                        if ((!empty($logo_clie)) and (file_exists("app/adms/assets/image/logo/contratos/" . $id . "/$logo_clie"))) {
-                            echo "<img src='" . URLADM . "app/adms/assets/image/logo/contratos/" . $id . "/$logo_clie' width='100' height='100'><br><br>";
-                        } else {
-                            echo "<img src='" . URLADM . "app/adms/assets/image/logo/contratos/icon_user.png' width='100' height='100'><br><br>";
-                        }
-                        ?>
-                    </span>
-                </div>
 
                 <div class="view-det-adm">
                     <span class="view-adm-title">ID: </span>
-                    <span class="view-adm-info"><?php echo $id; ?></span>
+                    <span class="view-adm-info"><?php echo $id_cont; ?></span>
                 </div>
 
                 <div class="view-det-adm">
-                    <span class="view-adm-title">Cliente: </span>
-                    <span class="view-adm-info"><?php echo $razao_social_emp; ?></span>
-                </div>
-
-                <div class="view-det-adm">
-                    <span class="view-adm-title">Serviço: </span>
-                    <span class="view-adm-info"><?php echo $servico; ?></span>
-                </div>
-
-                <div class="view-det-adm">
-                    <span class="view-adm-title">Num. Contrato: </span>
-                    <span class="view-adm-info"><?php echo $num_cont; ?></span>
-                </div>
-
-                <div class="view-det-adm">
-                    <span class="view-adm-title">Contrato Anexado: </span>
-                    <span class="view-adm-info"><?php echo $anexo; ?></span>
-                </div>
-
-                <div class="view-det-adm">
-                    <span class="view-adm-title">Início:: </span>
-                    <span class="view-adm-info"><?php echo date('d/m/Y', strtotime($dt_inicio)); ?></span>
-                </div>
-
-                <div class="view-det-adm">
-                    <span class="view-adm-title">Vencimento: </span>
-                    <span class="view-adm-info"><?php echo date('d/m/Y', strtotime($dt_term)); ?></span>
+                    <span class="view-adm-title">Tipo: </span>
+                    <span class="view-adm-info"><?php echo $name_cont; ?></span>
                 </div>
 
                 <div class="view-det-adm">
                     <span class="view-adm-title">Situação: </span>
                     <span class="view-adm-info"><?php echo $situacao; ?></span>
-                </div>
-
-                <div class="view-det-adm">
-                    <span class="view-adm-title">Tipo: </span>
-                    <span class="view-adm-info"><?php echo $tipo; ?></span>
-                </div>
-
-                <div class="view-det-adm">
-                    <span class="view-adm-title">Detalhes Adicionais: </span>
-                    <span class="view-adm-info"><?php echo $obs; ?></span>
                 </div>
 
                 <div class="view-det-adm">
