@@ -4,7 +4,7 @@ if (!defined('D0O8C0A3N1E9D6O1')) {
     die("Erro: Página não encontrada<br>");
 }
 //echo '<pre>';
-//var_dump($this->data['button']);
+//var_dump($this->data);
 ?>
 <!-- Inicio do conteudo do administrativo -->
 <div class="wrapper">
@@ -30,6 +30,36 @@ if (!defined('D0O8C0A3N1E9D6O1')) {
                 if (!empty( $this->data['button']['add_hist_cham'])) {
                     echo "<a href='" . URLADM . "add-hist-cham/index/$id' class='btn-success'>Anexar Histórico</a> ";
                 }
+                if (($_SESSION['adms_access_level_id'] == 4) and ($this->data['viewCham'][0]['name_sta']=='Agendado')){ ?>
+                        <!--Modal para inserir a data do reagendamento do ticket -->
+
+                        <button type="button" class="btn btn-dark btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">Reagendar Ticket</button>
+                            <form method="post" action="">
+                            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h1 class="modal-title fs-5" id="exampleModalLabel">Data do novo atendimento do Ticket</h1>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="mb-3">
+                                                <label for="recipient-name" class="col-form-label">Dia:</label>
+                                                <input type="date" class="form-control" name="dia_cham" id="dia_cham" required>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="recipient-name" class="col-form-label">Horario:</label>
+                                                <input type="time" class="form-control" name="hr_cham" id="hr_cham" required>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="submit" name="SendReagCham" value="Reagendar_Ticket" class="btn btn-dark btn-sm"><span class="fa-solid fa-calendar-day me-2"></span>Reagendar Ticket</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                <?php } 
 
                 if ($this->data['button']['view_profile_cham']) {
                     echo "<a href='" . URLADM . "view-profile-cham/index/$id' class='btn-warning'>Anexar Imagem Erro</a> ";

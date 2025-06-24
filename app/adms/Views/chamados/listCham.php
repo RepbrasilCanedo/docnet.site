@@ -351,6 +351,7 @@ if (isset($this->data['form'])) {
 
 
                                     if (($name_sta == 'Finalizado') or ($name_sta == 'Aprovado')) {
+
                                         if (($name_sta == 'Aprovado')) {
                                             if ($this->data['button']['view_cham']) {
                                                 echo "<a href='" . URLADM . "view-cham/index/$id'>Visualizar</a>";
@@ -374,6 +375,7 @@ if (isset($this->data['form'])) {
                                     } else {
                                         if ($this->data['button']['view_cham']) {
                                             echo "<a href='" . URLADM . "view-cham/index/$id'>Visualizar</a>";
+
                                             if ($_SESSION['adms_access_level_id'] == 14){
                                                 if ($name_sta == 'Aberto') {
                                                     echo "<a href='" . URLADM . "view-profile-cham/index/$id'>Anexar Erro</a>";

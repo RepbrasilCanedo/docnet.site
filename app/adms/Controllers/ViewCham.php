@@ -32,25 +32,32 @@ class ViewCham
     public function index(int|string|null $id = null): void
     {
         $this->dataForm = filter_input_array(INPUT_POST, FILTER_DEFAULT);
+        $this->id = (int) $id;
 
-        if (!empty($id)) {
-            $this->id = (int) $id;
-            $viewCham = new \App\adms\Models\AdmsViewCham();
-            $viewCham->viewCham($this->id);
+                if (!empty($this->dataForm['SendReagCham'])) {
+                    unset($this->dataForm['SendReagCham']);  
+                    $editCham = new \App\adms\Models\AdmsViewCham();
+                    $editCham->editReag($this->dataForm, $this->id);
+                } else {
+                    if (!empty($id)) {
+                        $this->id = (int) $id;
+                        $viewCham = new \App\adms\Models\AdmsViewCham();
+                        $viewCham->viewCham($this->id);
 
-            if ($viewCham->getResult()) {
-                $this->data['viewCham'] = $viewCham->getResultBd();
-                $this->viewCham();
-            } else {
-                $urlRedirect = URLADM . "list-cham/index";
-                header("Location: $urlRedirect");
-            }
-        
-        } else {
-            $_SESSION['msg'] = "<p class='alert-danger'>Erro: Chamado não encontrado!</p>";
-            $urlRedirect = URLADM . "list-cham/index";
-            header("Location: $urlRedirect");
-        }
+                        if ($viewCham->getResult()) {
+                            $this->data['viewCham'] = $viewCham->getResultBd();
+                            $this->viewCham();
+                        } else {
+                            $urlRedirect = URLADM . "list-cham/index";
+                            header("Location: $urlRedirect");
+                        }
+                    
+                    } else {
+                        $_SESSION['msg'] = "<p class='alert-danger'>Erro: Chamado não encontrado!</p>";
+                        $urlRedirect = URLADM . "list-cham/index";
+                        header("Location: $urlRedirect");
+                    }
+                }
     }
 
     /**

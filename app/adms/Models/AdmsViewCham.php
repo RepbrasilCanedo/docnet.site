@@ -20,6 +20,10 @@ class AdmsViewCham
 
     /** @var array|null $resultBd Recebe os registros do banco de dados */
     private array|null $resultBd;
+    
+
+    /** @var array|null $data Recebe as informações do formulário */
+    private array|null $data;
 
     /** @var int|string|null $id Recebe o id do registro */
     private int|string|null $id;
@@ -75,10 +79,67 @@ class AdmsViewCham
             
         }
     }
+        /**
+     * Metodo para visualizar os detalhes do chamado
+     * Recebe o ID do chamado que será usado como parametro na pesquisa
+     * Retorna FALSE se houver algum erro.
+     * @param integer $id
+     * @return void
+     */
+    public function reagCham(array $data): void
+    {      
+        if ($this->resultBd) {   
+            //$this->editReag();
+            var_dump($this->resultBd);
+        } else {            
+            $_SESSION['msg'] = "<p class='alert-danger'>Erro: Chamado não encontrado!</p>";
+            $this->result = false;
+            
+        }
+    }
+
+    
+
+    /**
+     * Metodo envia as informações editadas para o banco de dados
+     * @return void
+     */
+    public function editReag(array $data, int $id): void
+    {
+        $this->id = $id;
+        $this->data = $data;
+        //var_dump( $this->data);
+        date_default_timezone_set('America/Bahia');
+
+        // concatena o dia junto com o horario do agendamento
+        $diaAgendado=$this->data['dia_cham'];
+        unset($this->data['dia_cham']);
+        $horaAgendado=$this->data['hr_cham'];
+        unset($this->data['hr_cham']);
+        $agendamento=$diaAgendado . " ". $horaAgendado;
+
+        $this->data['modified'] = date("Y-m-d H:i:s");        
+        $this->data['status_id'] = 13; //Reagendado
+        $this->data['dt_status'] =$agendamento;
+        //$this->data['dt_status'] = date("Y-m-d H:i:s");
+        $this->data['suporte_id'] = $_SESSION['user_id'];
+
+        $upCham = new \App\adms\Models\helper\AdmsUpdate();
+        $upCham->exeUpdate("adms_cham", $this->data, "WHERE id=:id", "id={$this->id}");
+
+        if ($upCham->getResult()) {
+            $_SESSION['msg'] = "<p class='alert-success'>Ticket Reagendado com sucesso!</p>";
+            $urlRedirect = URLADM . "list-cham/index";
+            header("Location: $urlRedirect");
+            $this->result = true;
+        } else {
+            $_SESSION['msg'] = "<p class='alert-danger'>Erro: Ticket não Reagendado com sucesso!</p>";
+            $this->result = false;
+        }
+    }
 
     public function listTable() : array
-    {
-        
+    {       
 
         $listTable = new \App\adms\Models\helper\AdmsRead();
         $listTable->fullRead("SELECT hist.id as id_hist, hist.status, hist.dt_status, hist.cham_id, usr.name as name_usr_hist, hist.obs 
