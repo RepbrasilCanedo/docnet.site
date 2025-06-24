@@ -32,9 +32,8 @@ class AddHistCham
     public function index(): void
     {
         $this->dataForm = filter_input_array(INPUT_POST, FILTER_DEFAULT);        
-
-        if(!empty($this->dataForm['SendAddHistCham'])){
-            //var_dump($this->dataForm);
+        
+        if(!empty($this->dataForm['SendAddHistCham'])){            
             unset($this->dataForm['SendAddHistCham']);
             $createHistCham= new \App\adms\Models\AdmsAddHistCham();
             $createHistCham->create($this->dataForm);

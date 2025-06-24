@@ -43,7 +43,7 @@ class EditCham
         $this->dataForm = filter_input_array(INPUT_POST, FILTER_DEFAULT);
 
         // carregar pagina inicial do atendimento do chamado "Iniciar Atendimento"
-        if ((!empty($id)) and (empty($this->dataForm['SendInicCham'])) and (empty($this->dataForm['SendPausCham'])) and (empty($this->dataForm['SendPausCom'])) and (empty($this->dataForm['SendFinaCham'])) and (empty($this->dataForm['SendPendCham'])) and (empty($this->dataForm['SendAguarCham']))) {
+        if ((!empty($id)) and (empty($this->dataForm['SendInicCham'])) and (empty($this->dataForm['SendReagCham'])) and (empty($this->dataForm['SendPausCham'])) and (empty($this->dataForm['SendPausCom'])) and (empty($this->dataForm['SendFinaCham'])) and (empty($this->dataForm['SendPendCham'])) and (empty($this->dataForm['SendAguarCham']))) {
             $this->id = (int) $id;
             $viewCham = new \App\adms\Models\AdmsEditCham();
             $viewCham->viewCham($this->id);
@@ -66,7 +66,7 @@ class EditCham
      */
     private function viewEditCham(): void
     {
-        if (($_SESSION['adms_access_level_id'] > 1) and ($_SESSION['adms_access_level_id'] <> 7)) {
+        if ($_SESSION['adms_access_level_id'] > 2) {
             $button = [
                 'list_cham' => ['menu_controller' => 'list-cham', 'menu_metodo' => 'index'],
                 'view_cham' => ['menu_controller' => 'view-cham', 'menu_metodo' => 'index']
@@ -106,7 +106,7 @@ class EditCham
     {
 
 
-        if (!empty($this->dataForm['SendEditHist']) and (empty($this->dataForm['SendInicCham'])) and (empty($this->dataForm['SendPausCham'])) and (empty($this->dataForm['SendPausCom'])) and (empty($this->dataForm['SendPendCham'])) and (empty($this->dataForm['SendAguarCham'])) and (empty($this->dataForm['SendFinaCham']))) {
+        if (!empty($this->dataForm['SendEditHist']) and (empty($this->dataForm['SendReagCham'])) and (empty($this->dataForm['SendInicCham'])) and (empty($this->dataForm['SendPausCham'])) and (empty($this->dataForm['SendPausCom'])) and (empty($this->dataForm['SendPendCham'])) and (empty($this->dataForm['SendAguarCham'])) and (empty($this->dataForm['SendFinaCham']))) {
             unset($this->dataForm['SendEditHist']);
 
             //Cadastra o Histórico Pausado
@@ -131,8 +131,34 @@ class EditCham
                 $this->viewEditCham();
             }
 
+        //xxxxxxxxxxxxxxxxx Reagendar o Ticket
+        } elseif (empty($this->dataForm['SendEditHist']) and (!empty($this->dataForm['SendReagCham'])) and (empty($this->dataForm['SendInicCham'])) and (empty($this->dataForm['SendPausCham'])) and (empty($this->dataForm['SendPausCom'])) and (empty($this->dataForm['SendPendCham'])) and (empty($this->dataForm['SendAguarCham'])) and (empty($this->dataForm['SendFinaCham']))) {
+            unset($this->dataForm['SendReagCham']);
+
+            //Cadastra o Histórico do chamado Inicializado
+            $editHistCham = new \App\adms\Models\AdmsEditCham();
+            $editHistCham->addHistChamReag();
+
+            if ($editHistCham->getResult()) {
+
+                $editCham = new \App\adms\Models\AdmsEditCham();
+                $editCham->updateReag($this->dataForm);
+
+                if ($editCham->getResult()) {
+                    $urlRedirect = URLADM . "edit-cham/index/" . $this->dataForm['id'];
+                    header("Location: $urlRedirect");
+                } else {
+                    $this->data['form'] = $this->dataForm;
+                    $this->viewEditCham();
+                }
+            } else {
+                $_SESSION['msg'] = "<p class='alert-danger'>Erro: Histórico não cadastrado!</p>";
+                $this->data['form'] = $this->dataForm;
+                $this->viewEditCham();
+            }
+
         //xxxxxxxxxxxxxxxxx Inicializa o chamado
-        } elseif (!empty($this->dataForm['SendInicCham']) and (empty($this->dataForm['SendPausCham'])) and (empty($this->dataForm['SendPausCom'])) and (empty($this->dataForm['SendPendCham'])) and (empty($this->dataForm['SendAguarCham'])) and (empty($this->dataForm['SendFinaCham']))) {
+        } elseif (!empty($this->dataForm['SendInicCham']) and (empty($this->dataForm['SendReagCham'])) and  (empty($this->dataForm['SendPausCham'])) and (empty($this->dataForm['SendPausCom'])) and (empty($this->dataForm['SendPendCham'])) and (empty($this->dataForm['SendAguarCham'])) and (empty($this->dataForm['SendFinaCham']))) {
             unset($this->dataForm['SendInicCham']);
 
             //Cadastra o Histórico do chamado Inicializado
@@ -158,7 +184,7 @@ class EditCham
             }
 
         //xxxxxxxxxxxxxxxxxPausar o chamado
-        } elseif (empty($this->dataForm['SendInicCham']) and (!empty($this->dataForm['SendPausCham'])) and (empty($this->dataForm['SendPausCom'])) and (empty($this->dataForm['SendPendCham'])) and (empty($this->dataForm['SendAguarCham'])) and (empty($this->dataForm['SendFinaCham']))) {
+        } elseif (empty($this->dataForm['SendInicCham']) and (empty($this->dataForm['SendReagCham'])) and  (!empty($this->dataForm['SendPausCham'])) and (empty($this->dataForm['SendPausCom'])) and (empty($this->dataForm['SendPendCham'])) and (empty($this->dataForm['SendAguarCham'])) and (empty($this->dataForm['SendFinaCham']))) {
             unset($this->dataForm['SendPausCham']);
 
             $editCham = new \App\adms\Models\AdmsEditCham();
@@ -173,7 +199,7 @@ class EditCham
             }
 
         //xxxxxxxxxxxxxxxxxPausar para aguardar comercial
-        } elseif (empty($this->dataForm['SendInicCham']) and (empty($this->dataForm['SendPausCham'])) and (!empty($this->dataForm['SendPausCom'])) and (empty($this->dataForm['SendPendCham'])) and (empty($this->dataForm['SendAguarCham'])) and (empty($this->dataForm['SendFinaCham']))) {
+        } elseif (empty($this->dataForm['SendInicCham']) and (empty($this->dataForm['SendReagCham'])) and  (empty($this->dataForm['SendPausCham'])) and (!empty($this->dataForm['SendPausCom'])) and (empty($this->dataForm['SendPendCham'])) and (empty($this->dataForm['SendAguarCham'])) and (empty($this->dataForm['SendFinaCham']))) {
             unset($this->dataForm['SendPausCom']);
 
             $editCham = new \App\adms\Models\AdmsEditCham();
@@ -188,7 +214,7 @@ class EditCham
             }
 
          //xxxxxxxxxxxxxxxxx Pausar para aguarda cliente
-        } elseif (empty($this->dataForm['SendInicCham']) and (empty($this->dataForm['SendPausCham'])) and (empty($this->dataForm['SendPausCom'])) and (!empty($this->dataForm['SendPendCham'])) and (empty($this->dataForm['SendAguarCham'])) and (empty($this->dataForm['SendFinaCham']))) {
+        } elseif (empty($this->dataForm['SendInicCham']) and (empty($this->dataForm['SendReagCham'])) and  (empty($this->dataForm['SendPausCham'])) and (empty($this->dataForm['SendPausCom'])) and (!empty($this->dataForm['SendPendCham'])) and (empty($this->dataForm['SendAguarCham'])) and (empty($this->dataForm['SendFinaCham']))) {
             unset($this->dataForm['SendPendCham']);
 
             $updatePend = new \App\adms\Models\AdmsEditCham();
@@ -203,7 +229,7 @@ class EditCham
             }
 
             //xxxxxxxxxxxxxxxxx Pausar para aguarda outros
-           } elseif (empty($this->dataForm['SendInicCham']) and (empty($this->dataForm['SendPausCham'])) and (empty($this->dataForm['SendPausCom'])) and (empty($this->dataForm['SendPendCham'])) and (!empty($this->dataForm['SendAguarCham'])) and (empty($this->dataForm['SendFinaCham']))) {
+           } elseif (empty($this->dataForm['SendInicCham']) and (empty($this->dataForm['SendReagCham'])) and  (empty($this->dataForm['SendPausCham'])) and (empty($this->dataForm['SendPausCom'])) and (empty($this->dataForm['SendPendCham'])) and (!empty($this->dataForm['SendAguarCham'])) and (empty($this->dataForm['SendFinaCham']))) {
                 unset($this->dataForm['SendAguarCham']);
                
                $updateAguar = new \App\adms\Models\AdmsEditCham();
@@ -218,7 +244,7 @@ class EditCham
                }
 
         //xxxxxxxxxxxxxxxxx Finalizar o chamado
-        } elseif (empty($this->dataForm['SendInicCham']) and (empty($this->dataForm['SendPausCham'])) and (empty($this->dataForm['SendPausCom'])) and (empty($this->dataForm['SendPendCham'])) and (empty($this->dataForm['SendAguarCham'])) and (!empty($this->dataForm['SendFinaCham']))) {
+        } elseif (empty($this->dataForm['SendInicCham']) and (empty($this->dataForm['SendReagCham'])) and  (empty($this->dataForm['SendPausCham'])) and (empty($this->dataForm['SendPausCom'])) and (empty($this->dataForm['SendPendCham'])) and (empty($this->dataForm['SendAguarCham'])) and (!empty($this->dataForm['SendFinaCham']))) {
             unset($this->dataForm['SendFinaCham']);
 
             $editCham = new \App\adms\Models\AdmsEditCham();

@@ -68,6 +68,15 @@ class Dashboard
             $this->data['countAgend'] = false;
         }
 
+        $countReagend = new \App\adms\Models\AdmsDashboard();
+        $countReagend->countChamReagend();
+
+        if ($countReagend->getResult()) {
+            $this->data['countReagend'] = $countReagend->getResultBd();
+        } else {
+            $this->data['countReagend'] = false;
+        }
+
         $countChamAtend = new \App\adms\Models\AdmsDashboard();
         $countChamAtend->countChamAtend();
         if ($countChamAtend->getResult()) {

@@ -120,7 +120,7 @@ class AdmsDashboard
         }
     }
 
-    // Verifica a quantidade de chamados Abertos -> 9
+    // Verifica a quantidade de chamados Agendados -> 9
     public function countChamAgend(): void
     {
         // Chamados Agendados
@@ -153,6 +153,50 @@ class AdmsDashboard
             $countCham = new \App\adms\Models\helper\AdmsRead();
             $countCham->fullRead("SELECT COUNT(id) AS qnt_cham, status_id 
                                     FROM adms_cham WHERE status_id= :status_id ", "status_id=9");
+
+            $this->resultBd = $countCham->getResult();
+            if ($this->resultBd) {
+                $this->result = true;
+            } else {
+                $this->result = false;
+            }
+        }
+    }
+
+    // Verifica a quantidade de chamados Reagendados -> 13
+    public function countChamReagend(): void
+    {
+        if ($_SESSION['adms_access_level_id'] > 2) {
+            //Se for 4 - Cliente Administrativo ou Cliente Suporte
+            if (($_SESSION['adms_access_level_id'] == 4) or ($_SESSION['adms_access_level_id'] == 12)){
+                $countCham = new \App\adms\Models\helper\AdmsRead();
+                $countCham->fullRead("SELECT COUNT(id) AS qnt_cham, status_id, empresa_id FROM adms_cham WHERE status_id= :status_id and empresa_id = :empresa", 
+                "status_id=13&empresa={$_SESSION['emp_user']}");
+                
+                $this->resultBd = $countCham->getResult();
+
+                if ($this->resultBd) {
+                    $this->result = true;
+                } else {
+                    $this->result = false;
+                }
+                //Se for 14 - Cliente final
+            } elseif ($_SESSION['adms_access_level_id'] == 14) {
+                $countCham = new \App\adms\Models\helper\AdmsRead();
+                $countCham->fullRead("SELECT COUNT(id) AS qnt_cham, status_id FROM adms_cham WHERE status_id= :status_id and cliente_id= :id_cliente", 
+                "status_id=13&id_cliente={$_SESSION['set_clie']}");
+
+                $this->resultBd = $countCham->getResult();
+                if ($this->resultBd) {
+                    $this->result = true;
+                } else {
+                    $this->result = false;
+                }
+            }
+        } else {
+            $countCham = new \App\adms\Models\helper\AdmsRead();
+            $countCham->fullRead("SELECT COUNT(id) AS qnt_cham, status_id 
+                                    FROM adms_cham WHERE status_id= :status_id ", "status_id=13");
 
             $this->resultBd = $countCham->getResult();
             if ($this->resultBd) {

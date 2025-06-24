@@ -44,7 +44,7 @@ class AdmsAddHistCham
     public function create(array $data)
     {
         $this->data = $data;
-        echo "<pre>"; var_dump($this->data);
+        //echo "<pre>"; var_dump($this->data);
 
         $valEmptyField = new \App\adms\Models\helper\AdmsValEmptyField();
         $valEmptyField->valField($this->data);

@@ -58,6 +58,21 @@ unset($_SESSION["status_chamado"]);
             <h6>Tickets</h6>
             <span>
                 <?php
+                if (!empty($this->data['countReagend'])) { ?>
+                    <h5><?= $this->data['countReagend'][0]['qnt_cham'] ?></h5>
+                <?php } ?>
+            </span>
+            <?php if(($this->data['countReagend'][0]['qnt_cham'] > 0) and ($this->data['countReagend'][0]['status_id'] == 13)) {?>
+                <h6><a href="<?php echo URLADM; ?>list-cham/index?status_ticket=13">Reagendados</a></h6>
+            <?php } else { ?>
+                <h6>Reagendados</h6>
+            <?php }?>
+        </div>
+
+        <div class="box">
+            <h6>Tickets</h6>
+            <span>
+                <?php
                 if (!empty($this->data['countChamAtend'])) { ?>
                     <h5><?= $this->data['countChamAtend'][0]['qnt_cham_atend'] ?></h5>
                 <?php } ?>

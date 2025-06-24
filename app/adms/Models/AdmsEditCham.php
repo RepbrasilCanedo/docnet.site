@@ -116,6 +116,27 @@ class AdmsEditCham
             $this->result = false;
         }
     }
+
+    /**
+     * Metodo recebe como parametro a informação que será editada
+     * Instancia o helper AdmsValEmptyField para validar os campos do formulário
+     * Chama a função edit para enviar as informações para o banco de dados
+     * @param array|null $data
+     * @return void
+     */
+    public function updateReag(array $data): void
+    {
+        $this->data = $data;
+
+        $valEmptyField = new \App\adms\Models\helper\AdmsValEmptyField();
+        $valEmptyField->valField($this->data);
+        if ($valEmptyField->getResult()) {
+            $this->editReag();
+        } else {
+            $this->result = false;
+        }
+    }
+    
     /**
      * Metodo recebe como parametro a informação que será editada
      * Instancia o helper AdmsValEmptyField para validar os campos do formulário
@@ -242,6 +263,38 @@ class AdmsEditCham
 
         if ($createHistCham->getResult()) {
             $_SESSION['msg'] = "<p class='alert-success'>Historico Cadastrado com sucesso cadastrado com sucesso!</p>";
+            $this->result = true;
+        } else {
+            $_SESSION['msg'] = "<p class='alert-danger'>Erro: Hitórico não cadastrado com sucesso!</p>";
+            $this->result = false;
+        }
+    }
+
+    /** 
+     * Reagendar o data do ticket
+     * Retorna TRUE quando Reagendar o data do ticket
+     * Retorna FALSE quando não Reagendar o data do ticket
+     * 
+     * @return void
+     */
+    public function addHistChamReag(): void
+    {
+
+        date_default_timezone_set('America/Bahia');
+
+        $this->data['status'] = 'Reagendado';
+        $this->data['dt_status'] = date("Y-m-d H:i:s");
+        $this->data['cham_id'] = $_SESSION['set_cham'];
+        $this->data['usr_id'] = $_SESSION['user_id'];
+        $this->data['obs'] = "Reagendado as " . date("H:i:s") . " hs." . " do dia " . date("d-m-Y");
+        $this->data['created'] = date("Y-m-d H:i:s");
+
+
+        $createHistCham = new \App\adms\Models\helper\AdmsCreate();
+        $createHistCham->exeCreate("adms_cham_hist", $this->data);
+
+        if ($createHistCham->getResult()) {
+            $_SESSION['msg'] = "<p class='alert-success'>Historico Cadastrado com sucesso!</p>";
             $this->result = true;
         } else {
             $_SESSION['msg'] = "<p class='alert-danger'>Erro: Hitórico não cadastrado com sucesso!</p>";
@@ -435,6 +488,7 @@ class AdmsEditCham
     private function editPausa(): void
     {
         date_default_timezone_set('America/Bahia');
+
         $this->data['modified'] = date("Y-m-d H:i:s");
         $this->data['status_id'] = 5; //Pausado
         $this->data['dt_status'] = date("Y-m-d H:i:s");
@@ -448,6 +502,39 @@ class AdmsEditCham
             $this->result = true;
         } else {
             $_SESSION['msg'] = "<p class='alert-danger'>Erro: Chamado não Pausado com sucesso!</p>";
+            $this->result = false;
+        }
+    }
+
+    /**
+     * Metodo envia as informações editadas para o banco de dados
+     * @return void
+     */
+    private function editReag(): void
+    {
+        date_default_timezone_set('America/Bahia');
+
+        // concatena o dia junto com o horario do agendamento
+        $diaAgendado=$this->data['dia_cham'];
+        unset($this->data['dia_cham']);
+        $horaAgendado=$this->data['hr_cham'];
+        unset($this->data['hr_cham']);
+        $agendamento=$diaAgendado . " ". $horaAgendado;
+
+        $this->data['modified'] = date("Y-m-d H:i:s");        
+        $this->data['status_id'] = 13; //Reagendado
+        $this->data['dt_status'] =$agendamento;
+        //$this->data['dt_status'] = date("Y-m-d H:i:s");
+        $this->data['suporte_id'] = $_SESSION['user_id'];
+
+        $upCham = new \App\adms\Models\helper\AdmsUpdate();
+        $upCham->exeUpdate("adms_cham", $this->data, "WHERE id=:id", "id={$this->data['id']}");
+
+        if ($upCham->getResult()) {
+            $_SESSION['msg'] = "<p class='alert-success'>Chamado Reagendado com sucesso!</p>";
+            $this->result = true;
+        } else {
+            $_SESSION['msg'] = "<p class='alert-danger'>Erro: Chamado não Reagendado com sucesso!</p>";
             $this->result = false;
         }
     }

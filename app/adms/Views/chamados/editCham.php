@@ -19,17 +19,17 @@ if (isset($this->data['form'][0])) {
     <div class="row">
         <div class="top-list">
             <div class="d-flex flex-wrap align-items-center mb-3">
-            <span class="me-2">Atendimento : </span>
-            <div class="top-list-center">
-                <?php
-                $name_sta = "";
-                if (isset($valorForm['name_sta'])) {
-                    $name_sta = $valorForm['name_sta'];
-                }
-                ?>
-                <h1 class="mb-3"><?php echo $name_sta; ?></h1>
+                <span class="me-2">Atendimento : </span>
+                <div class="top-list-center">
+                    <?php
+                    $name_sta = "";
+                    if (isset($valorForm['name_sta'])) {
+                        $name_sta = $valorForm['name_sta'];
+                    }
+                    ?>
+                    <h1 class="mb-3"><?php echo $name_sta; ?></h1>
 
-            </div>
+                </div>
             </div>
             <div class="top-list-right">
                 <?php
@@ -63,38 +63,124 @@ if (isset($this->data['form'][0])) {
                 <div class="col-md-12">
                     <?php if ($name_sta == 'Aberto') { ?>
                         <button type="submit" name="SendInicCham" value="Iniciar" class="btn btn-success btn-sm"><span class="fas far fa-play-circle me-2"></span>Iniciar o Atendimento</button>
-
                     <?php } elseif ($name_sta == 'Pausado') { ?>
                         <button type="submit" name="SendInicCham" value="Pausar" class="btn btn-info btn-sm"><span class="fas fa-bed me-2"></span>Reiniciar Atendimento</button>
                         <?php
                         if ($this->data['button']['list_cham']) {
+                            unset($_SESSION['set_status']);
                             $_SESSION['set_status'] = 'Pausado';
+                            echo "<a href='" . URLADM . "add-hist-cham/index/" . $_SESSION['set_cham'] . "' class='btn btn-success btn-sm'>Cadastrar Histórico</a><br><br>";
+                        }
+                        ?>
+                    <?php } elseif ($name_sta == 'Reagendado') { ?>
+                        <button type="submit" name="SendInicCham" value="Pausar" class="btn btn-info btn-sm"><span class="fas fa-bed me-2"></span>Reiniciar Atendimento</button>
+                        <?php
+                        if ($this->data['button']['list_cham']) {
+                            unset($_SESSION['set_status']);
+                            $_SESSION['set_status'] = 'Reagendado';
                             echo "<a href='" . URLADM . "add-hist-cham/index/" . $_SESSION['set_cham'] . "' class='btn btn-success btn-sm'>Cadastrar Histórico</a><br><br>";
                         }
                         ?>
 
                     <?php } elseif ($name_sta == 'Aguardando Comercial') { ?>
-                        <button type="submit" name="SendInicCham" value="Aguardar_Comercial" class="btn btn-info btn-sm"><span class="fa-solid fa-money-bill-transfer me-2"></span>Reiniciar Atendimento</button>
+                        <!--Modal para inserir a data do reagendamento do ticket -->
+                        <button type="button" class="btn btn-dark btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">Reagendar Ticket</button>
+                        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="exampleModalLabel">Data do novo atendimento do Ticket</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="mb-3">
+                                            <label for="recipient-name" class="col-form-label">Dia:</label>
+                                            <input type="date" class="form-control" name="dia_cham" id="dia_cham" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="recipient-name" class="col-form-label">Horario:</label>
+                                            <input type="time" class="form-control" name="hr_cham" id="hr_cham" required>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="submit" name="SendReagCham" value="Reagendar_Ticket" class="btn btn-dark btn-sm"><span class="fa-solid fa-calendar-day me-2"></span>Reagendar Ticket</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                         <?php
                         if ($this->data['button']['list_cham']) {
+                            unset($_SESSION['set_status']);
                             $_SESSION['set_status'] = 'Aguardando Comercial';
                             echo "<a href='" . URLADM . "add-hist-cham/index/" . $_SESSION['set_cham'] . "' class='btn btn-success btn-sm'>Cadastrar Histórico</a><br><br>";
                         }
                         ?>
 
                     <?php } elseif ($name_sta == 'Aguardando Cliente') { ?>
-                        <button type="submit" name="SendInicCham" value="Aguardar" class="btn btn-info btn-sm"><span class="fa-solid fa-truck-fast me-2"></span>Reiniciar Atendimento</button>
-                        <?php
+                        <!--Modal para inserir a data do reagendamento do ticket -->
+                        <button type="button" class="btn btn-dark btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">Reagendar Ticket</button>
+                            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h1 class="modal-title fs-5" id="exampleModalLabel">Data do novo atendimento do Ticket</h1>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="mb-3">
+                                                <label for="recipient-name" class="col-form-label">Dia:</label>
+                                                <input type="date" class="form-control" name="dia_cham" id="dia_cham" required>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="recipient-name" class="col-form-label">Horario:</label>
+                                                <input type="time" class="form-control" name="hr_cham" id="hr_cham" required>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="submit" name="SendReagCham" value="Reagendar_Ticket" class="btn btn-dark btn-sm">Reagendar Ticket</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php                        
                         if ($this->data['button']['list_cham']) {
+                            unset($_SESSION['set_status']);
                             $_SESSION['set_status'] = 'Aguardando Cliente';
                             echo "<a href='" . URLADM . "add-hist-cham/index/" . $_SESSION['set_cham'] . "' class='btn btn-success btn-sm'>Cadastrar Histórico</a><br><br>";
                         }
                         ?>
 
                     <?php } elseif ($name_sta == 'Aguardando Outros') { ?>
-                        <button type="submit" name="SendInicCham" value="Aguardando_Outros" class="btn btn-info btn-sm"><span class="fa-solid fa-hourglass me-2"></span>Reiniciar Atendimento</button>
+                        <!--Modal para inserir a data do reagendamento do ticket -->
+                        <button type="button" class="btn btn-dark btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">Reagendar Ticket</button>
+                        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="exampleModalLabel">Data do novo atendimento do Ticket</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="mb-3">
+                                            <label for="recipient-name" class="col-form-label">Dia:</label>
+                                            <input type="date" class="form-control" name="dia_cham" id="dia_cham" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="recipient-name" class="col-form-label">Horario:</label>
+                                            <input type="time" class="form-control" name="hr_cham" id="hr_cham" required>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="submit" name="SendReagCham" value="Reagendar_Ticket" class="btn btn-dark btn-sm"><span class="fa-solid fa-calendar-day me-2"></span>Reagendar Ticket</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <?php
+
                         if ($this->data['button']['list_cham']) {
+                            unset($_SESSION['set_status']);
                             $_SESSION['set_status'] = 'Aguardando Outros';
                             echo "<a href='" . URLADM . "add-hist-cham/index/" . $_SESSION['set_cham'] . "' class='btn btn-success btn-sm'>Cadastrar Histórico</a><br><br>";
                         }
@@ -103,6 +189,7 @@ if (isset($this->data['form'][0])) {
                     <?php } elseif ($name_sta == 'Finalizado') { ?>
                         <?php
                         if ($this->data['button']['list_cham']) {
+                            unset($_SESSION['set_status']);
                             $_SESSION['set_status'] = 'Finalizado';
                             echo "<a href='" . URLADM . "add-hist-cham/index/" . $_SESSION['set_cham'] . "' class='btn btn-success btn-sm'>Cadastrar Histórico</a><br><br>";
                         }
@@ -116,6 +203,7 @@ if (isset($this->data['form'][0])) {
                         <button type="submit" name="SendInicCham" value="Iniciar" class="btn btn-danger btn-sm"><span class="fas far fa-play-circle me-2"></span>Reabrir Atendimento</button>
                         <?php
                         if ($this->data['button']['list_cham']) {
+                            unset($_SESSION['set_status']);
                             $_SESSION['set_status'] = 'Reprovado';
                             echo "<a href='" . URLADM . "add-hist-cham/index/" . $_SESSION['set_cham'] . "' class='btn btn-success btn-sm'>Cadastrar Histórico</a><br><br>";
                         }
@@ -123,15 +211,11 @@ if (isset($this->data['form'][0])) {
                     <?php } else { ?>
                         <button type="submit" name="SendPausCham" value="Pausar" class="btn btn-warning btn-sm"><span class="fas fa-bed me-2"></span>Pausar Atendimento</button>
                         <button type="submit" name="SendPausCom" value="Aguardar_Comercial" class="btn btn-dark btn-sm"><span class="fa-solid fa-money-bill-transfer me-2"></span>Aguardar Comercial</button>
-                        <button type="submit" name="SendPendCham" value="Aguardar" class="btn btn-danger btn-sm"><span class="fa-solid fa-truck-fast me-2"></span>Aguardar Cliente</button>
+                        <button type="submit" name="SendPendCham" value="Aguardar_cliente" class="btn btn-danger btn-sm"><span class="fa-solid fa-truck-fast me-2"></span>Aguardar Cliente</button>
                         <button type="submit" name="SendAguarCham" value="Aguardando_Outros" class="btn btn-success btn-sm"><span class="fa-solid fa-hourglass me-2"></span>Aguardando Outros</button>
                         <button type="submit" name="SendFinaCham" value="Finalizar" class="btn btn-primary btn-sm"><span class="fas fa-check me-2"></span>Finalizar Atendimento</button>
-
-                    <?php } ?>
-
-
+                    <?php } ?>                    
                 </div>
-
 
                 <div class="row">
                     <div class="col-md-6">
@@ -284,10 +368,10 @@ if (isset($this->data['form'][0])) {
                                 if (isset($valorForm['name_prod'])) {
                                     $name_prod = $valorForm['name_prod'];
                                 }
-                                 $marca_id_prod = "";
+                                $marca_id_prod = "";
                                 if (isset($valorForm['marca_id_prod'])) {
                                     $marca_id_prod = $valorForm['marca_id_prod'];
-                                } 
+                                }
                                 $modelo_id_prod = "";
                                 if (isset($valorForm['modelo_id_prod'])) {
                                     $modelo_id_prod = $valorForm['modelo_id_prod'];
@@ -297,7 +381,11 @@ if (isset($this->data['form'][0])) {
                                     $inf_cham = $valorForm['inf_cham'];
                                 }
                                 ?>
-                                <h6><span class="fas fa-edit p-2"></span>Descrição do Problema Apontado pelo Cliente do produto: <?php echo $name_prod; echo ' - '; echo $marca_id_prod; echo ' - '; echo $modelo_id_prod;?></h6>
+                                <h6><span class="fas fa-edit p-2"></span>Descrição do Problema Apontado pelo Cliente do produto: <?php echo $name_prod;
+                                                                                                                                    echo ' - ';
+                                                                                                                                    echo $marca_id_prod;
+                                                                                                                                    echo ' - ';
+                                                                                                                                    echo $modelo_id_prod; ?></h6>
                                 <p id="descricao" class="form-control" style="height: 100px;" aria-label="With textarea"><?php echo $inf_cham; ?></p>
                             </div>
                         </div>
