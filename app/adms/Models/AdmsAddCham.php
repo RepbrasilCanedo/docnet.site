@@ -188,11 +188,12 @@ class AdmsAddCham
                 WHERE empresa= :empresa", "empresa={$_SESSION['emp_user']}");
                 $registry['cliente'] = $list->getResult();
 
-                $list->fullRead("SELECT id, name, dias, inicio_contr, cliente_id, empresa_id FROM adms_produtos 
-                WHERE empresa_id= :empresa", "empresa={$_SESSION['emp_user']}");
-                $registry['produto'] = $list->getResult();
+                $list->fullRead("SELECT prod.id as id_prod, prod.name as name_prod, prod.dias as dias, prod.inicio_contr as inicio_contr, emp.nome_fantasia as nome_fantasia_clie, prod.empresa_id FROM adms_produtos as prod
+                INNER JOIN adms_clientes AS emp ON emp.id=prod.cliente_id  
+                WHERE prod.empresa_id= :empresa order by prod.cliente_id", "empresa={$_SESSION['emp_user']}");
+                $registry['produtoemp'] = $list->getResult();
 
-                $this->listRegistryAdd = ['cliente' => $registry['cliente'],'produto' => $registry['produto']];
+                $this->listRegistryAdd = ['cliente' => $registry['cliente'],'produtoemp' => $registry['produtoemp']];
 
                 //Se for 14 - Usuario(a) final
             } elseif ($_SESSION['adms_access_level_id'] == 14) {

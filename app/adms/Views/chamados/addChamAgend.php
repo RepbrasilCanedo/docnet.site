@@ -43,12 +43,23 @@ if (isset($this->data['form'])) {
                         <label class="title-input">Contato:<span class="text-danger">*</span></label>
                         <input type="text" name="contato" id="contato" class="input-adm" placeholder="Digite o nome do contato" value="<?php $contato ?>" required>
                     </div>
+
                     <div class="column">
-                    <label class="title-input">Telefone/WhatsApp (Ex: 00 00000 0000):<span class="text-danger">*</span></label>
-                    <input type="text" name="tel_contato" id="tel_contato"  class="input-adm" placeholder="## ##### ####" value="<?php $tel_contato ?>" required>
+                        <label class="title-input">Telefone/WhatsApp (Ex: 00 00000 0000):<span class="text-danger">*</span></label>
+                        <input type="text" name="tel_contato" id="tel_contato"  class="input-adm" placeholder="## ##### ####" value="<?php $tel_contato ?>" required>
+                    </div> 
+                    
+                    <div class="column">
+                        <label class="title-input">Tipo de Atendimento:<span class="text-danger">*</span></label>
+                        <select name="type_cham" id="type_cham" class="input-adm" required>
+                            <option value="Telefonico">Telefônico</option>
+                            <option value="Remoto">Remoto</option>
+                            <option value="Presencial">Presencial</option>
+                            <option value="Outros">Outros</option>
+                        </select>
                     </div>
-                    
-                    
+                </div>                  
+                <div class="row-input">   
                     <div class="column">
                         <label class="title-input">Cliente:<span class="text-danger">*</span></label>
                         <select name="cliente_id" id="cliente_id" class="input-adm" required>
@@ -65,31 +76,41 @@ if (isset($this->data['form'])) {
                             ?>
                         </select>
                     </div>
-                    <div class="column">
-                        <label class="title-input">Tipo de Atendimento:<span class="text-danger">*</span></label>
-                        <select name="type_cham" id="type_cham" class="input-adm" required>
-                            <option value="Telefonico">Telefônico</option>
-                            <option value="Remoto">Remoto</option>
-                            <option value="Presencial">Presencial</option>
-                            <option value="Outros">Outros</option>
-                        </select>
-                    </div>
-                    <div class="column">
-                        <label class="title-input">Produto:<span class="text-danger">*</span></label>
-                        <select name="prod_id" id="prod_id" class="input-adm" required>
-                            <option value="">Selecione</option>
-                            <?php
-                            foreach ($this->data['select']['produto'] as $nome) {
-                                extract($nome);
-                                if (isset($valorForm['id']) and $valorForm['id'] == $id) {
-                                    echo "<option value='$id' selected>$name</option>";
-                                } else {
-                                    echo "<option value='$id'>$name</option>";
+                    <?php if ($_SESSION['adms_access_level_id'] == 14) {?>
+                        <div class="column">
+                            <label class="title-input">Produto:<span class="text-danger">*</span></label>
+                            <select name="prod_id" id="prod_id" class="input-adm" required>
+                                <option value="">Selecione</option>
+                                <?php
+                                foreach ($this->data['select']['produto'] as $nome) {
+                                    extract($nome);
+                                    if (isset($valorForm['id']) and $valorForm['id'] == $id) {
+                                        echo "<option value='$id' selected>$name</option>";
+                                    } else {
+                                        echo "<option value='$id'>$name</option>";
+                                    }
                                 }
-                            }
-                            ?>
-                        </select>
-                    </div>
+                                ?>
+                            </select>
+                        </div>
+                    <?php } elseif (($_SESSION['adms_access_level_id'] == 4) or ($_SESSION['adms_access_level_id'] == 12)) { ?>
+                        <div class="column">
+                            <label class="title-input">Produto:<span class="text-danger">*</span></label>
+                            <select name="prod_id" id="prod_id" class="input-adm" required>
+                                <option value="">Selecione</option>
+                                <?php
+                                foreach ($this->data['select']['produtoemp'] as $nome) {
+                                    extract($nome);
+                                    if (isset($valorForm['id_prod']) and $valorForm['id_prod'] == $id_prod) {
+                                        echo "<option value='$id_prod' selected> $nome_fantasia_clie --> $name_prod</option>";
+                                    } else {
+                                        echo "<option value='$id_prod'>$nome_fantasia_clie --> $name_prod</option>";
+                                    }
+                                }
+                                ?>
+                            </select>
+                        </div>
+                        <?php }?> 
 
                     <div class="column">
                         <?php
@@ -130,7 +151,7 @@ if (isset($this->data['form'])) {
                     </div>
                 </div>
 
-                <p class="text-danger mb-5 fs-4">* Campo Obrigatório</p>
+                <p class="text-danger mb-5 fs-6">* Campo Obrigatório</p>
 
                 <button type="submit" name="SendAddChamAgend" class="btn-success" value="Cadastrar">Cadastrar</button>
 
