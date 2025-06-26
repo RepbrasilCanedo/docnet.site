@@ -21,7 +21,8 @@ if (!defined('D0O8C0A3N1E9D6O1')) {
             <?php
             }
             ?>
-            <div class="top-list-right">
+            
+            <div class="top-list-right">                         
                 <?php
                 if ($this->data['button']['list_cham']) {
                     echo "<a href='" . URLADM . "list-cham/index' class='btn-info'>Listar</a> ";
@@ -30,11 +31,11 @@ if (!defined('D0O8C0A3N1E9D6O1')) {
                 if (!empty( $this->data['button']['add_hist_cham'])) {
                     echo "<a href='" . URLADM . "add-hist-cham/index/$id' class='btn-success'>Anexar Histórico</a> ";
                 }
-                if (($_SESSION['adms_access_level_id'] == 4) and ($this->data['viewCham'][0]['name_sta']=='Agendado')){ ?>
+                if ($_SESSION['adms_access_level_id'] == 4){ ?>
                         <!--Modal para inserir a data do reagendamento do ticket -->
-
-                        <button type="button" class="btn btn-dark btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">Reagendar Ticket</button>
-                            <form method="post" action="">
+                            <button type="button" class="btn btn-dark btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">Reagendar Ticket</button>
+                
+                           <form method="post" action="">
                             <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                 <div class="modal-dialog modal-dialog-centered">
                                     <div class="modal-content">
