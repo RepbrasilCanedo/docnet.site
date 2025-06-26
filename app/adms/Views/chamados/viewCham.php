@@ -3,8 +3,7 @@ if (!defined('D0O8C0A3N1E9D6O1')) {
     header("Location: /");
     die("Erro: Página não encontrada<br>");
 }
-//echo '<pre>';
-//var_dump($this->data);
+//echo '<pre>';var_dump($this->data);
 ?>
 <!-- Inicio do conteudo do administrativo -->
 <div class="wrapper">
@@ -116,6 +115,15 @@ if (!defined('D0O8C0A3N1E9D6O1')) {
                             <div class="view-det-adm">
                                 <span class="view-adm-title">Data: </span>
                                 <span class="view-adm-info"><?php echo date('d/m/Y H:i:s', strtotime($dt_status)); ?></span>
+                            </div>                            
+
+                            <div class="view-det-adm">
+                                <span class="view-adm-title">Colaborador: </span>
+                                <?php if(($name_sta=='Aberto') or ($name_sta=='Agendado')) {?>
+
+                                <?php } else { ?>
+                                    <span class="view-adm-info"><?php echo$name_user; ?></span>
+                                <?php }?>
                             </div>
 
                             <?php if (!empty($motivo_repr)) { ?>
@@ -134,7 +142,12 @@ if (!defined('D0O8C0A3N1E9D6O1')) {
 
                             <div class="view-det-adm">
                                 <span class="view-adm-title">Duração: </span>
-                                <span class="view-adm-info"><?php echo date('H:i:s', (strtotime($dt_cham) - strtotime($dt_status))); ?></span>
+                                <?php if(($name_sta =='Finalizado') or ($name_sta =='Aprovado')) {?>
+                                    <span class="view-adm-info"><?php echo date('H:i:s', (strtotime($dt_cham) - strtotime($dt_status))); ?></span>
+                                <?php } else { ?>
+                                    
+                                <?php }?>
+                                
                             </div>
 
                             <div class="view-det-adm">
