@@ -14,7 +14,7 @@ if (!defined('D0O8C0A3N1E9D6O1')) {
             if (!empty($this->data['viewCham'])) {
                 extract($this->data['viewCham'][0]);
             ?>
-                <span class="view-adm-title">
+                <span class="title-content">
                     <h3>Detalhes do Chamado nº: <?php echo $id; ?></h3>
                 </span>
 
@@ -34,7 +34,8 @@ if (!defined('D0O8C0A3N1E9D6O1')) {
                 if ($_SESSION['adms_access_level_id'] == 4){ ?>
                         <!--Modal para inserir a data do reagendamento do ticket -->
                             <button type="button" class="btn btn-dark btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">Reagendar Ticket</button>
-                
+ 
+                        
                            <form method="post" action="">
                             <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                 <div class="modal-dialog modal-dialog-centered">
