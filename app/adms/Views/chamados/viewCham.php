@@ -24,7 +24,7 @@ if (!defined('D0O8C0A3N1E9D6O1')) {
             <div class="top-list-right">                         
                 <?php
                 if ($this->data['button']['list_cham']) {
-                    echo "<a href='" . URLADM . "list-cham/index' class='btn-info'>Listar</a> ";
+                    echo "<a href='" . URLADM . "list-cham/index' class='btn-info aButton'>Listar</a> ";
                 }
 
                 if (!empty( $this->data['button']['add_hist_cham'])) {
@@ -32,7 +32,7 @@ if (!defined('D0O8C0A3N1E9D6O1')) {
                 }
                 if ($_SESSION['adms_access_level_id'] == 4){ ?>
                         <!--Modal para inserir a data do reagendamento do ticket -->
-                            <button type="button" class="btn btn-dark btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">Reagendar Ticket</button>
+                            <button type="button" class="btn btn-dark btn-sm mb-0" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">Reagendar Ticket</button>
  
                         
                            <form method="post" action="">
@@ -63,7 +63,7 @@ if (!defined('D0O8C0A3N1E9D6O1')) {
                 <?php } 
 
                 if ($this->data['button']['view_profile_cham']) {
-                    echo "<a href='" . URLADM . "view-profile-cham/index/$id' class='btn-warning'>Anexar Imagem Erro</a> ";
+                    echo "<a href='" . URLADM . "view-profile-cham/index/$id' class='btn-warning aButton'>Anexar Imagem Erro</a> ";
                 }
                 ?>
             </div>

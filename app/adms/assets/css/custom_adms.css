@@ -65,6 +65,9 @@ body {
     z-index: 1;
 }
 
+a{
+    text-decoration: none;
+}
 .navbar .navbar-content {
     display: flex;
     align-items: center;
@@ -436,6 +439,13 @@ body {
     font-size: 17px;
 }
 
+.top-list-right {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
 .top-list .top-list-right {
     padding: 10px 5px 5px 0;
     float: right;
@@ -608,6 +618,11 @@ body {
     cursor: pointer;
     font-size: 15px;
     transition: all .3s ease;
+}
+
+.btn-dark:hover{
+    background-color: var(--fourth-color);
+    color: #000;
 }
 
 .btn-success:hover {
@@ -944,10 +959,15 @@ select.input-search:focus{
 
 /* Botões de atendimento*/
 @media (max-width: 540px) {
-  .btn-sm {
+  .btn-sm{
     display: block;
     width: 100%;
     margin-bottom: 10px;
+  }
+
+  .aButton{
+    width: 100%;
+    text-align: center;
   }
 
   .col-md-12 {
