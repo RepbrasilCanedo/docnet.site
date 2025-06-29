@@ -78,23 +78,18 @@ if (!defined('D0O8C0A3N1E9D6O1')) {
                 </div>
 
                 <div class="view-det-adm">
-                    <span class="view-adm-title">Situação: </span>
-                    <span class="view-adm-info"><?php echo $name_sit; ?></span>
-                </div>
-
-                <div class="view-det-adm">
                     <span class="view-adm-title">Tio de Contrato: </span>
                     <span class="view-adm-info"><?php echo $name_contr_id; ?></span>
                 </div>
 
                 <div class="view-det-adm">
-                    <span class="view-adm-title">Período: </span>
-                    <span class="view-adm-info"><?php echo $dias; ?></span>
+                    <span class="view-adm-title">Vencimento Contrato: </span>
+                    <span class="view-adm-info"><?php echo date('d/m/Y', strtotime($venc_contr_prod)); ?></span>
                 </div>
 
                 <div class="view-det-adm">
-                    <span class="view-adm-title">Data Início Contrato: </span>
-                    <span class="view-adm-info"><?php echo date('d/m/Y', strtotime($inicio_contr));  ?></span>
+                    <span class="view-adm-title">Situação: </span>
+                    <span class="view-adm-info"><?php echo $name_sit; ?></span>
                 </div>
 
                 <div class="view-det-adm">

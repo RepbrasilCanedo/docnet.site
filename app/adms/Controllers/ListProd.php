@@ -42,20 +42,25 @@ class ListProd
             $this->page = (int) $page ? $page : 1;
 
             $this->dataForm = filter_input_array(INPUT_POST, FILTER_DEFAULT);
-
-            $this->searchProd = filter_input(INPUT_GET, 'search_prod', FILTER_DEFAULT);
             $this->searchEmp = filter_input(INPUT_GET, 'search_emp', FILTER_DEFAULT);
+            $this->searchProd = filter_input(INPUT_GET, 'search_prod', FILTER_DEFAULT);
 
             $listProd = new \App\adms\Models\AdmsListProd();
 
             if (!empty($this->dataForm['SendSearchProdEmp'])) {
                 $this->page = 1;
-                $listProd->listSearchProd($this->page, $this->dataForm['search_prod'], $this->dataForm['search_emp']);
+                $listProd->listSearchProd($this->page, $this->dataForm['search_emp'], $this->dataForm['search_prod']);
                 $this->data['form'] = $this->dataForm;
-            } elseif ((!empty($this->searchProd)) or (!empty($this->searchEmp))) {
-                $listProd->listSearchProd($this->page, $this->searchProd, $this->searchEmp);
-                $this->data['form']['search_prod'] = $this->searchProd;
+            } elseif ((!empty($this->searchEmp)) or (empty($this->searchStatus))) {
+                $listProd->listSearchProd($this->page, $this->searchEmp, $this->searchProd  );
                 $this->data['form']['search_emp'] = $this->searchEmp;
+            } elseif ((empty($this->searchEmp)) or (!empty($this->searchStatus))) {
+                $listProd->listSearchProd($this->page, $this->searchEmp, $this->searchProd  );
+                $this->data['form']['search_prod'] = $this->searchProd;
+            } elseif ((!empty($this->searchProd)) or (!empty($this->searchEmp))) {
+                $listProd->listSearchProd($this->page, $this->searchEmp, $this->searchProd);
+                $this->data['form']['search_emp'] = $this->searchEmp;
+                $this->data['form']['search_prod'] = $this->searchProd;
             } else {
                 $listProd->listProd($this->page);
             }

@@ -27,70 +27,71 @@ if (isset($this->data['form'])) {
         <div class="top-list">
             <form method="POST" action="">
                 <div class="row-input">
-                    <?php if ($_SESSION['adms_access_level_id'] > 2) { ?>   
-                        
-                    <div class="column">
-                        <label class="title-input-search">Cliente: </label>
-                        <select name="search_empresa" id="search_empresa" class="input-adm">
-                            <option value="">Selecione</option>
-                            <?php
-                            foreach ($this->data['select']['nome_clie'] as $nome_emp) {
-                                extract($nome_emp);
-                                if (isset($valorForm['search_empresa']) and $valorForm['search_empresa'] == $id) {
-                                    echo "<option value='$id' selected>$nome_fantasia</option>";
-                                } else {
-                                    echo "<option value='$id'>$nome_fantasia</option>";
-                                }
+                    <?php if ($_SESSION['adms_access_level_id'] > 2) { ?> 
+
+                            <div class="column">
+                                <label class="title-input-search">Cliente: </label>
+                                <select name="search_emp" id="search_emp" class="input-adm">
+                                    <option value="">Selecione</option>
+                                    <?php
+                                    foreach ($this->data['select']['nome_clie'] as $nome_emp) {
+                                        extract($nome_emp);
+                                        if (isset($valorForm['search_emp']) and $valorForm['search_emp'] == $id) {
+                                            echo "<option value='$id' selected>$nome_fantasia</option>";
+                                        } else {
+                                            echo "<option value='$id'>$nome_fantasia</option>";
+                                        }
+                                    }
+                                    ?>
+                                </select>
+                            </div> 
+
+                            <?php 
+                            $search_prod = "";
+                            if (isset($valorForm['search_prod'])) {
+                                $search_prod = $valorForm['search_prod'];
                             }
                             ?>
-                        </select>
-                    </div>                    
-                        <?php 
-                        $search_prod = "";
-                        if (isset($valorForm['search_prod'])) {
-                            $search_prod = $valorForm['search_prod'];
-                        }
-                        ?>
-                        
-                        <div class="column">
-                            <label class="title-input-search">Equipamento: </label>
-                            <input type="text" name="search_prod" id="search_prod" class="input-search" placeholder="Pesquisar pelo produto..." value="<?php echo $search_prod; ?>">
+                            
+                            <div class="column">
+                                <label class="title-input-search">Equipamento: </label>
+                                <input type="text" name="search_prod" id="search_prod" class="input-search" placeholder="Pesquisar pelo produto..." value="<?php echo $search_prod; ?>">
+                            </div>
+                            <?php
+                            $search_emp = "";
+                            if (isset($valorForm['search_emp'])) {
+                                $search_emp = $valorForm['search_emp'];
+                            }
+                            ?>
+                            
+                        <div class="column margin-top-search">
+                            <button type="submit" name="SendSearchProdEmp" class="btn-info" value="Pesquisar">Pesquisar</button>
                         </div>
-                        <?php
-                        $search_emp = "";
-                        if (isset($valorForm['search_emp'])) {
-                            $search_emp = $valorForm['search_emp'];
-                        }
-                        ?>
-                        
-                    <div class="column margin-top-search">
-                        <button type="submit" name="SendSearchProdEmp" class="btn-info" value="Pesquisar">Pesquisar</button>
-                    </div>
                     <?php } else { ?>
-                        <?php $search_prod = "";
-                        if (isset($valorForm['search_prod'])) {
-                            $search_prod = $valorForm['search_prod'];
-                        }
-                        ?>
-                        
-                        <div class="column">
-                            <label class="title-input-search">Equipamento: </label>
-                            <input type="text" name="search_prod" id="search_prod" class="input-search" placeholder="Pesquisar pelo produto..." value="<?php echo $search_prod; ?>">
+                            <?php $search_prod = "";
+                            if (isset($valorForm['search_prod'])) {
+                                $search_prod = $valorForm['search_prod'];
+                            }
+                            ?>
+                            
+                            <div class="column">
+                                <label class="title-input-search">Equipamento: </label>
+                                <input type="text" name="search_prod" id="search_prod" class="input-search" placeholder="Pesquisar pelo produto..." value="<?php echo $search_prod; ?>">
+                            </div>
+                            <?php
+                            $search_emp = "";
+                            if (isset($valorForm['search_emp'])) {
+                                $search_emp = $valorForm['search_emp'];
+                            }
+                            ?>
+                            <div class="column">
+                                <label class="title-input-search">Empresa: </label>
+                                <input type="text" name="search_emp" id="search_emp" class="input-search" placeholder="Pesquisar pela empresa..." value="<?php echo $search_emp; ?>">
+                            </div>
+                            
+                        <div class="column margin-top-search">
+                            <button type="submit" name="SendSearchProdEmp" class="btn-info" value="Pesquisar">Pesquisar</button>
                         </div>
-                        <?php
-                        $search_emp = "";
-                        if (isset($valorForm['search_emp'])) {
-                            $search_emp = $valorForm['search_emp'];
-                        }
-                        ?>
-                        <div class="column">
-                            <label class="title-input-search">Empresa: </label>
-                            <input type="text" name="search_emp" id="search_emp" class="input-search" placeholder="Pesquisar pela empresa..." value="<?php echo $search_emp; ?>">
-                        </div>
-                        
-                    <div class="column margin-top-search">
-                        <button type="submit" name="SendSearchProdEmp" class="btn-info" value="Pesquisar">Pesquisar</button>
-                    </div>
                     <?php } ?>
                 </div>
                 <div>
@@ -117,6 +118,7 @@ if (isset($this->data['form'])) {
                     <th class="list-head-content">Nome</th>
                     <th class="list-head-content table-sm-none">Tipo</th>
                     <th class="list-head-content table-sm-none">Empresa</th>
+                    <th class="list-head-content table-sm-none">Venc. Contrato</th>
                     <th class="list-head-content">Situação</th>
                     <th class="list-head-content">Ações</th>
                 </tr>
@@ -131,6 +133,7 @@ if (isset($this->data['form'])) {
                         <td class="list-body-content"><?php echo $name; ?></td>
                         <td class="list-body-content table-sm-none"><?php echo $name_type; ?></td>
                         <td class="list-body-content table-sm-none"><?php echo $nome_fantasia_clie; ?></td>
+                        <td class="list-body-content table-sm-none"><?php echo date('d/m/Y', strtotime($venc_contr_prod)); ?>
                         <td class="list-body-content"><?php echo $name_sit; ?></td>
 
                         <td class="list-body-content">

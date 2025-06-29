@@ -36,7 +36,7 @@ if (isset($this->data['form'])) {
         <div class="content-adm">
             <form method="POST" action="" id="form-add-prod" class="form-adm">
 
-                <?php if (($_SESSION['adms_access_level_id'] > 2) and ($_SESSION['adms_access_level_id'] <> 7)) { ?>
+                <?php if ($_SESSION['adms_access_level_id'] > 2) { ?>
 
                     <div class="row-input">
                         <div class="column">
@@ -156,26 +156,16 @@ if (isset($this->data['form'])) {
                         </div>
                         <div class="column">
                             <?php
-                            $dias = "";
-                            if (isset($valorForm['dias'])) {
-                                $dias = $valorForm['dias'];
+                            $venc_contr = "";
+                            if (isset($valorForm['venc_contr'])) {
+                                $venc_contr = $valorForm['venc_contr'];
                             }
                             ?>
-                            <label class="title-input">Dias Validade:<span class="text-danger">*</span></label>
-                            <input type="text" name="dias" id="dias" class="input-adm" placeholder="Observações" value="<?php echo $dias; ?>" required>
+                            <label class="title-input">Vencimento Contrato:<span class="text-danger">*</span></label>
+                            <input type=date name="venc_contr" id="venc_contr" class="input-adm" value="<?php echo $venc_contr; ?>" required>
                         </div>
                     </div>
                     <div class="row-input">
-                        <div class="column">
-                            <?php
-                            $inicio_contr = "";
-                            if (isset($valorForm['inicio_contr'])) {
-                                $inicio_contr = $valorForm['inicio_contr'];
-                            }
-                            ?>
-                            <label class="title-input">Inicio Contrato:<span class="text-danger">*</span></label>
-                            <input type=date name="inicio_contr" id="inicio_contr" class="input-adm" placeholder="Observações" value="<?php echo $inicio_contr; ?>" required>
-                        </div>
                         
                         <div class="column">
                             <?php
@@ -307,7 +297,7 @@ if (isset($this->data['form'])) {
 
                 <?php } ?>
 
-                <p class="text-danger mb-5 fs-4">* Campo Obrigatório</p>
+                <p class="text-danger mb-3 fs-6">* Campo Obrigatório</p>
 
                 <button type="submit" name="SendAddProd" class="btn-success" value="Cadastrar">Cadastrar</button>
 

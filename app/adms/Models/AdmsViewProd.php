@@ -53,7 +53,7 @@ class AdmsViewProd
 
         $viewProd = new \App\adms\Models\helper\AdmsRead();
         $viewProd->fullRead("SELECT prod.id as id_prod, prod.name as name_prod, typ.name as name_type, prod.serie as serie_prod, 
-                prod.modelo_id as name_modelo, prod.marca_id as name_mar, clie.razao_social as razao_social_clie, clie.nome_fantasia as nome_fantasia_clie, 
+                prod.modelo_id as name_modelo, prod.marca_id as name_mar, clie.razao_social as razao_social_clie, clie.nome_fantasia as nome_fantasia_clie, prod.venc_contr as venc_contr_prod, 
                 contr.name as name_contr_id, prod.dias, prod.inicio_contr, prod.inf_adicionais as inf_adicionais, sit.name as name_sit, prod.created, prod.modified 
                 FROM adms_produtos AS prod  
                 INNER JOIN adms_type_equip AS typ ON typ.id=prod.type_id 

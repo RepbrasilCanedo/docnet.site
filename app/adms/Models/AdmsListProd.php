@@ -79,7 +79,7 @@ class AdmsListProd
     {
         $this->page = (int) $page ? $page : 1;
 
-        if (($_SESSION['adms_access_level_id'] > 2) and ($_SESSION['adms_access_level_id'] <> 7)) {
+        if ($_SESSION['adms_access_level_id'] > 2) {
             //Acessa se for Cliente Adm ou Suporte do Cliente
             if (($_SESSION['adms_access_level_id'] == 4) or ($_SESSION['adms_access_level_id'] == 12)) {
                 $pagination = new \App\adms\Models\helper\AdmsPagination(URLADM . 'list-prod/index');
@@ -88,7 +88,7 @@ class AdmsListProd
                 $this->resultPg = $pagination->getResult();
 
                 $listProd = new \App\adms\Models\helper\AdmsRead();
-                $listProd->fullRead("SELECT prod.id, prod.name,  typ.name as name_type, prod.serie, prod.modelo_id, prod.marca_id, clie.nome_fantasia as nome_fantasia_clie, prod.empresa_id, prod.inf_adicionais, sit.name as name_sit
+                $listProd->fullRead("SELECT prod.id, prod.name,  typ.name as name_type, prod.serie, prod.modelo_id, prod.marca_id, clie.nome_fantasia as nome_fantasia_clie, prod.venc_contr as venc_contr_prod, prod.empresa_id, prod.inf_adicionais, sit.name as name_sit
                 FROM adms_produtos AS prod  
                 INNER JOIN adms_type_equip AS typ ON typ.id=prod.type_id 
                 INNER JOIN adms_clientes AS clie ON clie.id=prod.cliente_id 
@@ -144,25 +144,25 @@ class AdmsListProd
      */
 
 
-    public function listSearchProd(int $page, string|null $search_prod, string|null $search_emp): void
+    public function listSearchProd(int $page, string|null $search_emp, string|null $search_prod): void
     {
         $this->page = (int) $page ? $page : 1;
 
-        $this->searchProd = trim($search_prod);
-        $this->searchEmp = trim($search_emp);
+        $this->searchEmp = $search_emp;
+        $this->searchProd = $search_prod;
 
 
-        $this->searchProdValue = "%" . $this->searchProd . "%";
-        $this->searchEmpValue = $this->searchEmp . "%";
+        $this->searchEmpValue = $this->searchEmp;
+        $this->searchProdValue = $this->searchProd . "%";
 
-        if ((!empty($this->searchProdValue)) and (!empty($this->searchProdValue))) {
+        if ((!empty($this->searchEmpValue)) and (!empty($this->searchProdValue))) {
             $this->searchProdEmp();
         } elseif ((!empty($this->searchProd)) and (empty($this->searchEmp))) {
             $this->searchProd();
         } elseif ((empty($this->searchProd)) and (!empty($this->searchEmp))) {
             $this->searchEmp();
         } else {
-            $this->searchProdEmp();
+            $this->listProd($this->page);
         }
     }
 
@@ -173,29 +173,29 @@ class AdmsListProd
 
     public function searchProdEmp(): void
     {
-        $pagination = new \App\adms\Models\helper\AdmsPagination(URLADM . 'list-prod/index', "?search_prod={$this->searchProd}&search_emp={$this->searchEmp}");
+        $pagination = new \App\adms\Models\helper\AdmsPagination(URLADM . 'list-prod/index', "?search_prod={$this->searchProd}&search_prod={$this->searchEmp}");
         $pagination->condition($this->page, $this->limitResult);
-        $pagination->pagination("SELECT COUNT(prod.id) AS num_result FROM adms_produtos AS prod  
-        WHERE (prod.empresa_id= :empresa_id) and (prod.name LIKE :search_prod)", 
-        "prod.empresa_id={$_SESSION['emp_user']}&search_prod={$this->searchProdValue}");
+        $pagination->pagination("SELECT COUNT(id) AS num_result FROM adms_produtos 
+                                WHERE (cliente_id = :cliente_id) and (name LIKE :search_prod)", 
+                                "cliente_id={$this->searchEmpValue}&search_prod={$this->searchProdValue}");
+
         $this->resultPg = $pagination->getResult();
 
         $listprod = new \App\adms\Models\helper\AdmsRead();
-        $listprod->fullRead("SELECT prod.id, prod.name, typ.name name_typ,
-        emp.nome_fantasia nome_fantasia_emp, sit.name name_sit
-        FROM adms_produtos AS prod 
-        LEFT JOIN adms_type_prod AS typ ON typ.id=prod.type_id  
-        LEFT JOIN adms_adms_clientes AS emp ON emp.id=prod.empresa_id 
-        LEFT JOIN adms_sits_empr_unid AS sit ON sit.id=prod.sit_id   
-        WHERE (prod.empresa_id= :empresa_id) and (prod.name LIKE :search_prod) AND (emp.nome_fantasia LIKE :search_nome_fantasia_emp )
-        ORDER BY prod.name ASC
-        LIMIT :limit OFFSET :offset", "empresa_id={$_SESSION['emp_user']}&search_prod={$this->searchProdValue}&search_nome_fantasia_emp={$this->searchEmpValue}&limit={$this->limitResult}&offset={$pagination->getOffset()}");
+        $listprod->fullRead("SELECT prod.id, prod.name,  typ.name as name_type, prod.serie, prod.modelo_id, prod.marca_id, 
+                clie.nome_fantasia as nome_fantasia_clie, prod.venc_contr as venc_contr_prod, prod.empresa_id, prod.inf_adicionais, 
+                sit.name as name_sit FROM adms_produtos AS prod  
+                INNER JOIN adms_type_equip AS typ ON typ.id=prod.type_id 
+                INNER JOIN adms_clientes AS clie ON clie.id=prod.cliente_id 
+                INNER JOIN adms_sit_equip AS sit ON sit.id=prod.sit_id   
+                WHERE (prod.cliente_id = :cliente_id) and (prod.name LIKE :search_prod)
+                LIMIT :limit OFFSET :offset", "cliente_id={$this->searchEmpValue}&search_prod={$this->searchProdValue}&limit={$this->limitResult}&offset={$pagination->getOffset()}");
 
         $this->resultBd = $listprod->getResult();
         if ($this->resultBd) {
             $this->result = true;
         } else {
-            $_SESSION['msg'] = "<p style='color: #f00'>Erro: Nenhum produto encontradoss!</p>";
+            $_SESSION['msg'] = "<p style='color: #f00'>Erro: Nenhum produto encontrado!</p>";
             $this->result = false;
         }
     }
@@ -206,29 +206,27 @@ class AdmsListProd
      */
     public function searchProd(): void
     {
-        $pagination = new \App\adms\Models\helper\AdmsPagination(URLADM . 'list-prod/index', "?search_prod={$this->searchProd}&search_emp={$this->searchEmp}");
+        $pagination = new \App\adms\Models\helper\AdmsPagination(URLADM . 'list-prod/index', "?search_prod={$this->searchProd}");
         $pagination->condition($this->page, $this->limitResult);
-        $pagination->pagination("SELECT COUNT(id) AS num_result FROM adms_produtos WHERE name LIKE :search_prod", "search_prod={$this->searchProdValue}");
+        $pagination->pagination("SELECT COUNT(id) AS num_result FROM adms_produtos WHERE name LIKE :search_prod and empresa_id= :empresa_id", "search_prod={$this->searchProdValue}&empresa_id={$_SESSION['emp_user']}");
         $this->resultPg = $pagination->getResult();
 
         $listprod = new \App\adms\Models\helper\AdmsRead();
-        $listprod->fullRead("SELECT prod.id, prod.empresa_id, prod.name, typ.name name_typ, prod.serie, modelo.name name_modelo, mar.name name_mar, 
-        prod.cor, emp.nome_fantasia nome_fantasia_emp, prod.inf_adicionais, sit.name name_sit
-        FROM adms_produtos AS prod 
-        LEFT JOIN adms_type_prod AS typ ON typ.id=prod.type_id 
-        LEFT JOIN adms_model AS modelo ON modelo.id=prod.modelo_id 
-        LEFT JOIN adms_marca AS mar ON mar.id=prod.marca_id 
-        LEFT JOIN adms_empresa AS emp ON emp.id=prod.empresa_id 
-        LEFT JOIN adms_sits_empr_unid AS sit ON sit.id=prod.sit_id  
-        WHERE (prod.empresa_id= :empresa_id) and (prod.name LIKE :search_prod LIKE :search_prod) ORDER BY prod.id DESC
-         LIMIT :limit OFFSET :offset", "empresa_id={$_SESSION['emp_user']}&search_prod={$this->searchProdValue}&limit={$this->limitResult}&offset={$pagination->getOffset()}");
+        $listprod->fullRead("SELECT prod.id, prod.name,  typ.name as name_type, prod.serie, prod.modelo_id, prod.marca_id, 
+                clie.nome_fantasia as nome_fantasia_clie, prod.venc_contr as venc_contr_prod, prod.empresa_id, prod.inf_adicionais, 
+                sit.name as name_sit FROM adms_produtos AS prod  
+                INNER JOIN adms_type_equip AS typ ON typ.id=prod.type_id 
+                INNER JOIN adms_clientes AS clie ON clie.id=prod.cliente_id 
+                INNER JOIN adms_sit_equip AS sit ON sit.id=prod.sit_id 
+                WHERE prod.name LIKE :search_prod and prod.empresa_id= :empresa_id
+                LIMIT :limit OFFSET :offset", "search_prod={$this->searchProdValue}&empresa_id={$_SESSION['emp_user']}&limit={$this->limitResult}&offset={$pagination->getOffset()}");
 
 
         $this->resultBd = $listprod->getResult();
         if ($this->resultBd) {
             $this->result = true;
         } else {
-            $_SESSION['msg'] = "<p style='color: #f00'>Erro: Nenhum produto encontrado2!</p>";
+            $_SESSION['msg'] = "<p style='color: #f00'>Erro: Nenhum produto encontrado!</p>";
             $this->result = false;
         }
     }
@@ -239,28 +237,26 @@ class AdmsListProd
      */
     public function searchEmp(): void
     {
-        $pagination = new \App\adms\Models\helper\AdmsPagination(URLADM . 'list-prod/index', "?search_prod={$this->searchProd}&search_emp={$this->searchEmp}");
+        $pagination = new \App\adms\Models\helper\AdmsPagination(URLADM . 'list-prod/index', "?search_emp={$this->searchEmp}");
         $pagination->condition($this->page, $this->limitResult);
-        $pagination->pagination("SELECT COUNT(id) AS num_result FROM adms_produtos WHERE name LIKE :search_prod", "search_prod={$this->searchProdValue}");
+        $pagination->pagination("SELECT COUNT(id) AS num_result FROM adms_produtos WHERE empresa_id= :search_emp", "search_emp={$this->searchEmpValue}");
         $this->resultPg = $pagination->getResult();
 
         $listprod = new \App\adms\Models\helper\AdmsRead();
-        $listprod->fullRead("SELECT prod.id, prod.name, typ.name name_typ, prod.serie, modelo.name name_modelo, mar.name name_mar, 
-        prod.cor, emp.nome_fantasia nome_fantasia_emp, prod.inf_adicionais, sit.name name_sit
-        FROM adms_produtos AS prod 
-        LEFT JOIN adms_type_prod AS typ ON typ.id=prod.type_id 
-        LEFT JOIN adms_model AS modelo ON modelo.id=prod.modelo_id 
-        LEFT JOIN adms_marca AS mar ON mar.id=prod.marca_id 
-        LEFT JOIN adms_empresa AS emp ON emp.id=prod.empresa_id 
-        LEFT JOIN adms_sits_empr_unid AS sit ON sit.id=prod.sit_id 
-        WHERE empresa_id LIKE :search_nome_fantasia_emp ORDER BY id_prod DESC
-         LIMIT :limit OFFSET :offset", "search_nome_fantasia_emp={$this->searchEmpValue}&limit={$this->limitResult}&offset={$pagination->getOffset()}");
+        $listprod->fullRead("SELECT prod.id, prod.name,  typ.name as name_type, prod.serie, prod.modelo_id, prod.marca_id, 
+                clie.nome_fantasia as nome_fantasia_clie, prod.venc_contr as venc_contr_prod, prod.empresa_id, prod.inf_adicionais, 
+                sit.name as name_sit FROM adms_produtos AS prod  
+                INNER JOIN adms_type_equip AS typ ON typ.id=prod.type_id 
+                INNER JOIN adms_clientes AS clie ON clie.id=prod.cliente_id 
+                INNER JOIN adms_sit_equip AS sit ON sit.id=prod.sit_id
+                WHERE prod.cliente_id= :cliente_id
+                LIMIT :limit OFFSET :offset", "cliente_id={$this->searchEmpValue}&limit={$this->limitResult}&offset={$pagination->getOffset()}");
 
         $this->resultBd = $listprod->getResult();
         if ($this->resultBd) {
             $this->result = true;
         } else {
-            $_SESSION['msg'] = "<p style='color: #f00'>Erro: Nenhum produto encontrada!</p>";
+            $_SESSION['msg'] = "<p style='color: #f00'>Erro: Nenhum produto encontrado!</p>";
             $this->result = false;
         }
     }

@@ -50,6 +50,15 @@ class Dashboard
             $this->data['logoCliente'] = false;
         }
 
+        $countEquipVenc = new \App\adms\Models\AdmsDashboard();
+        $countEquipVenc->countEquipVenc();
+
+        if ($countEquipVenc->getResult()) {
+            $this->data['countEquipVenc'] = $countEquipVenc->getResultBd();
+        } else {
+            $this->data['countEquipVenc'] = false;
+        }
+        
         $countCham = new \App\adms\Models\AdmsDashboard();
         $countCham->countChamAber();
 

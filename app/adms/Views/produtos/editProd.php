@@ -155,23 +155,13 @@ if (isset($this->data['form'][0])) {
                         </div>
                         <div class="column">
                             <?php
-                            $dias = "";
-                            if (isset($valorForm['dias'])) {
-                                $dias = $valorForm['dias'];
+                            $venc_contr_prod = "";
+                            if (isset($valorForm['venc_contr_prod'])) {
+                                $venc_contr_prod = $valorForm['venc_contr_prod'];
                             }
                             ?>
-                            <label class="title-input">Dias Validade:<span class="text-danger">*</span></label>
-                            <input type="text" name="dias" id="dias" class="input-adm" placeholder="Observações" value="<?php echo $dias; ?>" required>
-                        </div>
-                        <div class="column">
-                            <?php
-                            $inicio_contr = "";
-                            if (isset($valorForm['inicio_contr'])) {
-                                $inicio_contr = $valorForm['inicio_contr'];
-                            }
-                            ?>
-                            <label class="title-input">Inicio Contrato:<span class="text-danger">*</span></label>
-                            <input type=date name="inicio_contr" id="inicio_contr" class="input-adm" placeholder="Observações" value="<?php echo $inicio_contr; ?>" required>
+                            <label class="title-input">Vencimento Contrato:<span class="text-danger">*</span></label>
+                            <input type=date name="venc_contr" id="venc_contr" class="input-adm" placeholder="Observações" value="<?php echo $venc_contr_prod; ?>" required>
                         </div>
                 </div>
                 <div class="row-input">                    
@@ -187,7 +177,7 @@ if (isset($this->data['form'][0])) {
                     </div>
                 </div>
 
-                <p class="text-danger mb-5 fs-4">* Campo Obrigatório</p>
+                <p class="text-danger mb-3 fs-6">* Campo Obrigatório</p>
 
                 <button type="submit" name="SendEditProd" class="btn-warning" value="Salvar">Salvar</button>
 

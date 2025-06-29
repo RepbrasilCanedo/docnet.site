@@ -119,6 +119,49 @@ class AdmsDashboard
             }
         }
     }
+    
+    /**
+     * Metodo retornar dados para o dashboard
+     * Retorna FALSE se houver algum erro
+     * @param integer $id
+     * @return void
+     */
+    // Verifica a quantidade de Equipamentos com contrato de suporte ou garantia vencidos -> 2
+    public function countEquipVenc(): void
+    {
+        $dataAtual=date("Y-m-d");
+        
+
+        if (($_SESSION['adms_access_level_id'] > 2)) {
+            //Se for 4 - Cliente Administrativo
+            if (($_SESSION['adms_access_level_id'] == 4) or  ($_SESSION['adms_access_level_id'] == 12)){
+                $countEquipVenc = new \App\adms\Models\helper\AdmsRead();
+                $countEquipVenc->fullRead("SELECT COUNT(id) AS qnt_equip, sit_id, venc_contr, empresa_id FROM adms_produtos 
+                                        WHERE sit_id= :sit_id and venc_contr <= :data_atual and empresa_id = :empresa", 
+                                        "sit_id=1&data_atual={$dataAtual}&empresa={$_SESSION['emp_user']}");
+
+                $this->resultBd = $countEquipVenc->getResult();
+
+                if ($this->resultBd) {
+                    $this->result = true;
+                } else {
+                    $this->result = false;
+                }
+                //Se for 14 - Usuario final
+            }
+        } else {
+            $countCham = new \App\adms\Models\helper\AdmsRead();
+            $countCham->fullRead("SELECT COUNT(id) AS qnt_cham, status_id 
+                                FROM adms_cham WHERE status_id= :status_id ", "status_id=2 ");
+
+            $this->resultBd = $countCham->getResult();
+            if ($this->resultBd) {
+                $this->result = true;
+            } else {
+                $this->result = false;
+            }
+        }
+    }
 
     // Verifica a quantidade de chamados Agendados -> 9
     public function countChamAgend(): void
