@@ -6,20 +6,19 @@ if (!defined('D0O8C0A3N1E9D6O1')) {
 }
 
 if (isset($this->data['form'])) {
-    $valorForm = $this->data['form'];    
+    $valorForm = $this->data['form'];
 }
 
 ?>
-
 <div class="container-login">
-    
     <div class="wrapper-login">
         <div class="logo">
-            <img src="<?php echo URLADM; ?>app/adms/assets/image/logo/logo.png" width="200px" alt="Docnet">            
+            <img src="<?php echo URLADM; ?>app/adms/assets/image/logo/logo.png" width="200px" alt="Docnet">
         </div>
-        <h5 class="help_desk">HELP DESK</h5>
+        
+        
         <div class="title">
-            <span>Área Restrita</span>
+            <h5 class="help_desk">Help Desk</h5>
         </div>
 
         <div class="msg-alert">
@@ -35,7 +34,6 @@ if (isset($this->data['form'])) {
         </div>
 
         <form method="POST" action="" id="form-login" class="form-login">
-
             <?php
             $user = "";
             if (isset($valorForm['user'])) {
@@ -58,10 +56,14 @@ if (isset($this->data['form'])) {
                 <input type="password" name="password" id="password" placeholder="Digite a senha" autocomplete="on" value="<?php echo $password; ?>" required>
             </div>
 
+            <div class="link-novo-login">
+                <a href="https://www.repbrasil.salvador.br/contato" target="_blank">Esqueci minha senha</a>
+            </div>
+
             <div class="row button">
                 <button type="submit" name="SendLogin" value="Acessar">Acessar</button>
             </div>
-
         </form>
     </div>
+
 </div>

@@ -31,6 +31,7 @@
     --info-color-second: #cff4fc;
     --warning-color-second: #fff3cd;
     --danger-color-second: #f8d7da;
+    --color-title:#3335ff;
 }
 
 /*Inicio Personalização Login*/
@@ -58,19 +59,19 @@ body{
     width: 100%;
     background-color: var(--second-color);
     border-radius: 5px;
-    box-shadow: 0px 4px 10px 1px rgba(0, 0, 0, 1);
+    box-shadow: 0px 4px 10px 1px rgba(51, 53, 255);
 }
 
 .wrapper-login .title {
-    height: 90px;
-    background-color: var(--third-color);
-    border-radius: 5px 5px 0 0;
-    color: var(--default-color);
+    height: 30px;
+    background-color: var(--color-title);
+    color: var(--fourth-bg-color);
     font-size: 30px;
     font-weight: 400;
     display: flex;
     align-items: center;
     justify-content: center;
+    font-style: italic;
 }
 .wrapper-login .logo {
     margin-top: 20px;
@@ -215,7 +216,10 @@ body{
     border-radius: 4px;
     padding: 12px 7px;
 }
-
-
 /* Fim alerta */
+
+.link-novo-login{
+    margin: 2px 1%;
+    padding: 5px;
+}
 

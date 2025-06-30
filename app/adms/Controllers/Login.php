@@ -40,6 +40,7 @@ class Login
         if(!empty($this->dataForm['SendLogin'])){
             $valLogin = new \App\adms\Models\AdmsLogin();
             $valLogin->login($this->dataForm);
+            
             if($valLogin->getResult()){
                 $urlRedirect = URLADM . "dashboard/index";
                 header("Location: $urlRedirect");
