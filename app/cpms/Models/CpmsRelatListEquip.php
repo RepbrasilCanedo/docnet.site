@@ -42,6 +42,45 @@ class CpmsRelatListEquip
     {
         return $this->resultBd;
     }
+        /**
+     * Metodo pesquisar pela empresa do Ticket
+     * @return void
+     */
+    public function listEquip(string|null $search_empresa): void
+    {
+        $contEquip = new \App\adms\Models\helper\AdmsRead();
+        $contEquip->fullRead("SELECT COUNT(id) AS num_result FROM adms_produtos WHERE (empresa_id= :empresa_id)",
+            "empresa_id={$_SESSION['emp_user']}"
+        );
+        $this->resultBd = $contEquip->getResult();
+        if ($this->resultBd) {
+            $_SESSION['resultado'] = '';
+            $_SESSION['resultado'] = $this->resultBd[0]['num_result'];
+        } else {
+            $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum Ticket encontrado!</p>";
+            $this->result = false;
+        }
+
+        $listEquip = new \App\adms\Models\helper\AdmsRead();
+        $listEquip->fullRead("SELECT prod.id as id_prod, prod.name as name_prod, prod.serie as serie_prod, 
+                            prod.modelo_id as modelo_id_prod, prod.marca_id as marca_id_prod, clie.nome_fantasia as nome_fantasia_clie, prod.empresa_id as empresa_id_prod, prod.sit_id, emp.logo as logo_emp   
+                            FROM adms_produtos AS prod
+                            INNER JOIN adms_clientes AS clie ON clie.id=prod.cliente_id 
+                            INNER JOIN adms_emp_principal AS emp ON emp.id=prod.empresa_id
+                            WHERE (empresa_id= :empresa_id)", "empresa_id={$_SESSION['emp_user']}");
+
+
+
+        $this->resultBd = $listEquip->getResult();
+        
+        if ($this->resultBd) {
+            //var_dump($this->resultBd);
+            $this->generatePdf();
+        } else {
+            $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum Equipamento encontrado!</p>";
+            $this->result = false;
+        }
+    }
 
     /**
      * Metodo pesquisar pela empresa do Ticket

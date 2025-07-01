@@ -49,7 +49,11 @@ class RelatListEquip
         $listEquip = new \App\cpms\Models\CpmsRelatListEquip();
         
         if ((!empty($this->dataForm['SendSearchEquip']))) {
-            $listEquip->searchEmpresa($this->searchEmpresa);       
+            if($this->dataForm['search_empresa']== null){
+                $listEquip->listEquip($this->searchEmpresa);   
+           }else{
+                $listEquip->searchEmpresa($this->searchEmpresa);  
+           }      
         }
 
         $listSelect = new \App\cpms\Models\CpmsRelatListEquip();

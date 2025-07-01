@@ -28,7 +28,7 @@ if (isset($this->data['form'])) {
                             <div class="column">
                                 <label class="title-input">Cliente:</label>
                                 <select name="search_empresa" id="search_empresa" class="input-adm">
-                                    <option value="">Selecione um Cliente</option>
+                                    <option value="">Todos</option>
                                     <?php
                                     foreach ($this->data['select']['nome_emp'] as $nome_emp) {
                                         extract($nome_emp);
