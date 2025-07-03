@@ -57,7 +57,7 @@ if (isset($this->data['form'])) {
             </div>
 
             <div class="link-novo-login">
-                <a href="https://www.repbrasil.salvador.br/contato" target="_blank">Esqueci minha senha</a>
+                <?php echo "<a href='" . URLADM . "new-user/index'>Esqueci a Senha</a><br><br>";?>
             </div>
 
             <div class="row button">

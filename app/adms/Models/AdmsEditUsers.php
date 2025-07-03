@@ -80,7 +80,7 @@ class AdmsEditUsers
      * @param array|null $data
      * @return void
      */
-    public function update(array $data = null): void
+    public function update(array $data): void
     {
         $this->data = $data;
         $valEmptyField = new \App\adms\Models\helper\AdmsValEmptyField();

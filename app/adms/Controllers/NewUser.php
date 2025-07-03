@@ -32,20 +32,27 @@ class NewUser
     public function index(): void
     {
 
-        $this->dataForm = filter_input_array(INPUT_POST, FILTER_DEFAULT);        
+        $this->dataForm = filter_input_array(INPUT_POST, FILTER_DEFAULT); 
+
+             
 
         if(!empty($this->dataForm['SendNewUser'])){
-            //var_dump($this->dataForm);
+            
             unset($this->dataForm['SendNewUser']);
+            $_SESSION['solUser']='';
+            $_SESSION['solUser']=$this->dataForm['email']; 
+            
             $createNewUser = new \App\adms\Models\AdmsNewUser();
             $createNewUser->create($this->dataForm);
+
             if($createNewUser->getResult()){
-                $urlRedirect = URLADM;
+                $urlRedirect = URLADM . "login/index";
                 header("Location: $urlRedirect");
             }else{
                 $this->data['form'] = $this->dataForm;
                 $this->viewNewUser();
-            }           
+            }  
+         
         }else{
             $this->viewNewUser();
         }        

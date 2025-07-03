@@ -63,15 +63,25 @@ body{
 }
 
 .wrapper-login .title {
-    height: 30px;
+    height: 40px;
     background-color: var(--color-title);
-    color: var(--fourth-bg-color);
+    color: var(--fourth-color);
     font-size: 30px;
     font-weight: 400;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: center;  
     font-style: italic;
+}.wrapper-login .title-senha {
+    height: 80px;
+    background-color: var(--color-title);
+    color: var(--fourth-color);
+    font-size: 30px;
+    font-weight: 400;
+    display: flex;
+    font-style: italic;
+    text-align: center;
+    padding: 5px;
 }
 .wrapper-login .logo {
     margin-top: 20px;
