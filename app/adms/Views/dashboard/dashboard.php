@@ -12,7 +12,7 @@ unset($_SESSION["status_chamado"]);
 //unset($_SESSION["status_ticket"]);
 //$_SESSION['img_contr']='';
 //$_SESSION['img_contr']= $this->data['logoContrato'][0]['logo_clie'];
-//var_dump($this->data['countEquipVenc']);
+//var_dump($this->data['carrMarketing']);
 ?>
 
 <!-- Inicio dos box do dashboard -->
@@ -241,65 +241,83 @@ unset($_SESSION["status_chamado"]);
     </div>
 
 
-    <!--  inicio do carroussel da assistencia tecnica -->
+    <!--  inicio do carroussel de marketink -->
     <section class="top-carr">
+         <?php
+              // Acessa o IF quando encontrou algum registro no banco de dados
+              if (!empty($this->data['carrMarketing'])){
+                  //foreach ($this->data['home']['carroussel'][0] as $home) {
+                    extract($this->data['carrMarketing']);
+                    //echo('<pre>');print_r($this->data['carrMarketing']); echo('</pre>');
+              ?>
         <div class="row">
             <div class="col-md-12">
-                <div id="carouselExampleIndicators" class="carousel slide carousel-fade">                    
+                <div id="carouselExampleIndicators" class="carousel slide carousel-fade" data-bs-ride="carousel">                    
                     <div class="carousel-indicators">
                         <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
                         <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
                         <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
                         <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="3" aria-label="Slide 4"></button>
                         <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="4" aria-label="Slide 5"></button>
+                        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="5" aria-label="Slide 6"></button>
                     </div>
                     <div class="carousel-inner">                        
                         <div class="carousel-item active">
                             <div class="carousel-caption d-none d-md-block">                                
-                                <a href="https://www.instagram.com/repbrasilcomunicacaovisual" target="_blank">
+                                <a href="<?php echo $this->data['carrMarketing'][0]['instagram']?>" target="_blank">
                                     <i class="fab fa-instagram btn-lg btn-danger mt-3" data-toggle="tooltip" data-placement="top" title="Conheça nossa linha de produtos gráfico através de nosso Instagram"></i> 
                                 </a>
                             </div>
-                            <img src="<?php echo URL; ?>app/adms/assets/image/marketing/carrousel/1.jpg" class="d-block w-100" alt="Marketing Grafico">
+                            <img src="<?php echo URL; ?>app/adms/assets/image/marketing/carrousel/<?php echo $this->data['carrMarketing'][0]['image_1']?>" class="d-block w-100" alt="Marketing Grafico">
                         
                         </div>
 
                         <div class="carousel-item">
                             <div class="carousel-caption d-none d-md-block">                                
-                                <a href="https://www.instagram.com/repbrasilcomunicacaovisual" target="_blank">
+                                <a href="<?php echo $this->data['carrMarketing'][0]['instagram']?>" target="_blank">
                                     <i class="fab fa-instagram btn-lg btn-danger mt-3" data-toggle="tooltip" data-placement="top" title="Conheça nossa linha de produtos gráfico através de nosso Instagram"></i>
                                 </a>
                             </div>
-                            <img src="<?php echo URL; ?>app/adms/assets/image/marketing/carrousel/2.jpg" class="d-block w-100" alt="Marketing Grafico">
+                            <img src="<?php echo URL; ?>app/adms/assets/image/marketing/carrousel/<?php echo $this->data['carrMarketing'][0]['image_2']?>" class="d-block w-100" alt="Marketing Grafico">
                         </div>
 
                         <div class="carousel-item">
                             <div class="carousel-caption d-none d-md-block">                                
-                                <a href="https://www.instagram.com/repbrasilcomunicacaovisual" target="_blank">
+                                <a href="<?php echo $this->data['carrMarketing'][0]['instagram']?>" target="_blank">
                                     <i class="fab fa-instagram btn-lg btn-danger mt-3" data-toggle="tooltip" data-placement="top" title="Conheça nossa linha de produtos gráfico através de nosso Instagram"></i>
                                 </a>
                             </div>
-                            <img src="<?php echo URL; ?>app/adms/assets/image/marketing/carrousel/3.jpg" class="d-block w-100" alt="Marketing Grafico">
+                            <img src="<?php echo URL; ?>app/adms/assets/image/marketing/carrousel/<?php echo $this->data['carrMarketing'][0]['image_3']?>" class="d-block w-100" alt="Marketing Grafico">
                         </div>
 
                         <div class="carousel-item">
                             <div class="carousel-caption d-none d-md-block">                                
-                                <a href="https://www.instagram.com/repbrasilcomunicacaovisual" target="_blank">
+                                <a href="<?php echo $this->data['carrMarketing'][0]['instagram']?>" target="_blank">
                                     <i class="fab fa-instagram btn-lg btn-danger mt-3" data-toggle="tooltip" data-placement="top" title="Conheça nossa linha de produtos gráfico através de nosso Instagram"></i>
                                 </a>
                             </div>
-                            <img src="<?php echo URL; ?>app/adms/assets/image/marketing/carrousel/4.jpg" class="d-block w-100" alt="Marketing Grafico">
+                            <img src="<?php echo URL; ?>app/adms/assets/image/marketing/carrousel/<?php echo $this->data['carrMarketing'][0]['image_4']?>" class="d-block w-100" alt="Marketing Grafico">
                         </div>
 
                         <div class="carousel-item">
                             <div class="carousel-caption d-none d-md-block">                                
-                                <a href="https://www.instagram.com/repbrasilcomunicacaovisual" target="_blank">
+                                <a href="<?php echo $this->data['carrMarketing'][0]['instagram']?>" target="_blank">
                                     <i class="fab fa-instagram btn-lg btn-danger mt-3" data-toggle="tooltip" data-placement="top" title="Conheça nossa linha de produtos gráfico através de nosso Instagram"></i>
                                 </a>
                             </div>
-                            <img src="<?php echo URL; ?>app/adms/assets/image/marketing/carrousel/5.jpg" class="d-block w-100" alt="Marketing Grafico">
+                            <img src="<?php echo URL; ?>app/adms/assets/image/marketing/carrousel/<?php echo $this->data['carrMarketing'][0]['image_5']?>" class="d-block w-100" alt="Marketing Grafico">
+                        </div>
+
+                        <div class="carousel-item">
+                            <div class="carousel-caption d-none d-md-block">                                
+                                <a href="<?php echo $this->data['carrMarketing'][0]['instagram']?>" target="_blank">
+                                    <i class="fab fa-instagram btn-lg btn-danger mt-3" data-toggle="tooltip" data-placement="top" title="Conheça nossa linha de produtos gráfico através de nosso Instagram"></i>
+                                </a>
+                            </div>
+                            <img src="<?php echo URL; ?>app/adms/assets/image/marketing/carrousel/<?php echo $this->data['carrMarketing'][0]['image_6']?>" class="d-block w-100" alt="Marketing Grafico">
                         </div>
                     </div>
+
                     <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
                         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                         <span class="visually-hidden">Previous</span>
@@ -314,9 +332,10 @@ unset($_SESSION["status_chamado"]);
         </div>
 
         <div class="whatsapp-box">
-            <a href="https://api.whatsapp.com/send?phone=5571981376244&text=Ol%C3%A1,%20tudo%20bem?%20Estou%20interessado%20em%20saber%20mais%20sobre%20seus%20produtos%20Graficos,%20conforme%20publicado%20no%20DOCNET!" data-title="Atendimento via WhatsApp" class="tooltip-link" target="_blank" id="whatsapp-icon">
+            <a href="https://api.whatsapp.com/send?phone=<?php echo $this->data['carrMarketing'][0]['whatszap']?>"&text=Ol%C3%A1,%20tudo%20bem?%20Estou%20interessado%20em%20saber%20mais%20sobre%20seus%20produtos%20Graficos,%20conforme%20publicado%20no%20DOCNET!" data-title="Atendimento via WhatsApp" class="tooltip-link" target="_blank" id="whatsapp-icon">
             <img src="<?php echo URL; ?>app/adms/assets/image/whatsapp-logo.png" alt="WhatsApp" /></a>
         </div>
+         <?php } ?>
 
     </section>
     <!--  final do carroussel da assistencia tecnica -->

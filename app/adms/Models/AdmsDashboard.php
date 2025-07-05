@@ -30,6 +30,9 @@ class AdmsDashboard
     /** @var string|null $page Recebe a páginação */
     private string|null $resultPg;
 
+        /** @var array $data Recebe os registros do banco de dados */
+    private array|null $data;
+
     /**
      * @return bool Retorna true quando executar o processo com sucesso e false quando houver erro
      */
@@ -51,6 +54,25 @@ class AdmsDashboard
     function getResultPg(): string|null
     {
         return $this->resultPg;
+    }
+
+
+    /**
+     * Carrega as informações para o carroussel de marketing
+     */
+    public function carrMarketing(): void
+    {
+        $carrMarketing = new \App\adms\Models\helper\AdmsRead();
+        $carrMarketing->fullRead("SELECT id, empresa_id, instagram, whatszap, image_1, titlte_1, link_url_1, image_2, titlte_2, link_url_2, image_3, titlte_3, link_url_3, 
+        image_4, titlte_4, link_url_4, image_5, titlte_5, link_url_5, image_6, titlte_6, link_url_6 FROM sts_carr_mark WHERE empresa_id= :empresa_id LIMIT :limit", "limit=6&empresa_id={$_SESSION['emp_user']}");
+        
+        $this->resultBd = $carrMarketing->getResult();      
+
+        if ($this->resultBd) {
+            $this->result = true;
+        } else {
+            $this->result = false;
+        }
     }
     /**
      * Verifica se o cliente tem logo cadastrada o banco de dados

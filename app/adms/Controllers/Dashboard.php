@@ -40,7 +40,6 @@ class Dashboard
 
         $this->dataForm = filter_input_array(INPUT_POST, FILTER_DEFAULT);
         
-
         $logoCliente = new \App\adms\Models\AdmsDashboard();
         $logoCliente->logoCliente();
 
@@ -48,6 +47,15 @@ class Dashboard
             $this->data['logoCliente'] = $logoCliente->getResultBd();
         } else {
             $this->data['logoCliente'] = false;
+        }
+
+        $carrMarketing = new \App\adms\Models\AdmsDashboard();
+        $carrMarketing->carrMarketing();
+
+        if ($carrMarketing->getResult()) {
+            $this->data['carrMarketing'] = $carrMarketing->getResultBd();
+        } else {
+            $this->data['carrMarketing'] = false;
         }
 
         $countEquipVenc = new \App\adms\Models\AdmsDashboard();
