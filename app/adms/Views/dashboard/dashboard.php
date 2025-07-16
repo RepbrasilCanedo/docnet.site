@@ -179,7 +179,7 @@ unset($_SESSION["status_chamado"]);
                 <h6>Concluidos</h6>
             <?php } ?>
         </div>
-        <!-- Verifica se o usuarioe usuario final, se for não visualiza o Box -->
+        <!-- Verifica se o usuario e usuario final, se for não visualiza o Box -->
         <?php if (($_SESSION['adms_access_level_id'] <> 14)) {?>            
             <div class="box">
                 <h6>Equipamentos</h6>

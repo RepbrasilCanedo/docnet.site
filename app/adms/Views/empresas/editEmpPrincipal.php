@@ -175,19 +175,14 @@ if (isset($this->data['form'][0])) {
                     </div>
 
                     <div class="column ">
-                        <?php
-                        $situacao = "";
-                        if (isset($valorForm['situacao'])) {
-                            $situacao = $valorForm['situacao'];
-                        }
-                        ?>
                         <label class="title-input">Situação da Empresa:<span class="text-danger">*</span></label>
                         <select name="situacao" id="situacao" class="input-adm" required>
                             <option value="">Selecione</option>
                             <?php
                             foreach ($this->data['select']['sit_empresas'] as $sitempresas) {
                                 extract($sitempresas);
-                                if (isset($valorForm['situacao']) and $valorForm['situacao'] == $id_sit) {
+
+                                if (isset($valorForm['situacao']) and $valorForm['situacao'] == $name_sit) {
                                     echo "<option value='$id_sit' selected>$name_sit</option>";
                                 } else {
                                     echo "<option value='$id_sit'>$name_sit</option>";

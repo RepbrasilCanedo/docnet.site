@@ -57,11 +57,9 @@ if (isset($this->data['form'])) {
                         <label class="title-input">Nome Fantasia:<span class="text-danger">*</span></label>
                         <input type="text" name="nome_fantasia" id="nome_fantasia" class="input-adm" placeholder="Nome fantasia" value="<?php echo $nome_fantasia; ?>" required>
 
-                    </div>                    
-                </div>
+                    </div> 
 
-                    <div class="row-input">
-                        <div class="column">
+                    <div class="column">
                             <?php
                             $cnpj = "";
                             if (isset($valorForm['cnpj'])) {
@@ -70,7 +68,10 @@ if (isset($this->data['form'])) {
                             ?>
                             <label class="title-input">Cnpj:<span class="text-danger">*</span></label>
                             <input type="text" name="cnpj" id="cnpj" class="input-adm" placeholder="Número do Cnpj" value="<?php echo $cnpj; ?>" required>
-                        </div>
+                    </div>                   
+                </div>
+
+                    <div class="row-input">                        
                         <div class="column">
                             <?php
                             $cep = "";
@@ -81,9 +82,6 @@ if (isset($this->data['form'])) {
                             <label class="title-input">Cep:<span class="text-danger">*</span></label>
                             <input type="text" name="cep" id="cep" class="input-adm" placeholder="Número do Cep" value="<?php echo $cep; ?>" required>
                         </div>
-                    </div>
-
-                    <div class="row-input">
                         <div class="column">
                             <?php
                             $logradouro = "";
@@ -93,7 +91,6 @@ if (isset($this->data['form'])) {
                             ?>
                             <label class="title-input">Logradouro:<span class="text-danger">*</span></label>
                             <input type="text" name="logradouro" id="logradouro" class="input-adm" placeholder="Rua e numero" value="<?php echo $logradouro; ?>" required>
-
                         </div>
                         <div class="column">
                             <?php
@@ -106,7 +103,6 @@ if (isset($this->data['form'])) {
                             <input type="text" name="bairro" id="bairro" class="input-adm" placeholder="Bairro" value="<?php echo $bairro; ?>" required>
                         </div>
                     </div>
-
                     <div class="row-input">
                         <div class="column">
                             <?php
@@ -147,7 +143,41 @@ if (isset($this->data['form'])) {
                         </div>
                     </div>
 
-                    <p class="text-danger mb-5 fs-4">* Campo Obrigatório</p>
+                    <div class="row-input">
+                        <div class="column">
+                            <?php
+                            $contato = "";
+                            if (isset($valorForm['contato'])) {
+                                $contato = $valorForm['contato'];
+                            }
+                            ?>
+                            <label class="title-input">Contato<span class="text-danger">*</span></label>
+                            <input type="text" name="contato" id="contato" class="input-adm" placeholder="Contato da empresa..." value="<?php echo $contato; ?>" required>
+                        </div>
+                        <div class="column">
+                            <?php
+                            $telefone = "";
+                            if (isset($valorForm['telefone'])) {
+                                $telefone = $valorForm['telefone'];
+                            }
+                            ?>
+                            <label class="title-input">Telefone<span class="text-danger">*</span></label>
+                            <input type="text" name="telefone" id="telefone" class="input-adm" placeholder="Telefone do Contato..." value="<?php echo $telefone; ?>" required>
+                        </div>                       
+                        
+                        <div class="column">
+                            <?php
+                            $email = "";
+                            if (isset($valorForm['email'])) {
+                                $email = $valorForm['email'];
+                            }
+                            ?>
+                            <label class="title-input">E-Mail:<span class="text-danger">*</span></label>
+                            <input type="text" name="email" id="email" class="input-adm" placeholder="Estado" value="<?php echo $email; ?>" required>
+                        </div>
+                    </div>
+
+                    <p class="text-danger mb-5 fs-6">* Campo Obrigatório</p>
 
                     <button type="submit" name="SendAddEmpPrincipal" class="btn-success" value="Cadastrar">Cadastrar</button>
 

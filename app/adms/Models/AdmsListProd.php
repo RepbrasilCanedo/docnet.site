@@ -113,13 +113,13 @@ class AdmsListProd
             $this->resultPg = $pagination->getResult();
 
             $listProd = new \App\adms\Models\helper\AdmsRead();
-            $listProd->fullRead("SELECT prod.id, prod.name,  typ.name as name_type, prod.serie, prod.modelo_id, prod.marca_id, clie.nome_fantasia as nome_fantasia_clie, prod.inf_adicionais, sit.name as name_sit
+                $listProd->fullRead("SELECT prod.id, prod.name,  typ.name as name_type, prod.serie, prod.modelo_id, prod.marca_id, clie.nome_fantasia as nome_fantasia_clie, prod.venc_contr as venc_contr_prod, prod.empresa_id, prod.inf_adicionais, sit.name as name_sit
                 FROM adms_produtos AS prod  
                 INNER JOIN adms_type_equip AS typ ON typ.id=prod.type_id 
                 INNER JOIN adms_clientes AS clie ON clie.id=prod.cliente_id 
-                INNER JOIN adms_sit_equip AS sit ON sit.id=prod.sit_id
-                ORDER BY prod.name ASC
-                LIMIT :limit OFFSET :offset", "limit={$this->limitResult}&offset={$pagination->getOffset()}");
+                INNER JOIN adms_sit_equip AS sit ON sit.id=prod.sit_id ORDER BY venc_contr_prod ASC LIMIT :limit OFFSET :offset", 
+                "limit={$this->limitResult}&offset={$pagination->getOffset()}");
+
 
 
             $this->resultBd = $listProd->getResult();

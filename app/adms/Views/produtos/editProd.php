@@ -12,7 +12,6 @@ if (isset($this->data['form'])) {
 if (isset($this->data['form'][0])) {
     $valorForm = $this->data['form'][0];
 }
-//var_dump($this->data['form'][0]);
 ?>
 <!-- Inicio do conteudo do administrativo -->
 <div class="wrapper">
@@ -144,7 +143,7 @@ if (isset($this->data['form'][0])) {
                                 <?php
                                 foreach ($this->data['select']['contr_id'] as $contr_id) {
                                     extract($contr_id);
-                                    if (isset($valorForm['contr_id']) and $valorForm['contr_id'] == $id) {
+                                    if (isset($valorForm['name_contr_id']) and $valorForm['name_contr_id'] == $name) {
                                         echo "<option value='$id' selected>$name</option>";
                                     } else {
                                         echo "<option value='$id'>$name</option>";
