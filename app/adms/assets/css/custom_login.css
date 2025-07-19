@@ -72,7 +72,8 @@ body{
     align-items: center;
     justify-content: center;  
     font-style: italic;
-}.wrapper-login .title-senha {
+}
+.wrapper-login .title-senha {
     height: 80px;
     background-color: var(--color-title);
     color: var(--fourth-color);

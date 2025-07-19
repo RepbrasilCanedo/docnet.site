@@ -56,12 +56,12 @@ if (isset($this->data['form'])) {
                 <input type="password" name="password" id="password" placeholder="Digite a senha" autocomplete="on" value="<?php echo $password; ?>" required>
             </div>
 
-            <div class="link-novo-login">
-                <?php echo "<a href='" . URLADM . "new-user/index'>Esqueci a Senha</a><br><br>";?>
-            </div>
-
             <div class="row button">
                 <button type="submit" name="SendLogin" value="Acessar">Acessar</button>
+            </div>
+
+            <div class="link-novo-login">
+                <?php echo "<a href='" . URLADM . "new-user/index'>Esqueci a Senha</a><br><br>";?>
             </div>
         </form>
     </div>

@@ -102,13 +102,13 @@ class AdmsAddCham
           private function val_prod(): void
      {
                $viewProd = new \App\adms\Models\helper\AdmsRead();
-                $viewProd->fullRead("SELECT id, cliente_id, dias, inicio_contr FROM adms_produtos 
+                $viewProd->fullRead("SELECT id, cliente_id, dias, venc_contr FROM adms_produtos 
                 WHERE id= :id AND cliente_id= :cliente_id", "id={$this->data['prod_id']}& cliente_id={$this->data['cliente_id']}");
                 
                 $this->resultBd = $viewProd->getResult();
                 if ($this->resultBd) {
                     // Sua data inicial
-                    $dataInicial = $this->resultBd[0]['inicio_contr'];
+                    $dataInicial = $this->resultBd[0]['venc_contr'];
 
                     // Número de dias a adicionar
                     $diasParaAdicionar = $this->resultBd[0]['dias'];
@@ -116,10 +116,9 @@ class AdmsAddCham
                     // Adiciona os dias e formata a nova data em uma única linha
                     $vencContr = date('Y-m-d', strtotime($dataInicial . '+' . $diasParaAdicionar . 'days'));
 
-                    //var_dump($vencContr);
 
                     // Exibe a nova data
-                    if($vencContr > date(date("Y-m-d H:i:s"))){
+                    if($vencContr > date("Y-m-d H:i:s")){
                         $this->result = true;
                         $this->add();
                     } else{
