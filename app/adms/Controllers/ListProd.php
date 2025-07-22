@@ -39,6 +39,11 @@ class ListProd
      */
     public function index(string|int|null $page = null): void
     {
+        if (isset($_GET['status_ticket'])) {
+            $_SESSION['status_ticket'] = (int) $_GET['status_ticket'];
+            header("Location: " . URLADM . "list-prod/index");
+            exit();
+        }
             $this->page = (int) $page ? $page : 1;
 
             $this->dataForm = filter_input_array(INPUT_POST, FILTER_DEFAULT);

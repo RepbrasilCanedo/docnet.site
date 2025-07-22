@@ -78,23 +78,52 @@ class AdmsListProd
     public function listProd(int $page): void
     {
         $this->page = (int) $page ? $page : 1;
+        // Testa se foi enviada a variavel global status_ticket com algum valor
+        if ((isset($_SESSION['status_ticket'])) and ($_SESSION['status_ticket'] == 77)) {
+           // unset($_SESSION['status_ticket']);
+            if ($_SESSION['adms_access_level_id'] > 2) {
+                //Acessa se for Cliente Adm ou Suporte do Cliente
+                if (($_SESSION['adms_access_level_id'] == 4) or ($_SESSION['adms_access_level_id'] == 12)) {
+                    $pagination = new \App\adms\Models\helper\AdmsPagination(URLADM . 'list-prod/index');
+                    $pagination->condition($this->page, $this->limitResult);
+                    $pagination->pagination("SELECT COUNT(id) AS num_result FROM adms_produtos WHERE empresa_id = :empresa_id", "empresa_id={$_SESSION['emp_user']}");
+                    $this->resultPg = $pagination->getResult();
 
-        if ($_SESSION['adms_access_level_id'] > 2) {
-            //Acessa se for Cliente Adm ou Suporte do Cliente
-            if (($_SESSION['adms_access_level_id'] == 4) or ($_SESSION['adms_access_level_id'] == 12)) {
+                    $listProd = new \App\adms\Models\helper\AdmsRead();
+                    $listProd->fullRead("SELECT prod.id, prod.name,  typ.name as name_type, prod.serie, prod.modelo_id, prod.marca_id, clie.nome_fantasia as nome_fantasia_clie, prod.venc_contr as venc_contr_prod, prod.empresa_id, prod.inf_adicionais, sit.name as name_sit
+                    FROM adms_produtos AS prod  
+                    INNER JOIN adms_type_equip AS typ ON typ.id=prod.type_id 
+                    INNER JOIN adms_clientes AS clie ON clie.id=prod.cliente_id 
+                    INNER JOIN adms_sit_equip AS sit ON sit.id=prod.sit_id
+                    WHERE prod.empresa_id = :empresa_id ORDER BY prod.venc_contr ASC
+                    LIMIT :limit OFFSET :offset", "empresa_id={$_SESSION['emp_user']}&limit={$this->limitResult}&offset={$pagination->getOffset()}");
+
+                    $this->resultBd = $listProd->getResult();
+                    if ($this->resultBd) {
+                        $this->result = true;
+                    } else {
+                        $_SESSION['msg'] = "<p style='color: #f00'>Erro: Nenhuma Produto encontrado!</p>";
+                        $this->result = false;
+                    }
+                }
+                //Acessa se for Super Usuario ou Adm repbrasil
+            } else {
+
                 $pagination = new \App\adms\Models\helper\AdmsPagination(URLADM . 'list-prod/index');
                 $pagination->condition($this->page, $this->limitResult);
-                $pagination->pagination("SELECT COUNT(id) AS num_result FROM adms_produtos WHERE empresa_id = :empresa_id", "empresa_id={$_SESSION['emp_user']}");
+                $pagination->pagination("SELECT COUNT(id) AS num_result FROM adms_produtos");
                 $this->resultPg = $pagination->getResult();
 
                 $listProd = new \App\adms\Models\helper\AdmsRead();
-                $listProd->fullRead("SELECT prod.id, prod.name,  typ.name as name_type, prod.serie, prod.modelo_id, prod.marca_id, clie.nome_fantasia as nome_fantasia_clie, prod.venc_contr as venc_contr_prod, prod.empresa_id, prod.inf_adicionais, sit.name as name_sit
-                FROM adms_produtos AS prod  
-                INNER JOIN adms_type_equip AS typ ON typ.id=prod.type_id 
-                INNER JOIN adms_clientes AS clie ON clie.id=prod.cliente_id 
-                INNER JOIN adms_sit_equip AS sit ON sit.id=prod.sit_id
-                WHERE prod.empresa_id = :empresa_id ORDER BY prod.name ASC
-                LIMIT :limit OFFSET :offset", "empresa_id={$_SESSION['emp_user']}&limit={$this->limitResult}&offset={$pagination->getOffset()}");
+                    $listProd->fullRead("SELECT prod.id, prod.name,  typ.name as name_type, prod.serie, prod.modelo_id, prod.marca_id, 
+                    clie.nome_fantasia as nome_fantasia_clie, prod.venc_contr as venc_contr_prod, prod.empresa_id, prod.inf_adicionais, sit.name as name_sit
+                    FROM adms_produtos AS prod  
+                    INNER JOIN adms_type_equip AS typ ON typ.id=prod.type_id 
+                    INNER JOIN adms_clientes AS clie ON clie.id=prod.cliente_id 
+                    INNER JOIN adms_sit_equip AS sit ON sit.id=prod.sit_id ORDER BY prod.venc_contr ASC LIMIT :limit OFFSET :offset", 
+                    "limit={$this->limitResult}&offset={$pagination->getOffset()}");
+
+
 
                 $this->resultBd = $listProd->getResult();
                 if ($this->resultBd) {
@@ -104,30 +133,59 @@ class AdmsListProd
                     $this->result = false;
                 }
             }
-            //Acessa se for Super Usuario ou Adm repbrasil
-        } else {
+        }else if (!isset($_SESSION['status_ticket'])){
+            
+            if ($_SESSION['adms_access_level_id'] > 2) {
+                //Acessa se for Cliente Adm ou Suporte do Cliente
+                if (($_SESSION['adms_access_level_id'] == 4) or ($_SESSION['adms_access_level_id'] == 12)) {
+                    $pagination = new \App\adms\Models\helper\AdmsPagination(URLADM . 'list-prod/index');
+                    $pagination->condition($this->page, $this->limitResult);
+                    $pagination->pagination("SELECT COUNT(id) AS num_result FROM adms_produtos WHERE empresa_id = :empresa_id", "empresa_id={$_SESSION['emp_user']}");
+                    $this->resultPg = $pagination->getResult();
 
-            $pagination = new \App\adms\Models\helper\AdmsPagination(URLADM . 'list-prod/index');
-            $pagination->condition($this->page, $this->limitResult);
-            $pagination->pagination("SELECT COUNT(id) AS num_result FROM adms_produtos");
-            $this->resultPg = $pagination->getResult();
+                    $listProd = new \App\adms\Models\helper\AdmsRead();
+                    $listProd->fullRead("SELECT prod.id, prod.name, typ.name as name_type, prod.serie, prod.modelo_id, prod.marca_id, 
+                    clie.nome_fantasia as nome_fantasia_clie, prod.venc_contr as venc_contr_prod, prod.empresa_id, prod.inf_adicionais, sit.name as name_sit
+                    FROM adms_produtos AS prod  
+                    INNER JOIN adms_type_equip AS typ ON typ.id=prod.type_id 
+                    INNER JOIN adms_clientes AS clie ON clie.id=prod.cliente_id 
+                    INNER JOIN adms_sit_equip AS sit ON sit.id=prod.sit_id
+                    WHERE prod.empresa_id = :empresa_id ORDER BY prod.name ASC
+                    LIMIT :limit OFFSET :offset", "empresa_id={$_SESSION['emp_user']}&limit={$this->limitResult}&offset={$pagination->getOffset()}");
 
-            $listProd = new \App\adms\Models\helper\AdmsRead();
-                $listProd->fullRead("SELECT prod.id, prod.name,  typ.name as name_type, prod.serie, prod.modelo_id, prod.marca_id, clie.nome_fantasia as nome_fantasia_clie, prod.venc_contr as venc_contr_prod, prod.empresa_id, prod.inf_adicionais, sit.name as name_sit
-                FROM adms_produtos AS prod  
-                INNER JOIN adms_type_equip AS typ ON typ.id=prod.type_id 
-                INNER JOIN adms_clientes AS clie ON clie.id=prod.cliente_id 
-                INNER JOIN adms_sit_equip AS sit ON sit.id=prod.sit_id ORDER BY venc_contr_prod ASC LIMIT :limit OFFSET :offset", 
-                "limit={$this->limitResult}&offset={$pagination->getOffset()}");
-
-
-
-            $this->resultBd = $listProd->getResult();
-            if ($this->resultBd) {
-                $this->result = true;
+                    $this->resultBd = $listProd->getResult();
+                    if ($this->resultBd) {
+                        $this->result = true;
+                    } else {
+                        $_SESSION['msg'] = "<p style='color: #f00'>Erro: Nenhuma Produto encontrado!</p>";
+                        $this->result = false;
+                    }
+                }
+                //Acessa se for Super Usuario ou Adm repbrasil
             } else {
-                $_SESSION['msg'] = "<p style='color: #f00'>Erro: Nenhuma Produto encontrado!</p>";
-                $this->result = false;
+
+                $pagination = new \App\adms\Models\helper\AdmsPagination(URLADM . 'list-prod/index');
+                $pagination->condition($this->page, $this->limitResult);
+                $pagination->pagination("SELECT COUNT(id) AS num_result FROM adms_produtos");
+                $this->resultPg = $pagination->getResult();
+
+                $listProd = new \App\adms\Models\helper\AdmsRead();
+                    $listProd->fullRead("SELECT prod.id, prod.name,  typ.name as name_type, prod.serie, prod.modelo_id, prod.marca_id, clie.nome_fantasia as nome_fantasia_clie, prod.venc_contr as venc_contr_prod, prod.empresa_id, prod.inf_adicionais, sit.name as name_sit
+                    FROM adms_produtos AS prod  
+                    INNER JOIN adms_type_equip AS typ ON typ.id=prod.type_id 
+                    INNER JOIN adms_clientes AS clie ON clie.id=prod.cliente_id 
+                    INNER JOIN adms_sit_equip AS sit ON sit.id=prod.sit_id ORDER BY prod.name ASC LIMIT :limit OFFSET :offset  prod.venc_contr ASC", 
+                    "limit={$this->limitResult}&offset={$pagination->getOffset()}");
+
+
+
+                $this->resultBd = $listProd->getResult();
+                if ($this->resultBd) {
+                    $this->result = true;
+                } else {
+                    $_SESSION['msg'] = "<p style='color: #f00'>Erro: Nenhuma Produto encontrado!</p>";
+                    $this->result = false;
+                }
             }
         }
     }
@@ -273,17 +331,12 @@ class AdmsListProd
         $list = new \App\adms\Models\helper\AdmsRead();
 
         if ($_SESSION['adms_access_level_id'] > 2) {
-
                 $list->fullRead("SELECT id, nome_fantasia FROM adms_clientes
                 WHERE empresa= :empresa  ORDER BY nome_fantasia", "empresa={$_SESSION['emp_user']}");
                 $registry['nome_clie'] = $list->getResult();
-                
         } else {
-
             $list->fullRead("SELECT id, nome_fantasia FROM adms_clientes ORDER BY nome_fantasia");
             $registry['nome_clie'] = $list->getResult();
-
-            
         }
 
         $this->listRegistryAdd = ['nome_clie' => $registry['nome_clie']];

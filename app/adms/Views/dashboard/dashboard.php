@@ -191,9 +191,9 @@ unset($_SESSION["status_chamado"]);
                 </span>
                 <?php if ($this->data['countEquipVenc'][0]['qnt_equip'] > 0) { ?>
                     <?php if ($this->data['countEquipVenc'][0]['qnt_equip'] > 1) { ?>
-                        <h6><a href="<?php echo URLADM; ?>list-prod/index">Contratos Vencidos</a></h6>
+                        <h6><a href="<?php echo URLADM; ?>list-prod/index?status_ticket=77">Contratos Vencidos</a></h6>
                     <?php } else {?>
-                        <h6><a href="<?php echo URLADM; ?>list-prod/index">Contrato Vencido</a></h6>
+                        <h6><a href="<?php echo URLADM; ?>list-prod/index?status_ticket=77">Contrato Vencido</a></h6>
                     <?php }?>
                 <?php } else { ?>
                     <h6>Vencido</h6>

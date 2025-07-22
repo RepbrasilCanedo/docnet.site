@@ -151,8 +151,7 @@ class AdmsDashboard
     // Verifica a quantidade de Equipamentos com contrato de suporte ou garantia vencidos -> 2
     public function countEquipVenc(): void
     {
-        $dataAtual=date("Y-m-d");
-        
+        $dataAtual=date("Y-m-d");        
 
         if (($_SESSION['adms_access_level_id'] > 2)) {
             //Se for 4 - Cliente Administrativo

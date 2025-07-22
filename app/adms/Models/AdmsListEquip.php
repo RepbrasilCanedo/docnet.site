@@ -188,7 +188,7 @@ class AdmsListEquip
      */
 
 
-    public function listSearchEquip(int $page = null, string|null $search_equip, string|null $search_emp): void
+    public function listSearchEquip(int $page, string|null $search_equip, string|null $search_emp): void
     {
         $this->page = (int) $page ? $page : 1;
 
@@ -268,7 +268,7 @@ class AdmsListEquip
         LEFT JOIN adms_marca AS mar ON mar.id=equip.marca_id 
         LEFT JOIN adms_empresa AS emp ON emp.id=equip.empresa_id 
         LEFT JOIN adms_sits_empr_unid AS sit ON sit.id=equip.sit_id  
-        WHERE (equip.empresa_id= :empresa_id) and (equip.name LIKE :search_equip LIKE :search_equip) ORDER BY equip.id DESC
+        WHERE (equip.empresa_id= :empresa_id) and (equip.name LIKE :search_equip) ORDER BY equip.id DESC
          LIMIT :limit OFFSET :offset", "empresa_id={$_SESSION['emp_user']}&search_equip={$this->searchEquipValue}&limit={$this->limitResult}&offset={$pagination->getOffset()}");
 
 
