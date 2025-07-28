@@ -25,6 +25,12 @@ class RelatListEquip
     /** @var string|null $searchCham Recebe a empresa do chamado*/
     private string|null $searchEmpresa;
 
+    /** @var string|null $searchDateStart Recebe a data de inicio */
+    private string|null $searchDateStart;
+
+    /** @var string|null $searchDateEnd Recebe a data final */
+    private string|null $searchDateEnd;
+
     /**
      * Método listar Chamados
      * 
@@ -41,19 +47,20 @@ class RelatListEquip
         $this->dataForm = filter_input_array(INPUT_POST, FILTER_DEFAULT);  
         if($this->dataForm<>null){
             $this->searchEmpresa= $this->dataForm['search_empresa'];
+            $this->searchDateStart = $this->dataForm['search_date_start'];
+            $this->searchDateEnd = $this->dataForm['search_date_end'];
         }
-        
-        
-        //var_dump($this->searchEmpresa);
 
         $listEquip = new \App\cpms\Models\CpmsRelatListEquip();
         
         if ((!empty($this->dataForm['SendSearchEquip']))) {
-            if($this->dataForm['search_empresa']== null){
-                $listEquip->listEquip($this->searchEmpresa);   
-           }else{
+            if ((!empty($this->dataForm['search_empresa'])) and (empty($this->dataForm['search_date_start'])) and (empty($this->dataForm['search_date_end']))){  
                 $listEquip->searchEmpresa($this->searchEmpresa);  
-           }      
+            } elseif ((empty($this->dataForm['search_empresa'])) and (!empty($this->dataForm['search_date_start'])) and (!empty($this->dataForm['search_date_end']))){            
+                $listEquip->searchPeriodo($this->searchDateStart, $this->searchDateEnd); 
+            } elseif ((empty($this->dataForm['search_empresa'])) and (empty($this->dataForm['search_date_start'])) and (empty($this->dataForm['search_date_end']))) {            
+                $listEquip->listEquip($this->searchEmpresa); 
+            }      
         }
 
         $listSelect = new \App\cpms\Models\CpmsRelatListEquip();

@@ -27,6 +27,12 @@ class CpmsRelatListEquip
     /** @var string|null $searchMarca Recebe o valor da marca*/
     private string|null $searchEmpresa;
 
+    /** @var string|null $searchDateStart Recebe a data de inicio */
+    private string|null $searchDateStart;
+
+    /** @var string|null $searchDateEnd Recebe a data final */
+    private string|null $searchDateEnd;
+
     /** @var string|null $searchEmail Recebe o nome da cor em hexadecimal */
     private string|null $searchEmpresaValue;
 
@@ -63,7 +69,7 @@ class CpmsRelatListEquip
 
         $listEquip = new \App\adms\Models\helper\AdmsRead();
         $listEquip->fullRead("SELECT prod.id as id_prod, prod.name as name_prod, prod.serie as serie_prod, 
-                            prod.modelo_id as modelo_id_prod, prod.marca_id as marca_id_prod, clie.nome_fantasia as nome_fantasia_clie, prod.empresa_id as empresa_id_prod, prod.sit_id, emp.logo as logo_emp   
+                            prod.modelo_id as modelo_id_prod, prod.marca_id as marca_id_prod, clie.nome_fantasia as nome_fantasia_clie, prod.empresa_id as empresa_id_prod, prod.venc_contr as venc_contr_prod, prod.sit_id, emp.logo as logo_emp   
                             FROM adms_produtos AS prod
                             INNER JOIN adms_clientes AS clie ON clie.id=prod.cliente_id 
                             INNER JOIN adms_emp_principal AS emp ON emp.id=prod.empresa_id
@@ -74,7 +80,6 @@ class CpmsRelatListEquip
         $this->resultBd = $listEquip->getResult();
         
         if ($this->resultBd) {
-            //var_dump($this->resultBd);
             $this->generatePdf();
         } else {
             $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum Equipamento encontrado!</p>";
@@ -101,18 +106,63 @@ class CpmsRelatListEquip
             $_SESSION['resultado'] = '';
             $_SESSION['resultado'] = $this->resultBd[0]['num_result'];
         } else {
-            $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum Ticket encontrado!</p>";
+            $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum Equipamento encontrado!</p>";
             $this->result = false;
         }
 
         $listEquip = new \App\adms\Models\helper\AdmsRead();
         $listEquip->fullRead("SELECT prod.id as id_prod, prod.name as name_prod, prod.serie as serie_prod, 
-                            prod.modelo_id as modelo_id_prod, prod.marca_id as marca_id_prod, clie.nome_fantasia as nome_fantasia_clie, prod.empresa_id as empresa_id_prod, prod.sit_id, emp.logo as logo_emp   
+                            prod.modelo_id as modelo_id_prod, prod.marca_id as marca_id_prod, clie.nome_fantasia as nome_fantasia_clie, 
+                            prod.empresa_id as empresa_id_prod, prod.venc_contr as venc_contr_prod, prod.sit_id, emp.logo as logo_emp   
                             FROM adms_produtos AS prod
                             INNER JOIN adms_clientes AS clie ON clie.id=prod.cliente_id 
                             INNER JOIN adms_emp_principal AS emp ON emp.id=prod.empresa_id
                             WHERE (empresa_id= :empresa_id) AND (prod.cliente_id= :cliente_id)", 
                             "empresa_id={$_SESSION['emp_user']}&cliente_id={$this->searchEmpresa}");
+
+
+
+        $this->resultBd = $listEquip->getResult();
+        
+        if ($this->resultBd) {
+            $this->generatePdf();
+        } else {
+            $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum Equipamento encontrado!</p>";
+            $this->result = false;
+        }
+    }
+
+    /**
+     * Metodo pesquisar pela empresa do Ticket
+     * @return void
+     */
+    public function searchPeriodo(string|null $searchDateStart, string|null $searchDateEnd ): void
+    {
+        $this->searchDateStart=$searchDateStart;
+        $this->searchDateEnd=$searchDateEnd;
+
+        $contEquip = new \App\adms\Models\helper\AdmsRead();
+        $contEquip->fullRead("SELECT COUNT(id) AS num_result FROM adms_produtos WHERE (empresa_id= :empresa_id) AND (venc_contr BETWEEN :search_date_start AND :search_date_end)",
+            "empresa_id={$_SESSION['emp_user']}&search_date_start={$this->searchDateStart}&search_date_end={$this->searchDateEnd}"
+        );
+        $this->resultBd = $contEquip->getResult();
+        if ($this->resultBd) {
+            $_SESSION['resultado'] = '';
+            $_SESSION['resultado'] = $this->resultBd[0]['num_result'];
+        } else {
+            $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum Equipamento encontrado!</p>";
+            $this->result = false;
+        }
+
+        $listEquip = new \App\adms\Models\helper\AdmsRead();
+        $listEquip->fullRead("SELECT prod.id as id_prod, prod.name as name_prod, prod.serie as serie_prod, 
+                            prod.modelo_id as modelo_id_prod, prod.marca_id as marca_id_prod, clie.nome_fantasia as nome_fantasia_clie, 
+                            prod.empresa_id as empresa_id_prod, prod.venc_contr as venc_contr_prod, prod.sit_id, emp.logo as logo_emp   
+                            FROM adms_produtos AS prod
+                            INNER JOIN adms_clientes AS clie ON clie.id=prod.cliente_id 
+                            INNER JOIN adms_emp_principal AS emp ON emp.id=prod.empresa_id
+                            WHERE (empresa_id= :empresa_id) AND venc_contr BETWEEN :search_date_start AND :search_date_end", 
+                            "empresa_id={$_SESSION['emp_user']}&search_date_start={$this->searchDateStart}&search_date_end={$this->searchDateEnd}");
 
 
 
@@ -167,9 +217,8 @@ class CpmsRelatListEquip
 
         $image_clie=($this->resultBd[0]['empresa_id_prod']);
         $logo_clie=($this->resultBd[0]['logo_emp']);
-      
-        $html = "<style> table {border-collapse: collapse;width: 100%;}th, td {border: 1px solid black;padding: 2px;text-align: left;} caption{padding: 8px;text-align: center;}</style>";
-        $html .= "<img src='" . URLADM . "app/adms/assets/image/logo/clientes/$image_clie/$logo_clie' width='70' alt='Logo do Cliente'";
+        $html = "<style> table {border-collapse: collapse;width: 100%;}th, td {border: 1px solid black;padding: 2px;text-align: left;} caption{padding: 8px;text-align: center;}a{padding-left: 1000px}</style>";
+        $html .= "<a href='" .URLADM. "relat-list-equip/index'><img src='" . URLADM . "app/adms/assets/image/logo/clientes/$image_clie/$logo_clie' width='70' alt='Logo do Cliente'></a>";
         $html .= "<table>";
         $html .= "<caption><b> RELATORIO DE EQUIPAMENTOS </b>";
         $html .= "<caption>Total de : <b> {$total_tickets} </b> Ticket.";
@@ -178,7 +227,8 @@ class CpmsRelatListEquip
         $html .= "<th>Nome Equipamento.</th>";
         $html .= "<th>Modelo/Marca</th>";
         $html .= "<th>N. de Serie</th>";
-        $html .= "<th>Cliente</th>";
+        $html .= "<th>Cliente</th>";        
+        $html .= "<th>Venc. Contrato</th>";
         $html .= "</thead>";
 
         foreach ($this->resultBd as $user) {
@@ -190,6 +240,8 @@ class CpmsRelatListEquip
             $html .= "<td>$modelo_id_prod - $marca_id_prod</td>";
             $html .= "<td>$serie_prod</td>";
             $html .= "<td>$nome_fantasia_clie</td>";
+            $dt_cham_formatada = date('d/m/Y', strtotime($venc_contr_prod));
+            $html .= "<td>$dt_cham_formatada</td>";
             $html .= "</tbody>";
         }
         

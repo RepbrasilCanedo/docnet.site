@@ -1340,7 +1340,7 @@ class CpmsRelatListCham
 
                 $contCham = new \App\adms\Models\helper\AdmsRead();
                 $contCham->fullRead("SELECT COUNT(id) AS num_result FROM adms_cham WHERE empresa_id= :empresa_id AND dt_cham BETWEEN :search_date_start AND :search_date_end",
-                    "empresa_id={$_SESSION['emp_user']}&search_date_end={$this->searchDateEnd}"
+                    "empresa_id={$_SESSION['emp_user']}&search_date_start={$this->searchDateStart}&search_date_end={$this->searchDateEnd}"
                 );
                 $this->resultBd = $contCham->getResult();
 
@@ -2092,8 +2092,8 @@ class CpmsRelatListCham
         $image_clie=($this->resultBd[0]['empresa_id_cham']);
         $logo_clie=($this->resultBd[0]['logo_princ']);
       
-        $html = "<style> table {border-collapse: collapse;width: 100%;}th, td {border: 1px solid black;padding: 2px;text-align: left;} caption{padding: 8px;text-align: center;}</style>";
-        $html .= "<img src='" . URLADM . "app/adms/assets/image/logo/clientes/$image_clie/$logo_clie' width='70' alt='Logo do Cliente'";
+        $html = "<style> table {border-collapse: collapse;width: 100%;}th, td {border: 1px solid black;padding: 2px;text-align: left;} caption{padding: 8px;text-align: center;}center;} a{padding-left: 1000px}</style>";
+        $html .= "<a href='" .URLADM. "relat-list-cham/index'><img src='" . URLADM . "app/adms/assets/image/logo/clientes/$image_clie/$logo_clie' width='70' alt='Logo do Cliente' title='Retorna a Página Anterior'></a>";
         $html .= "<table>";
         $html .= "<caption><b> RELATORIO DE TICKETS DOCNET HELP DESK </b>";
         $html .= "<caption>Total de : <b> {$total_tickets} </b> Ticket.";

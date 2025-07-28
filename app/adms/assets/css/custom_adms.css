@@ -631,7 +631,11 @@ a{
     display: block;
 }
 
-
+.testa {
+    text-align: right;
+    color: red;
+    text-decoration: none;
+}
 /* Fim botao dropdown do listar */
 
 
