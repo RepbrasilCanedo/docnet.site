@@ -91,7 +91,7 @@ class EditContato
             $editContato->update($this->dataForm);
 
             if ($editContato->getResult()) {
-                $urlRedirect = URLADM . "edit-contato/index/" . $this->dataForm['id'];
+                $urlRedirect = URLADM . "list-contato/index/" . $this->dataForm['id'];
                 header("Location: $urlRedirect");
             } else {
                 $this->data['form'] = $this->dataForm;

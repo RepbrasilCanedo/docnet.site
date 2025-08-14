@@ -90,32 +90,28 @@ class AdmsAddChamAgend
      *
      * @return array
      */
-     private function val_prod(): void
+               private function val_prod(): void
      {
                $viewProd = new \App\adms\Models\helper\AdmsRead();
-                $viewProd->fullRead("SELECT id, cliente_id, dias, inicio_contr FROM adms_produtos 
+                $viewProd->fullRead("SELECT id, cliente_id, dias, venc_contr FROM adms_produtos 
                 WHERE id= :id AND cliente_id= :cliente_id", "id={$this->data['prod_id']}& cliente_id={$this->data['cliente_id']}");
+                
                 $this->resultBd = $viewProd->getResult();
 
                 if ($this->resultBd) {
-                    // Sua data inicial
-                    $dataInicial = $this->resultBd[0]['inicio_contr'];
-
-                    // Número de dias a adicionar
-                    $diasParaAdicionar = $this->resultBd[0]['dias'];
-
+                    
                     // Adiciona os dias e formata a nova data em uma única linha
-                    $novaData = date('d/m/Y', strtotime($dataInicial . " +{$diasParaAdicionar} days"));
+                    $vencContr = $this->resultBd[0]['venc_contr'];
+
 
                     // Exibe a nova data
-                    if($novaData < date(date("Y-m-d H:i:s"))){
-                    $this->result = true;
-                     $this->add();
+                    if($vencContr > date("Y-m-d H:i:s")){
+                        $this->result = true;
+                        $this->add();
                     } else{
-                        $_SESSION['msg'] = "<p class='alert-danger'>Não e possivel a abertura de Ticket para este produto pois o contrato de suporte tecnico ou garantia esta vencido. Entre em contato com o setor comercial da REPBRASIL 071 98137 6244</p>";
+                        $_SESSION['msg'] = "<p class='alert-danger'>Não e possivel a abertura de Ticket para este produto pois o contrato de suporte tecnico ou garantia esta vencido. Entre em contato com o setor comercial de sua revenda</p>";
                         $this->result = false;
                     };
-                    
                    
                 } else {
                     $_SESSION['msg'] = "<p class='alert-danger'>Erro: Produto não encontrado!</p>";
@@ -123,6 +119,7 @@ class AdmsAddChamAgend
                 }
 
      }
+     
 
 
     /** 

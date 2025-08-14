@@ -12,7 +12,7 @@ if(!defined('D0O8C0A3N1E9D6O1')){
  *
   * @author Daniel Canedo - docan2006@gmail.com
  */
-class AdmsValExtImg
+class AdmsValExtPdf
 {
     /** @var string $mimeType Recebe o mimeType da imagem */
     private string $mimeType;
@@ -38,11 +38,11 @@ class AdmsValExtImg
      * 
      * @return void
      */
-    public function validateExtImg(string $mimeType): void
+    public function validateExtOrcam(string $mimeType): void
     {
         $this->mimeType = $mimeType;
         switch ($this->mimeType) {
-            case 'image/pdf':
+            case 'application/pdf':
                 $this->result = true;
                 break;
             default:

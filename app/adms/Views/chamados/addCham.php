@@ -55,6 +55,7 @@ if (isset($this->data['form'])) {
                             <option value="Telefonico">Telefônico</option>
                             <option value="Remoto">Remoto</option>
                             <option value="Presencial">Presencial</option>
+                            <option value="Apresentacao">Apresentação de Produto</option>
                             <option value="Outros">Outros</option>
                         </select>
                     </div>

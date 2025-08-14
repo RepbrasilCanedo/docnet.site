@@ -556,6 +556,40 @@ function previewImageCham(new_image_cham) {
     readerCham.readAsDataURL(new_image_cham.files[0]);
 }
 
+
+function inputFileValImgOrcam() {
+    //Receber o valor do campo
+    var new_image_orcam = document.querySelector("#new_image_orcam");
+
+    var filePath = new_image_orcam.value;
+
+    var allowedExtensions = /(\.pdf)$/i;
+
+    if (!allowedExtensions.exec(filePath)) {
+        new_image_orcam.value = '';
+        document.getElementById("msg").innerHTML = "<p class='alert-danger'>Erro: Necessário selecionar uma imagem em PDF!</p>";
+        return;
+    } else {
+        previewImageOrcam(new_image_orcam);
+        document.getElementById("msg").innerHTML = "<p></p>";
+        return;
+    }
+}
+
+function previewImageOrcam(new_image_orcam) {
+    if ((new_image_orcam.files) && (new_image_orcam.files[0])) {
+        // FileReader() - ler o conteúdo dos arquivos
+        var readerOrcam = new FileReader();
+        // onload - disparar um evento quando qualquer elemento tenha sido carregado
+        readerOrcam.onload = function (e) {
+            document.getElementById('preview-img-orcam').innerHTML = "<img src='" + e.target.result + "' alt='Imagem' style='width: 500px;'>";
+        }
+    }
+
+    // readAsDataURL - Retorna os dados do formato blob como uma URL de dados - Blob representa um arquivo
+    readerCham.readAsDataURL(new_image_orcam.files[0]);
+}
+
 const formEditSitUser = document.getElementById("form-add-sit-user");
 if (formEditSitUser) {
     formEditSitUser.addEventListener("submit", async (e) => {

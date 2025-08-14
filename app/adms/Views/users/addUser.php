@@ -8,6 +8,7 @@ if (!defined('D0O8C0A3N1E9D6O1')) {
 if (isset($this->data['form'])) {
     $valorForm = $this->data['form'];
 }
+//var_dump($this->data['select']['lev']);
 
 ?>
 <!-- Inicio do conteudo do administrativo -->
@@ -47,7 +48,7 @@ if (isset($this->data['form'])) {
                         <label class="title-input">Nome:<span class="text-danger">*</span></label>
                         <input type="text" name="name" id="name" class="input-adm" placeholder="Digite o nome completo" value="<?php echo $name; ?>" required>
                     </div>
-                    <?php if ($_SESSION['adms_access_level_id'] < 2) { ?>
+                    <?php if ($_SESSION['adms_access_level_id'] <= 2) { ?>
 
                         <div class="column">
                         <?php
@@ -148,6 +149,24 @@ if (isset($this->data['form'])) {
                                     echo "<option value='$id_sit' selected>$name_sit</option>";
                                 } else {
                                     echo "<option value='$id_sit'>$name_sit</option>";
+                                }
+                            }
+                            ?>
+                        </select>
+                    </div>
+
+                    <div class="column">
+                        <label class="title-input">Nivel Acesso:<span class="text-danger">*</span></label>
+                        <select name="adms_access_level_id" id="adms_access_level_id" class="input-adm" required>
+                            <option value="">Selecione</option>
+                            <?php
+                            foreach ($this->data['select']['lev'] as $lev) {
+                                extract($lev);
+
+                                if ((isset($valorForm['adms_access_level_id'])) and ($valorForm['adms_access_level_id'] == $id)) {
+                                    echo "<option value='$id_lev' selected>$name_lev</option>";
+                                } else {
+                                    echo "<option value='$id_lev'>$name_lev</option>";
                                 }
                             }
                             ?>

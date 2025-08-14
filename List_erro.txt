@@ -5,5 +5,3 @@
 005 - ConfigView.php - Erro ao carregar a VIEW Login
 006 - CarregarPgAdmLevel.php - Erro nao encontrou a pagina no BD
 007 - CarregarPgAdmLevel.php - Erro carregar a metodo
-008 - CarregarPgAdm.php - Erro carregar a pagina ou pagina não existe
-009 - CarregarPgAdm.php - Erro carregar a pagina ou pagina não existe no pacote sts

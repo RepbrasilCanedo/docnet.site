@@ -80,10 +80,9 @@ if (isset($this->data['form'][0])) {
             <?php
             }
             ?>
-        </div>
-        <div class="content-adm">
             <form method="POST" action="" id="form-add-contato" class="form-adm">
-                <?php
+                
+                <?php                
                 $id_mens = "";
                 if (isset($valorForm['id_mens'])) {
                     $id_mens = $valorForm['id_mens'];

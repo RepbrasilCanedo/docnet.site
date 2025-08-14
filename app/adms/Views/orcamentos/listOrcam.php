@@ -19,7 +19,7 @@ if (isset($this->data['form'])) {
 <div class="wrapper">
     <div class="row">
         <div class="top-list">
-            <span class="title-content">Listar Tickets</span><br>
+            <span class="title-content">Listar Orçamentos</span><br>
         </div>
 
         <div class="top-list">
@@ -59,7 +59,7 @@ if (isset($this->data['form'])) {
                             </div>
 
                             <div class="column">
-                                <label class="title-input">Status do Ticket:</label>
+                                <label class="title-input">Status do Orcamento:</label>
                                 <select name="search_status" id="search_status" class="input-adm">
                                     <option value="">Todos</option>
                                     <?php
@@ -72,18 +72,6 @@ if (isset($this->data['form'])) {
                                         }
                                     }
                                     ?>
-                                </select>
-                            </div>
-
-                            <div class="column">
-                                <label class="title-input">Tipo do Ticket:</label>
-                                <select name="search_tipo" id="search_tipo" class="input-adm">
-                                    <option value="">Todos</option>
-                                    <option value="Telefonico">Telefônico</option>
-                                    <option value="Remoto">Remoto</option>
-                                    <option value="Presencial">Presencial</option>
-                                <option value="Apresentacao">Apresentação Negócios</option>
-                                    <option value="Outros">Outros</option>
                                 </select>
                             </div>
 
@@ -119,7 +107,7 @@ if (isset($this->data['form'])) {
                                     $search_id = $valorForm['search_id'];
                                 }
                                 ?>
-                                <label class="title-input">Número Ticket:</label>
+                                <label class="title-input">Número Orçamento:</label>
                                 <input type="number" name="search_id" id="search_id" class="input-adm" placeholder="Todos" value="<?= $search_id ?>">
                             </div>
 
@@ -143,7 +131,7 @@ if (isset($this->data['form'])) {
                             <div class="column">
                                 <label class="title-input">Cliente:</label>
                                 <select name="search_empresa" id="search_empresa" class="input-adm">
-                                    <option value="">Todas</option>
+                                    <option value="">Todos</option>
                                     <?php
                                     foreach ($this->data['select']['nome_clie'] as $nome_clie) {
                                         extract($nome_clie);
@@ -158,7 +146,7 @@ if (isset($this->data['form'])) {
                             </div>
 
                             <div class="column">
-                                <label class="title-input">Status do Ticket:</label>
+                                <label class="title-input">Status do Orcamento:</label>
                                 <select name="search_status" id="search_status" class="input-adm">
                                     <option value="">Todos</option>
                                     <?php
@@ -171,18 +159,6 @@ if (isset($this->data['form'])) {
                                         }
                                     }
                                     ?>
-                                </select>
-                            </div>
-
-                            <div class="column">
-                                <label class="title-input">Tipo do Ticket:</label>
-                                <select name="search_tipo" id="search_tipo" class="input-adm">
-                                    <option value="">Todos</option>
-                                    <option value="Telefonico">Telefônico</option>
-                                    <option value="Remoto">Remoto</option>
-                                    <option value="Presencial">Presencial</option>
-                                <option value="Apresentacao">Apresentação Negócios</option>
-                                    <option value="Outros">Outros</option>
                                 </select>
                             </div>
 
@@ -264,7 +240,6 @@ if (isset($this->data['form'])) {
                                 <option value="Telefonico">Telefônico</option>
                                 <option value="Remoto">Remoto</option>
                                 <option value="Presencial">Presencial</option>
-                                <option value="Apresentacao">Apresentação Negócios</option>
                                 <option value="Outros">Outros</option>
                             </select>
                         </div>
@@ -321,76 +296,49 @@ if (isset($this->data['form'])) {
                 <tr>
                     <th class="list-head-content table-sm-none">ID</th>
                     <th class="list-head-content">Cliente</th>
-                    <th class="list-head-content table-sm-none">Equipamento</th>
-                    <th class="list-head-content table-sm-none">Data </th>
+                    <th class="list-head-content table-sm-none">Produto/Serviço</th>
+                    <th class="list-head-content table-sm-none">Data Abertura </th>
                     <th class="list-head-content">Status</th>
                     <th class="list-head-content table-sm-none">Data</th>
-                    <th class="list-head-content table-sm-none">Tipo</th>
                     <th class="list-head-content">Ações</th>
                 </tr>
             </thead>
             <tbody class="list-body">
                 <?php
-                foreach ($this->data['listCham'] as $cham) {
+                foreach ($this->data['listOrcam'] as $cham) {
                     extract($cham);
                 ?>
                     <tr>
-                        <td class="list-body-content table-sm-none"><?php echo $id; ?></td>
-                        <td class="list-body-content"><?php echo $nome_fantasia_clie; ?></td>
-                        <td class="list-body-content table-sm-none"><?php echo $name_prod; ?></td>
-                        <td class="list-body-content table-sm-none"><?php echo date('d/m/Y H:i:s', strtotime($dt_cham)); ?>
+                        <td class="list-body-content table-sm-none"><?php echo $id_orcam; ?></td>
+                        <td class="list-body-content"><?php echo $nome_fantasia_id_clie; ?></td>
+                        <td class="list-body-content table-sm-none"><?php echo $prod_serv_orcam; ?></td>
+                        <td class="list-body-content table-sm-none"><?php echo date('d/m/Y H:i:s', strtotime($dt_orcam_orcam)); ?>
                         </td>
-                        <td class="list-body-content"><?php echo $name_sta; ?></td>
+                        <td class="list-body-content"><?php echo $name_status_orcam; ?></td>
                         <td class="list-body-content table-sm-none">
-                            <?php echo date('d/m/Y H:i:s', strtotime($dt_status)); ?></td>
-                        <td class="list-body-content table-sm-none"><?php echo $type_cham; ?></td>
+                            <?php echo date('d/m/Y H:i:s', strtotime($dt_status_orcam)); ?></td>
 
                         <td class="list-body-content">
                             <div class="dropdown-action">
-                                <button onclick="actionDropdown(<?php echo $id; ?>)" class="dropdown-btn-action">Ações</button>
+                                <button onclick="actionDropdown(<?php echo $id_orcam; ?>)" class="dropdown-btn-action">Ações</button>
 
-                                <div id="actionDropdown<?php echo $id; ?>" class="dropdown-action-item">
+                                <div id="actionDropdown<?php echo $id_orcam; ?>" class="dropdown-action-item">
                                     <?php
 
+                                        if ($this->data['button']['view_orcam']) { 
+                                            echo "<a href='" . URLADM . "view-orcam/index/$id_orcam'>Visualizar</a>";
 
-                                    if (($name_sta == 'Finalizado') or ($name_sta == 'Aprovado')) {
+                                            if ($_SESSION['adms_access_level_id'] == 4){
 
-                                        if (($name_sta == 'Aprovado')) {
-                                            if ($this->data['button']['view_cham']) {
-                                                echo "<a href='" . URLADM . "view-cham/index/$id'>Visualizar</a>";
-                                            }
-                                        } else {
-                                            if ($this->data['button']['view_cham']) {
-                                                echo "<a href='" . URLADM . "view-cham/index/$id'>Visualizar</a>";
-
-                                                if (($_SESSION['adms_access_level_id'] > 2)) {
-                                                    echo "<a href='" . URLADM . "edit-aprov-cham/index/$id'>Avaliar</a>";
+                                                if ($status_id == 1) {
+                                                    echo "<a href='" . URLADM . "edit-orcam/index/$id_orcam'>Atender</a>";
                                                 }
+                                            } else if(($_SESSION['adms_access_level_id'] == 14) and (($status_id == 3) or ($status_id == 6) )){
+                                                    echo "<a href='" . URLADM . "edit-aprov-orcam/index/$id_orcam'>Avaliar</a>";
                                             }
                                         }
-                                    } else if ($name_sta == 'Reprovado') {
-                                        if ($this->data['button']['view_cham']) {
-                                            echo "<a href='" . URLADM . "view-cham/index/$id'>Visualizar</a>";
-                                        }
-                                        if ($this->data['button']['edit_cham']) {
-                                            echo "<a href='" . URLADM . "edit-cham/index/$id'>Reabrir</a>";
-                                        }
-                                    } else {
-                                        if ($this->data['button']['view_cham']) {
-                                            echo "<a href='" . URLADM . "view-cham/index/$id'>Visualizar</a>";
-
-                                            if ($_SESSION['adms_access_level_id'] == 14){
-                                                if ($name_sta == 'Aberto') {
-                                                    echo "<a href='" . URLADM . "view-profile-cham/index/$id'>Anexar Erro</a>";
-                                                }
-
-                                            }
-                                        }
-                                        if ($this->data['button']['edit_cham']) {
-                                            echo "<a href='" . URLADM . "edit-cham/index/$id'>Atender</a>";
-                                        }
-                                    }
-                                    ?>
+                                        
+                                     ?>
                                 </div>
                             </div>
                         </td>

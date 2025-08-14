@@ -102,7 +102,6 @@ class AdmsAddUsers
         $this->data['password'] = password_hash($this->data['password'], PASSWORD_DEFAULT);
         $this->data['conf_email'] = password_hash($this->data['password'] . date("Y-m-d H:i:s"), PASSWORD_DEFAULT);
         $this->data['empresa_id'] = $_SESSION['emp_user'];
-        $this->data['adms_access_level_id']=12;//Suporte da empresa
         $this->data['created'] = date("Y-m-d H:i:s");
 
 //var_dump($this->data);
@@ -127,13 +126,16 @@ class AdmsAddUsers
     {
         $list = new \App\adms\Models\helper\AdmsRead();
 
-        if (($_SESSION['adms_access_level_id'] > 2) and ($_SESSION['adms_access_level_id'] <> 7)){
+        if ($_SESSION['adms_access_level_id'] > 2){
             
 
             $list->fullRead("SELECT sit.id id_sit, sit.name name_sit FROM adms_sits_users as sit");
             $registry['sit'] = $list->getResult();
 
-            $this->listRegistryAdd = ['sit' => $registry['sit']];
+            $list->fullRead("SELECT id id_lev, name name_lev FROM adms_access_levels  WHERE order_levels >:order_levels ORDER BY name ASC", "order_levels=" . $_SESSION['order_levels']);
+            $registry['lev'] = $list->getResult();
+
+            $this->listRegistryAdd = ['sit' => $registry['sit'], 'lev' => $registry['lev']];
             return $this->listRegistryAdd;
         } else {
 
