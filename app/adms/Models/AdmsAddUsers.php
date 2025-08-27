@@ -101,7 +101,9 @@ class AdmsAddUsers
 
         $this->data['password'] = password_hash($this->data['password'], PASSWORD_DEFAULT);
         $this->data['conf_email'] = password_hash($this->data['password'] . date("Y-m-d H:i:s"), PASSWORD_DEFAULT);
-        $this->data['empresa_id'] = $_SESSION['emp_user'];
+        if ($_SESSION['adms_access_level_id'] > 2) {
+            $this->data['empresa_id'] = $_SESSION['emp_user'];
+        }        
         $this->data['created'] = date("Y-m-d H:i:s");
 
 //var_dump($this->data);
@@ -127,7 +129,7 @@ class AdmsAddUsers
         $list = new \App\adms\Models\helper\AdmsRead();
 
         if ($_SESSION['adms_access_level_id'] > 2){
-            
+
 
             $list->fullRead("SELECT sit.id id_sit, sit.name name_sit FROM adms_sits_users as sit");
             $registry['sit'] = $list->getResult();

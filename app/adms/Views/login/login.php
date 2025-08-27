@@ -59,11 +59,10 @@ if (isset($this->data['form'])) {
             <div class="row button">
                 <button type="submit" name="SendLogin" value="Acessar">Acessar</button>
             </div>
-
+        </form>
             <div class="link-novo-login">
                 <?php echo "<a href='" . URLADM . "new-user/index'>Esqueci a Senha</a><br><br>";?>
             </div>
-        </form>
     </div>
 
 </div>

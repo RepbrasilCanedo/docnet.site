@@ -22,7 +22,14 @@ class AdmsViewProd
     private array|null $resultBd;
 
     /** @var int|string|null $id Recebe o id do registro */
-    private int|string|null $id;
+    private int|string|null $id;    
+    
+    /** @var array|null $data Recebe as informações do formulário */
+    private array|null $data;
+
+
+    /** @var array|null $data Recebe as informações do formulário */
+    private array|null $listRegistryAdd;
 
     /**
      * @return bool Retorna true quando executar o processo com sucesso e false quando houver erro
@@ -50,6 +57,8 @@ class AdmsViewProd
     public function viewProd(int $id): void
     {
         $this->id = $id;
+        $_SESSION['produto']='';
+        $_SESSION['produto']= $this->id;
 
         $viewProd = new \App\adms\Models\helper\AdmsRead();
         $viewProd->fullRead("SELECT prod.id as id_prod, prod.name as name_prod, typ.name as name_type, prod.serie as serie_prod, 
@@ -70,5 +79,23 @@ class AdmsViewProd
             $_SESSION['msg'] = "<p class='alert-danger'>Erro: Produto não encontrado!</p>";
             $this->result = false;
         }
+    }
+    
+
+    public function listTable(): array
+    {
+
+        $listTable = new \App\adms\Models\helper\AdmsRead();
+        $listTable->fullRead("SELECT cham.id, sta.name as nome_sta, cham.dt_status as dt_status_cham,  usr.name as name_usr, cham.inf_cham as inf_cham
+        FROM adms_cham AS cham        
+        INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id  
+        INNER JOIN adms_users AS usr ON usr.id=cham.suporte_id 
+        WHERE cham.prod_id= :prod_id", "prod_id={$_SESSION['produto']}");
+
+        $registry['listTable'] = $listTable->getResult();
+
+        $this->listRegistryAdd = ['listTable' => $registry['listTable']];
+
+        return $this->listRegistryAdd;
     }
 }

@@ -100,7 +100,7 @@ class AdmsAddProd
             $list->fullRead("SELECT id id_typ, name name_typ FROM adms_type_equip ORDER BY name ASC");
             $registry['type_equip'] = $list->getResult();            
 
-            $list->fullRead("SELECT id, name FROM adms_contr");
+            $list->fullRead("SELECT id, name FROM adms_contr WHERE empresa_id= :empresa_id", "empresa_id={$_SESSION['emp_user']}");
             $registry['contr_id'] = $list->getResult();
 
             $list->fullRead("SELECT id id_emp, nome_fantasia nome_fantasia_emp FROM adms_clientes WHERE empresa= :empresa ORDER BY nome_fantasia ASC", "empresa={$_SESSION['emp_user']}");

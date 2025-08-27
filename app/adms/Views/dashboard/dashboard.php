@@ -9,10 +9,7 @@ if (isset($this->data['form'])) {
     $valorForm = $this->data['form'];
 }
 unset($_SESSION["status_chamado"]);
-//unset($_SESSION["status_ticket"]);
-//$_SESSION['img_contr']='';
-//$_SESSION['img_contr']= $this->data['logoContrato'][0]['logo_clie'];
-//var_dump($this->data['carrMarketing']);
+
 ?>
 
 <!-- Inicio dos box do dashboard -->
@@ -143,7 +140,11 @@ unset($_SESSION["status_chamado"]);
                     <h5><?= $this->data['countChamClie'][0]['qnt_cham_clie'] ?></h5>
                 <?php } ?>
             </span>
-            <h6>Pausados Cliente</h6>
+            <?php if (($this->data['countChamClie'][0]['qnt_cham_clie'] > 0) and ($this->data['countChamClie'][0]['status_id'] == 10)) { ?>
+                <h6><a href="<?php echo URLADM; ?>list-cham/index?status_ticket=10">Aguardando Cliente</a></h6>
+            <?php } else { ?>
+                <h6>Aguardando Cliente</h6>
+            <?php } ?>
 
         </div>
         <div class="box">
@@ -179,27 +180,6 @@ unset($_SESSION["status_chamado"]);
                 <h6>Concluidos</h6>
             <?php } ?>
         </div>
-        <!-- Verifica se o usuario e usuario final, se for não visualiza o Box -->
-        <?php if (($_SESSION['adms_access_level_id'] <> 14)) {?>            
-            <div class="box">
-                <h6>Equipamentos</h6>
-                <span>
-                    <?php
-                    if (!empty($this->data['countEquipVenc'])) { ?>
-                        <h5><?= $this->data['countEquipVenc'][0]['qnt_equip'] ?></h5>
-                    <?php } ?>
-                </span>
-                <?php if ($this->data['countEquipVenc'][0]['qnt_equip'] > 0) { ?>
-                    <?php if ($this->data['countEquipVenc'][0]['qnt_equip'] > 1) { ?>
-                        <h6><a href="<?php echo URLADM; ?>list-prod/index?status_ticket=77">Contratos Vencidos</a></h6>
-                    <?php } else {?>
-                        <h6><a href="<?php echo URLADM; ?>list-prod/index?status_ticket=77">Contrato Vencido</a></h6>
-                    <?php }?>
-                <?php } else { ?>
-                    <h6>Vencido</h6>
-                <?php } ?>
-            </div>
-        <?php } ?>
 
         <div class="box">
             <h6>Tickets</h6>
@@ -238,6 +218,41 @@ unset($_SESSION["status_chamado"]);
                 <h6>Aprovado</h6>
             <?php } ?>
         </div>
+        <!-- Verifica se o usuario e usuario final, se for não visualiza o Box -->
+        <?php if (($_SESSION['adms_access_level_id'] <> 14)) {?>            
+            <div class="box">
+                <h6>Equipamentos</h6>
+                <span>
+                    <?php
+                    if (!empty($this->data['countEquipVenc'])) { ?>
+                        <h5><?= $this->data['countEquipVenc'][0]['qnt_equip'] ?></h5>
+                    <?php } ?>
+                </span>
+                <?php if ($this->data['countEquipVenc'][0]['qnt_equip'] > 0) { ?>
+                    <?php if ($this->data['countEquipVenc'][0]['qnt_equip'] > 1) { ?>
+                        <h6><a href="<?php echo URLADM; ?>list-prod/index?status_ticket=77">Contratos Vencidos</a></h6>
+                    <?php } else {?>
+                        <h6><a href="<?php echo URLADM; ?>list-prod/index?status_ticket=77">Contrato Vencido</a></h6>
+                    <?php }?>
+                <?php } else { ?>
+                    <h6>Vencido</h6>
+                <?php } ?>
+            </div>
+            <div class="box">
+                <h6>Mensagens</h6>
+                <span>
+                    <?php
+                    if (!empty($this->data['countMensRec'])) { ?>
+                        <h5><?= $this->data['countMensRec'][0]['qnt_mens_rec'] ?></h5>
+                    <?php } ?>
+                </span>
+                <?php if ($this->data['countMensRec'][0] > 0) { ?>
+                    <h6><a href="<?php echo URLADM; ?>list-contato/index">Recebidas</a></h6>
+                <?php } else { ?>
+                    <h6>Recebida</h6>
+                <?php } ?>
+            </div>
+        <?php } ?>
     </div>
 
 

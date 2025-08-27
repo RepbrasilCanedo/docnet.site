@@ -649,4 +649,37 @@ class AdmsDashboard
             $this->result = false;
         }
     }
+    
+    // Mensagen recebidas 
+    public function countMensRec(): void
+    {
+        if ($_SESSION['adms_access_level_id'] > 2) {
+            //Se for 4 - Cliente Administrativo ou suporte tecnico cliente
+            if (($_SESSION['adms_access_level_id'] == 4) or ($_SESSION['adms_access_level_id'] == 12)){
+                $countMensRec = new \App\adms\Models\helper\AdmsRead();
+                $countMensRec->fullRead("SELECT COUNT(id) AS qnt_mens_rec, status, empresa_id FROM sts_contacts_msgs WHERE status='Enviado' and empresa_id = :empresa", 
+                "empresa={$_SESSION['emp_user']}");
+                $this->resultBd = $countMensRec->getResult();
+                if ($this->resultBd) {
+                    $this->result = true;
+                } else {
+                    //$_SESSION['msg'] = "<p style='color: #f00'>Erro: Usuário não encontrado!</p>";
+                    $this->result = false;
+                }
+            }
+            
+        } else {
+            $countMensRec = new \App\adms\Models\helper\AdmsRead();
+            $countMensRec->fullRead("SELECT COUNT(id) AS qnt_mens_rec, status, empresa_id FROM sts_contacts_msgs WHERE status= :status_id", 
+                "status_id='Enviado'");
+
+            $this->resultBd = $countMensRec->getResult();
+            if ($this->resultBd) {
+                $this->result = true;
+            } else {
+                //$_SESSION['msg'] = "<p style='color: #f00'>Erro: Usuário não encontrado!</p>";
+                $this->result = false;
+            }
+        }
+    }
 }

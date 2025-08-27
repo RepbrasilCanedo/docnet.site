@@ -3,7 +3,7 @@ if (!defined('D0O8C0A3N1E9D6O1')) {
     header("Location: /");
     die("Erro: Página não encontrada<br>");
 }
-//var_dump($this->data['viewProd']);
+//var_dump($this->data);
 ?>
 <!-- Inicio do conteudo do administrativo -->
 <div class="wrapper">
@@ -110,6 +110,40 @@ if (!defined('D0O8C0A3N1E9D6O1')) {
             <?php
             }
             ?>
+        </div>
+
+
+            <div class="col-md-12">
+                <div class="card-body border-button border-info border-5 input-group-sm">
+                    <div class="input-group-sm">
+                        <span class="mb-3"> <b>Históricos de Atendimento do Produto</span>
+                        <table class="table table-sm table-hover table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th class="list-head-content">Status</th>
+                                    <th class="list-head-content">Data</th>
+                                    <th class="list-head-content table-sm-none">Suporte</th>
+                                    <th class="list-head-content">Históricos</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                //echo "<pre>"; print_r($this->data['list_table']);echo "<pre>";
+                                foreach ($this->data['list_table']['listTable'] as $cham) {
+                                    extract($cham);
+                                ?>
+                                    <tr>
+                                        <td class="list-body-content"><?php echo $nome_sta ?></td>
+                                        <td class="list-body-content"><?php echo date('d/m/Y H:i:s', strtotime($dt_status_cham)) ?></td>
+                                        <td class="list-body-content table-sm-none"><?php echo $name_usr ?></td>
+                                        <td class="list-body-content"><?php echo $inf_cham ?></td>
+                                    </tr>
+                                <?php } ?>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>

@@ -48,30 +48,29 @@ if (isset($this->data['form'])) {
                         <label class="title-input">Nome:<span class="text-danger">*</span></label>
                         <input type="text" name="name" id="name" class="input-adm" placeholder="Digite o nome completo" value="<?php echo $name; ?>" required>
                     </div>
-                    <?php if ($_SESSION['adms_access_level_id'] <= 2) { ?>
-
+                    <?php if ($_SESSION['adms_access_level_id'] <= 2) { ?>                        
                         <div class="column">
-                        <?php
-                        $empresa_id = "";
-                        if (isset($valorForm['empresa_id'])) {
-                            $empresa_id = $valorForm['empresa_id'];
-                        }
-                        ?>
-                        <label class="title-input">Empresa: <span class="text-danger">*</span></label>
-                        <select name="empresa_id" id="empresa_id" class="input-adm" required>
-                            <option value="">Selecione</option>
                             <?php
-                            foreach ($this->data['select']['emp'] as $emp) {
-                                extract($emp);
-                                if ((isset($valorForm['adms_sits_user_id'])) and ($valorForm['adms_sits_user_id'] == $id_emp)) {
-                                    echo "<option value='$id_emp' selected>$nome_fantasia_emp</option>";
-                                } else {
-                                    echo "<option value='$id_emp'>$nome_fantasia_emp</option>";
-                                }
+                            $empresa_id = "";
+                            if (isset($valorForm['empresa_id'])) {
+                                $empresa_id = $valorForm['empresa_id'];
                             }
                             ?>
-                        </select>
-                    </div>
+                            <label class="title-input">Empresa: <span class="text-danger">*</span></label>
+                            <select name="empresa_id" id="empresa_id" class="input-adm" required>
+                                <option value="">Selecione</option>
+                                <?php
+                                foreach ($this->data['select']['emp'] as $emp) {
+                                    extract($emp);
+                                    if ((isset($valorForm['adms_sits_user_id'])) and ($valorForm['adms_sits_user_id'] == $id_emp)) {
+                                        echo "<option value='$id_emp' selected>$nome_fantasia_emp</option>";
+                                    } else {
+                                        echo "<option value='$id_emp'>$nome_fantasia_emp</option>";
+                                    }
+                                }
+                                ?>
+                            </select>
+                        </div>
                     <?php } ?>
 
 

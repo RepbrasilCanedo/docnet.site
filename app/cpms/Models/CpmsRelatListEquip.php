@@ -221,7 +221,7 @@ class CpmsRelatListEquip
         $html .= "<a href='" .URLADM. "relat-list-equip/index'><img src='" . URLADM . "app/adms/assets/image/logo/clientes/$image_clie/$logo_clie' width='70' alt='Logo do Cliente'></a>";
         $html .= "<table>";
         $html .= "<caption><b> RELATORIO DE EQUIPAMENTOS </b>";
-        $html .= "<caption>Total de : <b> {$total_tickets} </b> Ticket.";
+        $html .= "<caption>Total de : <b> {$total_tickets} </b> Equipamentos.";
         $html .= "<thead>";
         $html .= "<th>Id</th>";
         $html .= "<th>Nome Equipamento.</th>";

@@ -21,7 +21,7 @@ if (isset($this->data['form'])) {
         </div>
 
         <div class="top-list">
-            <form method="POST" action="">
+            <form method="POST" action="" target="_blank">
                 <div class="row-input-search">
                         <!--4 ou 12: Usuario adm e suporte -->
                         <?php if (($_SESSION['adms_access_level_id'] == 4) or($_SESSION['adms_access_level_id'] == 12)){ ?>    

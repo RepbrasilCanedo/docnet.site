@@ -169,6 +169,16 @@ class Dashboard
         } else {
             $this->data['countChamAproAval'] = false;
         }
+        
+
+        $countMensRec = new \App\adms\Models\AdmsDashboard();
+        $countMensRec->countMensRec();
+
+        if ($countMensRec->getResult()) {
+            $this->data['countMensRec'] = $countMensRec->getResultBd();
+        } else {
+            $this->data['countMensRec'] = false;
+        }
 
 
 

@@ -72,6 +72,9 @@ if (isset($this->data['form'])) {
                 <tr>
                     <th class="list-head-content">ID</th>
                     <th class="list-head-content">Nome</th>
+                    <th class="list-head-content table-sm-none">Classe</th>
+                    <th class="list-head-content table-sm-none">Menu</th>
+                    <th class="list-head-content table-sm-none">Obervação</th>
                     <th class="list-head-content table-sm-none">Tipo de Página</th>
                     <th class="list-head-content table-sm-none">Situação</th>
                     <th class="list-head-content">Ações</th>
@@ -85,6 +88,9 @@ if (isset($this->data['form'])) {
                     <tr>
                         <td class="list-body-content"><?php echo $id; ?></td>
                         <td class="list-body-content"><?php echo $name_page; ?></td>
+                        <td class="list-body-content table-sm-none"><?php echo $controller; ?></td>
+                        <td class="list-body-content table-sm-none"><?php echo $menu_controller; ?></td>
+                        <td class="list-body-content table-sm-none"><?php echo $obs; ?></td>
                         <td class="list-body-content table-sm-none">
                             <?php echo $type_tpg . " - " . $name_tpg; ?>
                         </td>

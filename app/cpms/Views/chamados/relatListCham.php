@@ -21,7 +21,7 @@ if (isset($this->data['form'])) {
         </div>
 
         <div class="top-list">
-            <form method="POST" action="">
+            <form method="POST" action="" target="_blank">
                 <div class="row-input-search">
 
                     <?php if ($_SESSION['adms_access_level_id'] > 2) { ?>
@@ -188,7 +188,7 @@ if (isset($this->data['form'])) {
                     <?php } ?>
 
                     <div class="column margin-top-search">
-                        <button type="submit" name="SendSearchCham" class="btn-warning" value="Pesquisar" target="_blank">Gerar Pdf</button>
+                        <button type="submit" name="SendSearchCham" class="btn-warning" value="Pesquisar">Gerar Pdf</button>
                     </div>
             </form>
 

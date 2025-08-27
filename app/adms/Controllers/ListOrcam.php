@@ -121,11 +121,9 @@ class ListOrcam
             $this->data['pagination'] = "";
         }
 
-        $button = [
-            'view_orcam' => ['menu_controller' => 'view-orcam', 'menu_metodo' => 'index'],
+        $button = ['view_orcam' => ['menu_controller' => 'view-orcam', 'menu_metodo' => 'index'],
             'edit_orcam' => ['menu_controller' => 'edit-orcam', 'menu_metodo' => 'index'],
-            'aval_orcam' => ['menu_controller' => 'aval-orcam', 'menu_metodo' => 'index']
-        ];
+            'aval_orcam' => ['menu_controller' => 'aval-orcam', 'menu_metodo' => 'index']];
 
         $listBotton = new \App\adms\Models\helper\AdmsButton();
         $this->data['button'] = $listBotton->buttonPermission($button);

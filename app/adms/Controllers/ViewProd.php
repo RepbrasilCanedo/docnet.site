@@ -55,6 +55,9 @@ class ViewProd
      */
     private function viewProd(): void
     {
+        $listTable = new \App\adms\Models\AdmsViewProd();
+        $this->data['list_table'] = $listTable->listTable(); 
+
         $button = ['list_prod' => ['menu_controller' => 'list-prod', 'menu_metodo' => 'index'],
         'edit_prod' => ['menu_controller' => 'edit-prod', 'menu_metodo' => 'index'],
         'delete_prod' => ['menu_controller' => 'delete-prod', 'menu_metodo' => 'index']];

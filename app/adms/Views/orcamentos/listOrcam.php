@@ -9,7 +9,7 @@ if (isset($this->data['form'])) {
     $valorForm = $this->data['form'];
 }
 //echo('<pre>');var_dump($_SESSION['status_ticket']);echo('</pre>');
-//echo('<pre>');var_dump($this->data);echo('</pre>')
+//echo('<pre>');var_dump($this->data['button']);echo('</pre>')
 
 
 ?>
@@ -321,23 +321,18 @@ if (isset($this->data['form'])) {
                         <td class="list-body-content">
                             <div class="dropdown-action">
                                 <button onclick="actionDropdown(<?php echo $id_orcam; ?>)" class="dropdown-btn-action">Ações</button>
-
                                 <div id="actionDropdown<?php echo $id_orcam; ?>" class="dropdown-action-item">
                                     <?php
 
-                                        if ($this->data['button']['view_orcam']) { 
-                                            echo "<a href='" . URLADM . "view-orcam/index/$id_orcam'>Visualizar</a>";
+                                        echo "<a href='" . URLADM . "view-orcam/index/$id_orcam'>Visualizar</a>";
 
                                             if ($_SESSION['adms_access_level_id'] == 4){
-
                                                 if ($status_id == 1) {
                                                     echo "<a href='" . URLADM . "edit-orcam/index/$id_orcam'>Atender</a>";
                                                 }
                                             } else if(($_SESSION['adms_access_level_id'] == 14) and (($status_id == 3) or ($status_id == 6) )){
                                                     echo "<a href='" . URLADM . "edit-aprov-orcam/index/$id_orcam'>Avaliar</a>";
-                                            }
-                                        }
-                                        
+                                            }                                      
                                      ?>
                                 </div>
                             </div>

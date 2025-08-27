@@ -72,7 +72,7 @@ class AdmsListPages
      * @param integer|null $page
      * @return void
      */
-    public function listPages(int $page = null):void
+    public function listPages(int $page):void
     {
         $this->page = (int) $page ? $page : 1;
 
@@ -82,7 +82,7 @@ class AdmsListPages
         $this->resultPg = $pagination->getResult();
 
         $listPages = new \App\adms\Models\helper\AdmsRead();
-        $listPages->fullRead("SELECT pg.id, pg.name_page,
+        $listPages->fullRead("SELECT pg.id, pg.controller, pg.menu_controller, pg.name_page, pg.obs,
                         tpg.type type_tpg, tpg.name name_tpg,
                         sit.name name_sit,
                         col.color 
