@@ -129,7 +129,7 @@ if (isset($this->data['form'])) {
                                         echo "<a href='" . URLADM . "edit-users-final/index/$id'>Editar</a>";
                                     }
                                     if ($this->data['button']['delete_users_final']) {
-                                        echo "<a href='" . URLADM . "delete-users/index/$id' onclick='return confirm(\"Tem certeza que deseja excluir este registro?\")'>Apagar</a>";
+                                        echo "<a href='" . URLADM . "delete-users-final/index/$id' onclick='return confirm(\"Tem certeza que deseja excluir este registro?\")'>Apagar</a>";
                                     }
                                     ?>
                                 </div>

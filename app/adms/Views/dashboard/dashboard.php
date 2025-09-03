@@ -9,7 +9,6 @@ if (isset($this->data['form'])) {
     $valorForm = $this->data['form'];
 }
 unset($_SESSION["status_chamado"]);
-
 ?>
 
 <!-- Inicio dos box do dashboard -->
@@ -283,7 +282,7 @@ unset($_SESSION["status_chamado"]);
                                     <i class="fab fa-instagram btn-lg btn-danger mt-3" data-toggle="tooltip" data-placement="top" title="Conheça nossa linha de produtos gráfico através de nosso Instagram"></i> 
                                 </a>
                             </div>
-                            <img src="<?php echo URL; ?>app/adms/assets/image/marketing/carrousel/<?php echo $this->data['carrMarketing'][0]['image_1']?>" class="d-block w-100" alt="Marketing Grafico">
+                            <img src="<?php echo URL; ?>app/adms/assets/image/marketing/carrousel/<?php echo $_SESSION['emp_user']?>/<?php echo $this->data['carrMarketing'][0]['image_1']?>" class="d-block w-100" alt="Marketing Grafico">
                         
                         </div>
 
@@ -293,7 +292,7 @@ unset($_SESSION["status_chamado"]);
                                     <i class="fab fa-instagram btn-lg btn-danger mt-3" data-toggle="tooltip" data-placement="top" title="Conheça nossa linha de produtos gráfico através de nosso Instagram"></i>
                                 </a>
                             </div>
-                            <img src="<?php echo URL; ?>app/adms/assets/image/marketing/carrousel/<?php echo $this->data['carrMarketing'][0]['image_2']?>" class="d-block w-100" alt="Marketing Grafico">
+                            <img src="<?php echo URL; ?>app/adms/assets/image/marketing/carrousel/<?php echo $_SESSION['emp_user']?>/<?php echo $this->data['carrMarketing'][0]['image_2']?>" class="d-block w-100" alt="Marketing Grafico">
                         </div>
 
                         <div class="carousel-item">
@@ -302,7 +301,7 @@ unset($_SESSION["status_chamado"]);
                                     <i class="fab fa-instagram btn-lg btn-danger mt-3" data-toggle="tooltip" data-placement="top" title="Conheça nossa linha de produtos gráfico através de nosso Instagram"></i>
                                 </a>
                             </div>
-                            <img src="<?php echo URL; ?>app/adms/assets/image/marketing/carrousel/<?php echo $this->data['carrMarketing'][0]['image_3']?>" class="d-block w-100" alt="Marketing Grafico">
+                            <img src="<?php echo URL; ?>app/adms/assets/image/marketing/carrousel/<?php echo $_SESSION['emp_user']?>/<?php echo $this->data['carrMarketing'][0]['image_3']?>" class="d-block w-100" alt="Marketing Grafico">
                         </div>
 
                         <div class="carousel-item">
@@ -311,7 +310,7 @@ unset($_SESSION["status_chamado"]);
                                     <i class="fab fa-instagram btn-lg btn-danger mt-3" data-toggle="tooltip" data-placement="top" title="Conheça nossa linha de produtos gráfico através de nosso Instagram"></i>
                                 </a>
                             </div>
-                            <img src="<?php echo URL; ?>app/adms/assets/image/marketing/carrousel/<?php echo $this->data['carrMarketing'][0]['image_4']?>" class="d-block w-100" alt="Marketing Grafico">
+                            <img src="<?php echo URL; ?>app/adms/assets/image/marketing/carrousel/<?php echo $_SESSION['emp_user']?>/<?php echo $this->data['carrMarketing'][0]['image_4']?>" class="d-block w-100" alt="Marketing Grafico">
                         </div>
 
                         <div class="carousel-item">
@@ -320,7 +319,7 @@ unset($_SESSION["status_chamado"]);
                                     <i class="fab fa-instagram btn-lg btn-danger mt-3" data-toggle="tooltip" data-placement="top" title="Conheça nossa linha de produtos gráfico através de nosso Instagram"></i>
                                 </a>
                             </div>
-                            <img src="<?php echo URL; ?>app/adms/assets/image/marketing/carrousel/<?php echo $this->data['carrMarketing'][0]['image_5']?>" class="d-block w-100" alt="Marketing Grafico">
+                            <img src="<?php echo URL; ?>app/adms/assets/image/marketing/carrousel/<?php echo $_SESSION['emp_user']?>/<?php echo $this->data['carrMarketing'][0]['image_5']?>" class="d-block w-100" alt="Marketing Grafico">
                         </div>
 
                         <div class="carousel-item">
@@ -329,7 +328,7 @@ unset($_SESSION["status_chamado"]);
                                     <i class="fab fa-instagram btn-lg btn-danger mt-3" data-toggle="tooltip" data-placement="top" title="Conheça nossa linha de produtos gráfico através de nosso Instagram"></i>
                                 </a>
                             </div>
-                            <img src="<?php echo URL; ?>app/adms/assets/image/marketing/carrousel/<?php echo $this->data['carrMarketing'][0]['image_6']?>" class="d-block w-100" alt="Marketing Grafico">
+                            <img src="<?php echo URL; ?>app/adms/assets/image/marketing/carrousel/<?php echo $_SESSION['emp_user']?>/<?php echo $this->data['carrMarketing'][0]['image_6']?>" class="d-block w-100" alt="Marketing Grafico">
                         </div>
                     </div>
 

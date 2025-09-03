@@ -129,7 +129,7 @@ class AdmsListCham
                             INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id 
                             INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id                             
                             INNER JOIN adms_produtos AS prod ON prod.id=cham.prod_id
-                            WHERE cham.empresa_id= :empresa_id ORDER BY cham.dt_status LIMIT :limit OFFSET :offset", "empresa_id={$_SESSION['emp_user']}&limit={$this->limitResult}&offset={$pagination->getOffset()}");
+                            WHERE cham.empresa_id= :empresa_id ORDER BY cham.dt_status DESC LIMIT :limit OFFSET :offset", "empresa_id={$_SESSION['emp_user']}&limit={$this->limitResult}&offset={$pagination->getOffset()}");
                     $this->resultBd = $listCham->getResult();
 
                     if ($this->resultBd) {
@@ -156,7 +156,7 @@ class AdmsListCham
                             INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id 
                             INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id                             
                             INNER JOIN adms_produtos AS prod ON prod.id=cham.prod_id
-                            WHERE cham.empresa_id= :empresa_id AND cham.cliente_id= :id_cliente ORDER BY cham.dt_status  LIMIT :limit OFFSET :offset", "empresa_id={$_SESSION['emp_user']}&id_cliente={$_SESSION['set_clie']}&limit={$this->limitResult}&offset={$pagination->getOffset()}");
+                            WHERE cham.empresa_id= :empresa_id AND cham.cliente_id= :id_cliente ORDER BY cham.dt_status  DESC LIMIT :limit OFFSET :offset", "empresa_id={$_SESSION['emp_user']}&id_cliente={$_SESSION['set_clie']}&limit={$this->limitResult}&offset={$pagination->getOffset()}");
                     $this->resultBd = $listCham->getResult();
 
                     if ($this->resultBd) {
@@ -209,7 +209,7 @@ class AdmsListCham
                             INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id 
                             INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id                             
                             INNER JOIN adms_produtos AS prod ON prod.id=cham.prod_id 
-                            WHERE cham.empresa_id= :empresa_id AND status_id= :status_ticket ORDER BY cham.dt_status  LIMIT :limit OFFSET :offset", "empresa_id={$_SESSION['emp_user']}&status_ticket={$_SESSION['status_ticket']}&limit={$this->limitResult}&offset={$pagination->getOffset()}");
+                            WHERE cham.empresa_id= :empresa_id AND status_id= :status_ticket ORDER BY cham.dt_status DESC LIMIT :limit OFFSET :offset", "empresa_id={$_SESSION['emp_user']}&status_ticket={$_SESSION['status_ticket']}&limit={$this->limitResult}&offset={$pagination->getOffset()}");
                     $this->resultBd = $listCham->getResult();
 
                     if ($this->resultBd) {
@@ -236,7 +236,7 @@ class AdmsListCham
                             INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id 
                             INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id                             
                             INNER JOIN adms_produtos AS prod ON prod.id=cham.prod_id
-                            WHERE cham.empresa_id= :empresa_id AND cham.cliente_id= :id_cliente AND cham.status_id= :status_ticket ORDER BY cham.dt_status  LIMIT :limit OFFSET :offset", "empresa_id={$_SESSION['emp_user']}&id_cliente={$_SESSION['set_clie']}&status_ticket={$_SESSION['status_ticket']}&limit={$this->limitResult}&offset={$pagination->getOffset()}");
+                            WHERE cham.empresa_id= :empresa_id AND cham.cliente_id= :id_cliente AND cham.status_id= :status_ticket ORDER BY cham.dt_status DESC LIMIT :limit OFFSET :offset", "empresa_id={$_SESSION['emp_user']}&id_cliente={$_SESSION['set_clie']}&status_ticket={$_SESSION['status_ticket']}&limit={$this->limitResult}&offset={$pagination->getOffset()}");
                     $this->resultBd = $listCham->getResult();
 
                     if ($this->resultBd) {
@@ -261,7 +261,7 @@ class AdmsListCham
                             INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id 
                             INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id                             
                             INNER JOIN adms_produtos AS prod ON prod.id=cham.prod_id 
-                            WHERE status_id= :status_ticket ORDER BY cham.dt_status  LIMIT :limit OFFSET :offset", "status_ticket={$_SESSION['status_ticket']}&limit={$this->limitResult}&offset={$pagination->getOffset()}");
+                            WHERE status_id= :status_ticket ORDER BY cham.dt_status DESC LIMIT :limit OFFSET :offset", "status_ticket={$_SESSION['status_ticket']}&limit={$this->limitResult}&offset={$pagination->getOffset()}");
                 $this->resultBd = $listCham->getResult();
 
                 if ($this->resultBd) {
