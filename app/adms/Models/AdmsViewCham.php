@@ -62,10 +62,11 @@ class AdmsViewCham
         $_SESSION['set_cham'] = $this->id;
 
         $viewCham = new \App\adms\Models\helper\AdmsRead();
-        $viewCham->fullRead("SELECT cham.id, clie.nome_fantasia as nome_fantasia_clie, prod.name as name_prod, prod.marca_id as marca_id_prod, prod.modelo_id as modelo_id_prod, cham.contato, cham.tel_contato,
-                            cham.dt_cham, user.name as name_user, sta.name as name_sta, cham.dt_status, cham.dt_term_cham, cham.inf_cham, cham.type_cham, cham.fech_cham, cham.image, cham.motivo_repr, cham.created
+        $viewCham->fullRead("SELECT cham.id, clie.nome_fantasia as nome_fantasia_clie, sla.name as name_sla, prod.name as name_prod, prod.marca_id as marca_id_prod, prod.modelo_id as modelo_id_prod, cham.contato, cham.tel_contato,
+                            cham.dt_cham, user.name as name_user, sta.name as name_sta, cham.dt_status, cham.dt_term_cham, cham.inf_cham, cham.type_cham, cham.fech_cham as fech_cham, cham.dur_cham as sla_total, cham.image, cham.motivo_repr, cham.created
                             FROM adms_cham as cham 
-                            INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id 
+                            INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id                             
+                            INNER JOIN adms_sla AS sla ON sla.id=cham.sla_id  
                             INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id                             
                             INNER JOIN adms_produtos AS prod ON prod.id=cham.prod_id                             
                             INNER JOIN adms_users AS user ON user.id=cham.suporte_id  

@@ -2,13 +2,15 @@
 
 namespace App\adms\Models;
 
+use DateTime;
+
 if (!defined('D0O8C0A3N1E9D6O1')) {
     header("Location: /");
     die("Erro: Página não encontrada<br>");
 }
 
 /**
- * Editar Chamado no banco de dados
+ * Editar Ticket no banco de dados
  *
  * @author Daniel Canedo - docan2006@gmail.com
  */
@@ -24,8 +26,14 @@ class AdmsEditCham
     /** @var int|string|null $id Recebe o id do registro */
     private int|string|null $id;
 
+    /** @var int|string|null $id Recebe o id do registro */
+    private int|string|null $idStatus;
+
     /** @var array|null $data Recebe as informações do formulário */
     private array|null $data;
+
+    /** @var array|null $data Recebe as informações do formulário */
+    private array|null $dataSla;
 
 
     /** @var array|null $data Recebe as informações do formulário */
@@ -60,19 +68,24 @@ class AdmsEditCham
         $_SESSION['set_cham'] = $this->id;
 
         $viewCham = new \App\adms\Models\helper\AdmsRead();
-        $viewCham->fullRead("SELECT cham.id, clie.nome_fantasia as nome_fantasia_clie, prod.name as name_prod, prod.marca_id as marca_id_prod, prod.modelo_id as modelo_id_prod, cham.contato, cham.tel_contato, 
-                            cham.dt_cham, cham.suporte_id, sta.name as name_sta, cham.dt_status, cham.dt_term_cham, cham.inf_cham, cham.type_cham, cham.fech_cham, cham.image, cham.motivo_repr, cham.created
+        $viewCham->fullRead("SELECT cham.id, clie.nome_fantasia as nome_fantasia_clie, sla.name as name_sla, prod.name as name_prod, prod.marca_id as marca_id_prod, prod.modelo_id as modelo_id_prod, cham.contato, cham.tel_contato, 
+                            cham.dt_cham, cham.suporte_id, cham.status_id, sta.name as name_sta, cham.dt_status, cham.dt_term_cham, cham.inf_cham, cham.type_cham, cham.fech_cham, cham.dur_cham as sla_total, cham.image, cham.motivo_repr, cham.created
                             FROM adms_cham as cham 
-                            INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id
+                            INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id                             
+                            INNER JOIN adms_sla AS sla ON sla.id=cham.sla_id  
                             INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id                             
                             INNER JOIN adms_produtos AS prod ON prod.id=cham.prod_id 
                             WHERE cham.id= :cham_id ORDER BY cham.id DESC LIMIT :limit","cham_id={$_SESSION['set_cham']}&limit=1");
 
         $this->resultBd = $viewCham->getResult();
         if ($this->resultBd) {
+            $_SESSION['dt_status_ant']='';
+            $_SESSION['status_id_ant']='';
+            $_SESSION['dt_status_ant']=$this->resultBd[0]['dt_status'];
+            $_SESSION['status_id_ant']=$this->resultBd[0]['status_id'];
             $this->result = true;
         } else {
-            $_SESSION['msg'] = "<p class='alert-danger'>Erro: Chamado  não encontrado!</p>";
+            $_SESSION['msg'] = "<p class='alert-danger'>Erro: Ticket  não encontrado!</p>";
             $this->result = false;
         }
     }
@@ -86,11 +99,14 @@ class AdmsEditCham
      */
     public function update(array $data): void
     {
-
+        // verifica se todos os campos obrigatorios estão preenchidos
         $this->data = $data;
+
         $valEmptyField = new \App\adms\Models\helper\AdmsValEmptyField();
         $valEmptyField->valField($this->data);
         if ($valEmptyField->getResult()) {
+            $_SESSION['status_cham']='';
+            $_SESSION['status_cham']=3;
             $this->edit();
         } else {
             $this->result = false;
@@ -111,6 +127,8 @@ class AdmsEditCham
         $valEmptyField = new \App\adms\Models\helper\AdmsValEmptyField();
         $valEmptyField->valField($this->data);
         if ($valEmptyField->getResult()) {
+            $_SESSION['status_cham']='';
+            $_SESSION['status_cham']=5;
             $this->editPausa();
         } else {
             $this->result = false;
@@ -131,6 +149,8 @@ class AdmsEditCham
         $valEmptyField = new \App\adms\Models\helper\AdmsValEmptyField();
         $valEmptyField->valField($this->data);
         if ($valEmptyField->getResult()) {
+            $_SESSION['status_cham']='';
+            $_SESSION['status_cham']=13;
             $this->editReag();
         } else {
             $this->result = false;
@@ -151,7 +171,9 @@ class AdmsEditCham
 
         $valEmptyField = new \App\adms\Models\helper\AdmsValEmptyField();
         $valEmptyField->valField($this->data);
-        if ($valEmptyField->getResult()) {
+        if ($valEmptyField->getResult()) {            
+            $_SESSION['status_cham']='';
+            $_SESSION['status_cham']=11;
             $this->editPausaCom();
         } else {
             $this->result = false;
@@ -171,7 +193,9 @@ class AdmsEditCham
 
         $valEmptyField = new \App\adms\Models\helper\AdmsValEmptyField();
         $valEmptyField->valField($this->data);
-        if ($valEmptyField->getResult()) {
+        if ($valEmptyField->getResult()) {            
+            $_SESSION['status_cham']='';
+            $_SESSION['status_cham']=10;
             $this->editPend();
         } else {
             $this->result = false;
@@ -189,7 +213,10 @@ class AdmsEditCham
         $this->data = $data;
         $valEmptyField = new \App\adms\Models\helper\AdmsValEmptyField();
         $valEmptyField->valField($this->data);
-        if ($valEmptyField->getResult()) {
+
+        if ($valEmptyField->getResult()) {            
+            $_SESSION['status_cham']='';
+            $_SESSION['status_cham']=12;
             $this->editAguar();
         } else {
             $this->result = false;
@@ -206,37 +233,18 @@ class AdmsEditCham
     public function updateFinal(array $data): void
     {
         $this->data = $data;
+        $_SESSION['set_cham']=$this->data['id'];
 
         $valEmptyField = new \App\adms\Models\helper\AdmsValEmptyField();
         $valEmptyField->valField($this->data);
-        if ($valEmptyField->getResult()) {
-            $this->tempoGasto();
+
+        if ($valEmptyField->getResult()) {            
+            $_SESSION['status_cham']='';
+            $_SESSION['status_cham']=6;// ticket finalizado
+            $this->editFinal();
         } else {
             $this->result = false;
         }
-    }
-    /**
-     * Metodo recebe como parametro a informação que será editada
-     * Faz o calculo entre o inicio do atendimento e a finalização do atendimento
-     * Chama a função edit para enviar as informações para o banco de dados
-     * @param array|null $data
-     * @return void
-     */
-    public function tempoGasto(array $data = null): void
-    {
-        /*// Executando a consulta SQL
-        $viewCham = new \App\adms\Models\helper\AdmsRead();
-        $viewCham->fullRead("SELECT TIMESTAMPDIFF(HOUR, dt_cham, fech_cham) AS dur_cham FROM adms_cham");
-
-        // Obtendo o resultado
-        $row = mysqli_fetch_assoc($viewCham);
-        $horas = $row['horas_transcorridas'];
-
-        // Formatando a saída
-        echo "O tempo transcorrido foi de " . $horas . " horas.";
-*/
-
-        $this->editFinal();
     }
     /** 
      * Cadastrar usuário no banco de dados
@@ -348,7 +356,7 @@ class AdmsEditCham
         $this->data['dt_status'] = date("Y-m-d H:i:s");
         $this->data['cham_id'] = $_SESSION['set_cham'];
         $this->data['usr_id'] = $_SESSION['user_id'];
-        $this->data['obs'] = 'Chamado Pausado pelo Suporte Técnico';
+        $this->data['obs'] = 'Ticket Pausado pelo Suporte Técnico';
         $this->data['created'] = date("Y-m-d H:i:s");
 
 
@@ -378,7 +386,7 @@ class AdmsEditCham
         $this->data['dt_status'] = date("Y-m-d H:i:s");
         $this->data['cham_id'] = $_SESSION['set_cham'];
         $this->data['usr_id'] = $_SESSION['user_id'];
-        $this->data['obs'] = 'Chamado Pausado Aguardando Autorização do Cliente';
+        $this->data['obs'] = 'Ticket Pausado Aguardando Autorização do Cliente';
         $this->data['created'] = date("Y-m-d H:i:s");
 
 
@@ -408,7 +416,7 @@ class AdmsEditCham
         $this->data['dt_status'] = date("Y-m-d H:i:s");
         $this->data['cham_id'] = $_SESSION['set_cham'];
         $this->data['usr_id'] = $_SESSION['user_id'];
-        $this->data['obs'] = 'Chamado Pausado Aguardando Outros(Terceirizados, Operadoras, etc... ';
+        $this->data['obs'] = 'Ticket Pausado Aguardando Outros(Terceirizados, Operadoras, etc... ';
         $this->data['created'] = date("Y-m-d H:i:s");
 
 
@@ -439,7 +447,7 @@ class AdmsEditCham
         $this->data['dt_status'] = date("Y-m-d H:i:s");
         $this->data['cham_id'] = $_SESSION['set_cham'];
         $this->data['usr_id'] = $_SESSION['user_id'];
-        $this->data['obs'] = 'Chamado com Atendimento Finalizado pelo Suporte Técnico';
+        $this->data['obs'] = 'Ticket com Atendimento Finalizado pelo Suporte Técnico';
         $this->data['created'] = date("Y-m-d H:i:s");
 
 
@@ -455,6 +463,51 @@ class AdmsEditCham
         }
     }
 
+        /**
+     * Metodo envia as informações criadas para o banco de dados
+     * @return void
+     */
+    private function createdSlaHist(): void
+    {
+        date_default_timezone_set('America/Bahia'); 
+
+        $viewTicket = new \App\adms\Models\helper\AdmsRead();
+        $viewTicket->fullRead("SELECT cham.id as id_cham, cham.empresa_id as empresa_id_cham,  cham.cliente_id as cliente_id_cham, cham.sla_id, sla.prim_resp as prim_resp_sla, sla.final_resp as final_resp_sla, 
+                            cham.suporte_id, cham.status_id, cham.dt_cham as dt_cham, cham.dt_status 
+                            FROM adms_cham  AS cham
+                            INNER JOIN adms_sla AS sla ON sla.id = cham.sla_id 
+                            WHERE cham.id= :cham_id","cham_id={$_SESSION['set_cham']}");
+
+        $this->resultBd = $viewTicket->getResult();
+               
+        $this->dataSla['id'] ='';
+        $this->dataSla['empresa_id'] = $this->resultBd[0]['empresa_id_cham'];
+        $this->dataSla['cliente_id'] = $this->resultBd[0]['cliente_id_cham'];
+        $this->dataSla['id_ticket'] = $this->resultBd[0]['id_cham'];
+        $this->dataSla['id_sla'] = $this->resultBd[0]['sla_id'];
+        $this->dataSla['tempo_sla_prim'] = $this->resultBd[0]['prim_resp_sla'];
+        $this->dataSla['tempo_sla_fin'] = $this->resultBd[0]['final_resp_sla'];
+        $this->dataSla['suporte_id'] = $_SESSION['user_id'];
+        $this->dataSla['status_id'] = $_SESSION['status_cham'];
+        $this->dataSla['dt_status'] = date("Y-m-d H:i:s");
+        $this->dataSla['dt_abert_ticket'] = $this->resultBd[0]['dt_cham'];        
+        $this->dataSla['status_id_ant'] = $_SESSION['status_id_ant'];//Status anterior do ticket
+        $this->dataSla['dt_status_ant'] = $_SESSION['dt_status_ant'];//Status anterior do ticket 
+
+        // Define as duas datas/horários
+        $data_inicio = new DateTime($_SESSION['dt_status_ant']);
+        $data_fim = new DateTime();
+        // Use o método diff() para obter a diferença
+        $intervalo = $data_inicio->diff($data_fim);
+
+        $this->dataSla['tempo_sla'] =$intervalo->format('%H:%i');
+        $this->dataSla['modified'] = date("Y-m-d H:i:s");
+
+        
+        $createSla = new \App\adms\Models\helper\AdmsCreate();
+        $createSla->exeCreate("adms_sla_hist", $this->dataSla);
+    }
+
     /**
      * Metodo envia as informações editadas para o banco de dados
      * @return void
@@ -462,8 +515,6 @@ class AdmsEditCham
     private function edit(): void
     {
         date_default_timezone_set('America/Bahia');
-
-
         $this->data['modified'] = date("Y-m-d H:i:s");
         $this->data['status_id'] = 3; //Em Atendimento
         $this->data['dt_status'] = date("Y-m-d H:i:s");
@@ -473,10 +524,11 @@ class AdmsEditCham
         $upCham->exeUpdate("adms_cham", $this->data, "WHERE id=:id", "id={$this->data['id']}");
 
         if ($upCham->getResult()) {
-            $_SESSION['msg'] = "<p class='alert-success'>Chamado Iniciado com sucesso!</p>";
+            $this->createdSlaHist();
+            $_SESSION['msg'] = "<p class='alert-success'>Ticket Iniciado com sucesso!</p>";
             $this->result = true;
         } else {
-            $_SESSION['msg'] = "<p class='alert-danger'>Erro: Chamado não editado com sucesso!</p>";
+            $_SESSION['msg'] = "<p class='alert-danger'>Erro: Ticket não editado com sucesso!</p>";
             $this->result = false;
         }
     }
@@ -488,7 +540,6 @@ class AdmsEditCham
     private function editPausa(): void
     {
         date_default_timezone_set('America/Bahia');
-
         $this->data['modified'] = date("Y-m-d H:i:s");
         $this->data['status_id'] = 5; //Pausado
         $this->data['dt_status'] = date("Y-m-d H:i:s");
@@ -498,10 +549,11 @@ class AdmsEditCham
         $upCham->exeUpdate("adms_cham", $this->data, "WHERE id=:id", "id={$this->data['id']}");
 
         if ($upCham->getResult()) {
-            $_SESSION['msg'] = "<p class='alert-success'>Chamado Pausado com sucesso!</p>";
+            $this->createdSlaHist();
+            $_SESSION['msg'] = "<p class='alert-success'>Ticket Pausado com sucesso!</p>";
             $this->result = true;
         } else {
-            $_SESSION['msg'] = "<p class='alert-danger'>Erro: Chamado não Pausado com sucesso!</p>";
+            $_SESSION['msg'] = "<p class='alert-danger'>Erro: Ticket não Pausado com sucesso!</p>";
             $this->result = false;
         }
     }
@@ -530,11 +582,12 @@ class AdmsEditCham
         $upCham = new \App\adms\Models\helper\AdmsUpdate();
         $upCham->exeUpdate("adms_cham", $this->data, "WHERE id=:id", "id={$this->data['id']}");
 
-        if ($upCham->getResult()) {
-            $_SESSION['msg'] = "<p class='alert-success'>Chamado Reagendado com sucesso!</p>";
+        if ($upCham->getResult()) {            
+            $this->createdSlaHist();
+            $_SESSION['msg'] = "<p class='alert-success'>Ticket Reagendado com sucesso!</p>";
             $this->result = true;
         } else {
-            $_SESSION['msg'] = "<p class='alert-danger'>Erro: Chamado não Reagendado com sucesso!</p>";
+            $_SESSION['msg'] = "<p class='alert-danger'>Erro: Ticket não Reagendado com sucesso!</p>";
             $this->result = false;
         }
     }
@@ -555,10 +608,11 @@ class AdmsEditCham
         $upCham->exeUpdate("adms_cham", $this->data, "WHERE id=:id", "id={$this->data['id']}");
 
         if ($upCham->getResult()) {
-            $_SESSION['msg'] = "<p class='alert-success'>Chamado aguardando comercial pausado com sucesso!</p>";
+            $this->createdSlaHist();
+            $_SESSION['msg'] = "<p class='alert-success'>Ticket aguardando comercial pausado com sucesso!</p>";
             $this->result = true;
         } else {
-            $_SESSION['msg'] = "<p class='alert-danger'>Erro: Chamado aguardando comercial não Pausado com sucesso!</p>";
+            $_SESSION['msg'] = "<p class='alert-danger'>Erro: Ticket aguardando comercial não Pausado com sucesso!</p>";
             $this->result = false;
         }
     }
@@ -578,11 +632,12 @@ class AdmsEditCham
         $updatePend = new \App\adms\Models\helper\AdmsUpdate();
         $updatePend->exeUpdate("adms_cham", $this->data, "WHERE id=:id", "id={$this->data['id']}");
 
-        if ($updatePend->getResult()) {
-            $_SESSION['msg'] = "<p class='alert-success'>Chamado Pausado  com sucesso!</p>";
+        if ($updatePend->getResult()) {            
+            $this->createdSlaHist();
+            $_SESSION['msg'] = "<p class='alert-success'>Ticket Pausado  com sucesso!</p>";
             $this->result = true;
         } else {
-            $_SESSION['msg'] = "<p class='alert-danger'>Erro: Chamado não Pausado com sucesso!</p>";
+            $_SESSION['msg'] = "<p class='alert-danger'>Erro: Ticket não Pausado com sucesso!</p>";
             $this->result = false;
         }
     }
@@ -601,11 +656,12 @@ class AdmsEditCham
         $updateAguar = new \App\adms\Models\helper\AdmsUpdate();
         $updateAguar->exeUpdate("adms_cham", $this->data, "WHERE id=:id", "id={$this->data['id']}");
 
-        if ($updateAguar->getResult()) {
-            $_SESSION['msg'] = "<p class='alert-success'>Chamado Pausado  com sucesso!</p>";
+        if ($updateAguar->getResult()) {            
+            $this->createdSlaHist();
+            $_SESSION['msg'] = "<p class='alert-success'>Ticket Pausado  com sucesso!</p>";
             $this->result = true;
         } else {
-            $_SESSION['msg'] = "<p class='alert-danger'>Erro: Chamado não Pausado com sucesso!</p>";
+            $_SESSION['msg'] = "<p class='alert-danger'>Erro: Ticket não Pausado com sucesso!</p>";
             $this->result = false;
         }
     }
@@ -615,23 +671,39 @@ class AdmsEditCham
      * @return void
      */
     private function editFinal(): void
-    {
-        date_default_timezone_set('America/Bahia');
+    { 
+        date_default_timezone_set('America/Bahia');           
+
+        $viewChamGrav = new \App\adms\Models\helper\AdmsRead();
+        $viewChamGrav->fullRead("SELECT cham.id, cham.dt_cham FROM adms_cham as cham WHERE cham.id= :cham_id","cham_id={$_SESSION['set_cham']}");
+        $this->resultBd = $viewChamGrav->getResult();
+
+        // Define as duas datas/horários
+        $data_inicio = new DateTime($this->resultBd[0]['dt_cham']);
+        $data_fim = new DateTime();
+        // Use o método diff() para obter a diferença
+        $intervalo = $data_inicio->diff($data_fim);
+
         
+       
+        $this->data['dur_cham'] =$intervalo->format('%H:%i');
         $this->data['modified'] = date("Y-m-d H:i:s");
-        $this->data['status_id'] = 6; //Finalizado
+        $this->data['status_id'] = 6; //TicketFinalizado
         $this->data['suporte_id'] = $_SESSION['user_id'];
         $this->data['dt_status'] = date("Y-m-d H:i:s");
         $this->data['dt_term_cham'] = date("Y-m-d H:i:s");
 
+        
+
         $upCham = new \App\adms\Models\helper\AdmsUpdate();
         $upCham->exeUpdate("adms_cham", $this->data, "WHERE id=:id", "id={$this->data['id']}");
 
-        if ($upCham->getResult()) {
-            $_SESSION['msg'] = "<p class='alert-success'>Chamado Finalizado com sucesso!</p>";
+        if ($upCham->getResult()) {  
+            $this->createdSlaHist();// Gera o sla
+            $_SESSION['msg'] = "<p class='alert-success'>Ticket Finalizado com sucesso!</p>";
             $this->result = true;
         } else {
-            $_SESSION['msg'] = "<p class='alert-danger'>Erro: Chamado não Finalizado com sucesso!</p>";
+            $_SESSION['msg'] = "<p class='alert-danger'>Erro: Ticket não Finalizado com sucesso!</p>";
             $this->result = false;
         }
     }

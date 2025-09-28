@@ -19,7 +19,7 @@ if (isset($this->data['form'][0])) {
     <div class="row">
         <div class="top-list">
             <div class="d-flex flex-wrap align-items-center mb-3">
-                <span class="me-2">Atendimento : </span>
+                <span class="me-2">Ticket : </span>
                 <div class="top-list-center">
                     <?php
                     $name_sta = "";
@@ -45,6 +45,7 @@ if (isset($this->data['form'][0])) {
 
             </div>
         </div>
+    </div>
 
 
 
@@ -66,11 +67,11 @@ if (isset($this->data['form'][0])) {
                     <?php } elseif ($name_sta == 'Pausado') { ?>
                         <button type="submit" name="SendInicCham" value="Pausar" class="btn btn-info btn-sm"><span class="fas fa-bed me-2"></span>Reiniciar Atendimento</button>
                         <?php
-                        if ($this->data['button']['list_cham']) {
-                            unset($_SESSION['set_status']);
-                            $_SESSION['set_status'] = 'Pausado';
-                            echo "<a href='" . URLADM . "add-hist-cham/index/" . $_SESSION['set_cham'] . "' class='btn btn-success btn-sm'>Cadastrar Histórico</a><br><br>";
-                        }
+                            if ($this->data['button']['list_cham']) {
+                                unset($_SESSION['set_status']);
+                                $_SESSION['set_status'] = 'Pausado';
+                                echo "<a href='" . URLADM . "add-hist-cham/index/" . $_SESSION['set_cham'] . "' class='btn btn-success btn-sm'>Cadastrar Histórico</a><br><br>";
+                            }
                         ?>
                     <?php } elseif ($name_sta == 'Reagendado') { ?>
                         <button type="submit" name="SendInicCham" value="Pausar" class="btn btn-info btn-sm"><span class="fas fa-bed me-2"></span>Reiniciar Atendimento</button>
@@ -242,6 +243,17 @@ if (isset($this->data['form'][0])) {
 
                                 <div class="input-group">
                                     <?php
+                                    $name_sla = "";
+                                    if (isset($valorForm['name_sla'])) {
+                                        $name_sla = $valorForm['name_sla'];
+                                    }
+                                    ?>
+                                    <span class="input-group-text view-adm-title">Prioridade(SLA):</span>
+                                    <span class="form-control"><?php echo $name_sla; ?></span>
+                                </div>
+
+                                <div class="input-group">
+                                    <?php
                                     $contato = "";
                                     if (isset($valorForm['contato'])) {
                                         $contato = $valorForm['contato'];
@@ -267,7 +279,7 @@ if (isset($this->data['form'][0])) {
                                         $id = $valorForm['id'];
                                     }
                                     ?>
-                                    <span class="input-group-text">Número Chamado</span>
+                                    <span class="input-group-text">Número Ticket</span>
                                     <span class="form-control"><?php echo $id; ?></span>
                                 </div>
 
@@ -278,7 +290,7 @@ if (isset($this->data['form'][0])) {
                                         $dt_cham = $valorForm['dt_cham'];
                                     }
                                     ?>
-                                    <span class="input-group-text">Data Chamado</span>
+                                    <span class="input-group-text">Data Abertura Ticket</span>
                                     <span class="form-control"><?php echo date('d/m/Y H:i:s', strtotime($dt_cham)); ?></span>
                                 </div>
                             </div>
@@ -318,22 +330,21 @@ if (isset($this->data['form'][0])) {
                                         $type_cham = $valorForm['type_cham'];
                                     }
                                     ?>
-                                    <span class="input-group-text">Tipo Atendimento</span>
+                                    <span class="input-group-text">Tipo Ticket</span>
                                     <span class="form-control"><?php echo $type_cham; ?></span>
                                 </div>
                                 <div class="input-group">
                                     <?php
-                                    $fech_cham = "";
-                                    if (isset($valorForm['fech_cham'])) {
-                                        $obs = $valorForm['fech_cham'];
+                                    $sla_total = "";
+                                    if (isset($valorForm['sla_total'])) {
+                                        $sla_total = $valorForm['sla_total'];
                                     }
                                     ?>
-                                    <span class="input-group-text">Fechamento Chamado</span>
-
+                                    <span class="input-group-text">Tempo de SLA Total do Ticket</span>
                                     <span class="form-control">
                                         <?php
-                                        if (!empty($dt_term_cham)) {
-                                            echo date('d/m/Y H:i:s', strtotime($dt_term_cham));
+                                        if (!empty($sla_total)) {
+                                            echo date('H:i:s', strtotime($sla_total));
                                         }
                                         ?>
                                     </span>
@@ -345,7 +356,7 @@ if (isset($this->data['form'][0])) {
                                         $dt_term_cham = $valorForm['dt_term_cham'];
                                     }
                                     ?>
-                                    <span class="input-group-text">Conclusão Atendimento</span>
+                                    <span class="input-group-text">Aprovação do Ticket</span>
                                     <span class="form-control">
                                         <?php
                                         if (!empty($fech_cham)) {
@@ -428,8 +439,5 @@ if (isset($this->data['form'][0])) {
             </div>
         </div>
     </div>
-
-
-
 </div>
 <!-- Fim do conteudo do administrativo -->

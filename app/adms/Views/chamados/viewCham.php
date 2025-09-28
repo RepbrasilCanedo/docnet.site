@@ -30,7 +30,7 @@ if (!defined('D0O8C0A3N1E9D6O1')) {
                 if (!empty( $this->data['button']['add_hist_cham'])) {
                     echo "<a href='" . URLADM . "add-hist-cham/index/$id' class='btn-success'>Anexar Histórico</a> ";
                 }
-                if (($_SESSION['adms_access_level_id'] == 4) or ($_SESSION['adms_access_level_id'] == 12) and ($name_sta <> 'Finalizado')){ ?>
+                if ((($_SESSION['adms_access_level_id'] == 4) or ($_SESSION['adms_access_level_id'] == 12)) and ($name_sta <> 'Finalizado')){ ?>
                         <!--Modal para inserir a data do reagendamento do ticket -->
                             <button type="button" class="btn btn-dark btn-sm mb-0" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">Reagendar Ticket</button>
  
@@ -94,6 +94,10 @@ if (!defined('D0O8C0A3N1E9D6O1')) {
                                 <span class="view-adm-title">Tipo: </span>
                                 <span class="view-adm-info"><?php echo $type_cham; ?></span>
                             </div>
+                            <div class="view-det-adm">
+                                <span class="view-adm-title">Prioridade(SLA):: </span>
+                                <span class="view-adm-info"><?php echo $name_sla; ?></span>
+                            </div>
 
                             <div class="view-det-adm">
                                 <span class="view-adm-title">Contato: </span>
@@ -106,6 +110,38 @@ if (!defined('D0O8C0A3N1E9D6O1')) {
                         </div>
                     </div>
                     <div class="col-md-6">
+                        <div class="card card-body border-top border-info border-2 input-group-sm">
+                            <div class="view-det-adm">
+                                <span class="view-adm-title">Abertura : </span>
+                                <span class="view-adm-info"><?php echo date('d/m/Y H:i:s', strtotime($dt_cham)); ?></span>
+                            </div>
+                            <div class="view-det-adm">
+                                <span class="view-adm-title">Conclusão : </span>
+                                <span class="view-adm-info">
+                                    <?php
+                                    if (!empty($fech_cham)) {
+                                        echo date('d/m/Y H:i:s', strtotime($fech_cham));
+                                    } ?>
+                                </span>
+                            </div>
+
+
+                            <div class="view-det-adm">
+                                <span class="view-adm-title">Tempo SLA: </span>
+                                    <span class="view-adm-info"><?php echo $sla_total ?></span>  
+                                
+                            </div>
+
+                            <div class="view-det-adm">
+                                <span class="view-adm-title">Aprovação Chamado: </span>
+                                <span class="view-adm-info">
+                                    <?php
+                                    if (!empty($dt_term_cham)) {
+                                        echo date('d/m/Y H:i:s', strtotime($dt_term_cham));
+                                    } ?>
+                                </span>
+                            </div>
+                        </div>
                         <div class="card card-body border-top border-info border-2 input-group-sm">
                             <div class="view-det-adm">
                                 <span class="view-adm-title">Status Atual: </span>
@@ -132,33 +168,6 @@ if (!defined('D0O8C0A3N1E9D6O1')) {
                                     <span class="view-adm-info"><?php echo $motivo_repr ?></span>
                                 </div>
                             <?php } ?>
-                        </div>
-                        <div class="card card-body border-top border-info border-2 input-group-sm">
-                            <div class="view-det-adm">
-                                <span class="view-adm-title">Abertura : </span>
-                                <span class="view-adm-info"><?php echo date('d/m/Y H:i:s', strtotime($dt_cham)); ?></span>
-                            </div>
-
-
-                            <div class="view-det-adm">
-                                <span class="view-adm-title">Duração: </span>
-                                <?php if(($name_sta =='Finalizado') or ($name_sta =='Aprovado')) {?>
-                                    <span class="view-adm-info"><?php echo date('H:i:s', (strtotime($dt_cham) - strtotime($dt_status))); ?></span>
-                                <?php } else { ?>
-                                    
-                                <?php }?>
-                                
-                            </div>
-
-                            <div class="view-det-adm">
-                                <span class="view-adm-title">Aprovação Chamado: </span>
-                                <span class="view-adm-info">
-                                    <?php
-                                    if (!empty($fech_cham)) {
-                                        echo date('d/m/Y H:i:s', strtotime($fech_cham));
-                                    } ?>
-                                </span>
-                            </div>
                         </div>
                     </div>
                     <div class="row">

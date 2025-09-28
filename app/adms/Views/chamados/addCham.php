@@ -8,7 +8,7 @@ if (!defined('D0O8C0A3N1E9D6O1')) {
 if (isset($this->data['form'])) {
     $valorForm = $this->data['form'];
 }
-//echo "<pre>"; var_dump($this->data['select']['cliente']);
+
 
 ?>
 <!-- Inicio do conteudo do administrativo -->
@@ -43,6 +43,7 @@ if (isset($this->data['form'])) {
                         <label class="title-input">Contato:<span class="text-danger">*</span></label>
                         <input type="text" name="contato" id="contato" class="input-adm" placeholder="Digite o nome do contato" value="<?php $contato ?>" required>
                     </div>
+
                     <div class="column">
                         <label class="title-input">Telefone/WhatsApp (Ex: 00 00000 0000):<span class="text-danger">*</span></label>
                         <input type="text" name="tel_contato" id="tel_contato" class="input-adm" placeholder="## ##### ####" value="<?php $tel_contato ?>" required>
@@ -79,7 +80,25 @@ if (isset($this->data['form'])) {
                         </select>
                     </div>
 
+                    <div class="column">
+                        <label class="title-input">Prioridade(SLA):<span class="text-danger">*</span></label>
+                        <select name="sla_id" id="sla_id" class="input-adm" required>
+                            <option value="">Selecione</option>
+                            <?php
+                            foreach ($this->data['select']['sla'] as $sla) {
+                                extract($sla);
+                                if (isset($valorForm['id_sla']) and $valorForm['id_sla'] == $id_sla) {
+                                    echo "<option value='$id_sla' selected>$name_sla  -- $name_ativ</option>";
+                                } else {
+                                    echo "<option value='$id_sla'>$name_sla  -- $name_ativ</option>";
+                                }
+                            }
+                            ?>
+                        </select>
+                    </div>
+
                     <?php if ($_SESSION['adms_access_level_id'] == 14) {?>
+                        
                         <div class="column">
                             <label class="title-input">Produto:<span class="text-danger">*</span></label>
                             <select name="prod_id" id="prod_id" class="input-adm" required>

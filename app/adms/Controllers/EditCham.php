@@ -166,7 +166,6 @@ class EditCham
             $editHistCham->addHistChamInic();
 
             if ($editHistCham->getResult()) {
-
                 $editCham = new \App\adms\Models\AdmsEditCham();
                 $editCham->update($this->dataForm);
 

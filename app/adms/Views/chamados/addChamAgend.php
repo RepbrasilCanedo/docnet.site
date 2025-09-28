@@ -77,6 +77,23 @@ if (isset($this->data['form'])) {
                             ?>
                         </select>
                     </div>
+
+                    <div class="column">
+                        <label class="title-input">Prioridade(SLA):<span class="text-danger">*</span></label>
+                        <select name="sla_id" id="sla_id" class="input-adm" required>
+                            <option value="">Selecione</option>
+                            <?php
+                            foreach ($this->data['select']['sla'] as $sla) {
+                                extract($sla);
+                                if (isset($valorForm['id_sla']) and $valorForm['id_sla'] == $id_sla) {
+                                    echo "<option value='$id_sla' selected>$name_sla --- $name_ativ</option>";
+                                } else {
+                                    echo "<option value='$id_sla'>$name_sla --- $name_ativ</option>";
+                                }
+                            }
+                            ?>
+                        </select>
+                    </div>
                     <?php if ($_SESSION['adms_access_level_id'] == 14) {?>
                         <div class="column">
                             <label class="title-input">Produto:<span class="text-danger">*</span></label>

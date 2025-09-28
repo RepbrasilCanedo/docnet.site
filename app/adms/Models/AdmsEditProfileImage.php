@@ -86,6 +86,7 @@ class AdmsEditProfileImage
 
         $valEmptyField = new \App\adms\Models\helper\AdmsValEmptyField();
         $valEmptyField->valField($this->data);
+
         if ($valEmptyField->getResult()) {
             if (!empty($this->dataImagem['name'])) {
                 $this->valInput();
@@ -108,6 +109,7 @@ class AdmsEditProfileImage
     {
         $valExtImg = new \App\adms\Models\helper\AdmsValExtImg();
         $valExtImg->validateExtImg($this->dataImagem['type']);
+        
         if (($this->viewProfile()) and ($valExtImg->getResult())) {
             $this->upload();
         } else {

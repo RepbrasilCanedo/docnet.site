@@ -43,21 +43,8 @@ class ListSla
 
         $this->dataForm = filter_input_array(INPUT_POST, FILTER_DEFAULT);
 
-        $this->searchName = filter_input(INPUT_GET, 'search_name', FILTER_DEFAULT);
-        $this->searchSla = filter_input(INPUT_GET, 'search_color', FILTER_DEFAULT);
-
         $listSla = new \App\adms\Models\AdmsListSla();
-        if (!empty($this->dataForm['SendSearchSla'])) {
-            $this->page = 1;
-            $listSla->listSearchSla($this->page, $this->dataForm['search_name'], $this->dataForm['search_sla']);
-            $this->data['form'] = $this->dataForm;
-        } elseif ((!empty($this->searchName)) or (!empty($this->searchSla))) {
-            $listSla->listSearchSla($this->page, $this->searchName, $this->searchSla);
-            $this->data['form']['search_name'] = $this->searchName;
-            $this->data['form']['search_sla'] = $this->searchSla;
-        } else {            
-            $listSla->listSla($this->page);            
-        }
+        $listSla->listSla($this->page); 
         
         if ($listSla->getResult()) {
             $this->data['listSla'] = $listSla->getResultBd();
@@ -71,6 +58,7 @@ class ListSla
         'view_sla' => ['menu_controller' => 'view-sla', 'menu_metodo' => 'index'],
         'edit_sla' => ['menu_controller' => 'edit-sla', 'menu_metodo' => 'index'],
         'delete_sla' => ['menu_controller' => 'delete-sla', 'menu_metodo' => 'index']];
+        
         $listBotton = new \App\adms\Models\helper\AdmsButton();
         $this->data['button'] = $listBotton->buttonPermission($button);
 

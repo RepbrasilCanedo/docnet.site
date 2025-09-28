@@ -118,7 +118,7 @@ class AdmsAddCham
                         $this->result = true;
                         $this->add();
                     } else{
-                        $_SESSION['msg'] = "<p class='alert-danger'>Não e possivel a abertura de Ticket para este produto pois o contrato de suporte tecnico ou garantia esta vencido. Entre em contato com o setor comercial de sua revenda</p>";
+                        $_SESSION['msg'] = "<p class='alert-danger'>Não e possivel a abertura de Ticket para este produto pois o contrato de suporte tecnico ou garantia esta vencido. Entre em contato com o setor comercial de sua revenda Atraves dos telefones/Whatsapp: 71 98137 6244 - 71 98426 0258</p>";
                         $this->result = false;
                     };
                    
@@ -181,12 +181,18 @@ class AdmsAddCham
                 WHERE empresa= :empresa", "empresa={$_SESSION['emp_user']}");
                 $registry['cliente'] = $list->getResult();
 
+                $list->fullRead("SELECT sla.id as id_sla, sla.name as name_sla, sla.empresa_id, tempo_horas_sla_id, ativ.name as name_ativ  FROM adms_sla as sla
+                INNER JOIN adms_atividade AS ativ ON ativ.id = sla.atividade_id 
+                WHERE sla.empresa_id= :empresa", "empresa={$_SESSION['emp_user']}");
+                $registry['sla'] = $list->getResult();
+                
+
                 $list->fullRead("SELECT prod.id as id_prod, prod.name as name_prod, prod.dias as dias, prod.inicio_contr as inicio_contr, emp.nome_fantasia as nome_fantasia_clie, prod.empresa_id FROM adms_produtos as prod
                 INNER JOIN adms_clientes AS emp ON emp.id=prod.cliente_id  
                 WHERE prod.empresa_id= :empresa order by prod.cliente_id", "empresa={$_SESSION['emp_user']}");
                 $registry['produtoemp'] = $list->getResult();
 
-                $this->listRegistryAdd = ['cliente' => $registry['cliente'],'produtoemp' => $registry['produtoemp']];
+                $this->listRegistryAdd = ['cliente' => $registry['cliente'], 'sla' => $registry['sla'], 'produtoemp' => $registry['produtoemp']];
 
                 //Se for 14 - Usuario(a) final
             } elseif ($_SESSION['adms_access_level_id'] == 14) {
@@ -195,18 +201,27 @@ class AdmsAddCham
                 WHERE (empresa= :empresa) AND (id = :cliente) ORDER BY nome_fantasia ASC", "empresa={$_SESSION['emp_user']}&cliente={$_SESSION['set_clie']}");
                 $registry['cliente'] = $list->getResult();
 
+                $list->fullRead("SELECT sla.id as id_sla, sla.name as name_sla, sla.empresa_id, tempo_horas_sla_id, ativ.name as name_ativ  FROM adms_sla as sla
+                INNER JOIN adms_atividade AS ativ ON ativ.id = sla.atividade_id 
+                WHERE sla.empresa_id= :empresa", "empresa={$_SESSION['emp_user']}");
+                $registry['sla'] = $list->getResult();
+
                 $list->fullRead("SELECT id, name, dias, inicio_contr, cliente_id, empresa_id FROM adms_produtos
                 WHERE cliente_id= :cliente_id", "cliente_id={$_SESSION['set_clie']}");
                 $registry['produto'] = $list->getResult();
 
-                $this->listRegistryAdd = ['cliente' => $registry['cliente'],'produto' => $registry['produto']];
+                $this->listRegistryAdd = ['cliente' => $registry['cliente'], 'sla' => $registry['sla'], 'produto' => $registry['produto']];
             }
         } else {
 
             $list->fullRead("SELECT id, nome_fantasia FROM adms_clientes ORDER BY nome_fantasia ASC");
             $registry['cliente'] = $list->getResult();
 
-            $this->listRegistryAdd = ['cliente' => $registry['cliente']];
+                $list->fullRead("SELECT id, name, empresa_id, tempo_horas_sla_id FROM adms_sla");                
+                $registry['sla'] = $list->getResult();
+                
+
+            $this->listRegistryAdd = ['cliente' => $registry['cliente'], 'sla' => $registry['sla'], ];
         }
         
 

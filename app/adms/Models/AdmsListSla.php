@@ -82,7 +82,8 @@ class AdmsListSla
         $this->resultPg = $pagination->getResult();
 
         $listSla = new \App\adms\Models\helper\AdmsRead();
-        $listSla->fullRead("SELECT sla.id as id_sla, sla.name, emp.nome_fantasia as nome_fantasia_emp, typ.name as name_typ, prio.name as name_prio, temp.name as name_temp, sla.tempo_horas_sla_id, 
+        $listSla->fullRead("SELECT sla.id as id_sla, sla.name, emp.nome_fantasia as nome_fantasia_emp, sla.prim_resp as prim_resp_sla, 
+        sla.final_resp as final_resp_sla, typ.name as name_typ, prio.name as name_prio, temp.name as name_temp, sla.tempo_horas_sla_id, 
                             ativ.name as name_ativ, sla.obs as obs_sla FROM adms_sla as sla
                             INNER JOIN adms_emp_principal AS emp ON emp.id=sla.empresa_id
                             INNER JOIN adms_tipo_ocorr AS typ ON typ.id=sla.tipo_ocorr_id

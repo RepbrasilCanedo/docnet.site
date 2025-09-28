@@ -24,38 +24,6 @@ if (isset($this->data['form'])) {
             </div>
         </div>
 
-        <div class="top-list">
-            <form method="POST" action="">
-                <div class="row-input-search">
-                    <?php
-                    $search_name = "";
-                    if (isset($valorForm['search_name'])) {
-                        $search_name = $valorForm['search_name'];
-                    }
-                    ?>
-                    <div class="column">
-                        <label class="title-input-search">Nome: </label>
-                        <input type="text" name="search_name" id="search_name" class="input-search" placeholder="Pesquisar pelo nome..." value="<?php echo $search_name; ?>">
-                    </div>
-
-                    <?php
-                    $search_color = "";
-                    if (isset($valorForm['search_color'])) {
-                        $search_color = $valorForm['search_color'];
-                    }
-                    ?>
-                    <div class="column">
-                        <label class="title-input-search">Sla: </label>
-                        <input type="text" name="search_color" id="search_color" class="input-search" placeholder="Pesquisar pela cor..." value="<?php echo $search_color; ?>">
-                    </div>
-
-                    <div class="column margin-top-search">
-                        <button type="submit" name="SendSearchColor" class="btn-info" value="Pesquisar">Pesquisar</button>
-                    </div>
-                </div>
-            </form>
-        </div>
-
         <div class="content-adm-alert">
             <?php
             if (isset($_SESSION['msg'])) {
@@ -70,9 +38,10 @@ if (isset($this->data['form'])) {
                     <th class="list-head-content">ID</th>
                     <th class="list-head-content">Tipo</th>
                     <th class="list-head-content table-sm-none">Empresa</th>
-                    <th class="list-head-content">Prioridade</th>
-                    <th class="list-head-content">Sla</th>
-                    <th class="list-head-content table-sm-none">Atividade</th>
+                    <th class="list-head-content">Primeira Resposta</th>
+                    <th class="list-head-content">Tempo do SLA</th>
+                    <th class="list-head-content table-sm-none">Tipo de Urgencia</th>
+                    <th class="list-head-content table-sm-none">Dados Adicionais</th>
                     <th class="list-head-content">Ações</th>
                 </tr>
             </thead>
@@ -85,9 +54,10 @@ if (isset($this->data['form'])) {
                         <td class="list-body-content"><?php echo $id_sla; ?></td>
                         <td class="list-body-content"><?php echo $name; ?></td>
                         <td class="list-body-content"><?php echo $nome_fantasia_emp; ?></td>
-                        <td class="list-body-content"><?php echo $name_prio; ?></td>
-                        <td class="list-body-content"><?php echo $name_temp; ?></td>
+                        <td class="list-body-content"><?php echo $prim_resp_sla; ?></td>
+                        <td class="list-body-content"><?php echo $final_resp_sla; ?></td>
                         <td class="list-body-content"><?php echo $name_ativ; ?></td>
+                        <td class="list-body-content"><?php echo $obs_sla; ?></td>
                         
                         <td class="list-body-content">
                             <div class="dropdown-action">

@@ -42,11 +42,17 @@ class AdmsValExtImg
     {
         $this->mimeType = $mimeType;
         switch ($this->mimeType) {
-            case 'image/pdf':
+            case 'image/jpg':
+                $this->result = true;
+                break;
+            case 'image/jpeg':
+                $this->result = true;
+                break;
+            case 'image/png':
                 $this->result = true;
                 break;
             default:
-                $_SESSION['msg'] = "<p class='alert-danger'>Erro: Necessário selecionar imagem em PDF!</p>";
+                $_SESSION['msg'] = "<p class='alert-danger'>Erro: Necessário selecionar imagem em JPG ou PNG!</p>";
                 $this->result = false;
         }
     }

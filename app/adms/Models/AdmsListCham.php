@@ -123,10 +123,11 @@ class AdmsListCham
                     $this->resultPg = $pagination->getResult();
 
                     $listCham = new \App\adms\Models\helper\AdmsRead();
-                    $listCham->fullRead("SELECT cham.id, cham.empresa_id, cham.status_id, clie.nome_fantasia as nome_fantasia_clie, prod.name as name_prod, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
+                    $listCham->fullRead("SELECT cham.id, cham.empresa_id, cham.status_id, clie.nome_fantasia as nome_fantasia_clie, sla.name as name_sla, prod.name as name_prod, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
                             cham.dt_cham, sta.name AS name_sta, cham.dt_status, cham.type_cham  
                             FROM adms_cham AS cham
-                            INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id 
+                            INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id                             
+                            INNER JOIN adms_sla AS sla ON sla.id=cham.sla_id   
                             INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id                             
                             INNER JOIN adms_produtos AS prod ON prod.id=cham.prod_id
                             WHERE cham.empresa_id= :empresa_id ORDER BY cham.dt_status DESC LIMIT :limit OFFSET :offset", "empresa_id={$_SESSION['emp_user']}&limit={$this->limitResult}&offset={$pagination->getOffset()}");
@@ -150,10 +151,11 @@ class AdmsListCham
                     $this->resultPg = $pagination->getResult();
 
                     $listCham = new \App\adms\Models\helper\AdmsRead();
-                    $listCham->fullRead("SELECT cham.id, cham.empresa_id, cham.status_id, clie.nome_fantasia as nome_fantasia_clie, prod.name as name_prod, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
+                    $listCham->fullRead("SELECT cham.id, cham.empresa_id, cham.status_id, clie.nome_fantasia as nome_fantasia_clie, sla.name as name_sla, prod.name as name_prod, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
                             cham.dt_cham, sta.name AS name_sta, dt_status, cham.type_cham  
                             FROM adms_cham AS cham
-                            INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id 
+                            INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id                             
+                            INNER JOIN adms_sla AS sla ON sla.id=cham.sla_id   
                             INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id                             
                             INNER JOIN adms_produtos AS prod ON prod.id=cham.prod_id
                             WHERE cham.empresa_id= :empresa_id AND cham.cliente_id= :id_cliente ORDER BY cham.dt_status  DESC LIMIT :limit OFFSET :offset", "empresa_id={$_SESSION['emp_user']}&id_cliente={$_SESSION['set_clie']}&limit={$this->limitResult}&offset={$pagination->getOffset()}");
@@ -175,10 +177,11 @@ class AdmsListCham
                 $this->resultPg = $pagination->getResult();
 
                 $listCham = new \App\adms\Models\helper\AdmsRead();
-                $listCham->fullRead("SELECT cham.id, cham.empresa_id, cham.status_id, clie.nome_fantasia as nome_fantasia_clie, prod.name as name_prod, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
+                $listCham->fullRead("SELECT cham.id, cham.empresa_id, cham.status_id, clie.nome_fantasia as nome_fantasia_clie, sla.name as name_sla, prod.name as name_prod, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
                             cham.dt_cham, sta.name AS name_sta, dt_status, cham.type_cham  
                             FROM adms_cham AS cham
                             INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id                             
+                            INNER JOIN adms_sla AS sla ON sla.id=cham.sla_id                               
                             INNER JOIN adms_produtos AS prod ON prod.id=cham.prod_id 
                             INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id LIMIT :limit OFFSET :offset","limit={$this->limitResult}&offset={$pagination->getOffset()}");
                 $this->resultBd = $listCham->getResult();
@@ -203,10 +206,11 @@ class AdmsListCham
                     $this->resultPg = $pagination->getResult();
 
                     $listCham = new \App\adms\Models\helper\AdmsRead();
-                    $listCham->fullRead("SELECT cham.id, cham.empresa_id, cham.status_id, clie.nome_fantasia as nome_fantasia_clie, prod.name as name_prod, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
+                    $listCham->fullRead("SELECT cham.id, cham.empresa_id, cham.status_id, clie.nome_fantasia as nome_fantasia_clie, sla.name as name_sla, prod.name as name_prod, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
                             cham.dt_cham, sta.name AS name_sta, dt_status, cham.type_cham  
                             FROM adms_cham AS cham
-                            INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id 
+                            INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id                             
+                            INNER JOIN adms_sla AS sla ON sla.id=cham.sla_id   
                             INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id                             
                             INNER JOIN adms_produtos AS prod ON prod.id=cham.prod_id 
                             WHERE cham.empresa_id= :empresa_id AND status_id= :status_ticket ORDER BY cham.dt_status DESC LIMIT :limit OFFSET :offset", "empresa_id={$_SESSION['emp_user']}&status_ticket={$_SESSION['status_ticket']}&limit={$this->limitResult}&offset={$pagination->getOffset()}");
@@ -230,10 +234,11 @@ class AdmsListCham
                     $this->resultPg = $pagination->getResult();
 
                     $listCham = new \App\adms\Models\helper\AdmsRead();
-                    $listCham->fullRead("SELECT cham.id, cham.empresa_id, cham.status_id, clie.nome_fantasia as nome_fantasia_clie, prod.name as name_prod, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
+                    $listCham->fullRead("SELECT cham.id, cham.empresa_id, cham.status_id, clie.nome_fantasia as nome_fantasia_clie, sla.name as name_sla, prod.name as name_prod, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
                             cham.dt_cham, sta.name AS name_sta, dt_status, cham.type_cham  
                             FROM adms_cham AS cham
-                            INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id 
+                            INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id                             
+                            INNER JOIN adms_sla AS sla ON sla.id=cham.sla_id   
                             INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id                             
                             INNER JOIN adms_produtos AS prod ON prod.id=cham.prod_id
                             WHERE cham.empresa_id= :empresa_id AND cham.cliente_id= :id_cliente AND cham.status_id= :status_ticket ORDER BY cham.dt_status DESC LIMIT :limit OFFSET :offset", "empresa_id={$_SESSION['emp_user']}&id_cliente={$_SESSION['set_clie']}&status_ticket={$_SESSION['status_ticket']}&limit={$this->limitResult}&offset={$pagination->getOffset()}");
@@ -255,10 +260,11 @@ class AdmsListCham
                 $this->resultPg = $pagination->getResult();
 
                 $listCham = new \App\adms\Models\helper\AdmsRead();
-                $listCham->fullRead("SELECT cham.id, cham.empresa_id, cham.status_id, clie.nome_fantasia as nome_fantasia_clie, prod.name as name_prod, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
+                $listCham->fullRead("SELECT cham.id, cham.empresa_id, cham.status_id, clie.nome_fantasia as nome_fantasia_clie, sla.name as name_sla, prod.name as name_prod, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
                             cham.dt_cham, sta.name AS name_sta, dt_status, cham.type_cham  
                             FROM adms_cham AS cham
-                            INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id 
+                            INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id                             
+                            INNER JOIN adms_sla AS sla ON sla.id=cham.sla_id   
                             INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id                             
                             INNER JOIN adms_produtos AS prod ON prod.id=cham.prod_id 
                             WHERE status_id= :status_ticket ORDER BY cham.dt_status DESC LIMIT :limit OFFSET :offset", "status_ticket={$_SESSION['status_ticket']}&limit={$this->limitResult}&offset={$pagination->getOffset()}");
@@ -359,10 +365,11 @@ class AdmsListCham
                 $this->resultPg = $pagination->getResult();
 
                 $listCham = new \App\adms\Models\helper\AdmsRead();
-                $listCham->fullRead("SELECT cham.id, cham.empresa_id, clie.nome_fantasia as nome_fantasia_clie, prod.name as name_prod, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
+                $listCham->fullRead("SELECT cham.id, cham.empresa_id, clie.nome_fantasia as nome_fantasia_clie, sla.name as name_sla, prod.name as name_prod, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
                                     cham.dt_cham, sta.name AS name_sta, dt_status, cham.type_cham  
                                     FROM adms_cham AS cham
-                                    INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id 
+                                    INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id                             
+                                    INNER JOIN adms_sla AS sla ON sla.id=cham.sla_id   
                                     INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id                            
                                     INNER JOIN adms_produtos AS prod ON prod.id=cham.prod_id 
                                     WHERE (cham.empresa_id= :empresa_id) and (cham.id= :cham_id) LIMIT :limit OFFSET :offset",
@@ -384,10 +391,11 @@ class AdmsListCham
             $this->resultPg = $pagination->getResult();
 
             $listCham = new \App\adms\Models\helper\AdmsRead();
-            $listCham->fullRead("SELECT cham.id, cham.empresa_id, clie.nome_fantasia as nome_fantasia_clie, prod.name as name_prod, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
+            $listCham->fullRead("SELECT cham.id, cham.empresa_id, clie.nome_fantasia as nome_fantasia_clie, sla.name as name_sla, prod.name as name_prod, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
                                     cham.dt_cham, sta.name AS name_sta, dt_status, cham.type_cham  
                                     FROM adms_cham AS cham
-                                    INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id 
+                                    INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id                             
+                                    INNER JOIN adms_sla AS sla ON sla.id=cham.sla_id   
                                     INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id                            
                                     INNER JOIN adms_produtos AS prod ON prod.id=cham.prod_id 
                                     WHERE cham.id= :cham_id LIMIT :limit","cham_id={$this->searchIdValue}&limit=1");
@@ -419,12 +427,13 @@ class AdmsListCham
                 $this->resultPg = $pagination->getResult();
 
                 $listCham = new \App\adms\Models\helper\AdmsRead();
-                $listCham->fullRead("SELECT cham.id, cham.empresa_id, clie.nome_fantasia as nome_fantasia_clie, prod.name as name_prod, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
+                $listCham->fullRead("SELECT cham.id, cham.empresa_id, clie.nome_fantasia as nome_fantasia_clie, sla.name as name_sla, prod.name as name_prod, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
                                     cham.dt_cham, sta.name AS name_sta, dt_status, cham.type_cham  
                                     FROM adms_cham AS cham
-                                    INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id 
+                                    INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id                             
+                                    INNER JOIN adms_sla AS sla ON sla.id=cham.sla_id   
                                     INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id                             
-                            INNER JOIN adms_produtos AS prod ON prod.id=cham.prod_id 
+                                    INNER JOIN adms_produtos AS prod ON prod.id=cham.prod_id 
                                     WHERE (cham.empresa_id= :empresa_id) AND (cham.cliente_id= :cliente_id)  ORDER BY dt_status 
                                     LIMIT :limit OFFSET :offset", "empresa_id={$_SESSION['emp_user']}&cliente_id={$this->searchEmpresaValue}&limit={$this->limitResult}&offset={$pagination->getOffset()}");
             }
@@ -435,12 +444,13 @@ class AdmsListCham
             $this->resultPg = $pagination->getResult();
 
             $listCham = new \App\adms\Models\helper\AdmsRead();
-            $listCham->fullRead("SELECT cham.id, cham.empresa_id, clie.nome_fantasia as nome_fantasia_clie, prod.name as name_prod, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
+            $listCham->fullRead("SELECT cham.id, cham.empresa_id, clie.nome_fantasia as nome_fantasia_clie, sla.name as name_sla, prod.name as name_prod, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
                                 cham.dt_cham, sta.name AS name_sta, dt_status, cham.type_cham  
                                 FROM adms_cham AS cham
-                                INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id 
+                                INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id                              
+                                INNER JOIN adms_sla AS sla ON sla.id=cham.sla_id  
                                 INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id                            
-                            INNER JOIN adms_produtos AS prod ON prod.id=cham.prod_id 
+                                INNER JOIN adms_produtos AS prod ON prod.id=cham.prod_id 
                                 WHERE cham.cliente_id= :cliente_id  ORDER BY dt_status 
                                 LIMIT :limit OFFSET :offset", "cliente_id={$this->searchEmpresaValue}&limit={$this->limitResult}&offset={$pagination->getOffset()}");
         }
@@ -474,10 +484,11 @@ class AdmsListCham
                 $this->resultPg = $pagination->getResult();
 
                 $listCham = new \App\adms\Models\helper\AdmsRead();
-                $listCham->fullRead("SELECT cham.id, cham.empresa_id, clie.nome_fantasia as nome_fantasia_clie, prod.name as name_prod, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
+                $listCham->fullRead("SELECT cham.id, cham.empresa_id, clie.nome_fantasia as nome_fantasia_clie, sla.name as name_sla, prod.name as name_prod, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
                 cham.dt_cham, sta.name AS name_sta, dt_status, cham.type_cham  
                 FROM adms_cham AS cham
-                INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id 
+                INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id                             
+                            INNER JOIN adms_sla AS sla ON sla.id=cham.sla_id   
                 INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id                            
                             INNER JOIN adms_produtos AS prod ON prod.id=cham.prod_id 
                 WHERE (cham.empresa_id= :empresa_id) AND (cham.cliente_id= :cliente_id) AND (cham.status_id= :status_id) AND (cham.type_cham= :type_cham) ORDER BY dt_status 
@@ -501,10 +512,11 @@ class AdmsListCham
             $this->resultPg = $pagination->getResult();
 
             $listCham = new \App\adms\Models\helper\AdmsRead();
-            $listCham->fullRead("SELECT cham.id, cham.empresa_id, clie.nome_fantasia as nome_fantasia_clie, prod.name as name_prod, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
+            $listCham->fullRead("SELECT cham.id, cham.empresa_id, clie.nome_fantasia as nome_fantasia_clie, sla.name as name_sla, prod.name as name_prod, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
                 cham.dt_cham, sta.name AS name_sta, dt_status, cham.type_cham  
                 FROM adms_cham AS cham
-                INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id 
+                INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id                             
+                            INNER JOIN adms_sla AS sla ON sla.id=cham.sla_id   
                 INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id                            
                             INNER JOIN adms_produtos AS prod ON prod.id=cham.prod_id 
                         WHERE (cham.cliente_id= :cliente_id) AND (cham.status_id= :status_id ) AND (cham.type_cham= :type_cham)  ORDER BY dt_status 
@@ -539,10 +551,11 @@ class AdmsListCham
                 $this->resultPg = $pagination->getResult();
 
                 $listUsers = new \App\adms\Models\helper\AdmsRead();
-                $listUsers->fullRead("SELECT cham.id, cham.empresa_id, clie.nome_fantasia as nome_fantasia_clie, prod.name as name_prod, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
+                $listUsers->fullRead("SELECT cham.id, cham.empresa_id, clie.nome_fantasia as nome_fantasia_clie, sla.name as name_sla, prod.name as name_prod, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
                 cham.dt_cham, sta.name AS name_sta, dt_status, cham.type_cham  
                 FROM adms_cham AS cham
-                INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id 
+                INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id                              
+                            INNER JOIN adms_sla AS sla ON sla.id=cham.sla_id  
                 INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id                             
                             INNER JOIN adms_produtos AS prod ON prod.id=cham.prod_id 
                 WHERE (cham.empresa_id= :empresa_id) AND (cham.cliente_id= :cliente_id) AND (cham.status_id= :status_id) AND (cham.type_cham = :type_cham) AND (cham.dt_cham BETWEEN :search_date_start AND :search_date_end)
@@ -567,10 +580,11 @@ class AdmsListCham
             $this->resultPg = $pagination->getResult();
 
             $listCham = new \App\adms\Models\helper\AdmsRead();
-            $listCham->fullRead("SELECT cham.id, cham.empresa_id, clie.nome_fantasia as nome_fantasia_clie, prod.name as name_prod, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
+            $listCham->fullRead("SELECT cham.id, cham.empresa_id, clie.nome_fantasia as nome_fantasia_clie, sla.name as name_sla, prod.name as name_prod, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
                             cham.dt_cham, sta.name AS name_sta, dt_status, cham.type_cham  
                             FROM adms_cham AS cham
-                            INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id 
+                            INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id                             
+                            INNER JOIN adms_sla AS sla ON sla.id=cham.sla_id   
                             INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id                            
                             INNER JOIN adms_produtos AS prod ON prod.id=cham.prod_id 
                             WHERE (cham.cliente_id= :cliente_id) AND (cham.status_id= :status_id ) AND (cham.type_cham= :type_cham) AND (dt_cham BETWEEN :search_date_start AND :search_date_end)  ORDER BY dt_status 
@@ -606,10 +620,11 @@ class AdmsListCham
                 $this->resultPg = $pagination->getResult();
 
                 $listCham = new \App\adms\Models\helper\AdmsRead();
-                $listCham->fullRead("SELECT cham.id, cham.empresa_id, clie.nome_fantasia as nome_fantasia_clie, prod.name as name_prod, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
+                $listCham->fullRead("SELECT cham.id, cham.empresa_id, clie.nome_fantasia as nome_fantasia_clie, sla.name as name_sla, prod.name as name_prod, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
                             cham.dt_cham, sta.name AS name_sta, dt_status, cham.type_cham  
                             FROM adms_cham AS cham
-                            INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id 
+                            INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id                             
+                            INNER JOIN adms_sla AS sla ON sla.id=cham.sla_id   
                             INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id                            
                             INNER JOIN adms_produtos AS prod ON prod.id=cham.prod_id 
                         WHERE (cham.empresa_id= :empresa_id) AND (cham.cliente_id= :cliente_id) AND (cham.status_id= :status_id) ORDER BY dt_status 
@@ -633,10 +648,11 @@ class AdmsListCham
             $this->resultPg = $pagination->getResult();
 
             $listCham = new \App\adms\Models\helper\AdmsRead();
-            $listCham->fullRead("SELECT cham.id, cham.empresa_id, clie.nome_fantasia as nome_fantasia_clie, prod.name as name_prod, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
+            $listCham->fullRead("SELECT cham.id, cham.empresa_id, clie.nome_fantasia as nome_fantasia_clie, sla.name as name_sla, prod.name as name_prod, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
                             cham.dt_cham, sta.name AS name_sta, dt_status, cham.type_cham  
                             FROM adms_cham AS cham
-                            INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id 
+                            INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id                             
+                            INNER JOIN adms_sla AS sla ON sla.id=cham.sla_id   
                             INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id                            
                             INNER JOIN adms_produtos AS prod ON prod.id=cham.prod_id 
                         WHERE (cham.cliente_id= :cliente_id) AND (cham.status_id= :status_id)  ORDER BY dt_status 
@@ -670,10 +686,11 @@ class AdmsListCham
                 $this->resultPg = $pagination->getResult();
 
                 $listCham = new \App\adms\Models\helper\AdmsRead();
-                $listCham->fullRead("SELECT cham.id, cham.empresa_id, clie.nome_fantasia as nome_fantasia_clie, prod.name as name_prod, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
+                $listCham->fullRead("SELECT cham.id, cham.empresa_id, clie.nome_fantasia as nome_fantasia_clie, sla.name as name_sla, prod.name as name_prod, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
                             cham.dt_cham, sta.name AS name_sta, dt_status, cham.type_cham  
                             FROM adms_cham AS cham
-                            INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id 
+                            INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id                             
+                            INNER JOIN adms_sla AS sla ON sla.id=cham.sla_id   
                             INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id                              
                             INNER JOIN adms_produtos AS prod ON prod.id=cham.prod_id 
                             WHERE (cham.empresa_id= :empresa_id) and (cham.status_id= :status_id) ORDER BY dt_status 
@@ -696,9 +713,10 @@ class AdmsListCham
                 $this->resultPg = $pagination->getResult();
 
                 $listCham = new \App\adms\Models\helper\AdmsRead();
-                $listCham->fullRead("SELECT cham.id, emp.nome_fantasia as nome_fantasia_clie, prod.name as name_prod, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, cham.dt_cham AS dt_cham,
+                $listCham->fullRead("SELECT cham.id, emp.nome_fantasia as nome_fantasia_clie, sla.name as name_sla, prod.name as name_prod, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, cham.dt_cham AS dt_cham,
                             sta.name AS name_sta, cham.dt_status AS dt_status, cham.type_cham FROM adms_cham AS cham
-                            INNER JOIN adms_clientes AS emp ON emp.id=cham.cliente_id 
+                            INNER JOIN adms_clientes AS emp ON emp.id=cham.cliente_id                             
+                            INNER JOIN adms_sla AS sla ON sla.id=cham.sla_id   
                             INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id                             
                             INNER JOIN adms_produtos AS prod ON prod.id=cham.prod_id 
                             WHERE cham.cliente_id= :cliente_id and cham.status_id= :status_id  ORDER BY dt_status 
@@ -722,10 +740,11 @@ class AdmsListCham
             $this->resultPg = $pagination->getResult();
 
             $listCham = new \App\adms\Models\helper\AdmsRead();
-            $listCham->fullRead("SELECT cham.id, cham.empresa_id, clie.nome_fantasia as nome_fantasia_clie, prod.name as name_prod, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
+            $listCham->fullRead("SELECT cham.id, cham.empresa_id, clie.nome_fantasia as nome_fantasia_clie, sla.name as name_sla, prod.name as name_prod, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
                             cham.dt_cham, sta.name AS name_sta, dt_status, cham.type_cham  
                             FROM adms_cham AS cham
-                            INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id 
+                            INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id                             
+                            INNER JOIN adms_sla AS sla ON sla.id=cham.sla_id   
                             INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id                              
                             INNER JOIN adms_produtos AS prod ON prod.id=cham.prod_id 
                             WHERE(cham.status_id= :status_id) ORDER BY dt_status 
@@ -759,10 +778,11 @@ class AdmsListCham
                 $this->resultPg = $pagination->getResult();
 
                 $listCham = new \App\adms\Models\helper\AdmsRead();
-                $listCham->fullRead("SELECT cham.id, cham.empresa_id, clie.nome_fantasia as nome_fantasia_clie, prod.name as name_prod, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
+                $listCham->fullRead("SELECT cham.id, cham.empresa_id, clie.nome_fantasia as nome_fantasia_clie, sla.name as name_sla, prod.name as name_prod, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
                             cham.dt_cham, sta.name AS name_sta, dt_status, cham.type_cham  
                             FROM adms_cham AS cham
-                            INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id 
+                            INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id                             
+                            INNER JOIN adms_sla AS sla ON sla.id=cham.sla_id   
                             INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id                             
                             INNER JOIN adms_produtos AS prod ON prod.id=cham.prod_id 
                             WHERE (cham.empresa_id= :empresa_id) and (cham.status_id= :status_id AND (cham.dt_cham BETWEEN :search_date_start AND :search_date_end))  ORDER BY dt_status 
@@ -786,9 +806,10 @@ class AdmsListCham
                 $this->resultPg = $pagination->getResult();
 
                 $listCham = new \App\adms\Models\helper\AdmsRead();
-                $listCham->fullRead("SELECT cham.id, emp.nome_fantasia as nome_fantasia_clie, prod.name as name_prod, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham,
+                $listCham->fullRead("SELECT cham.id, emp.nome_fantasia as nome_fantasia_clie, sla.name as name_sla, prod.name as name_prod, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham,
                              cham.dt_cham, sta.name AS name_sta, dt_status, cham.type_cham FROM adms_cham AS cham
-                            INNER JOIN adms_clientes AS emp ON emp.id=cham.cliente_id  
+                            INNER JOIN adms_clientes AS emp ON emp.id=cham.cliente_id                             
+                            INNER JOIN adms_sla AS sla ON sla.id=cham.sla_id    
                             INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id                             
                             INNER JOIN adms_produtos AS prod ON prod.id=cham.prod_id 
                             WHERE (cham.cliente_id = :cliente_id ) and (cham.status_id= :status_id) AND (cham.dt_cham BETWEEN :search_date_start AND :search_date_end)  ORDER BY dt_status 
@@ -812,10 +833,11 @@ class AdmsListCham
             $this->resultPg = $pagination->getResult();
 
             $listCham = new \App\adms\Models\helper\AdmsRead();
-            $listCham->fullRead("SELECT cham.id, cham.empresa_id, clie.nome_fantasia as nome_fantasia_clie, prod.name as name_prod, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
+            $listCham->fullRead("SELECT cham.id, cham.empresa_id, clie.nome_fantasia as nome_fantasia_clie, sla.name as name_sla, prod.name as name_prod, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
                             cham.dt_cham, sta.name AS name_sta, dt_status, cham.type_cham  
                             FROM adms_cham AS cham
-                            INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id 
+                            INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id                             
+                            INNER JOIN adms_sla AS sla ON sla.id=cham.sla_id   
                             INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id                             
                             INNER JOIN adms_produtos AS prod ON prod.id=cham.prod_id 
                         WHERE (cham.status_id= :status_id) AND (cham.dt_cham BETWEEN :search_date_start AND :search_date_end) ORDER BY dt_status 
@@ -850,9 +872,10 @@ class AdmsListCham
                 $this->resultPg = $pagination->getResult();
 
                 $listCham = new \App\adms\Models\helper\AdmsRead();
-                $listCham->fullRead("SELECT cham.id, emp.nome_fantasia as nome_fantasia_clie, prod.name as name_prod, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham,
+                $listCham->fullRead("SELECT cham.id, emp.nome_fantasia as nome_fantasia_clie, sla.name as name_sla, prod.name as name_prod, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham,
                              cham.dt_cham, sta.name AS name_sta, dt_status, cham.type_cham FROM adms_cham AS cham
-                            INNER JOIN adms_clientes AS emp ON emp.id=cham.cliente_id  
+                            INNER JOIN adms_clientes AS emp ON emp.id=cham.cliente_id                              
+                            INNER JOIN adms_sla AS sla ON sla.id=cham.sla_id   
                             INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id                             
                             INNER JOIN adms_produtos AS prod ON prod.id=cham.prod_id 
                             WHERE (cham.contrato_id= :id_contrato) AND (cham.status_id= :status_id) AND (cham.type_cham= :type_cham) AND (cham.dt_cham BETWEEN :search_date_start AND :search_date_end)  ORDER BY dt_status 
@@ -875,9 +898,10 @@ class AdmsListCham
                 $this->resultPg = $pagination->getResult();
 
                 $listCham = new \App\adms\Models\helper\AdmsRead();
-                $listCham->fullRead("SELECT cham.id, emp.nome_fantasia as nome_fantasia_clie, prod.name as name_prod, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham,
+                $listCham->fullRead("SELECT cham.id, emp.nome_fantasia as nome_fantasia_clie, sla.name as name_sla, prod.name as name_prod, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham,
                              cham.dt_cham, sta.name AS name_sta, dt_status, cham.type_cham FROM adms_cham AS cham
-                            INNER JOIN adms_clientes AS emp ON emp.id=cham.cliente_id  
+                            INNER JOIN adms_clientes AS emp ON emp.id=cham.cliente_id                              
+                            INNER JOIN adms_sla AS sla ON sla.id=cham.sla_id   
                             INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id                             
                             INNER JOIN adms_produtos AS prod ON prod.id=cham.prod_id 
                         WHERE (cliente_id= :cliente_id) AND (cham.status_id= :status_id) AND (cham.type_cham= :type_cham) AND (cham.dt_cham BETWEEN :search_date_start AND :search_date_end)  ORDER BY dt_status 
@@ -901,9 +925,10 @@ class AdmsListCham
             $this->resultPg = $pagination->getResult();
 
             $listCham = new \App\adms\Models\helper\AdmsRead();
-            $listCham->fullRead("SELECT cham.id, emp.nome_fantasia as nome_fantasia_clie, prod.name as name_prod, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham,
+            $listCham->fullRead("SELECT cham.id, emp.nome_fantasia as nome_fantasia_clie, sla.name as name_sla, prod.name as name_prod, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham,
                              cham.dt_cham, sta.name AS name_sta, dt_status, cham.type_cham FROM adms_cham AS cham
-                            INNER JOIN adms_clientes AS emp ON emp.id=cham.cliente_id  
+                            INNER JOIN adms_clientes AS emp ON emp.id=cham.cliente_id                              
+                            INNER JOIN adms_sla AS sla ON sla.id=cham.sla_id   
                             INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id                             
                             INNER JOIN adms_produtos AS prod ON prod.id=cham.prod_id 
                         WHERE (cham.status_id= :status_id) AND (cham.type_cham= :type_cham) AND (cham.dt_cham BETWEEN :search_date_start AND :search_date_end) ORDER BY dt_status 
@@ -940,9 +965,10 @@ class AdmsListCham
                 $this->resultPg = $pagination->getResult();
 
                 $listCham = new \App\adms\Models\helper\AdmsRead();
-                $listCham->fullRead("SELECT cham.id, emp.nome_fantasia as nome_fantasia_clie, prod.name as name_prod, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, cham.dt_cham AS dt_cham,
+                $listCham->fullRead("SELECT cham.id, emp.nome_fantasia as nome_fantasia_clie, sla.name as name_sla, prod.name as name_prod, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, cham.dt_cham AS dt_cham,
                             sta.name AS name_sta, cham.dt_status AS dt_status, cham.type_cham FROM adms_cham AS cham
-                            INNER JOIN adms_clientes AS emp ON emp.id=cham.cliente_id 
+                            INNER JOIN adms_clientes AS emp ON emp.id=cham.cliente_id                              
+                            INNER JOIN adms_sla AS sla ON sla.id=cham.sla_id  
                             INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id                             
                             INNER JOIN adms_produtos AS prod ON prod.id=cham.prod_id  
                             WHERE (cham.empresa_id= :empresa_id) and (cham.type_cham= :type_cham) ORDER BY dt_status 
@@ -966,9 +992,10 @@ class AdmsListCham
                 $this->resultPg = $pagination->getResult();
 
                 $listCham = new \App\adms\Models\helper\AdmsRead();
-                $listCham->fullRead("SELECT cham.id, emp.nome_fantasia as nome_fantasia_clie, prod.name as name_prod, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, cham.dt_cham AS dt_cham,
+                $listCham->fullRead("SELECT cham.id, emp.nome_fantasia as nome_fantasia_clie, sla.name as name_sla, prod.name as name_prod, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, cham.dt_cham AS dt_cham,
                             sta.name AS name_sta, cham.dt_status AS dt_status, cham.type_cham FROM adms_cham AS cham
-                            INNER JOIN adms_clientes AS emp ON emp.id=cham.cliente_id 
+                            INNER JOIN adms_clientes AS emp ON emp.id=cham.cliente_id                              
+                            INNER JOIN adms_sla AS sla ON sla.id=cham.sla_id  
                             INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id                             
                             INNER JOIN adms_produtos AS prod ON prod.id=cham.prod_id 
                         WHERE (cham.type_cham = :type_cham ) AND (cham.empresa_id= :empresa_id) AND (cliente_id= :cliente_id) ORDER BY dt_status 
@@ -991,9 +1018,10 @@ class AdmsListCham
             $this->resultPg = $pagination->getResult();
 
             $listCham = new \App\adms\Models\helper\AdmsRead();
-            $listCham->fullRead("SELECT cham.id, emp.nome_fantasia as nome_fantasia_clie, prod.name as name_prod, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, cham.dt_cham AS dt_cham,
+            $listCham->fullRead("SELECT cham.id, emp.nome_fantasia as nome_fantasia_clie, sla.name as name_sla, prod.name as name_prod, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, cham.dt_cham AS dt_cham,
                             sta.name AS name_sta, cham.dt_status AS dt_status, cham.type_cham FROM adms_cham AS cham
-                            INNER JOIN adms_clientes AS emp ON emp.id=cham.cliente_id 
+                            INNER JOIN adms_clientes AS emp ON emp.id=cham.cliente_id                              
+                            INNER JOIN adms_sla AS sla ON sla.id=cham.sla_id  
                             INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id                             
                             INNER JOIN adms_produtos AS prod ON prod.id=cham.prod_id 
                         WHERE cham.type_cham= :type_cham  ORDER BY dt_status 
@@ -1030,9 +1058,10 @@ class AdmsListCham
                 $this->resultPg = $pagination->getResult();
 
                 $listCham = new \App\adms\Models\helper\AdmsRead();
-                $listCham->fullRead("SELECT cham.id, emp.nome_fantasia as nome_fantasia_clie, prod.name as name_prod, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, cham.dt_cham AS dt_cham,
+                $listCham->fullRead("SELECT cham.id, emp.nome_fantasia as nome_fantasia_clie, sla.name as name_sla, prod.name as name_prod, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, cham.dt_cham AS dt_cham,
                             sta.name AS name_sta, cham.dt_status AS dt_status, cham.type_cham FROM adms_cham AS cham
-                            INNER JOIN adms_clientes AS emp ON emp.id=cham.cliente_id 
+                            INNER JOIN adms_clientes AS emp ON emp.id=cham.cliente_id                              
+                            INNER JOIN adms_sla AS sla ON sla.id=cham.sla_id  
                             INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id                             
                             INNER JOIN adms_produtos AS prod ON prod.id=cham.prod_id 
                             WHERE (cham.empresa_id= :empresa_id) and (cham.type_cham= :type_cham) AND (cham.dt_cham BETWEEN :search_date_start AND :search_date_end)  ORDER BY dt_status 
@@ -1056,9 +1085,10 @@ class AdmsListCham
                 $this->resultPg = $pagination->getResult();
 
                 $listCham = new \App\adms\Models\helper\AdmsRead();
-                $listCham->fullRead("SELECT cham.id, emp.nome_fantasia as nome_fantasia_clie, prod.name as name_prod, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, cham.dt_cham AS dt_cham,
+                $listCham->fullRead("SELECT cham.id, emp.nome_fantasia as nome_fantasia_clie, sla.name as name_sla, prod.name as name_prod, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, cham.dt_cham AS dt_cham,
                             sta.name AS name_sta, cham.dt_status AS dt_status, cham.type_cham FROM adms_cham AS cham
-                            INNER JOIN adms_clientes AS emp ON emp.id=cham.cliente_id 
+                            INNER JOIN adms_clientes AS emp ON emp.id=cham.cliente_id                              
+                            INNER JOIN adms_sla AS sla ON sla.id=cham.sla_id  
                             INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id                             
                             INNER JOIN adms_produtos AS prod ON prod.id=cham.prod_id 
                         WHERE (cham.empresa_id= :empresa_id) AND (cliente_id= :cliente_id) AND(cham.type_cham = :type_cham ) AND (cham.dt_cham BETWEEN :search_date_start AND :search_date_end)  ORDER BY dt_status 
@@ -1081,9 +1111,10 @@ class AdmsListCham
             $this->resultPg = $pagination->getResult();
 
             $listCham = new \App\adms\Models\helper\AdmsRead();
-            $listCham->fullRead("SELECT cham.id, emp.nome_fantasia as nome_fantasia_clie, prod.name as name_prod, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, cham.dt_cham AS dt_cham,
+            $listCham->fullRead("SELECT cham.id, emp.nome_fantasia as nome_fantasia_clie, sla.name as name_sla, prod.name as name_prod, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, cham.dt_cham AS dt_cham,
                             sta.name AS name_sta, cham.dt_status AS dt_status, cham.type_cham FROM adms_cham AS cham
-                            INNER JOIN adms_clientes AS emp ON emp.id=cham.cliente_id 
+                            INNER JOIN adms_clientes AS emp ON emp.id=cham.cliente_id                              
+                            INNER JOIN adms_sla AS sla ON sla.id=cham.sla_id  
                             INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id                             
                             INNER JOIN adms_produtos AS prod ON prod.id=cham.prod_id 
                         WHERE (cham.type_cham= :type_cham) AND (cham.dt_cham BETWEEN :search_date_start AND :search_date_end)  ORDER BY dt_status 
@@ -1120,9 +1151,10 @@ class AdmsListCham
                 $this->resultPg = $pagination->getResult();
 
                 $listCham = new \App\adms\Models\helper\AdmsRead();
-                $listCham->fullRead("SELECT cham.id, emp.nome_fantasia as nome_fantasia_clie, prod.name as name_prod, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, cham.dt_cham AS dt_cham,
+                $listCham->fullRead("SELECT cham.id, emp.nome_fantasia as nome_fantasia_clie, sla.name as name_sla, prod.name as name_prod, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, cham.dt_cham AS dt_cham,
                             sta.name AS name_sta, cham.dt_status AS dt_status, cham.type_cham FROM adms_cham AS cham
-                            INNER JOIN adms_clientes AS emp ON emp.id=cham.cliente_id 
+                            INNER JOIN adms_clientes AS emp ON emp.id=cham.cliente_id                              
+                            INNER JOIN adms_sla AS sla ON sla.id=cham.sla_id  
                             INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id                             
                             INNER JOIN adms_produtos AS prod ON prod.id=cham.prod_id 
                             WHERE (cham.empresa_id= :empresa_id ) AND (cham.cliente_id= :cliente_id ) AND (cham.type_cham= :type_cham) ORDER BY dt_status 
@@ -1146,9 +1178,10 @@ class AdmsListCham
             $this->resultPg = $pagination->getResult();
 
             $listCham = new \App\adms\Models\helper\AdmsRead();
-            $listCham->fullRead("SELECT cham.id, emp.nome_fantasia as nome_fantasia_clie, prod.name as name_prod, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, cham.dt_cham AS dt_cham,
+            $listCham->fullRead("SELECT cham.id, emp.nome_fantasia as nome_fantasia_clie, sla.name as name_sla, prod.name as name_prod, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, cham.dt_cham AS dt_cham,
                             sta.name AS name_sta, cham.dt_status AS dt_status, cham.type_cham FROM adms_cham AS cham
-                            INNER JOIN adms_clientes AS emp ON emp.id=cham.cliente_id 
+                            INNER JOIN adms_clientes AS emp ON emp.id=cham.cliente_id                              
+                            INNER JOIN adms_sla AS sla ON sla.id=cham.sla_id  
                             INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id                             
                             INNER JOIN adms_produtos AS prod ON prod.id=cham.prod_id 
                         WHERE (cham.cliente_id= :cliente_id) AND (cham.type_cham= :type_cham) ORDER BY dt_status 
@@ -1183,9 +1216,10 @@ class AdmsListCham
                 $this->resultPg = $pagination->getResult();
 
                 $listCham = new \App\adms\Models\helper\AdmsRead();
-                $listCham->fullRead("SELECT cham.id, emp.nome_fantasia as nome_fantasia_clie, prod.name as name_prod, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, cham.dt_cham AS dt_cham,
+                $listCham->fullRead("SELECT cham.id, emp.nome_fantasia as nome_fantasia_clie, sla.name as name_sla, prod.name as name_prod, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, cham.dt_cham AS dt_cham,
                             sta.name AS name_sta, cham.dt_status AS dt_status, cham.type_cham FROM adms_cham AS cham
-                            INNER JOIN adms_clientes AS emp ON emp.id=cham.cliente_id 
+                            INNER JOIN adms_clientes AS emp ON emp.id=cham.cliente_id                              
+                            INNER JOIN adms_sla AS sla ON sla.id=cham.sla_id  
                             INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id                             
                             INNER JOIN adms_produtos AS prod ON prod.id=cham.prod_id 
                             WHERE (cham.empresa_id = :empresa_id) AND (cham.status_id= :status_id) AND (cham.type_cham = :type_cham) ORDER BY dt_status 
@@ -1209,9 +1243,10 @@ class AdmsListCham
                 $this->resultPg = $pagination->getResult();
 
                 $listCham = new \App\adms\Models\helper\AdmsRead();
-                $listCham->fullRead("SELECT cham.id, emp.nome_fantasia as nome_fantasia_clie, prod.name as name_prod, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, cham.dt_cham AS dt_cham,
+                $listCham->fullRead("SELECT cham.id, emp.nome_fantasia as nome_fantasia_clie, sla.name as name_sla, prod.name as name_prod, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, cham.dt_cham AS dt_cham,
                                 sta.name AS name_sta, cham.dt_status AS dt_status, cham.type_cham FROM adms_cham AS cham
-                                INNER JOIN adms_clientes AS emp ON emp.id=cham.cliente_id 
+                                INNER JOIN adms_clientes AS emp ON emp.id=cham.cliente_id                              
+                            INNER JOIN adms_sla AS sla ON sla.id=cham.sla_id  
                                 INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id                             
                             INNER JOIN adms_produtos AS prod ON prod.id=cham.prod_id 
                             WHERE (cham.cliente_id = :cliente_id) AND (cham.cham.status_id= :status_id) AND (cham.cham.type_cham= :type_cham) ORDER BY dt_status  
@@ -1235,9 +1270,10 @@ class AdmsListCham
             $this->resultPg = $pagination->getResult();
 
             $listCham = new \App\adms\Models\helper\AdmsRead();
-            $listCham->fullRead("SELECT cham.id, emp.nome_fantasia as nome_fantasia_clie, prod.name as name_prod, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, cham.dt_cham AS dt_cham,
+            $listCham->fullRead("SELECT cham.id, emp.nome_fantasia as nome_fantasia_clie, sla.name as name_sla, prod.name as name_prod, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, cham.dt_cham AS dt_cham,
                             sta.name AS name_sta, cham.dt_status AS dt_status, cham.type_cham FROM adms_cham AS cham
-                            INNER JOIN adms_clientes AS emp ON emp.id=cham.cliente_id 
+                            INNER JOIN adms_clientes AS emp ON emp.id=cham.cliente_id                             
+                            INNER JOIN adms_sla AS sla ON sla.id=cham.sla_id   
                             INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id                             
                             INNER JOIN adms_produtos AS prod ON prod.id=cham.prod_id 
                             WHERE (cham.status_id= :status_id) AND (cham.type_cham = :type_cham) ORDER BY dt_status 
@@ -1272,9 +1308,10 @@ class AdmsListCham
                 $this->resultPg = $pagination->getResult();
 
                 $listUsers = new \App\adms\Models\helper\AdmsRead();
-                $listUsers->fullRead("SELECT cham.id, emp.nome_fantasia as nome_fantasia_clie, prod.name as name_prod, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, cham.dt_cham AS dt_cham,
+                $listUsers->fullRead("SELECT cham.id, emp.nome_fantasia as nome_fantasia_clie, sla.name as name_sla, prod.name as name_prod, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, cham.dt_cham AS dt_cham,
                             sta.name AS name_sta, cham.dt_status AS dt_status, cham.type_cham FROM adms_cham AS cham
-                            INNER JOIN adms_clientes AS emp ON emp.id=cham.cliente_id 
+                            INNER JOIN adms_clientes AS emp ON emp.id=cham.cliente_id                             
+                            INNER JOIN adms_sla AS sla ON sla.id=cham.sla_id   
                             INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id                              
                             INNER JOIN adms_produtos AS prod ON prod.id=cham.prod_id 
                 WHERE (cham.empresa_id = :empresa_id) AND (cham.cliente_id = :cliente_id) AND (cham.dt_cham BETWEEN :search_date_start AND :search_date_end)
@@ -1300,9 +1337,10 @@ class AdmsListCham
             $this->resultPg = $pagination->getResult();
 
             $listUsers = new \App\adms\Models\helper\AdmsRead();
-            $listUsers->fullRead("SELECT cham.id, emp.nome_fantasia as nome_fantasia_clie, prod.name as name_prod, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, cham.dt_cham AS dt_cham,
+            $listUsers->fullRead("SELECT cham.id, emp.nome_fantasia as nome_fantasia_clie, sla.name as name_sla, prod.name as name_prod, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, cham.dt_cham AS dt_cham,
                             sta.name AS name_sta, cham.dt_status AS dt_status, cham.type_cham FROM adms_cham AS cham
-                            INNER JOIN adms_clientes AS emp ON emp.id=cham.cliente_id 
+                            INNER JOIN adms_clientes AS emp ON emp.id=cham.cliente_id                              
+                            INNER JOIN adms_sla AS sla ON sla.id=cham.sla_id  
                             INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id                             
                             INNER JOIN adms_produtos AS prod ON prod.id=cham.prod_id  
                             WHERE (cham.cliente_id= :cliente_id) AND (cham.dt_cham BETWEEN :search_date_start AND :search_date_end)
@@ -1337,9 +1375,10 @@ class AdmsListCham
                 $this->resultPg = $pagination->getResult();
 
                 $listUsers = new \App\adms\Models\helper\AdmsRead();
-                $listUsers->fullRead("SELECT cham.id, emp.nome_fantasia as nome_fantasia_clie, prod.name as name_prod, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, cham.dt_cham AS dt_cham,
+                $listUsers->fullRead("SELECT cham.id, emp.nome_fantasia as nome_fantasia_clie, sla.name as name_sla, prod.name as name_prod, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, cham.dt_cham AS dt_cham,
                             sta.name AS name_sta, cham.dt_status AS dt_status, cham.type_cham FROM adms_cham AS cham
-                            INNER JOIN adms_clientes AS emp ON emp.id=cham.cliente_id 
+                            INNER JOIN adms_clientes AS emp ON emp.id=cham.cliente_id                              
+                            INNER JOIN adms_sla AS sla ON sla.id=cham.sla_id  
                             INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id                             
                             INNER JOIN adms_produtos AS prod ON prod.id=cham.prod_id  
                             WHERE (cham.empresa_id = :empresa_id) AND (cham.cliente_id = :cliente_id) AND (cham.status_id= :status_id) AND (cham.dt_cham BETWEEN :search_date_start AND :search_date_end)
@@ -1366,9 +1405,10 @@ class AdmsListCham
             $this->resultPg = $pagination->getResult();
 
             $listUsers = new \App\adms\Models\helper\AdmsRead();
-            $listUsers->fullRead("SELECT cham.id, emp.nome_fantasia as nome_fantasia_clie, prod.name as name_prod, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, cham.dt_cham AS dt_cham,
+            $listUsers->fullRead("SELECT cham.id, emp.nome_fantasia as nome_fantasia_clie, sla.name as name_sla, prod.name as name_prod, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, cham.dt_cham AS dt_cham,
                             sta.name AS name_sta, cham.dt_status AS dt_status, cham.type_cham FROM adms_cham AS cham
-                            INNER JOIN adms_clientes AS emp ON emp.id=cham.cliente_id                             
+                            INNER JOIN adms_clientes AS emp ON emp.id=cham.cliente_id                              
+                            INNER JOIN adms_sla AS sla ON sla.id=cham.sla_id                              
                             INNER JOIN adms_produtos AS prod ON prod.id=cham.prod_id 
                             INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id 
             WHERE (cham.cliente_id= :cliente_id) AND (cham.status_id= :status_id) AND (cham.dt_cham BETWEEN :search_date_start AND :search_date_end)
@@ -1404,9 +1444,10 @@ class AdmsListCham
                 $this->resultPg = $pagination->getResult();
 
                 $listUsers = new \App\adms\Models\helper\AdmsRead();
-                $listUsers->fullRead("SELECT cham.id, emp.nome_fantasia as nome_fantasia_clie, prod.name as name_prod, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, cham.dt_cham AS dt_cham,
+                $listUsers->fullRead("SELECT cham.id, emp.nome_fantasia as nome_fantasia_clie, sla.name as name_sla, prod.name as name_prod, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, cham.dt_cham AS dt_cham,
                                     sta.name AS name_sta, cham.dt_status AS dt_status, cham.type_cham FROM adms_cham AS cham
-                                    INNER JOIN adms_clientes AS emp ON emp.id=cham.cliente_id 
+                                    INNER JOIN adms_clientes AS emp ON emp.id=cham.cliente_id                             
+                            INNER JOIN adms_sla AS sla ON sla.id=cham.sla_id   
                                     INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id                              
                             INNER JOIN adms_produtos AS prod ON prod.id=cham.prod_id  
                                     WHERE (cham.empresa_id= :empresa_id) AND (cham.cliente_id= :cliente_id) AND (cham.cham.type_cham= :type_cham) AND (cham.dt_cham BETWEEN :search_date_start AND :search_date_end)
@@ -1433,9 +1474,10 @@ class AdmsListCham
             $this->resultPg = $pagination->getResult();
 
             $listUsers = new \App\adms\Models\helper\AdmsRead();
-            $listUsers->fullRead("SELECT cham.id, emp.nome_fantasia as nome_fantasia_clie, prod.name as name_prod, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, cham.dt_cham AS dt_cham,
+            $listUsers->fullRead("SELECT cham.id, emp.nome_fantasia as nome_fantasia_clie, sla.name as name_sla, prod.name as name_prod, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, cham.dt_cham AS dt_cham,
                                     sta.name AS name_sta, cham.dt_status AS dt_status, cham.type_cham FROM adms_cham AS cham
-                                    INNER JOIN adms_clientes AS emp ON emp.id=cham.cliente_id 
+                                    INNER JOIN adms_clientes AS emp ON emp.id=cham.cliente_id                              
+                            INNER JOIN adms_sla AS sla ON sla.id=cham.sla_id  
                                     INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id                              
                             INNER JOIN adms_produtos AS prod ON prod.id=cham.prod_id 
             WHERE (cham.cliente_id= :cliente_id) AND (cham.type_cham = :type_cham) AND (cham.dt_cham BETWEEN :search_date_start AND :search_date_end)
@@ -1469,9 +1511,10 @@ class AdmsListCham
                 $this->resultPg = $pagination->getResult();
 
                 $listUsers = new \App\adms\Models\helper\AdmsRead();
-                $listUsers->fullRead("SELECT cham.id, emp.nome_fantasia as nome_fantasia_clie, prod.name as name_prod, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, cham.dt_cham AS dt_cham,
+                $listUsers->fullRead("SELECT cham.id, emp.nome_fantasia as nome_fantasia_clie, sla.name as name_sla, prod.name as name_prod, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, cham.dt_cham AS dt_cham,
                                     sta.name AS name_sta, cham.dt_status AS dt_status, cham.type_cham FROM adms_cham AS cham
-                                    INNER JOIN adms_clientes AS emp ON emp.id=cham.cliente_id 
+                                    INNER JOIN adms_clientes AS emp ON emp.id=cham.cliente_id                              
+                            INNER JOIN adms_sla AS sla ON sla.id=cham.sla_id  
                                     INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id                             
                             INNER JOIN adms_produtos AS prod ON prod.id=cham.prod_id  
                 WHERE (cham.empresa_id = :empresa_id) AND (cham.dt_cham BETWEEN :search_date_start AND :search_date_end)
@@ -1496,10 +1539,11 @@ class AdmsListCham
                 $this->resultPg = $pagination->getResult();
 
                 $listUsers = new \App\adms\Models\helper\AdmsRead();
-                $listUsers->fullRead("SELECT cham.id, emp.nome_fantasia as nome_fantasia_clie, prod.name as name_prod, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
+                $listUsers->fullRead("SELECT cham.id, emp.nome_fantasia as nome_fantasia_clie, sla.name as name_sla, prod.name as name_prod, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
                 usr.name AS name_usr, usr.tel_1 as tel_1_usr, cham.dt_cham, sta.name AS name_sta, dt_status, cham.type_cham  
                 FROM adms_cham AS cham
-                INNER JOIN adms_emp_principal AS emp ON emp.id=cham.empresa_id                 
+                INNER JOIN adms_emp_principal AS emp ON emp.id=cham.empresa_id                               
+                            INNER JOIN adms_sla AS sla ON sla.id=cham.sla_id                 
                 INNER JOIN adms_users AS usr ON usr.id=cham.usuario_id 
                 INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id                             
                             INNER JOIN adms_produtos AS prod ON prod.id=cham.prod_id  
@@ -1526,9 +1570,10 @@ class AdmsListCham
                 $this->resultPg = $pagination->getResult();
 
                 $listUsers = new \App\adms\Models\helper\AdmsRead();
-                $listUsers->fullRead("SELECT cham.id, emp.nome_fantasia as nome_fantasia_clie, prod.name as name_prod, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, cham.dt_cham AS dt_cham,
+                $listUsers->fullRead("SELECT cham.id, emp.nome_fantasia as nome_fantasia_clie, sla.name as name_sla, prod.name as name_prod, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, cham.dt_cham AS dt_cham,
                                     sta.name AS name_sta, cham.dt_status AS dt_status, cham.type_cham FROM adms_cham AS cham
-                                    INNER JOIN adms_clientes AS emp ON emp.id=cham.cliente_id 
+                                    INNER JOIN adms_clientes AS emp ON emp.id=cham.cliente_id                              
+                            INNER JOIN adms_sla AS sla ON sla.id=cham.sla_id  
                                     INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id                             
                                     INNER JOIN adms_produtos AS prod ON prod.id=cham.prod_id  
                                     WHERE (cliente_id= :cliente_id) AND (cham.dt_cham BETWEEN :search_date_start AND :search_date_end)
@@ -1555,9 +1600,10 @@ class AdmsListCham
             $this->resultPg = $pagination->getResult();
 
             $listUsers = new \App\adms\Models\helper\AdmsRead();
-            $listUsers->fullRead("SELECT cham.id, emp.nome_fantasia as nome_fantasia_clie, prod.name as name_prod, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, cham.dt_cham AS dt_cham,
+            $listUsers->fullRead("SELECT cham.id, emp.nome_fantasia as nome_fantasia_clie, sla.name as name_sla, prod.name as name_prod, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, cham.dt_cham AS dt_cham,
                                     sta.name AS name_sta, cham.dt_status AS dt_status, cham.type_cham FROM adms_cham AS cham
-                                    INNER JOIN adms_clientes AS emp ON emp.id=cham.cliente_id 
+                                    INNER JOIN adms_clientes AS emp ON emp.id=cham.cliente_id                              
+                            INNER JOIN adms_sla AS sla ON sla.id=cham.sla_id  
                                     INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id                              
                             INNER JOIN adms_produtos AS prod ON prod.id=cham.prod_id  
             WHERE cham.dt_cham BETWEEN :search_date_start AND :search_date_end  ORDER BY dt_status 
