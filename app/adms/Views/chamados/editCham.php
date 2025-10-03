@@ -102,6 +102,22 @@ if (isset($this->data['form'][0])) {
                                             <label for="recipient-name" class="col-form-label">Horario:</label>
                                             <input type="time" class="form-control" name="hr_cham" id="hr_cham" required>
                                         </div>
+                                        <div class="mb-3">
+                                                <label class="title-input">Técnico do Suporte:</label>
+                                                <select name="suporte_id" id="suporte_id" class="input-adm">
+                                                    <option value="">Todos</option>
+                                                    <?php
+                                                    foreach ($this->data['select']['nomesup'] as $searchSuporte) {
+                                                        extract($searchSuporte);
+                                                        if (isset($valorForm['suporte_id']) and $valorForm['suporte_id'] == $id) {
+                                                            echo "<option value='$id' selected>$name</option>";
+                                                        } else {
+                                                            echo "<option value='$id'>$name</option>";
+                                                        }
+                                                    }
+                                                    ?>
+                                                </select>
+                                        </div>
                                     </div>
                                     <div class="modal-footer">
                                         <button type="submit" name="SendReagCham" value="Reagendar_Ticket" class="btn btn-dark btn-sm"><span class="fa-solid fa-calendar-day me-2"></span>Reagendar Ticket</button>
@@ -138,6 +154,22 @@ if (isset($this->data['form'][0])) {
                                                 <input type="time" class="form-control" name="hr_cham" id="hr_cham" required>
                                             </div>
                                         </div>
+                                        <div class="mb-3">
+                                                <label class="title-input">Técnico do Suporte:</label>
+                                                <select name="suporte_id" id="suporte_id" class="input-adm">
+                                                    <option value="">Todos</option>
+                                                    <?php
+                                                    foreach ($this->data['select']['nomesup'] as $searchSuporte) {
+                                                        extract($searchSuporte);
+                                                        if (isset($valorForm['suporte_id']) and $valorForm['suporte_id'] == $id) {
+                                                            echo "<option value='$id' selected>$name</option>";
+                                                        } else {
+                                                            echo "<option value='$id'>$name</option>";
+                                                        }
+                                                    }
+                                                    ?>
+                                                </select>
+                                        </div>
                                         <div class="modal-footer">
                                             <button type="submit" name="SendReagCham" value="Reagendar_Ticket" class="btn btn-dark btn-sm">Reagendar Ticket</button>
                                         </div>
@@ -171,6 +203,22 @@ if (isset($this->data['form'][0])) {
                                             <label for="recipient-name" class="col-form-label">Horario:</label>
                                             <input type="time" class="form-control" name="hr_cham" id="hr_cham" required>
                                         </div>
+                                        <div class="mb-3">
+                                                <label class="title-input">Técnico do Suporte:</label>
+                                                <select name="suporte_id" id="suporte_id" class="input-adm">
+                                                    <option value="">Todos</option>
+                                                    <?php
+                                                    foreach ($this->data['select']['nomesup'] as $searchSuporte) {
+                                                        extract($searchSuporte);
+                                                        if (isset($valorForm['suporte_id']) and $valorForm['suporte_id'] == $id) {
+                                                            echo "<option value='$id' selected>$name</option>";
+                                                        } else {
+                                                            echo "<option value='$id'>$name</option>";
+                                                        }
+                                                    }
+                                                    ?>
+                                                </select>
+                                        </div>
                                     </div>
                                     <div class="modal-footer">
                                         <button type="submit" name="SendReagCham" value="Reagendar_Ticket" class="btn btn-dark btn-sm"><span class="fa-solid fa-calendar-day me-2"></span>Reagendar Ticket</button>
@@ -199,7 +247,6 @@ if (isset($this->data['form'][0])) {
                         <button type="submit" name="SendInicCham" value="Iniciar" class="btn btn-success btn-sm"><span class="fas far fa-play-circle me-2"></span>Iniciar o Atendimento</button>
 
                     <?php } elseif ($name_sta == 'Aprovado') { ?>
-
                     <?php } elseif ($name_sta == 'Reprovado') { ?>
                         <button type="submit" name="SendInicCham" value="Iniciar" class="btn btn-danger btn-sm"><span class="fas far fa-play-circle me-2"></span>Reabrir Atendimento</button>
                         <?php
@@ -319,9 +366,17 @@ if (isset($this->data['form'][0])) {
                                     <span class="input-group-text">Data e Hora Status</span>
                                     <span class="form-control"><?php echo date('d/m/Y H:i:s', strtotime($dt_status)); ?></span>
                                 </div>
+
                                 <div class="input-group">
                                     <span class="input-group-text">Técnico Suporte</span>
-                                    <span class="form-control"><?php echo $_SESSION['user_name']; ?></span>
+                                    <span class="form-control">
+                                    <?php 
+                                        if($valorForm['suporte_id'] === 1){
+                                            echo "Suporte Livre" ;
+                                        } else {
+                                            echo $valorForm['name_user'];
+                                        }; ?>
+                                    </span>
                                 </div>
                                 <div class="input-group">
                                     <?php

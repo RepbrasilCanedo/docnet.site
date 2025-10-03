@@ -9,7 +9,9 @@ if (isset($this->data['form'])) {
     $valorForm = $this->data['form'];
 }
 //echo('<pre>');var_dump($_SESSION['status_ticket']);echo('</pre>');
-//echo('<pre>');var_dump($this->data);echo('</pre>')
+
+
+//echo('<pre>');var_dump($valorForm);echo('</pre>')
 
 
 ?>
@@ -321,10 +323,11 @@ if (isset($this->data['form'])) {
                 <tr>
                     <th class="list-head-content table-sm-none">ID</th>
                     <th class="list-head-content">Cliente</th>
-                    <th class="list-head-content">Prioridade(SLA)</th>
+                    <th class="list-head-content table-sm-none">Prioridade(SLA)</th>
                     <th class="list-head-content table-sm-none">Equipamento</th>
                     <th class="list-head-content table-sm-none">Abertura Ticket </th>
                     <th class="list-head-content">Status</th>
+                    <th class="list-head-content">Suporte</th>
                     <th class="list-head-content table-sm-none">Data Status</th>
                     <th class="list-head-content table-sm-none">Tipo</th>
                     <th class="list-head-content">Ações</th>
@@ -338,11 +341,20 @@ if (isset($this->data['form'])) {
                     <tr>
                         <td class="list-body-content table-sm-none"><?php echo $id; ?></td>
                         <td class="list-body-content"><?php echo $nome_fantasia_clie; ?></td>
-                        <td class="list-body-content"><?php echo $name_sla; ?></td>
+                        <td class="list-body-content table-sm-none"><?php echo $name_sla; ?></td>
                         <td class="list-body-content table-sm-none"><?php echo $name_prod; ?></td>
                         <td class="list-body-content table-sm-none"><?php echo date('d/m/Y H:i:s', strtotime($dt_cham)); ?>
                         </td>
                         <td class="list-body-content"><?php echo $name_sta; ?></td>
+                        <td class="list-body-content"><?php 
+
+                        if($suporte_id === 1){ 
+                            echo "Suporte Livre" ;
+                        } else {
+                            echo $name_user;
+                        }; ?>
+                        </td>
+
                         <td class="list-body-content table-sm-none">
                             <?php echo date('d/m/Y H:i:s', strtotime($dt_status)); ?></td>
                         <td class="list-body-content table-sm-none"><?php echo $type_cham; ?></td>

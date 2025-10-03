@@ -63,7 +63,7 @@ class AdmsViewCham
 
         $viewCham = new \App\adms\Models\helper\AdmsRead();
         $viewCham->fullRead("SELECT cham.id, clie.nome_fantasia as nome_fantasia_clie, sla.name as name_sla, prod.name as name_prod, prod.marca_id as marca_id_prod, prod.modelo_id as modelo_id_prod, cham.contato, cham.tel_contato,
-                            cham.dt_cham, user.name as name_user, sta.name as name_sta, cham.dt_status, cham.dt_term_cham, cham.inf_cham, cham.type_cham, cham.fech_cham as fech_cham, cham.dur_cham as sla_total, cham.image, cham.motivo_repr, cham.created
+                            cham.dt_cham, cham.suporte_id, user.name as name_user, cham.status_id, sta.name as name_sta, cham.dt_status, cham.dt_term_cham, cham.inf_cham, cham.type_cham, cham.fech_cham as fech_cham, cham.dur_cham as sla_total, cham.image, cham.motivo_repr, cham.created
                             FROM adms_cham as cham 
                             INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id                             
                             INNER JOIN adms_sla AS sla ON sla.id=cham.sla_id  
@@ -123,8 +123,6 @@ class AdmsViewCham
         $this->data['modified'] = date("Y-m-d H:i:s");        
         $this->data['status_id'] = 13; //Reagendado
         $this->data['dt_status'] =$agendamento;
-        //$this->data['dt_status'] = date("Y-m-d H:i:s");
-        $this->data['suporte_id'] = $_SESSION['user_id'];
 
         $upCham = new \App\adms\Models\helper\AdmsUpdate();
         $upCham->exeUpdate("adms_cham", $this->data, "WHERE id=:id", "id={$this->id}");
@@ -155,5 +153,30 @@ class AdmsViewCham
 
         return $this->listRegistryAdd;
 
+    }
+    
+
+       /**
+     * Metodo para pesquisar as informações que serão usadas no dropdown do formulário
+     *
+     * @return array
+     */
+    public function listSelect(): array
+    {
+        $list = new \App\adms\Models\helper\AdmsRead();
+
+
+        if ($_SESSION['adms_access_level_id'] > 2){
+            //Se for 4 - Cliente Administrativo
+            if (($_SESSION['adms_access_level_id'] == 4) or ($_SESSION['adms_access_level_id'] == 12)) {
+
+                $list->fullRead("SELECT id, name FROM adms_users WHERE empresa_id= :empresa AND adms_access_level_id= :nivel_acesso", "empresa={$_SESSION['emp_user']}&nivel_acesso=12");
+                $registry['nomesup'] = $list->getResult();
+
+                $this->listRegistryAdd = ['nomesup' => $registry['nomesup']];
+            }
+        } 
+
+        return $this->listRegistryAdd;
     }
 }

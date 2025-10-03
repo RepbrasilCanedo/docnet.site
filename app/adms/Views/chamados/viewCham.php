@@ -3,7 +3,8 @@ if (!defined('D0O8C0A3N1E9D6O1')) {
     header("Location: /");
     die("Erro: Página não encontrada<br>");
 }
-//echo '<pre>';var_dump($this->data);
+
+//echo '<pre>';var_dump($this->data['viewCham']);
 ?>
 <!-- Inicio do conteudo do administrativo -->
 <div class="wrapper">
@@ -27,9 +28,11 @@ if (!defined('D0O8C0A3N1E9D6O1')) {
                     echo "<a href='" . URLADM . "list-cham/index' class='btn-info aButton'>Listar</a> ";
                 }
 
-                if (!empty( $this->data['button']['add_hist_cham'])) {
+                if ((empty($this->data['button']['add_hist_cham'])) and ($_SESSION['adms_access_level_id'] == 12)) {
+                    $_SESSION['set_status']=$name_sta;
                     echo "<a href='" . URLADM . "add-hist-cham/index/$id' class='btn-success'>Anexar Histórico</a> ";
                 }
+
                 if ((($_SESSION['adms_access_level_id'] == 4) or ($_SESSION['adms_access_level_id'] == 12)) and ($name_sta <> 'Finalizado')){ ?>
                         <!--Modal para inserir a data do reagendamento do ticket -->
                             <button type="button" class="btn btn-dark btn-sm mb-0" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">Reagendar Ticket</button>
@@ -52,6 +55,22 @@ if (!defined('D0O8C0A3N1E9D6O1')) {
                                                 <label for="recipient-name" class="col-form-label">Horario:</label>
                                                 <input type="time" class="form-control" name="hr_cham" id="hr_cham" required>
                                             </div>
+                                        <div class="mb-3">
+                                                <label class="title-input">Técnico do Suporte:</label>
+                                                <select name="suporte_id" id="suporte_id" class="input-adm">
+                                                    <option value="">Todos</option>
+                                                    <?php
+                                                    foreach ($this->data['select']['nomesup'] as $searchSuporte) {
+                                                        extract($searchSuporte);
+                                                        if (isset($valorForm['suporte_id']) and $valorForm['suporte_id'] == $id) {
+                                                            echo "<option value='$id' selected>$name</option>";
+                                                        } else {
+                                                            echo "<option value='$id'>$name</option>";
+                                                        }
+                                                    }
+                                                    ?>
+                                                </select>
+                                        </div>
                                         </div>
                                         <div class="modal-footer">
                                             <button type="submit" name="SendReagCham" value="Reagendar_Ticket" class="btn btn-dark btn-sm"><span class="fa-solid fa-calendar-day me-2"></span>Reagendar Ticket</button>
@@ -155,11 +174,14 @@ if (!defined('D0O8C0A3N1E9D6O1')) {
 
                             <div class="view-det-adm">
                                 <span class="view-adm-title">Colaborador: </span>
-                                <?php if(($name_sta=='Aberto') or ($name_sta=='Agendado')) {?>
-
-                                <?php } else { ?>
-                                    <span class="view-adm-info"><?php echo$name_user; ?></span>
-                                <?php }?>
+                                <span class="view-adm-info">
+                                    <?php 
+                                    if($suporte_id === 1){
+                                        echo "Suporte Livre" ;
+                                    } else {
+                                        echo $name_user;
+                                    }; ?>
+                                </span>
                             </div>
 
                             <?php if (!empty($motivo_repr)) { ?>

@@ -147,6 +147,7 @@ class AdmsAddChamAgend
         $this->data['dt_status'] =$agendamento;
         $this->data['created'] = date("Y-m-d H:i:s");
 
+        
         $createChamAgend = new \App\adms\Models\helper\AdmsCreate();
         $createChamAgend->exeCreate("adms_cham", $this->data);
 
@@ -188,8 +189,11 @@ class AdmsAddChamAgend
                 INNER JOIN adms_clientes AS emp ON emp.id=prod.cliente_id  
                 WHERE prod.empresa_id= :empresa order by prod.cliente_id", "empresa={$_SESSION['emp_user']}");
                 $registry['produtoemp'] = $list->getResult();
+                            
+                $list->fullRead("SELECT id, name FROM adms_users WHERE empresa_id= :empresa AND adms_access_level_id= :nivel_acesso", "empresa={$_SESSION['emp_user']}&nivel_acesso=12");
+                $registry['nomesup'] = $list->getResult();
 
-                $this->listRegistryAdd = ['cliente' => $registry['cliente'], 'sla' => $registry['sla'], 'produtoemp' => $registry['produtoemp']];
+                $this->listRegistryAdd = ['cliente' => $registry['cliente'], 'sla' => $registry['sla'], 'produtoemp' => $registry['produtoemp'], 'nomesup' => $registry['nomesup']];
 
             //Se for 14 - Usuário final
             } elseif ($_SESSION['adms_access_level_id'] == 14) {
@@ -198,8 +202,9 @@ class AdmsAddChamAgend
                 WHERE id= :clie_id ORDER BY nome_fantasia ASC", "clie_id={$_SESSION['set_clie']}");
                 $registry['cliente'] = $list->getResult();
 
-                $list->fullRead("SELECT id, name, empresa_id, tempo_horas_sla_id FROM adms_sla 
-                WHERE empresa_id= :empresa", "empresa={$_SESSION['emp_user']}");
+                $list->fullRead("SELECT sla.id as id_sla, sla.name as name_sla, sla.empresa_id, tempo_horas_sla_id, ativ.name as name_ativ  FROM adms_sla as sla
+                INNER JOIN adms_atividade AS ativ ON ativ.id = sla.atividade_id 
+                WHERE sla.empresa_id= :empresa", "empresa={$_SESSION['emp_user']}");
                 $registry['sla'] = $list->getResult();
 
                 $list->fullRead("SELECT id, name FROM adms_produtos 
@@ -212,8 +217,9 @@ class AdmsAddChamAgend
             $list->fullRead("SELECT id id_emp, nome_fantasia nome_fantasia_emp FROM adms_empresa as emp ORDER BY nome_fantasia ASC");
             $registry['cliente'] = $list->getResult();
 
-                $list->fullRead("SELECT id, name, empresa_id, tempo_horas_sla_id FROM adms_sla 
-                WHERE empresa_id= :empresa", "empresa={$_SESSION['emp_user']}");
+                $list->fullRead("SELECT sla.id as id_sla, sla.name as name_sla, sla.empresa_id, tempo_horas_sla_id, ativ.name as name_ativ  FROM adms_sla as sla
+                INNER JOIN adms_atividade AS ativ ON ativ.id = sla.atividade_id 
+                WHERE sla.empresa_id= :empresa", "empresa={$_SESSION['emp_user']}");
                 $registry['sla'] = $list->getResult();
 
             $list->fullRead("SELECT id, name FROM adms_produtos");

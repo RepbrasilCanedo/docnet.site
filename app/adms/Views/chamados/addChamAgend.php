@@ -112,6 +112,7 @@ if (isset($this->data['form'])) {
                             </select>
                         </div>
                     <?php } elseif (($_SESSION['adms_access_level_id'] == 4) or ($_SESSION['adms_access_level_id'] == 12)) { ?>
+
                         <div class="column">
                             <label class="title-input">Produto:<span class="text-danger">*</span></label>
                             <select name="prod_id" id="prod_id" class="input-adm" required>
@@ -128,7 +129,23 @@ if (isset($this->data['form'])) {
                                 ?>
                             </select>
                         </div>
-                        <?php }?> 
+                        <div class="column">
+                                <label class="title-input">Técnico do Suporte:</label>
+                                <select name="suporte_id" id="suporte_id" class="input-adm">
+                                    <option value="">Todos</option>
+                                    <?php
+                                    foreach ($this->data['select']['nomesup'] as $searchSuporte) {
+                                        extract($searchSuporte);
+                                        if (isset($valorForm['suporte_id']) and $valorForm['suporte_id'] == $id) {
+                                            echo "<option value='$id' selected>$name</option>";
+                                        } else {
+                                            echo "<option value='$id'>$name</option>";
+                                        }
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+                    <?php }?> 
 
                     <div class="column">
                         <?php
@@ -152,7 +169,9 @@ if (isset($this->data['form'])) {
                         <label class="title-input">Horário do Atendimento:<span class="text-danger">*</span></label>
                         <input type="time" name="hr_cham" id="hr_cham" rows="5" cols="50" class="input-adm" placeholder="Problema Detectado" value="<?php echo $hr_cham; ?>" required>
 
-                    </div>
+                    </div>                    
+
+                            
                 </div>
                 
                 <div class="row-input">

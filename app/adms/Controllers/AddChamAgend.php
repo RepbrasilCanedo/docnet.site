@@ -67,7 +67,7 @@ class AddChamAgend
         $listBotton = new \App\adms\Models\helper\AdmsButton();
         $this->data['button'] = $listBotton->buttonPermission($button);
 
-        $listSelect = new \App\adms\Models\AdmsAddCham();
+        $listSelect = new \App\adms\Models\AdmsAddChamAgend();
         $this->data['select'] = $listSelect->listSelect();
 
         $listMenu = new \App\adms\Models\helper\AdmsMenu();

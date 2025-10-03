@@ -86,6 +86,9 @@ class EditCham
         $listTable = new \App\adms\Models\AdmsEditCham();
         $this->data['list_table'] = $listTable->listTable();
 
+        $listSelect = new \App\adms\Models\AdmsEditCham();
+        $this->data['select'] = $listSelect->listSelect();
+
         $listMenu = new \App\adms\Models\helper\AdmsMenu();
         $this->data['menu'] = $listMenu->itemMenu();
 
