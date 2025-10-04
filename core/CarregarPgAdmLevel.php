@@ -52,8 +52,7 @@ class CarregarPgAdmLevel
     private function searchPage(): void
     {
         $searchPage = new \App\adms\Models\helper\AdmsRead();
-        $searchPage->fullRead("SELECT pag.id, pag.publish,
-                    typ.type
+        $searchPage->fullRead("SELECT pag.id, pag.publish, typ.type
                     FROM adms_pages AS pag
                     INNER JOIN adms_types_pgs AS typ ON typ.id=pag.adms_types_pgs_id 
                     WHERE pag.controller =:controller 

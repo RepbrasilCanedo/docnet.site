@@ -56,8 +56,9 @@ class AdmsLogin
                             LIMIT :limit", "user={$this->data['user']}&email={$this->data['user']}&limit=1");
 
         $this->resultBd = $viewUser->getResult();
+        
         if ($this->resultBd) {
-            $this->valEmailPerm();
+            $this->valPassword();
         } else {
             //Verifica e valida na tabela usuario final
             $viewUser = new \App\adms\Models\helper\AdmsRead();
@@ -70,7 +71,7 @@ class AdmsLogin
 
             $this->resultBd = $viewUser->getResult();
             if ($this->resultBd) {
-                $this->valEmailPerm();
+                $this->valPassword();
             } else {
                 $_SESSION['msg'] = "<p class='alert-danger'>Erro: Usuário ou a senha incorreta!</p>";
                 $this->result = false;
