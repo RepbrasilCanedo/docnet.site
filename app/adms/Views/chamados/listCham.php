@@ -326,7 +326,7 @@ if (isset($this->data['form'])) {
                     <th class="list-head-content table-sm-none">Prioridade(SLA)</th>
                     <th class="list-head-content table-sm-none">Equipamento</th>
                     <th class="list-head-content table-sm-none">Abertura Ticket </th>
-                    <th class="list-head-content">Status</th>
+                    <th class="list-head-content table-sm-none">Status</th>
                     <th class="list-head-content">Suporte</th>
                     <th class="list-head-content table-sm-none">Data Status</th>
                     <th class="list-head-content table-sm-none">Tipo</th>
@@ -345,7 +345,7 @@ if (isset($this->data['form'])) {
                         <td class="list-body-content table-sm-none"><?php echo $name_prod; ?></td>
                         <td class="list-body-content table-sm-none"><?php echo date('d/m/Y H:i:s', strtotime($dt_cham)); ?>
                         </td>
-                        <td class="list-body-content"><?php echo $name_sta; ?></td>
+                        <td class="list-body-content table-sm-none"><?php echo $name_sta; ?></td>
                         <td class="list-body-content"><?php 
 
                         if($suporte_id === 1){ 

@@ -30,7 +30,7 @@ if (!defined('D0O8C0A3N1E9D6O1')) {
 
                 if ((empty($this->data['button']['add_hist_cham'])) and ($_SESSION['adms_access_level_id'] == 12)) {
                     $_SESSION['set_status']=$name_sta;
-                    echo "<a href='" . URLADM . "add-hist-cham/index/$id' class='btn-success'>Anexar Histórico</a> ";
+                    echo "<a href='" . URLADM . "add-hist-cham/index/$id' class='btn btn-success btn-sm mb-0'>Anexar Histórico</a> ";
                 }
 
                 if ((($_SESSION['adms_access_level_id'] == 4) or ($_SESSION['adms_access_level_id'] == 12)) and ($name_sta <> 'Finalizado')){ ?>

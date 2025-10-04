@@ -167,13 +167,13 @@ if (isset($this->data['form'])) {
             <thead class="list-head">
                 <tr>
                     <th class="list-head-content">Ticket</th>
-                    <th class="list-head-content">Tipo</th>
-                    <th class="list-head-content">Cliente</th>
-                    <th class="list-head-content">Abertura Ticket</th>
-                    <th class="list-head-content">Status Anter.</th>
+                    <th class="list-head-content table-sm-none">Tipo</th>
+                    <th class="list-head-content table-sm-none">Cliente</th>
+                    <th class="list-head-content table-sm-none">Abertura Ticket</th>
+                    <th class="list-head-content table-sm-none">Status Anter.</th>
                     <th class="list-head-content">Status Atual</th>
                     <th class="list-head-content">Tempo SLA</th>
-                    <th class="list-head-content">Tecnico</th>
+                    <th class="list-head-content table-sm-none">Tecnico</th>
 
                     <th class="list-head-content">Ações</th>
                 </tr>
@@ -185,13 +185,13 @@ if (isset($this->data['form'])) {
                 ?>
                     <tr>
                         <td class="list-body-content"><?php echo $id_ticket_sla_hist; ?></td>
-                        <td class="list-body-content"><?php echo $name_sla; ?></td>
-                        <td class="list-body-content"><?php echo $nome_fantasia_clie; ?></td>
-                        <td class="list-body-content"><?php echo date('d/m/Y H:i:s', strtotime($dt_abert_ticket))?>
-                        <td class="list-body-content"><?php echo $name_status_id_ant; ?></td>
+                        <td class="list-body-content table-sm-none"><?php echo $name_sla; ?></td>
+                        <td class="list-body-content table-sm-none"><?php echo $nome_fantasia_clie; ?></td>
+                        <td class="list-body-content table-sm-none"><?php echo date('d/m/Y H:i:s', strtotime($dt_abert_ticket))?>
+                        <td class="list-body-content table-sm-none"><?php echo $name_status_id_ant; ?></td>
                         <td class="list-body-content"><?php echo $name_sta_atu; ?></td>
                         <td class="list-body-content"><?php echo date('H:i:s', strtotime($tempo_sla))?>
-                        <td class="list-body-content"><?php echo $name_user; ?></td>
+                        <td class="list-body-content table-sm-none"><?php echo $name_user; ?></td>
                         
                         <td class="list-body-content">
                             <div class="dropdown-action">

@@ -12,7 +12,6 @@ if (isset($this->data['form'])) {
 if (isset($this->data['form'][0])) {
     $valorForm = $this->data['form'][0];
 }
-//var_dump($this->data);
 ?>
 <!-- Inicio do conteudo do administrativo -->
 <div class="wrapper">
@@ -68,36 +67,25 @@ if (isset($this->data['form'][0])) {
 
                     <div class="column">
                         <?php
-                        $name_temp = "";
-                        if (isset($valorForm['name_temp'])) {
-                            $name_temp = $valorForm['name_temp'];
+                        $prim_resp_sla = "";
+                        if (isset($valorForm['prim_resp_sla'])) {
+                            $prim_resp_sla = $valorForm['prim_resp_sla'];
                         }
                         ?>
-                        <label class="title-input">Primeira Resposta do SLA:<span class="text-danger">*</span></label>                        
-                        <select name="prim_resp" id="tempo_nome_sla_id" class="input-adm" required>
-                            <option value="">Selecione</option>
-                            <?php
-                            foreach ($this->data['select']['temp_sla'] as $temp_sla) {
-                                extract($temp_sla);
-                                if (isset($valorForm['tempo']) and $valorForm['tempo'] == $name_temp) {
-                                    echo "<option value='$id_temp' selected>$name_temp</option>";
-                                } else {
-                                    echo "<option value='$id_temp'>$name_temp</option>";
-                                }
-                            }
-                            ?>
-                        </select>
+                        <label class="title-input">Primeira Resposta do SLA:<span class="text-danger">*</span></label> 
+                        <input type="time" name="prim_resp" id="prim_resp" class="input-adm" placeholder="Tempo total do sla" value="<?php echo $prim_resp_sla; ?>" required>
                     </div>
                     
+
                     <div class="column">
                         <?php
-                        $tempo_horas_sla_id = "";
-                        if (isset($valorForm['tempo_horas_sla_id'])) {
-                            $tempo_horas_sla_id = $valorForm['tempo_horas_sla_id'];
+                        $final_resp_sla = "";
+                        if (isset($valorForm['final_resp_sla'])) {
+                            $final_resp_sla = $valorForm['final_resp_sla'];
                         }
                         ?>
-                        <label class="title-input">Tempo Total SLA:<span class="text-danger">*</span></label>
-                        <input type="text" name="final_resp" id="final_resp" class="input-adm" placeholder="Tempo total do sla" value="<?php echo $tempo_horas_sla_id; ?>" required>
+                        <label class="title-input">Tempo Total do SLA:<span class="text-danger">*</span></label> 
+                        <input type="time" name="final_resp" id="final_resp" class="input-adm" placeholder="Tempo total do sla" value="<?php echo $final_resp_sla; ?>" required>
                     </div>
                 </div>
 

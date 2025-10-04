@@ -131,7 +131,7 @@ class AdmsEditSla
                 $list->fullRead("SELECT id id_prior, name name_prior, empresa_id FROM adms_prioridade as prior WHERE empresa_id= :empresa_id", "empresa_id={$_SESSION['emp_user']}");
                 $registry['prior_sla'] = $list->getResult();
 
-                $list->fullRead("SELECT id id_temp, name name_temp, tempo, empresa_id FROM adms_tempo_sla as temp WHERE empresa_id= :empresa_id", "empresa_id={$_SESSION['emp_user']}");
+                $list->fullRead("SELECT id id_temp, name name_temp, prim_resp, tempo, empresa_id FROM adms_tempo_sla as temp WHERE empresa_id= :empresa_id", "empresa_id={$_SESSION['emp_user']}");
                 $registry['temp_sla'] = $list->getResult();
 
                 $list->fullRead("SELECT id id_ativ, name name_ativ, empresa_id FROM adms_atividade as ativ WHERE empresa_id= :empresa_id", "empresa_id={$_SESSION['emp_user']}");

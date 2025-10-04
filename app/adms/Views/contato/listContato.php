@@ -25,12 +25,12 @@ if (isset($this->data['form'])) {
                     <th class="list-head-content">ID</th>
                     <th class="list-head-content">Assunto</th>
                     <th class="list-head-content">Cliente</th>
-                    <th class="list-head-content">Nome</th>
-                    <th class="list-head-content">Usuario</th>
-                    <th class="list-head-content">Tel</th>
-                    <th class="list-head-content">Mensagem</th>
-                    <th class="list-head-content">Data</th>                    
-                    <th class="list-head-content">Status</th>
+                    <th class="list-head-content table-sm-none">Nome</th>
+                    <th class="list-head-content table-sm-none">Usuario</th>
+                    <th class="list-head-content table-sm-none">Tel</th>
+                    <th class="list-head-content table-sm-none">Mensagem</th>
+                    <th class="list-head-content table-sm-none">Data</th>                    
+                    <th class="list-head-content table-sm-none">Status</th>
                     <th class="list-head-content">Ações</th>
                 </tr>
             </thead>
@@ -43,12 +43,12 @@ if (isset($this->data['form'])) {
                         <td class="list-body-content"><?php echo $id_mens; ?></td>
                         <td class="list-body-content"><?php echo $assunto_mens; ?></td>
                         <td class="list-body-content"><?php echo $nome_fantasia_clie; ?></td>
-                        <td class="list-body-content"><?php echo $nome_mens	; ?></td>
-                        <td class="list-body-content"><?php echo $email_mens	; ?></td>
-                        <td class="list-body-content"><?php echo $tel_mens; ?></td>
-                        <td class="list-body-content"><?php echo $mensagem_mens; ?></td>
-                        <td class="list-body-content"><?php echo date('d/m/Y H:i:s', strtotime($dia_mens));?></td>
-                        <td class="list-body-content"><?php echo $status_mens; ?></td>
+                        <td class="list-body-content table-sm-none"><?php echo $nome_mens	; ?></td>
+                        <td class="list-body-content table-sm-none"><?php echo $email_mens	; ?></td>
+                        <td class="list-body-content table-sm-none"><?php echo $tel_mens; ?></td>
+                        <td class="list-body-content table-sm-none"><?php echo $mensagem_mens; ?></td>
+                        <td class="list-body-content table-sm-none"><?php echo date('d/m/Y H:i:s', strtotime($dia_mens));?></td>
+                        <td class="list-body-content table-sm-none"><?php echo $status_mens; ?></td>
 
                         <td class="list-body-content">
                             <div class="dropdown-action">

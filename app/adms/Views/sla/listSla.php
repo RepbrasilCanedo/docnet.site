@@ -39,7 +39,7 @@ if (isset($this->data['form'])) {
                     <th class="list-head-content">Tipo</th>
                     <th class="list-head-content table-sm-none">Empresa</th>
                     <th class="list-head-content">Primeira Resposta</th>
-                    <th class="list-head-content">Tempo do SLA</th>
+                    <th class="list-head-content table-sm-none">Tempo do SLA</th>
                     <th class="list-head-content table-sm-none">Tipo de Urgencia</th>
                     <th class="list-head-content table-sm-none">Dados Adicionais</th>
                     <th class="list-head-content">Ações</th>
@@ -53,11 +53,11 @@ if (isset($this->data['form'])) {
                     <tr>
                         <td class="list-body-content"><?php echo $id_sla; ?></td>
                         <td class="list-body-content"><?php echo $name; ?></td>
-                        <td class="list-body-content"><?php echo $nome_fantasia_emp; ?></td>
+                        <td class="list-body-content table-sm-none"><?php echo $nome_fantasia_emp; ?></td>
                         <td class="list-body-content"><?php echo $prim_resp_sla; ?></td>
-                        <td class="list-body-content"><?php echo $final_resp_sla; ?></td>
-                        <td class="list-body-content"><?php echo $name_ativ; ?></td>
-                        <td class="list-body-content"><?php echo $obs_sla; ?></td>
+                        <td class="list-body-content table-sm-none"><?php echo $final_resp_sla; ?></td>
+                        <td class="list-body-content table-sm-none"><?php echo $name_ativ; ?></td>
+                        <td class="list-body-content table-sm-none"><?php echo $obs_sla; ?></td>
                         
                         <td class="list-body-content">
                             <div class="dropdown-action">

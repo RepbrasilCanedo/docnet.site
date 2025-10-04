@@ -99,7 +99,7 @@ if (isset($this->data['form'])) {
                     <th class="list-head-content">ID</th>
                     <th class="list-head-content">Nome</th>
                     <th class="list-head-content table-sm-none">E-mail</th>
-                    <th class="list-head-content table-md-none">Cliente</th>
+                    <th class="list-head-content table-sm-none">Cliente</th>
                     <th class="list-head-content table-md-none">Situação</th>
                     <th class="list-head-content">Ações</th>
                 </tr>
@@ -113,7 +113,7 @@ if (isset($this->data['form'])) {
                         <td class="list-body-content"><?php echo $id; ?></td>
                         <td class="list-body-content"><?php echo $name_usr; ?></td>
                         <td class="list-body-content table-sm-none"><?php echo $email; ?></td>
-                        <td class="list-body-content table-sm-none"><?php echo $razao_social_emp; ?></td>
+                        <td class="list-body-content table-sm-none"><?php echo $nome_fantasia_emp; ?></td>
                         <td class="list-body-content table-md-none">
                             <?php echo "<span style='color: $color'>$name_sit</span>"; ?>
                         </td>

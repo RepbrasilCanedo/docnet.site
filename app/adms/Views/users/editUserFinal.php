@@ -12,7 +12,6 @@ if (isset($this->data['form'])) {
 if (isset($this->data['form'][0])) {
     $valorForm = $this->data['form'][0];
 }
-//echo "<pre>"; var_dump($valorForm);echo "</pre>";
 ?>
 <!-- Inicio do conteudo do administrativo -->
 <div class="wrapper">
@@ -105,7 +104,8 @@ if (isset($this->data['form'][0])) {
                             <?php
                             foreach ($this->data['select']['emp'] as $emp) {
                                 extract($emp);
-                                if ((isset($valorForm['nome_fantasia_cli'])) and ($valorForm['nome_fantasia_cli'] == $id_emp)) {
+                                
+                                if ((isset($valorForm['nome_fantasia_clie'])) and ($valorForm['nome_fantasia_clie'] == $nome_fantasia_emp)) {
                                     echo "<option value='$id_emp' selected>$nome_fantasia_emp</option>";
                                 } else {
                                     echo "<option value='$id_emp'>$nome_fantasia_emp</option>";
@@ -140,7 +140,7 @@ if (isset($this->data['form'][0])) {
                             <?php
                             foreach ($this->data['select']['sit_user'] as $sit) {
                                 extract($sit);
-                                if ((isset($valorForm['adms_sits_user_id'])) and ($valorForm['adms_sits_user_id'] == $id_sit)) {
+                                if ((isset($valorForm['name_sit'])) and ($valorForm['name_sit'] == $name_sit)) {
                                     echo "<option value='$id_sit' selected>$name_sit</option>";
                                 } else {
                                     echo "<option value='$id_sit'>$name_sit</option>";
