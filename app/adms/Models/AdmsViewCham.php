@@ -154,29 +154,26 @@ class AdmsViewCham
         return $this->listRegistryAdd;
 
     }
+
     
 
        /**
-     * Metodo para pesquisar as informações que serão usadas no dropdown do formulário
+     * Metodo para pesquisar as informações que serão usadas no modal do formulário
      *
      * @return array
      */
     public function listSelect(): array
     {
-        $list = new \App\adms\Models\helper\AdmsRead();
+        $list = new \App\adms\Models\helper\AdmsRead();    
+        if (($_SESSION['adms_access_level_id'] == 4) or ($_SESSION['adms_access_level_id'] == 12)) {//Se for 4 - Cliente Administrativo                
+                
 
-
-        if ($_SESSION['adms_access_level_id'] > 2){
-            //Se for 4 - Cliente Administrativo
-            if (($_SESSION['adms_access_level_id'] == 4) or ($_SESSION['adms_access_level_id'] == 12)) {
-
-                $list->fullRead("SELECT id, name FROM adms_users WHERE empresa_id= :empresa AND adms_access_level_id= :nivel_acesso", "empresa={$_SESSION['emp_user']}&nivel_acesso=12");
-                $registry['nomesup'] = $list->getResult();
-
-                $this->listRegistryAdd = ['nomesup' => $registry['nomesup']];
+                        $list->fullRead("SELECT id, name FROM adms_users WHERE empresa_id= :empresa AND adms_access_level_id= :nivel_acesso", "empresa={$_SESSION['emp_user']}&nivel_acesso=12");
+                        $registry['nomesup'] = $list->getResult();
+                        $this->listRegistryAdd = ['nomesup' => $registry['nomesup']];
+                        
+                
             }
-        } 
-
-        return $this->listRegistryAdd;
+            return $this->listRegistryAdd;
     }
 }
