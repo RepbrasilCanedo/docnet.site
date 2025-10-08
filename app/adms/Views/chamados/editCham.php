@@ -105,7 +105,7 @@ if (isset($this->data['form'][0])) {
                                         <div class="mb-3">
                                                 <label class="title-input">Técnico do Suporte:</label>
                                                 <select name="suporte_id" id="suporte_id" class="input-adm">
-                                                    <option value="">Todos</option>
+                                                    <option value="1">Suporte Livre</option>
                                                     <?php
                                                     foreach ($this->data['select']['nomesup'] as $searchSuporte) {
                                                         extract($searchSuporte);
@@ -157,7 +157,7 @@ if (isset($this->data['form'][0])) {
                                         <div class="mb-3">
                                                 <label class="title-input">Técnico do Suporte:</label>
                                                 <select name="suporte_id" id="suporte_id" class="input-adm">
-                                                    <option value="">Todos</option>
+                                                    <option value="1">Suporte Livre</option>
                                                     <?php
                                                     foreach ($this->data['select']['nomesup'] as $searchSuporte) {
                                                         extract($searchSuporte);
@@ -206,7 +206,7 @@ if (isset($this->data['form'][0])) {
                                         <div class="mb-3">
                                                 <label class="title-input">Técnico do Suporte:</label>
                                                 <select name="suporte_id" id="suporte_id" class="input-adm">
-                                                    <option value="">Todos</option>
+                                                    <option value="1">Suporte Livre</option>
                                                     <?php
                                                     foreach ($this->data['select']['nomesup'] as $searchSuporte) {
                                                         extract($searchSuporte);
