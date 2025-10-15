@@ -31,6 +31,9 @@ class ListCham
     /** @var string|null $searchCham Recebe a empresa do chamado*/
     private string|null $searchEmpresa;
 
+    /** @var string|null $searchCham Recebe a empresa do chamado*/
+    private string|null $searchSuporte;
+
     /** @var string|null $searchCham Recebe o status do chamado*/
     private string|null $searchStatus;
 
@@ -68,6 +71,7 @@ class ListCham
         $this->dataForm = filter_input_array(INPUT_POST, FILTER_DEFAULT);  
         $this->searchId = filter_input(INPUT_GET, 'search_id', FILTER_DEFAULT);
         $this->searchEmpresa = filter_input(INPUT_GET, 'search_empresa', FILTER_DEFAULT);
+        $this->searchSuporte = filter_input(INPUT_GET, 'search_suporte', FILTER_DEFAULT);
         $this->searchStatus = filter_input(INPUT_GET, 'search_status', FILTER_DEFAULT);
         $this->searchTipo = filter_input(INPUT_GET, 'search_tipo', FILTER_DEFAULT);
         $this->searchDateStart = filter_input(INPUT_GET, 'search_date_start', FILTER_DEFAULT);
@@ -77,70 +81,8 @@ class ListCham
         
         if ((!empty($this->dataForm['SendSearchCham']))) {
             $this->page = 1;
-            $listCham->listSearchCham($this->page, $this->dataForm['search_id'], $this->dataForm['search_empresa'], $this->dataForm['search_status'], $this->dataForm['search_tipo'], $this->dataForm['search_date_start'], $this->dataForm['search_date_end']);
+            $listCham->listSearchCham($this->page, $this->dataForm['search_id'], $this->dataForm['search_empresa'],  $this->dataForm['search_suporte'], $this->dataForm['search_status'], $this->dataForm['search_tipo'], $this->dataForm['search_date_start'], $this->dataForm['search_date_end']);
             $this->data['form'] = $this->dataForm;
-        } elseif ((!empty($this->searchId))) {
-            $listCham->listSearchCham($this->page, $this->searchId, $this->searchEmpresa, $this->searchTipo, $this->searchStatus, $this->searchDateStart, $this->searchDateEnd);
-            $this->data['form']['search_id'] = $this->searchId;
-        } elseif ((!empty($this->searchEmpresa)) or (!empty($this->searchStatus)) or (!empty($this->searchTipo)) or (empty($this->searchDateStart)) or (empty($this->searchDateEnd))) {
-            $listCham->listSearchCham($this->page, $this->searchId, $this->searchEmpresa, $this->searchStatus, $this->searchTipo, $this->searchDateStart, $this->searchDateEnd);
-            $this->data['form']['search_empresa'] = $this->searchEmpresa;
-            $this->data['form']['search_status'] = $this->searchStatus;
-            $this->data['form']['search_tipo'] = $this->searchTipo;
-        } elseif ((!empty($this->searchEmpresa)) or (empty($this->searchStatus)) or (empty($this->searchTipo)) or (empty($this->searchDateStart)) or (empty($this->searchDateEnd))) {
-            $listCham->listSearchCham($this->page, $this->searchId, $this->searchEmpresa, $this->searchStatus, $this->searchTipo, $this->searchDateStart, $this->searchDateEnd);
-            $this->data['form']['search_empresa'] = $this->searchEmpresa;
-        } elseif ((empty($this->searchEmpresa)) or (!empty($this->searchStatus)) or (empty($this->searchTipo)) or (empty($this->searchDateStart)) or (empty($this->searchDateEnd))) {
-            $listCham->listSearchCham($this->page, $this->searchId, $this->searchEmpresa, $this->searchStatus, $this->searchTipo, $this->searchDateStart, $this->searchDateEnd);
-            $this->data['form']['search_status'] = $this->searchStatus;
-        } elseif ((empty($this->searchEmpresa)) or (empty($this->searchStatus)) or (!empty($this->searchTipo)) or (empty($this->searchDateStart)) or (empty($this->searchDateEnd))) {
-            $listCham->listSearchCham($this->page, $this->searchId, $this->searchEmpresa, $this->searchStatus, $this->searchTipo, $this->searchDateStart, $this->searchDateEnd);
-            $this->data['form']['search_tipo'] = $this->searchTipo;
-        } elseif ((empty($this->searchEmpresa)) or (empty($this->searchStatus)) or (!empty($this->searchTipo)) or (!empty($this->searchDateStart)) or (!empty($this->searchDateEnd))) {
-            $listCham->listSearchCham($this->page, $this->searchId, $this->searchEmpresa, $this->searchStatus, $this->searchTipo, $this->searchDateStart, $this->searchDateEnd);
-            $this->data['form']['search_tipo'] = $this->searchTipo;
-            $this->data['form']['search_date_start'] = $this->searchDateStart;            
-            $this->data['form']['search_date_end'] = $this->searchDateEnd;
-        } elseif ((!empty($this->searchEmpresa)) or (!empty($this->searchStatus)) or (empty($this->searchTipo)) or (empty($this->searchDateStart)) or (empty($this->searchDateEnd))) {
-            $listCham->listSearchCham($this->page, $this->searchId, $this->searchEmpresa, $this->searchStatus, $this->searchTipo, $this->searchDateStart, $this->searchDateEnd);
-            $this->data['form']['search_empresa'] = $this->searchEmpresa;
-            $this->data['form']['search_status'] = $this->searchStatus;
-        } elseif ((!empty($this->searchEmpresa)) or (empty($this->searchStatus)) or (!empty($this->searchTipo)) or (empty($this->searchDateStart)) or (empty($this->searchDateEnd))) {
-            $listCham->listSearchCham($this->page, $this->searchId, $this->searchEmpresa, $this->searchStatus, $this->searchTipo, $this->searchDateStart, $this->searchDateEnd);
-            $this->data['form']['search_empresa'] = $this->searchEmpresa;
-            $this->data['form']['search_tipo'] = $this->searchTipo;
-        } elseif ((empty($this->searchEmpresa)) or (!empty($this->searchStatus)) or (!empty($this->searchTipo)) or (empty($this->searchDateStart)) or (empty($this->searchDateEnd))) {
-            $listCham->listSearchCham($this->page, $this->searchId, $this->searchEmpresa, $this->searchStatus, $this->searchTipo, $this->searchDateStart, $this->searchDateEnd);
-            $this->data['form']['search_status'] = $this->searchStatus;
-            $this->data['form']['search_tipo'] = $this->searchTipo;
-        } elseif ((empty($this->searchEmpresa)) or (!empty($this->searchStatus)) or (!empty($this->searchTipo)) or (!empty($this->searchDateStart)) or (!empty($this->searchDateEnd))) {
-            $listCham->listSearchCham($this->page, $this->searchId, $this->searchEmpresa, $this->searchStatus, $this->searchTipo, $this->searchDateStart, $this->searchDateEnd);
-            $this->data['form']['search_status'] = $this->searchStatus;
-            $this->data['form']['search_tipo'] = $this->searchTipo;
-            $this->data['form']['search_date_start'] = $this->searchDateStart;            
-            $this->data['form']['search_date_end'] = $this->searchDateEnd;
-        } elseif ((!empty($this->searchEmpresa)) or (empty($this->searchStatus)) or (empty($this->searchTipo)) or (!empty($this->searchDateStart)) or (!empty($this->searchDateEnd))) {
-            $listCham->listSearchCham($this->page, $this->searchId, $this->searchEmpresa, $this->searchStatus, $this->searchTipo, $this->searchDateStart, $this->searchDateEnd);
-            $this->data['form']['search_empresa'] = $this->searchEmpresa;
-            $this->data['form']['search_date_start'] = $this->searchDateStart;            
-            $this->data['form']['search_date_end'] = $this->searchDateEnd;
-        } elseif ((!empty($this->searchEmpresa)) or (!empty($this->searchStatus)) or (empty($this->searchTipo)) or (!empty($this->searchDateStart)) or (!empty($this->searchDateEnd))) {
-            $listCham->listSearchCham($this->page, $this->searchId, $this->searchEmpresa, $this->searchStatus, $this->searchTipo, $this->searchDateStart, $this->searchDateEnd);
-            $this->data['form']['search_empresa'] = $this->searchEmpresa;
-            $this->data['form']['search_status'] = $this->searchStatus;
-            $this->data['form']['search_date_start'] = $this->searchDateStart;            
-            $this->data['form']['search_date_end'] = $this->searchDateEnd;
-        } elseif ((!empty($this->searchEmpresa)) or (!empty($this->searchStatus)) or (!empty($this->searchTipo)) or (!empty($this->searchDateStart)) or (!empty($this->searchDateEnd))) {
-            $listCham->listSearchCham($this->page, $this->searchId, $this->searchEmpresa, $this->searchStatus, $this->searchTipo, $this->searchDateStart, $this->searchDateEnd);
-            $this->data['form']['search_empresa'] = $this->searchEmpresa;
-            $this->data['form']['search_status'] = $this->searchStatus;
-            $this->data['form']['search_tipo'] = $this->searchTipo;
-            $this->data['form']['search_date_start'] = $this->searchDateStart;            
-            $this->data['form']['search_date_end'] = $this->searchDateEnd;
-        } elseif ((empty($this->searchEmpresa)) or (empty($this->searchStatus)) or (empty($this->searchTipo)) or (!empty($this->searchDateStart)) or (!empty($this->searchDateEnd))) {
-            $listCham->listSearchCham($this->page, $this->searchId, $this->searchEmpresa, $this->searchStatus, $this->searchTipo, $this->searchDateStart, $this->searchDateEnd);
-            $this->data['form']['search_date_start'] = $this->searchDateStart;
-            $this->data['form']['search_date_end'] = $this->searchDateEnd;
         } else {
             $listCham->listCham($this->page);
         }

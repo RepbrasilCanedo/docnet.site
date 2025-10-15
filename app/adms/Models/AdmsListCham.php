@@ -34,6 +34,9 @@ class AdmsListCham
     private string|null $searchEmpresa;
 
     /** @var string|null $searchMarca Recebe o valor da marca*/
+    private string|null $searchSuporte;
+
+    /** @var string|null $searchMarca Recebe o valor da marca*/
     private string|null $searchTipo;
 
     /** @var string|null $searchMarca Recebe o valor da marca*/
@@ -50,6 +53,9 @@ class AdmsListCham
 
     /** @var string|null $searchEmail Recebe o nome da cor em hexadecimal */
     private string|null $searchEmpresaValue;
+
+    /** @var string|null $searchEmail Recebe o nome da cor em hexadecimal */
+    private string|null $searchSuporteValue;
 
     /** @var string|null $searchEmail Recebe o nome da cor em hexadecimal */
     private string|null $searchStatusValue;
@@ -298,12 +304,13 @@ class AdmsListCham
      * @param string|null $search_color
      * @return void
      */
-    public function listSearchCham(int $page, string|null $search_id, string|null $search_empresa, string|null $search_status, string|null $search_Tipo, string|null $search_Date_Start, string|null $search_Date_End): void
+    public function listSearchCham(int $page, string|null $search_id, string|null $search_empresa, string|null $search_suporte, string|null $search_status, string|null $search_Tipo, string|null $search_Date_Start, string|null $search_Date_End): void
     {
         $this->page = (int) $page ? $page : 1;
 
         $this->searchId = (int) $search_id;
-        $this->searchEmpresa = $search_empresa;
+        $this->searchEmpresa = $search_empresa;        
+        $this->searchSuporte = $search_suporte;
         $this->searchStatus = $search_status;
         $this->searchTipo = $search_Tipo;
         $this->searchDateStart = $search_Date_Start;
@@ -311,6 +318,7 @@ class AdmsListCham
 
         $this->searchIdValue = $this->searchId;
         $this->searchEmpresaValue = $this->searchEmpresa;
+        $this->searchSuporteValue = $this->searchSuporte;
         $this->searchStatusValue = $this->searchStatus;
         $this->searchTipoValue = $this->searchTipo;
         $this->searchDateStartValue = $this->searchDateStart;
@@ -320,35 +328,66 @@ class AdmsListCham
         if (!empty($this->searchId)) {
             $this->searchContrId();
         } else {
-            if ((!empty($this->searchEmpresa)) and (empty($this->searchStatus)) and (empty($this->searchTipo)) and (empty($this->searchDateStart)) and (empty($this->searchDateEnd))) {
+            if ((!empty($this->searchEmpresa)) and (empty($this->searchSuporte)) and (empty($this->searchStatus)) and (empty($this->searchTipo)) and (empty($this->searchDateStart)) and (empty($this->searchDateEnd))) {
                 $this->searchEmpresa(); //So empresa
-            } elseif ((!empty($this->searchEmpresa)) and (!empty($this->searchStatus)) and (!empty($this->searchTipo)) and (empty($this->searchDateStart)) and (empty($this->searchDateEnd))) {
+
+            } elseif ((empty($this->searchEmpresa)) and (!empty($this->searchSuporte)) and (empty($this->searchStatus)) and (empty($this->searchTipo)) and (empty($this->searchDateStart)) and (empty($this->searchDateEnd))) {
+                $this->searchSuporte(); // empresa - Status - Tipo
+            
+            } elseif ((empty($this->searchEmpresa)) and (!empty($this->searchSuporte)) and (empty($this->searchStatus)) and (empty($this->searchTipo)) and (!empty($this->searchDateStart)) and (!empty($this->searchDateEnd))) {
+                $this->searchSupPeriodo(); // suporte e periodo
+
+            } elseif ((!empty($this->searchEmpresa)) and (!empty($this->searchSuporte)) and (empty($this->searchStatus)) and (empty($this->searchTipo)) and (!empty($this->searchDateStart)) and (!empty($this->searchDateEnd))) {
+                $this->searchEmpSupPer(); // Empresa, suporte e periodo
+
+            } elseif ((!empty($this->searchEmpresa)) and (!empty($this->searchSuporte)) and (empty($this->searchStatus)) and (empty($this->searchTipo)) and (empty($this->searchDateStart)) and (empty($this->searchDateEnd))) {
+                $this->searchEmpSup(); // Empresa e suporte
+
+            } elseif ((!empty($this->searchEmpresa)) and (!empty($this->searchSuporte)) and (!empty($this->searchStatus)) and (empty($this->searchTipo)) and (!empty($this->searchDateStart)) and (!empty($this->searchDateEnd))) {
+                $this->searchEmpSupPerSta(); // Empresa, suporte, status e periodo
+
+            } elseif ((empty($this->searchEmpresa)) and (!empty($this->searchSuporte)) and (!empty($this->searchStatus)) and (!empty($this->searchTipo)) and (empty($this->searchDateStart)) and (empty($this->searchDateEnd))) {
+                $this->searchSupStaTip(); //  suporte, status e tipo
+
+            } elseif ((!empty($this->searchEmpresa)) and (!empty($this->searchSuporte)) and (!empty($this->searchStatus)) and (!empty($this->searchTipo)) and (!empty($this->searchDateStart)) and (!empty($this->searchDateEnd))) {
+                $this->searchEmpSupPerStaTip(); // Empresa, suporte, tipo e periodo
+
+            } elseif ((empty($this->searchEmpresa)) and (!empty($this->searchSuporte)) and (!empty($this->searchStatus)) and (empty($this->searchTipo)) and (empty($this->searchDateStart)) and (empty($this->searchDateEnd))) {
+                $this->searchSupSta(); //  suporte e status
+
+            } elseif ((empty($this->searchEmpresa)) and (!empty($this->searchSuporte)) and (empty($this->searchStatus)) and (!empty($this->searchTipo)) and (empty($this->searchDateStart)) and (empty($this->searchDateEnd))) {
+                $this->searchSupTip(); //  suporte e tipo
+
+
+            } elseif ((!empty($this->searchEmpresa)) and (empty($this->searchSuporte)) and  (!empty($this->searchStatus)) and (!empty($this->searchTipo)) and (empty($this->searchDateStart)) and (empty($this->searchDateEnd))) {
                 $this->searchEmpresaTipoStatus(); // empresa - Status - Tipo
-            } elseif ((!empty($this->searchEmpresa)) and (!empty($this->searchStatus)) and (!empty($this->searchTipo)) and (!empty($this->searchDateStart)) and (!empty($this->searchDateEnd))) {
+            } elseif ((!empty($this->searchEmpresa)) and (empty($this->searchSuporte)) and (!empty($this->searchStatus)) and (!empty($this->searchTipo)) and (empty($this->searchDateStart)) and (empty($this->searchDateEnd))) {
+                $this->searchEmpresaTipoStatus(); // empresa - Status - Tipo
+            } elseif ((!empty($this->searchEmpresa)) and (empty($this->searchSuporte)) and (!empty($this->searchStatus)) and (!empty($this->searchTipo)) and (!empty($this->searchDateStart)) and (!empty($this->searchDateEnd))) {
                 $this->searchEmpresaTipoStatusDate(); // empresa - Status - Tipo - Periodo
-            } elseif ((!empty($this->searchEmpresa)) and (!empty($this->searchStatus)) and (empty($this->searchTipo)) and (empty($this->searchDateStart)) and (empty($this->searchDateEnd))) {
+            } elseif ((!empty($this->searchEmpresa)) and (empty($this->searchSuporte)) and (!empty($this->searchStatus)) and (empty($this->searchTipo)) and (empty($this->searchDateStart)) and (empty($this->searchDateEnd))) {
                 $this->searchEmpresaStatus(); // empresa - Status - Tipo - Periodo
-            } elseif ((empty($this->searchEmpresa)) and (!empty($this->searchStatus)) and (empty($this->searchTipo)) and (empty($this->searchDateStart)) and (empty($this->searchDateEnd))) {
+            } elseif ((empty($this->searchEmpresa)) and (empty($this->searchSuporte)) and (!empty($this->searchStatus)) and (empty($this->searchTipo)) and (empty($this->searchDateStart)) and (empty($this->searchDateEnd))) {
                 $this->searchStatus(); //So status
-            } elseif ((empty($this->searchEmpresa)) and (!empty($this->searchStatus)) and (empty($this->searchTipo)) and (!empty($this->searchDateStart)) and (!empty($this->searchDateEnd))) {
+            } elseif ((empty($this->searchEmpresa)) and (empty($this->searchSuporte)) and (!empty($this->searchStatus)) and (empty($this->searchTipo)) and (!empty($this->searchDateStart)) and (!empty($this->searchDateEnd))) {
                 $this->searchStatusDate(); //So status e periodo do chamado
-            } elseif ((empty($this->searchEmpresa)) and (empty($this->searchStatus)) and (!empty($this->searchTipo)) and (empty($this->searchDateStart)) and (empty($this->searchDateEnd))) {
+            } elseif ((empty($this->searchEmpresa)) and (empty($this->searchSuporte)) and (empty($this->searchStatus)) and (!empty($this->searchTipo)) and (empty($this->searchDateStart)) and (empty($this->searchDateEnd))) {
                 $this->searchTipo(); //So tipo do chamado
-            } elseif ((empty($this->searchEmpresa)) and (empty($this->searchStatus)) and (!empty($this->searchTipo)) and (!empty($this->searchDateStart)) and (!empty($this->searchDateEnd))) {
+            } elseif ((empty($this->searchEmpresa)) and (empty($this->searchSuporte)) and (empty($this->searchStatus)) and (!empty($this->searchTipo)) and (!empty($this->searchDateStart)) and (!empty($this->searchDateEnd))) {
                 $this->searchTipoDate(); //So tipo e periodo do chamado
-            } elseif ((empty($this->searchEmpresa)) and (!empty($this->searchStatus)) and (!empty($this->searchTipo)) and (!empty($this->searchDateStart)) and (!empty($this->searchDateEnd))) {
+            } elseif ((empty($this->searchEmpresa)) and (empty($this->searchSuporte)) and (!empty($this->searchStatus)) and (!empty($this->searchTipo)) and (!empty($this->searchDateStart)) and (!empty($this->searchDateEnd))) {
                 $this->searchTipoStatusDate(); //So status, tipó e periodo do chamado
             } elseif ((!empty($this->searchEmpresa)) and (empty($this->searchStatus)) and (!empty($this->searchTipo)) and (empty($this->searchDateStart)) and (empty($this->searchDateEnd))) {
                 $this->searchEmpresaTipo(); // empresa e tipo
-            } elseif ((empty($this->searchEmpresa)) and (!empty($this->searchStatus)) and (!empty($this->searchTipo)) and (empty($this->searchDateStart)) and (empty($this->searchDateEnd))) {
+            } elseif ((empty($this->searchEmpresa)) and (empty($this->searchSuporte)) and (!empty($this->searchStatus)) and (!empty($this->searchTipo)) and (empty($this->searchDateStart)) and (empty($this->searchDateEnd))) {
                 $this->searchTipoStatus(); // status e tipo
-            } elseif ((empty($this->searchEmpresa)) and (empty($this->searchStatus)) and (empty($this->searchTipo)) and (!empty($this->searchDateStart)) and (!empty($this->searchDateEnd))) {
+            } elseif ((empty($this->searchEmpresa)) and (empty($this->searchSuporte)) and (empty($this->searchStatus)) and (empty($this->searchTipo)) and (!empty($this->searchDateStart)) and (!empty($this->searchDateEnd))) {
                 $this->searchChamDate(); // periodo
-            } elseif ((!empty($this->searchEmpresa)) and (empty($this->searchStatus)) and (empty($this->searchTipo)) and (!empty($this->searchDateStart)) and (!empty($this->searchDateEnd))) {
+            } elseif ((!empty($this->searchEmpresa)) and (empty($this->searchSuporte)) and (empty($this->searchStatus)) and (empty($this->searchTipo)) and (!empty($this->searchDateStart)) and (!empty($this->searchDateEnd))) {
                 $this->searchChamEmpDate(); // empresa e periodo
-            } elseif ((!empty($this->searchEmpresa)) and (!empty($this->searchStatus)) and (empty($this->searchTipo)) and (!empty($this->searchDateStart)) and (!empty($this->searchDateEnd))) {
+            } elseif ((!empty($this->searchEmpresa)) and (empty($this->searchSuporte)) and (!empty($this->searchStatus)) and (empty($this->searchTipo)) and (!empty($this->searchDateStart)) and (!empty($this->searchDateEnd))) {
                 $this->searchChamEmpStatusDate(); // empresa, status e periodo
-            } elseif ((!empty($this->searchEmpresa)) and (empty($this->searchStatus)) and (!empty($this->searchTipo)) and (!empty($this->searchDateStart)) and (!empty($this->searchDateEnd))) {
+            } elseif ((!empty($this->searchEmpresa)) and (empty($this->searchSuporte)) and (empty($this->searchStatus)) and (!empty($this->searchTipo)) and (!empty($this->searchDateStart)) and (!empty($this->searchDateEnd))) {
                 $this->searchChamEmpTipoDate(); // empresa, tipo e periodo
             } else {
                 $this->listCham($this->page);
@@ -474,6 +513,469 @@ class AdmsListCham
             $this->result = false;
         }
     }
+    
+
+    /**
+     * Metodo pesquisar pela suporte do chamado
+     * @return void
+     */
+    public function searchSuporte(): void
+    {
+        if ($_SESSION['adms_access_level_id'] > 2) {
+
+            if (($_SESSION['adms_access_level_id'] == 4) or ($_SESSION['adms_access_level_id'] == 12)) {
+                $pagination = new \App\adms\Models\helper\AdmsPagination(URLADM . 'list-cham/index', "?search_empresa={$this->searchEmpresa}");
+                $pagination->condition($this->page, $this->limitResult);
+                $pagination->pagination("SELECT COUNT(id) AS num_result FROM adms_cham WHERE (empresa_id= :empresa_id) AND (suporte_id = :suporte_id)",
+                    "empresa_id={$_SESSION['emp_user']}&suporte_id={$this->searchSuporteValue}"
+                );
+                $this->resultPg = $pagination->getResult();
+
+                $listCham = new \App\adms\Models\helper\AdmsRead();
+                $listCham->fullRead("SELECT cham.id, cham.empresa_id, cham.status_id, cham.suporte_id  as suporte_id, user.name as name_user, clie.nome_fantasia as nome_fantasia_clie, sla.name as name_sla, prod.name as name_prod, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
+                            cham.dt_cham, sta.name AS name_sta, cham.dt_status, cham.type_cham  
+                            FROM adms_cham AS cham
+                            INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id                             
+                            INNER JOIN adms_sla AS sla ON sla.id=cham.sla_id   
+                            INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id   
+                            INNER JOIN adms_users AS user ON user.id=cham.suporte_id                              
+                            INNER JOIN adms_produtos AS prod ON prod.id=cham.prod_id
+                            WHERE (cham.empresa_id= :empresa_id) AND (suporte_id = :suporte_id)  ORDER BY dt_status 
+                            LIMIT :limit OFFSET :offset", "empresa_id={$_SESSION['emp_user']}&suporte_id={$this->searchSuporteValue}&limit={$this->limitResult}&offset={$pagination->getOffset()}");
+            }
+        } else {
+            $pagination = new \App\adms\Models\helper\AdmsPagination(URLADM . 'list-cham/index', "?search_empresa={$this->searchEmpresa}");
+                $pagination->condition($this->page, $this->limitResult);
+                $pagination->pagination("SELECT COUNT(id) AS num_result FROM adms_cham WHERE (suporte_id = :suporte_id)",
+                    "esuporte_id={$this->searchSuporteValue}"
+                );
+                $this->resultPg = $pagination->getResult();
+
+                $listCham = new \App\adms\Models\helper\AdmsRead();
+                $listCham->fullRead("SELECT cham.id, cham.empresa_id, cham.status_id, cham.suporte_id  as suporte_id, user.name as name_user, clie.nome_fantasia as nome_fantasia_clie, sla.name as name_sla, prod.name as name_prod, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
+                            cham.dt_cham, sta.name AS name_sta, cham.dt_status, cham.type_cham  
+                            FROM adms_cham AS cham
+                            INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id                             
+                            INNER JOIN adms_sla AS sla ON sla.id=cham.sla_id   
+                            INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id   
+                            INNER JOIN adms_users AS user ON user.id=cham.suporte_id                              
+                            INNER JOIN adms_produtos AS prod ON prod.id=cham.prod_id
+                            WHERE (suporte_id = :suporte_id)  ORDER BY dt_status 
+                            LIMIT :limit OFFSET :offset", "suporte_id={$this->searchSuporteValue}&limit={$this->limitResult}&offset={$pagination->getOffset()}");
+            }
+
+        $this->resultBd = $listCham->getResult();
+        if ($this->resultBd) {
+            $this->result = true;
+        } else {
+            $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum Ticket encontrado!</p>";
+            $this->result = false;
+        }
+    }
+
+    /**
+     * Metodo pesquisar pela empresa do chamado
+     * @return void
+     */
+    public function searchEmpSupPer(): void
+    {
+        if ($_SESSION['adms_access_level_id'] > 2) {
+
+            if (($_SESSION['adms_access_level_id'] == 4) or ($_SESSION['adms_access_level_id'] == 12)) {
+                $pagination = new \App\adms\Models\helper\AdmsPagination(URLADM . 'list-cham/index', "?search_empresa={$this->searchEmpresa}");
+                $pagination->condition($this->page, $this->limitResult);
+                $pagination->pagination("SELECT COUNT(id) AS num_result FROM adms_cham WHERE (empresa_id= :empresa_id) AND (cliente_id= :cliente_id) AND (suporte_id = :suporte_id) AND (dt_cham BETWEEN :search_date_start AND :search_date_end)",
+                    "empresa_id={$_SESSION['emp_user']}&cliente_id={$this->searchEmpresaValue}&suporte_id={$this->searchSuporteValue}&search_date_start={$this->searchDateStart}&search_date_end={$this->searchDateEnd}"
+                );
+                $this->resultPg = $pagination->getResult();
+
+                $listCham = new \App\adms\Models\helper\AdmsRead();
+                $listCham->fullRead("SELECT cham.id, cham.empresa_id, cham.status_id, cham.suporte_id  as suporte_id, user.name as name_user, clie.nome_fantasia as nome_fantasia_clie, sla.name as name_sla, prod.name as name_prod, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
+                            cham.dt_cham, sta.name AS name_sta, cham.dt_status, cham.type_cham  
+                            FROM adms_cham AS cham
+                            INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id                             
+                            INNER JOIN adms_sla AS sla ON sla.id=cham.sla_id   
+                            INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id   
+                            INNER JOIN adms_users AS user ON user.id=cham.suporte_id                              
+                            INNER JOIN adms_produtos AS prod ON prod.id=cham.prod_id
+                            WHERE (cham.empresa_id= :empresa_id) AND (cham.cliente_id= :cliente_id) AND (suporte_id = :suporte_id) AND (dt_cham BETWEEN :search_date_start AND :search_date_end)  ORDER BY dt_status 
+                            LIMIT :limit OFFSET :offset", "empresa_id={$_SESSION['emp_user']}&cliente_id={$this->searchEmpresaValue}&suporte_id={$this->searchSuporteValue}&search_date_start={$this->searchDateStart}&search_date_end={$this->searchDateEnd}&limit={$this->limitResult}&offset={$pagination->getOffset()}");
+            }
+        } else {
+            $pagination = new \App\adms\Models\helper\AdmsPagination(URLADM . 'list-cham/index', "?search_empresa={$this->searchEmpresa}");
+                $pagination->condition($this->page, $this->limitResult);
+                $pagination->pagination("SELECT COUNT(id) AS num_result FROM adms_cham WHERE (cliente_id= :cliente_id) AND (suporte_id = :suporte_id) AND (dt_cham BETWEEN :search_date_start AND :search_date_end)",
+                    "cliente_id={$this->searchEmpresaValue}&suporte_id={$this->searchSuporteValue}&search_date_start={$this->searchDateStart}&search_date_end={$this->searchDateEnd}"
+                );
+                $this->resultPg = $pagination->getResult();
+
+                $listCham = new \App\adms\Models\helper\AdmsRead();
+                $listCham->fullRead("SELECT cham.id, cham.empresa_id, cham.status_id, cham.suporte_id  as suporte_id, user.name as name_user, clie.nome_fantasia as nome_fantasia_clie, sla.name as name_sla, prod.name as name_prod, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
+                            cham.dt_cham, sta.name AS name_sta, cham.dt_status, cham.type_cham  
+                            FROM adms_cham AS cham
+                            INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id                             
+                            INNER JOIN adms_sla AS sla ON sla.id=cham.sla_id   
+                            INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id   
+                            INNER JOIN adms_users AS user ON user.id=cham.suporte_id                              
+                            INNER JOIN adms_produtos AS prod ON prod.id=cham.prod_id
+                            WHERE (cham.cliente_id= :cliente_id) AND (suporte_id = :suporte_id) AND (dt_cham BETWEEN :search_date_start AND :search_date_end)  ORDER BY dt_status 
+                            LIMIT :limit OFFSET :offset", "cliente_id={$this->searchEmpresaValue}&suporte_id={$this->searchSuporteValue}&search_date_start={$this->searchDateStart}&search_date_end={$this->searchDateEnd}&limit={$this->limitResult}&offset={$pagination->getOffset()}");
+            }
+
+        $this->resultBd = $listCham->getResult();
+        if ($this->resultBd) {
+            $this->result = true;
+        } else {
+            $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum Ticket encontrado!</p>";
+            $this->result = false;
+        }
+    }
+    
+
+    /**
+     * Metodo pesquisar pela empresa do chamado
+     * @return void
+     */
+    public function searchEmpSupPerSta(): void
+    {
+        if ($_SESSION['adms_access_level_id'] > 2) {
+
+            if (($_SESSION['adms_access_level_id'] == 4) or ($_SESSION['adms_access_level_id'] == 12)) {
+                $pagination = new \App\adms\Models\helper\AdmsPagination(URLADM . 'list-cham/index', "?search_empresa={$this->searchEmpresa}");
+                $pagination->condition($this->page, $this->limitResult);
+                $pagination->pagination("SELECT COUNT(id) AS num_result FROM adms_cham WHERE (empresa_id= :empresa_id) AND (cliente_id= :cliente_id) AND (suporte_id = :suporte_id) AND (status_id= :status_id) AND (dt_cham BETWEEN :search_date_start AND :search_date_end)",
+                    "empresa_id={$_SESSION['emp_user']}&cliente_id={$this->searchEmpresaValue}&suporte_id={$this->searchSuporteValue}&status_id={$this->searchStatusValue}&search_date_start={$this->searchDateStart}&search_date_end={$this->searchDateEnd}"
+                );
+                $this->resultPg = $pagination->getResult();
+
+                $listCham = new \App\adms\Models\helper\AdmsRead();
+                $listCham->fullRead("SELECT cham.id, cham.empresa_id, cham.status_id, cham.suporte_id  as suporte_id, user.name as name_user, clie.nome_fantasia as nome_fantasia_clie, sla.name as name_sla, prod.name as name_prod, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
+                            cham.dt_cham, sta.name AS name_sta, cham.dt_status, cham.type_cham  
+                            FROM adms_cham AS cham
+                            INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id                             
+                            INNER JOIN adms_sla AS sla ON sla.id=cham.sla_id   
+                            INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id   
+                            INNER JOIN adms_users AS user ON user.id=cham.suporte_id                              
+                            INNER JOIN adms_produtos AS prod ON prod.id=cham.prod_id
+                            WHERE (cham.empresa_id= :empresa_id) AND (cham.cliente_id= :cliente_id) AND (suporte_id = :suporte_id) AND (status_id= :status_id) AND (dt_cham BETWEEN :search_date_start AND :search_date_end)  ORDER BY dt_status 
+                            LIMIT :limit OFFSET :offset", "empresa_id={$_SESSION['emp_user']}&cliente_id={$this->searchEmpresaValue}&suporte_id={$this->searchSuporteValue}&status_id={$this->searchStatusValue}&search_date_start={$this->searchDateStart}&search_date_end={$this->searchDateEnd}&limit={$this->limitResult}&offset={$pagination->getOffset()}");
+            }
+        } else {
+                $pagination = new \App\adms\Models\helper\AdmsPagination(URLADM . 'list-cham/index', "?search_empresa={$this->searchEmpresa}");
+                $pagination->condition($this->page, $this->limitResult);
+                $pagination->pagination("SELECT COUNT(id) AS num_result FROM adms_cham WHERE (cliente_id= :cliente_id) AND (suporte_id = :suporte_id) AND (status_id= :status_id) AND (dt_cham BETWEEN :search_date_start AND :search_date_end)",
+                    "cliente_id={$this->searchEmpresaValue}&suporte_id={$this->searchSuporteValue}&status_id={$this->searchStatusValue}&search_date_start={$this->searchDateStart}&search_date_end={$this->searchDateEnd}"
+                );
+                $this->resultPg = $pagination->getResult();
+
+                $listCham = new \App\adms\Models\helper\AdmsRead();
+                $listCham->fullRead("SELECT cham.id, cham.empresa_id, cham.status_id, cham.suporte_id  as suporte_id, user.name as name_user, clie.nome_fantasia as nome_fantasia_clie, sla.name as name_sla, prod.name as name_prod, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
+                            cham.dt_cham, sta.name AS name_sta, cham.dt_status, cham.type_cham  
+                            FROM adms_cham AS cham
+                            INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id                             
+                            INNER JOIN adms_sla AS sla ON sla.id=cham.sla_id   
+                            INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id   
+                            INNER JOIN adms_users AS user ON user.id=cham.suporte_id                              
+                            INNER JOIN adms_produtos AS prod ON prod.id=cham.prod_id
+                            WHERE (cham.cliente_id= :cliente_id) AND (suporte_id = :suporte_id) AND (status_id= :status_id) AND (dt_cham BETWEEN :search_date_start AND :search_date_end)  ORDER BY dt_status 
+                            LIMIT :limit OFFSET :offset", "cliente_id={$this->searchEmpresaValue}&suporte_id={$this->searchSuporteValue}&status_id={$this->searchStatusValue}&search_date_start={$this->searchDateStart}&search_date_end={$this->searchDateEnd}&limit={$this->limitResult}&offset={$pagination->getOffset()}");
+            }
+        $this->resultBd = $listCham->getResult();
+        if ($this->resultBd) {
+            $this->result = true;
+        } else {
+            $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum Ticket encontrado!</p>";
+            $this->result = false;
+        }
+    }
+    
+
+    /**
+     * Metodo pesquisar pela empresa do chamado
+     * @return void
+     */
+    public function searchEmpSupPerStaTip(): void
+    {
+        if ($_SESSION['adms_access_level_id'] > 2) {
+
+            if (($_SESSION['adms_access_level_id'] == 4) or ($_SESSION['adms_access_level_id'] == 12)) {
+                $pagination = new \App\adms\Models\helper\AdmsPagination(URLADM . 'list-cham/index', "?search_empresa={$this->searchEmpresa}");
+                $pagination->condition($this->page, $this->limitResult);
+                $pagination->pagination("SELECT COUNT(id) AS num_result FROM adms_cham WHERE (empresa_id= :empresa_id) AND (cliente_id= :cliente_id) AND (suporte_id = :suporte_id) AND (status_id= :status_id) AND (type_cham= :type_cham) AND (dt_cham BETWEEN :search_date_start AND :search_date_end)",
+                    "empresa_id={$_SESSION['emp_user']}&cliente_id={$this->searchEmpresaValue}&suporte_id={$this->searchSuporteValue}&status_id={$this->searchStatusValue}&type_cham={$this->searchTipoValue}&search_date_start={$this->searchDateStart}&search_date_end={$this->searchDateEnd}"
+                );
+                $this->resultPg = $pagination->getResult();
+
+                $listCham = new \App\adms\Models\helper\AdmsRead();
+                $listCham->fullRead("SELECT cham.id, cham.empresa_id, cham.status_id, cham.suporte_id  as suporte_id, user.name as name_user, clie.nome_fantasia as nome_fantasia_clie, sla.name as name_sla, prod.name as name_prod, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
+                            cham.dt_cham, sta.name AS name_sta, cham.dt_status, cham.type_cham  
+                            FROM adms_cham AS cham
+                            INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id                             
+                            INNER JOIN adms_sla AS sla ON sla.id=cham.sla_id   
+                            INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id   
+                            INNER JOIN adms_users AS user ON user.id=cham.suporte_id                              
+                            INNER JOIN adms_produtos AS prod ON prod.id=cham.prod_id
+                            WHERE (cham.empresa_id= :empresa_id) AND (cham.cliente_id= :cliente_id) AND (suporte_id = :suporte_id) AND (status_id= :status_id) AND (type_cham= :type_cham) AND (dt_cham BETWEEN :search_date_start AND :search_date_end)  ORDER BY dt_status 
+                            LIMIT :limit OFFSET :offset", "empresa_id={$_SESSION['emp_user']}&cliente_id={$this->searchEmpresaValue}&suporte_id={$this->searchSuporteValue}&status_id={$this->searchStatusValue}&type_cham={$this->searchTipoValue}&search_date_start={$this->searchDateStart}&search_date_end={$this->searchDateEnd}&limit={$this->limitResult}&offset={$pagination->getOffset()}");
+            }
+        } else {
+           $pagination = new \App\adms\Models\helper\AdmsPagination(URLADM . 'list-cham/index', "?search_empresa={$this->searchEmpresa}");
+                $pagination->condition($this->page, $this->limitResult);
+                $pagination->pagination("SELECT COUNT(id) AS num_result FROM adms_cham WHERE (cliente_id= :cliente_id) AND (suporte_id = :suporte_id) AND (status_id= :status_id) AND (type_cham= :type_cham) AND (dt_cham BETWEEN :search_date_start AND :search_date_end)",
+                    "cliente_id={$this->searchEmpresaValue}&suporte_id={$this->searchSuporteValue}&status_id={$this->searchStatusValue}&type_cham={$this->searchTipoValue}&search_date_start={$this->searchDateStart}&search_date_end={$this->searchDateEnd}"
+                );
+                $this->resultPg = $pagination->getResult();
+
+                $listCham = new \App\adms\Models\helper\AdmsRead();
+                $listCham->fullRead("SELECT cham.id, cham.empresa_id, cham.status_id, cham.suporte_id  as suporte_id, user.name as name_user, clie.nome_fantasia as nome_fantasia_clie, sla.name as name_sla, prod.name as name_prod, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
+                            cham.dt_cham, sta.name AS name_sta, cham.dt_status, cham.type_cham  
+                            FROM adms_cham AS cham
+                            INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id                             
+                            INNER JOIN adms_sla AS sla ON sla.id=cham.sla_id   
+                            INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id   
+                            INNER JOIN adms_users AS user ON user.id=cham.suporte_id                              
+                            INNER JOIN adms_produtos AS prod ON prod.id=cham.prod_id
+                            WHERE (cham.cliente_id= :cliente_id) AND (suporte_id = :suporte_id) AND (status_id= :status_id) AND (type_cham= :type_cham) AND (dt_cham BETWEEN :search_date_start AND :search_date_end)  ORDER BY dt_status 
+                            LIMIT :limit OFFSET :offset", "cliente_id={$this->searchEmpresaValue}&suporte_id={$this->searchSuporteValue}&status_id={$this->searchStatusValue}&type_cham={$this->searchTipoValue}&search_date_start={$this->searchDateStart}&search_date_end={$this->searchDateEnd}&limit={$this->limitResult}&offset={$pagination->getOffset()}");
+            }
+        $this->resultBd = $listCham->getResult();
+        if ($this->resultBd) {
+            $this->result = true;
+        } else {
+            $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum Ticket encontrado!</p>";
+            $this->result = false;
+        }
+    }
+    
+
+    /**
+     * Metodo pesquisar pela empresa do chamado
+     * @return void
+     */
+    public function searchSupStaTip(): void
+    {
+        if ($_SESSION['adms_access_level_id'] > 2) {
+
+            if (($_SESSION['adms_access_level_id'] == 4) or ($_SESSION['adms_access_level_id'] == 12)) {
+                $pagination = new \App\adms\Models\helper\AdmsPagination(URLADM . 'list-cham/index', "?search_empresa={$this->searchEmpresa}");
+                $pagination->condition($this->page, $this->limitResult);
+                $pagination->pagination("SELECT COUNT(id) AS num_result FROM adms_cham WHERE (empresa_id= :empresa_id) AND (suporte_id = :suporte_id) AND (status_id= :status_id) AND (type_cham= :type_cham)",
+                    "empresa_id={$_SESSION['emp_user']}&suporte_id={$this->searchSuporteValue}&status_id={$this->searchStatusValue}&type_cham={$this->searchTipoValue}"
+                );
+                $this->resultPg = $pagination->getResult();
+
+                $listCham = new \App\adms\Models\helper\AdmsRead();
+                $listCham->fullRead("SELECT cham.id, cham.empresa_id, cham.status_id, cham.suporte_id  as suporte_id, user.name as name_user, clie.nome_fantasia as nome_fantasia_clie, sla.name as name_sla, prod.name as name_prod, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
+                            cham.dt_cham, sta.name AS name_sta, cham.dt_status, cham.type_cham  
+                            FROM adms_cham AS cham
+                            INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id                             
+                            INNER JOIN adms_sla AS sla ON sla.id=cham.sla_id   
+                            INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id   
+                            INNER JOIN adms_users AS user ON user.id=cham.suporte_id                              
+                            INNER JOIN adms_produtos AS prod ON prod.id=cham.prod_id
+                            WHERE (cham.empresa_id= :empresa_id) AND (suporte_id = :suporte_id) AND (status_id= :status_id) AND (type_cham= :type_cham)   ORDER BY dt_status 
+                            LIMIT :limit OFFSET :offset", "empresa_id={$_SESSION['emp_user']}&suporte_id={$this->searchSuporteValue}&status_id={$this->searchStatusValue}&type_cham={$this->searchTipoValue}&limit={$this->limitResult}&offset={$pagination->getOffset()}");
+            }
+        } else {
+           $pagination = new \App\adms\Models\helper\AdmsPagination(URLADM . 'list-cham/index', "?search_empresa={$this->searchEmpresa}");
+                $pagination->condition($this->page, $this->limitResult);
+                $pagination->pagination("SELECT COUNT(id) AS num_result FROM adms_cham WHERE (cliente_id= :cliente_id) AND (suporte_id = :suporte_id) AND (status_id= :status_id) AND (type_cham= :type_cham) AND (dt_cham BETWEEN :search_date_start AND :search_date_end)",
+                    "cliente_id={$this->searchEmpresaValue}&suporte_id={$this->searchSuporteValue}&status_id={$this->searchStatusValue}&type_cham={$this->searchTipoValue}&search_date_start={$this->searchDateStart}&search_date_end={$this->searchDateEnd}"
+                );
+                $this->resultPg = $pagination->getResult();
+
+                $listCham = new \App\adms\Models\helper\AdmsRead();
+                $listCham->fullRead("SELECT cham.id, cham.empresa_id, cham.status_id, cham.suporte_id  as suporte_id, user.name as name_user, clie.nome_fantasia as nome_fantasia_clie, sla.name as name_sla, prod.name as name_prod, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
+                            cham.dt_cham, sta.name AS name_sta, cham.dt_status, cham.type_cham  
+                            FROM adms_cham AS cham
+                            INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id                             
+                            INNER JOIN adms_sla AS sla ON sla.id=cham.sla_id   
+                            INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id   
+                            INNER JOIN adms_users AS user ON user.id=cham.suporte_id                              
+                            INNER JOIN adms_produtos AS prod ON prod.id=cham.prod_id
+                            WHERE (cham.cliente_id= :cliente_id) AND (suporte_id = :suporte_id) AND (status_id= :status_id) AND (type_cham= :type_cham) AND (dt_cham BETWEEN :search_date_start AND :search_date_end)  ORDER BY dt_status 
+                            LIMIT :limit OFFSET :offset", "cliente_id={$this->searchEmpresaValue}&suporte_id={$this->searchSuporteValue}&status_id={$this->searchStatusValue}&type_cham={$this->searchTipoValue}&search_date_start={$this->searchDateStart}&search_date_end={$this->searchDateEnd}&limit={$this->limitResult}&offset={$pagination->getOffset()}");
+            }
+        $this->resultBd = $listCham->getResult();
+        if ($this->resultBd) {
+            $this->result = true;
+        } else {
+            $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum Ticket encontrado!</p>";
+            $this->result = false;
+        }
+    }
+    
+    
+    /**
+     * Metodo pesquisar pela empresa do chamado
+     * @return void
+     */
+    public function searchSupSta(): void
+    {
+        if ($_SESSION['adms_access_level_id'] > 2) {
+
+            if (($_SESSION['adms_access_level_id'] == 4) or ($_SESSION['adms_access_level_id'] == 12)) {
+                $pagination = new \App\adms\Models\helper\AdmsPagination(URLADM . 'list-cham/index', "?search_empresa={$this->searchEmpresa}");
+                $pagination->condition($this->page, $this->limitResult);
+                $pagination->pagination("SELECT COUNT(id) AS num_result FROM adms_cham WHERE (empresa_id= :empresa_id) AND (suporte_id= :suporte_id) AND (status_id= :status_id)",
+                    "empresa_id={$_SESSION['emp_user']}&suporte_id={$this->searchSuporteValue}&status_id={$this->searchStatusValue}"
+                );
+                $this->resultPg = $pagination->getResult();
+
+                $listCham = new \App\adms\Models\helper\AdmsRead();
+                $listCham->fullRead("SELECT cham.id, cham.empresa_id, cham.status_id, cham.suporte_id  as suporte_id, user.name as name_user, clie.nome_fantasia as nome_fantasia_clie, sla.name as name_sla, prod.name as name_prod, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
+                            cham.dt_cham, sta.name AS name_sta, cham.dt_status, cham.type_cham  
+                            FROM adms_cham AS cham
+                            INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id                             
+                            INNER JOIN adms_sla AS sla ON sla.id=cham.sla_id   
+                            INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id   
+                            INNER JOIN adms_users AS user ON user.id=cham.suporte_id                              
+                            INNER JOIN adms_produtos AS prod ON prod.id=cham.prod_id
+                            WHERE (cham.empresa_id= :empresa_id) AND (suporte_id = :suporte_id) AND (status_id= :status_id) ORDER BY dt_status 
+                            LIMIT :limit OFFSET :offset", "empresa_id={$_SESSION['emp_user']}&suporte_id={$this->searchSuporteValue}&status_id={$this->searchStatusValue}&limit={$this->limitResult}&offset={$pagination->getOffset()}");
+            }
+        } else {
+           $pagination = new \App\adms\Models\helper\AdmsPagination(URLADM . 'list-cham/index', "?search_empresa={$this->searchEmpresa}");
+                $pagination->condition($this->page, $this->limitResult);
+                $pagination->pagination("SELECT COUNT(id) AS num_result FROM adms_cham WHERE (cliente_id= :cliente_id) AND (suporte_id = :suporte_id) AND (status_id= :status_id) AND (type_cham= :type_cham) AND (dt_cham BETWEEN :search_date_start AND :search_date_end)",
+                    "cliente_id={$this->searchEmpresaValue}&suporte_id={$this->searchSuporteValue}&status_id={$this->searchStatusValue}&type_cham={$this->searchTipoValue}&search_date_start={$this->searchDateStart}&search_date_end={$this->searchDateEnd}"
+                );
+                $this->resultPg = $pagination->getResult();
+
+                $listCham = new \App\adms\Models\helper\AdmsRead();
+                $listCham->fullRead("SELECT cham.id, cham.empresa_id, cham.status_id, cham.suporte_id  as suporte_id, user.name as name_user, clie.nome_fantasia as nome_fantasia_clie, sla.name as name_sla, prod.name as name_prod, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
+                            cham.dt_cham, sta.name AS name_sta, cham.dt_status, cham.type_cham  
+                            FROM adms_cham AS cham
+                            INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id                             
+                            INNER JOIN adms_sla AS sla ON sla.id=cham.sla_id   
+                            INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id   
+                            INNER JOIN adms_users AS user ON user.id=cham.suporte_id                              
+                            INNER JOIN adms_produtos AS prod ON prod.id=cham.prod_id
+                            WHERE (cham.cliente_id= :cliente_id) AND (suporte_id = :suporte_id) AND (status_id= :status_id) AND (type_cham= :type_cham) AND (dt_cham BETWEEN :search_date_start AND :search_date_end)  ORDER BY dt_status 
+                            LIMIT :limit OFFSET :offset", "cliente_id={$this->searchEmpresaValue}&suporte_id={$this->searchSuporteValue}&status_id={$this->searchStatusValue}&type_cham={$this->searchTipoValue}&search_date_start={$this->searchDateStart}&search_date_end={$this->searchDateEnd}&limit={$this->limitResult}&offset={$pagination->getOffset()}");
+            }
+        $this->resultBd = $listCham->getResult();
+        if ($this->resultBd) {
+            $this->result = true;
+        } else {
+            $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum Ticket encontrado!</p>";
+            $this->result = false;
+        }
+    }
+    
+
+    /**
+     * Metodo pesquisar pela empresa do chamado
+     * @return void
+     */
+    public function searchSupTip(): void
+    {
+        if ($_SESSION['adms_access_level_id'] > 2) {
+
+            if (($_SESSION['adms_access_level_id'] == 4) or ($_SESSION['adms_access_level_id'] == 12)) {
+                $pagination = new \App\adms\Models\helper\AdmsPagination(URLADM . 'list-cham/index', "?search_empresa={$this->searchEmpresa}");
+                $pagination->condition($this->page, $this->limitResult);
+                $pagination->pagination("SELECT COUNT(id) AS num_result FROM adms_cham WHERE (empresa_id= :empresa_id) AND (suporte_id = :suporte_id) AND (type_cham= :type_cham)",
+                    "empresa_id={$_SESSION['emp_user']}&suporte_id={$this->searchSuporteValue}&type_cham={$this->searchTipoValue}"
+                );
+                $this->resultPg = $pagination->getResult();
+
+                $listCham = new \App\adms\Models\helper\AdmsRead();
+                $listCham->fullRead("SELECT cham.id, cham.empresa_id, cham.status_id, cham.suporte_id  as suporte_id, user.name as name_user, clie.nome_fantasia as nome_fantasia_clie, sla.name as name_sla, prod.name as name_prod, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
+                            cham.dt_cham, sta.name AS name_sta, cham.dt_status, cham.type_cham  
+                            FROM adms_cham AS cham
+                            INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id                             
+                            INNER JOIN adms_sla AS sla ON sla.id=cham.sla_id   
+                            INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id   
+                            INNER JOIN adms_users AS user ON user.id=cham.suporte_id                              
+                            INNER JOIN adms_produtos AS prod ON prod.id=cham.prod_id
+                            WHERE (cham.empresa_id= :empresa_id) AND (suporte_id = :suporte_id) AND (type_cham= :type_cham)   ORDER BY dt_status 
+                            LIMIT :limit OFFSET :offset", "empresa_id={$_SESSION['emp_user']}&suporte_id={$this->searchSuporteValue}&type_cham={$this->searchTipoValue}&limit={$this->limitResult}&offset={$pagination->getOffset()}");
+            }
+        } else {
+                $pagination = new \App\adms\Models\helper\AdmsPagination(URLADM . 'list-cham/index', "?search_empresa={$this->searchEmpresa}");
+                $pagination->condition($this->page, $this->limitResult);
+                $pagination->pagination("SELECT COUNT(id) AS num_result FROM adms_cham WHERE (suporte_id = :suporte_id) AND (type_cham= :type_cham)",
+                    "suporte_id={$this->searchSuporteValue}&type_cham={$this->searchTipoValue}"
+                );
+                $this->resultPg = $pagination->getResult();
+
+                $listCham = new \App\adms\Models\helper\AdmsRead();
+                $listCham->fullRead("SELECT cham.id, cham.empresa_id, cham.status_id, cham.suporte_id  as suporte_id, user.name as name_user, clie.nome_fantasia as nome_fantasia_clie, sla.name as name_sla, prod.name as name_prod, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
+                            cham.dt_cham, sta.name AS name_sta, cham.dt_status, cham.type_cham  
+                            FROM adms_cham AS cham
+                            INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id                             
+                            INNER JOIN adms_sla AS sla ON sla.id=cham.sla_id   
+                            INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id   
+                            INNER JOIN adms_users AS user ON user.id=cham.suporte_id                              
+                            INNER JOIN adms_produtos AS prod ON prod.id=cham.prod_id
+                            WHERE (suporte_id = :suporte_id) AND (type_cham= :type_cham)   ORDER BY dt_status 
+                            LIMIT :limit OFFSET :offset", "suporte_id={$this->searchSuporteValue}&type_cham={$this->searchTipoValue}&limit={$this->limitResult}&offset={$pagination->getOffset()}");
+            }
+        $this->resultBd = $listCham->getResult();
+        if ($this->resultBd) {
+            $this->result = true;
+        } else {
+            $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum Ticket encontrado!</p>";
+            $this->result = false;
+        }
+    }
+
+    /**
+     * Metodo pesquisar pela empresa e suporte
+     * @return void
+     */
+    public function searchEmpSup(): void
+    {
+        if ($_SESSION['adms_access_level_id'] > 2) {
+
+            if (($_SESSION['adms_access_level_id'] == 4) or ($_SESSION['adms_access_level_id'] == 12)) {
+                $pagination = new \App\adms\Models\helper\AdmsPagination(URLADM . 'list-cham/index', "?search_empresa={$this->searchEmpresa}");
+                $pagination->condition($this->page, $this->limitResult);
+                $pagination->pagination("SELECT COUNT(id) AS num_result FROM adms_cham WHERE (empresa_id= :empresa_id) AND (cliente_id= :cliente_id) AND (suporte_id = :suporte_id)",
+                    "empresa_id={$_SESSION['emp_user']}&cliente_id={$this->searchEmpresaValue}&suporte_id={$this->searchSuporteValue}"
+                );
+                $this->resultPg = $pagination->getResult();
+
+                $listCham = new \App\adms\Models\helper\AdmsRead();
+                $listCham->fullRead("SELECT cham.id, cham.empresa_id, cham.status_id, cham.suporte_id  as suporte_id, user.name as name_user, clie.nome_fantasia as nome_fantasia_clie, sla.name as name_sla, prod.name as name_prod, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
+                            cham.dt_cham, sta.name AS name_sta, cham.dt_status, cham.type_cham  
+                            FROM adms_cham AS cham
+                            INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id                             
+                            INNER JOIN adms_sla AS sla ON sla.id=cham.sla_id   
+                            INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id   
+                            INNER JOIN adms_users AS user ON user.id=cham.suporte_id                              
+                            INNER JOIN adms_produtos AS prod ON prod.id=cham.prod_id
+                                    WHERE (cham.empresa_id= :empresa_id) AND (cham.cliente_id= :cliente_id) AND (suporte_id = :suporte_id)  ORDER BY dt_status 
+                                    LIMIT :limit OFFSET :offset", "empresa_id={$_SESSION['emp_user']}&cliente_id={$this->searchEmpresaValue}&suporte_id={$this->searchSuporteValue}&limit={$this->limitResult}&offset={$pagination->getOffset()}");
+            }
+        } else {
+            $pagination = new \App\adms\Models\helper\AdmsPagination(URLADM . 'list-cham/index', "?search_empresa={$this->searchEmpresa}");
+            $pagination->condition($this->page, $this->limitResult);
+            $pagination->pagination("SELECT COUNT(id) AS num_result FROM adms_cham WHERE (cliente_id= :cliente_id)", "cliente_id={$this->searchEmpresaValue}");
+            $this->resultPg = $pagination->getResult();
+
+            $listCham = new \App\adms\Models\helper\AdmsRead();
+            $listCham->fullRead("SELECT cham.id, cham.empresa_id, cham.status_id, cham.suporte_id  as suporte_id, user.name as name_user, clie.nome_fantasia as nome_fantasia_clie, sla.name as name_sla, prod.name as name_prod, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
+                            cham.dt_cham, sta.name AS name_sta, cham.dt_status, cham.type_cham  
+                            FROM adms_cham AS cham
+                            INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id                             
+                            INNER JOIN adms_sla AS sla ON sla.id=cham.sla_id   
+                            INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id   
+                            INNER JOIN adms_users AS user ON user.id=cham.suporte_id                              
+                            INNER JOIN adms_produtos AS prod ON prod.id=cham.prod_id
+                                WHERE cham.cliente_id= :cliente_id  ORDER BY dt_status 
+                                LIMIT :limit OFFSET :offset", "cliente_id={$this->searchEmpresaValue}&limit={$this->limitResult}&offset={$pagination->getOffset()}");
+        }
+
+        $this->resultBd = $listCham->getResult();
+        if ($this->resultBd) {
+            $this->result = true;
+        } else {
+            $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum Ticket encontrado!</p>";
+            $this->result = false;
+        }
+    }
 
     /**
      * Metodo pesquisar pela empresa, status e tipo do chamado
@@ -542,6 +1044,78 @@ class AdmsListCham
                 $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum Ticket encontrado!</p>";
                 $this->result = false;
             }
+        }
+    }
+    
+
+    /**
+     * Metodo pesquisar pelo suporte e periodo
+     * @return void
+     */
+    public function searchSupPeriodo(): void
+    {
+        if ($_SESSION['adms_access_level_id'] > 2) {
+
+            //Se for 4 - Cliente Administrativo
+            if (($_SESSION['adms_access_level_id'] == 4) or ($_SESSION['adms_access_level_id'] == 12)) {
+                $pagination = new \App\adms\Models\helper\AdmsPagination(URLADM . 'list-cham/index', "?search_empresa={$this->searchEmpresa}&search_date_start={$this->searchDateStart}&search_date_end={$this->searchDateEnd}");
+                $pagination->condition($this->page, $this->limitResult);
+                $pagination->pagination("SELECT COUNT(id) AS num_result FROM adms_cham WHERE (empresa_id = :empresa_id) AND (suporte_id = :suporte_id) AND (dt_cham BETWEEN :search_date_start AND :search_date_end)",
+                    "empresa_id={$_SESSION['emp_user']}&suporte_id={$this->searchSuporteValue}&search_date_start={$this->searchDateStart}&search_date_end={$this->searchDateEnd}"
+                );
+                $this->resultPg = $pagination->getResult();
+
+                $listUsers = new \App\adms\Models\helper\AdmsRead();
+                $listUsers->fullRead("SELECT cham.id, cham.empresa_id, cham.status_id, cham.suporte_id  as suporte_id, user.name as name_user, clie.nome_fantasia as nome_fantasia_clie, sla.name as name_sla, prod.name as name_prod, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
+                            cham.dt_cham, sta.name AS name_sta, cham.dt_status, cham.type_cham  
+                            FROM adms_cham AS cham
+                            INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id                             
+                            INNER JOIN adms_sla AS sla ON sla.id=cham.sla_id   
+                            INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id   
+                            INNER JOIN adms_users AS user ON user.id=cham.suporte_id                              
+                            INNER JOIN adms_produtos AS prod ON prod.id=cham.prod_id
+                WHERE (cham.empresa_id = :empresa_id) AND (suporte_id = :suporte_id) AND (cham.dt_cham BETWEEN :search_date_start AND :search_date_end)
+                 ORDER BY dt_status 
+                LIMIT :limit OFFSET :offset", "empresa_id={$_SESSION['emp_user']}&suporte_id={$this->searchSuporteValue}&search_date_start={$this->searchDateStart}&search_date_end={$this->searchDateEnd}&limit={$this->limitResult}&offset={$pagination->getOffset()}");
+
+                $this->resultBd = $listUsers->getResult();
+                if ($this->resultBd) {
+                    $this->result = true;
+                } else {
+                    $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum Ticket encontrado!</p>";
+                    $this->result = false;
+                }
+            }
+        } else {
+
+            $pagination = new \App\adms\Models\helper\AdmsPagination(URLADM . 'list-cham/index', "?search_empresa={$this->searchEmpresa}&search_date_start={$this->searchDateStart}&search_date_end={$this->searchDateEnd}");
+                $pagination->condition($this->page, $this->limitResult);
+                $pagination->pagination(
+                    "SELECT COUNT(id) AS num_result FROM adms_cham WHERE (suporte_id = :suporte_id) AND (dt_cham BETWEEN :search_date_start AND :search_date_end)",
+                    "suporte_id={$this->searchSuporteValue}&search_date_start={$this->searchDateStart}&search_date_end={$this->searchDateEnd}"
+                );
+                $this->resultPg = $pagination->getResult();
+
+                $listUsers = new \App\adms\Models\helper\AdmsRead();
+                $listUsers->fullRead("SELECT cham.id, cham.empresa_id, cham.status_id, cham.suporte_id  as suporte_id, user.name as name_user, clie.nome_fantasia as nome_fantasia_clie, sla.name as name_sla, prod.name as name_prod, cham.contato as contato_cham, cham.tel_contato as tel_contato_cham, 
+                            cham.dt_cham, sta.name AS name_sta, cham.dt_status, cham.type_cham  
+                            FROM adms_cham AS cham
+                            INNER JOIN adms_clientes AS clie ON clie.id=cham.cliente_id                             
+                            INNER JOIN adms_sla AS sla ON sla.id=cham.sla_id   
+                            INNER JOIN adms_cham_status AS sta ON sta.id=cham.status_id   
+                            INNER JOIN adms_users AS user ON user.id=cham.suporte_id                              
+                            INNER JOIN adms_produtos AS prod ON prod.id=cham.prod_id
+                WHERE (suporte_id = :suporte_id) AND (cham.dt_cham BETWEEN :search_date_start AND :search_date_end)
+                 ORDER BY dt_status 
+                LIMIT :limit OFFSET :offset", "suporte_id={$this->searchSuporteValue}&search_date_start={$this->searchDateStart}&search_date_end={$this->searchDateEnd}&limit={$this->limitResult}&offset={$pagination->getOffset()}");
+
+                $this->resultBd = $listUsers->getResult();
+                if ($this->resultBd) {
+                    $this->result = true;
+                } else {
+                    $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum Ticket encontrado!</p>";
+                    $this->result = false;
+                }
         }
     }
 
@@ -1705,8 +2279,13 @@ class AdmsListCham
                 $listSta = new \App\adms\Models\helper\AdmsRead();
                 $listSta->fullRead("SELECT id, name FROM adms_cham_status  ORDER BY name ASC");
                 $registry['nome_status'] = $listSta->getResult();
+                $listSup = new \App\adms\Models\helper\AdmsRead();  
 
-                $this->listRegistryAdd = ['nome_clie' => $registry['nome_clie'], 'nome_status' => $registry['nome_status']];
+                $listSup->fullRead("SELECT id, name FROM adms_users
+                WHERE empresa_id= :empresa AND adms_access_level_id= :nivel_acesso ORDER BY name", "empresa={$_SESSION['emp_user']}&nivel_acesso=12");
+                $registry['nome_sup'] = $listSup->getResult();
+
+                $this->listRegistryAdd = ['nome_clie' => $registry['nome_clie'], 'nome_status' => $registry['nome_status'], 'nome_sup' => $registry['nome_sup']];
                 return $this->listRegistryAdd;
                 // Cliente Final
             } elseif ($_SESSION['adms_access_level_id'] == 14) {

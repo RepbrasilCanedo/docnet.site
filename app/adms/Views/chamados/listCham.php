@@ -112,7 +112,7 @@ if (isset($this->data['form'])) {
                             </div>
                             
                             <!--4: Cliente Administrador ou tecnico do cliente-->                        
-                            <?php } elseif (($_SESSION['adms_access_level_id'] == 4) or ($_SESSION['adms_access_level_id'] == 12)) { ?>
+                        <?php } elseif (($_SESSION['adms_access_level_id'] == 4) or ($_SESSION['adms_access_level_id'] == 12)) { ?>
 
                             <div class="column">
                                 <?php
@@ -153,6 +153,24 @@ if (isset($this->data['form'])) {
                                             echo "<option value='$id' selected>$nome_fantasia</option>";
                                         } else {
                                             echo "<option value='$id'>$nome_fantasia</option>";
+                                        }
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+
+                            
+                            <div class="column">
+                                <label class="title-input">Suporte:</label>
+                                <select name="search_suporte" id="search_suporte" class="input-adm">
+                                    <option value="">Todos</option>
+                                    <?php
+                                    foreach ($this->data['select']['nome_sup'] as $searchSuporte) {
+                                        extract($searchSuporte);
+                                        if (isset($valorForm['search_suporte']) and $valorForm['search_suporte'] == $id) {
+                                            echo "<option value='$id' selected>$name</option>";
+                                        } else {
+                                            echo "<option value='$id'>$name</option>";
                                         }
                                     }
                                     ?>

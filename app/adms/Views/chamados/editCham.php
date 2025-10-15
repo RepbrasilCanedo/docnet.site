@@ -27,18 +27,18 @@ if (isset($this->data['form'][0])) {
                         $name_sta = $valorForm['name_sta'];
                     }
                     ?>
-                    <h1 class="mb-3"><?php echo $name_sta; ?></h1>
+                    <h2 class="mb-3"><?php echo $name_sta; ?></h2>
 
                 </div>
             </div>
             <div class="top-list-right">
                 <?php
                 if ($this->data['button']['list_cham']) {
-                    echo "<a href='" . URLADM . "list-cham/index' class='btn-info'>Listar</a> ";
+                    echo "<a href='" . URLADM . "list-cham/index' class='btn-info aButton'>Listar</a> ";
                 }
                 if (isset($valorForm['id'])) {
                     if ($this->data['button']['view_cham']) {
-                        echo "<a href='" . URLADM . "view-cham/index/" . $_SESSION['set_cham'] . "' class='btn-primary'>Visualizar</a><br><br>";
+                        echo "<a href='" . URLADM . "view-cham/index/" . $_SESSION['set_cham'] . "' class='btn-primary aButton'>Visualizar</a>";
                     }
                 }
                 ?>

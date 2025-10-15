@@ -48,17 +48,16 @@ class AdmsLogin
 
         $viewUser = new \App\adms\Models\helper\AdmsRead();
         $viewUser->fullRead("SELECT usr.id, usr.name, usr.nickname, usr.email, usr.password, usr.image, usr.adms_sits_user_id, usr.adms_access_level_id,
-                            lev.order_levels, usr.empresa_id, usr.cliente_id, usr.contr_id, usr.setor_id, emp_pri.base_dados
+                            lev.order_levels, usr.empresa_id, usr.cliente_id, usr.contr_id, usr.setor_id 
                             FROM adms_users AS usr
                             INNER JOIN adms_access_levels AS lev ON lev.id=usr.adms_access_level_id
-                            INNER JOIN adms_emp_principal AS emp_pri ON emp_pri.id=usr.empresa_id
                             WHERE usr.user =:user 
                             OR usr.email =:email 
                             LIMIT :limit", "user={$this->data['user']}&email={$this->data['user']}&limit=1");
 
         $this->resultBd = $viewUser->getResult();
         if ($this->resultBd) {
-           $this->valPassword();
+            $this->valEmailPerm();
         } else {
             //Verifica e valida na tabela usuario final
             $viewUser = new \App\adms\Models\helper\AdmsRead();
@@ -70,16 +69,13 @@ class AdmsLogin
                             LIMIT :limit", "user={$this->data['user']}&email={$this->data['user']}&limit=1");
 
             $this->resultBd = $viewUser->getResult();
-        
-
             if ($this->resultBd) {
-                $this->valPassword();
+                $this->valEmailPerm();
             } else {
-                $_SESSION['msg'] = "<p class='alert-danger'>Erro: Usuário ou a senha incorreta!</p>";
+                $_SESSION['msg'] = "<p class='alert-danger'>Erro: Usuário ou a senha incorreta55!</p>";
                 $this->result = false;
             }
         }
-        
     }
 
     /**
@@ -119,10 +115,6 @@ class AdmsLogin
      */
     private function valPassword(): void
     {
-
-
-
-      
         if (password_verify($this->data['password'], $this->resultBd[0]['password'])) {
             $_SESSION['user_id'] = $this->resultBd[0]['id'];
             $_SESSION['user_name'] = $this->resultBd[0]['name'];
@@ -134,8 +126,6 @@ class AdmsLogin
             $_SESSION['emp_user'] = $this->resultBd[0]['empresa_id'];
             $_SESSION['set_clie'] = $this->resultBd[0]['cliente_id'];
             $_SESSION['set_Contr'] = $this->resultBd[0]['contr_id'];
-            $_SESSION['base_dados'] = $this->resultBd[0]['base_dados'];
-
             $_SESSION['set_cham'] = '';
             $_SESSION['set_hist'] = '';
             $_SESSION['set_status'] = '';
@@ -145,6 +135,5 @@ class AdmsLogin
             $_SESSION['msg'] = "<p class='alert-danger'>Erro: Usuário ou a senha incorreta!</p>";
             $this->result = false;
         }
-            
     }
 }

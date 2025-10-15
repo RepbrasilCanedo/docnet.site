@@ -601,16 +601,15 @@ class AdmsListTicketSla
                             "empresa_id={$_SESSION['emp_user']}&status_id={$this->searchStatusValue}&limit={$this->limitResult}&offset={$pagination->getOffset()}");
 
 
-                $this->resultBd = $listTicketSla->getResult();}
-
                 $this->resultBd = $listTicketSla->getResult();
+
                 if ($this->resultBd) {
                     $this->result = true;
                 } else {
                     $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum Ticket encontrado!</p>";
                     $this->result = false;
                 }
-
+            }
         } else {
             $pagination = new \App\adms\Models\helper\AdmsPagination(URLADM . 'list-ticket-sla/index');
                 $pagination->condition($this->page, $this->limitResult);
