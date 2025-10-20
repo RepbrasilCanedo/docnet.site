@@ -72,7 +72,7 @@ class AdmsListColors
      * @param integer|null $page
      * @return void
      */
-    public function listColors(int $page = null):void
+    public function listColors(int $page):void
     {
         $this->page = (int) $page ? $page : 1;
 

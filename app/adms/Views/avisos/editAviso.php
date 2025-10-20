@@ -102,7 +102,7 @@ if (isset($this->data['form'][0])) {
                         }
                         ?>
                         <label class="title-input">Texto do Alerta</label>
-                        <textarea name="aviso" id="aviso" rows="8" cols="50" class="input-adm" maxlength="480" placeholder="Texto do Alerta."required><?php echo $aviso; ?></textarea>
+                        <textarea name="aviso" id="aviso" rows="8" cols="50" class="input-adm" maxlength="480" placeholder="Texto do Alerta."><?php echo $aviso; ?></textarea>
                     </div>
                 </div>
 
