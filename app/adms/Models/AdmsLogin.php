@@ -21,6 +21,10 @@ class AdmsLogin
     /** @var array|null $resultBd Recebe os registros do banco de dados */
     private array|null $resultBd;
 
+    /** @var array Recebe as informações que serão usadas no dropdown do formulário*/
+    private array|null $listRegistryAdd;
+
+
     /** @var bool $result Recebe true quando executar o processo com sucesso e false quando houver erro */
     private bool $result;
 
@@ -135,6 +139,7 @@ class AdmsLogin
             $_SESSION['set_clie'] = $this->resultBd[0]['cliente_id'];
             $_SESSION['set_Contr'] = $this->resultBd[0]['contr_id'];
             $_SESSION['base_dados'] = $this->resultBd[0]['base_dados'];
+            define('DBCLIE', $this->resultBd[0]['base_dados']);
 
             $_SESSION['set_cham'] = '';
             $_SESSION['set_hist'] = '';
@@ -146,5 +151,26 @@ class AdmsLogin
             $this->result = false;
         }
             
+    }
+
+    
+
+    /**
+     * Metodo para pesquisar as informações que serão usadas no dropdown do formulário
+     *
+     * @return array
+     */
+    public function listSelect()
+    {
+        $list = new \App\adms\Models\helper\AdmsRead();
+
+        $list->fullRead("SELECT id, name, texto, tit_aviso, aviso FROM adms_info_login");
+        $registry['texto'] = $list->getResult();
+                
+
+        $this->listRegistryAdd = ['texto' => $registry['texto']];        
+        
+
+        return $this->listRegistryAdd;
     }
 }

@@ -49,6 +49,9 @@ class Login
             }            
         }
 
+        $listSelect = new \App\adms\Models\AdmsLogin();
+        $this->data['select'] = $listSelect->listSelect();
+
         $loadView = new \Core\ConfigView("adms/Views/login/login", $this->data);
         $loadView->loadViewLogin();
     }

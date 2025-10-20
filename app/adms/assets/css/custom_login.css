@@ -46,6 +46,13 @@ body{
     justify-content: center;
     height: 100vh;
 }
+.info{
+    
+    text-align: center;
+    padding: 5%;
+    
+
+}
 
 .container-login {
     width: 400px;
@@ -109,6 +116,12 @@ body{
 
 .msg-alert a:hover {
     color: var(--site-color);
+}
+.wrapper .row {
+    display: flex;
+    justify-content: space-between;
+    padding: 5px;
+    flex-wrap: wrap;
 }
 
 .wrapper-login .form-login {
