@@ -395,7 +395,7 @@ if (isset($this->data['form'])) {
                                             if ($this->data['button']['view_cham']) {
                                                 echo "<a href='" . URLADM . "view-cham/index/$id'>Visualizar</a>";
 
-                                                if (($_SESSION['adms_access_level_id'] > 2)) {
+                                                if (($_SESSION['adms_access_level_id'] > 2) and ($_SESSION['adms_access_level_id'] <> 12)) {
                                                     echo "<a href='" . URLADM . "edit-aprov-cham/index/$id'>Avaliar</a>";
                                                 }
                                             }

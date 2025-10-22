@@ -134,6 +134,48 @@ class AdmsDashboard
                 }
         }
     }
+    
+    /**
+     * Metodo retornar dados para o dashboard
+     * Retorna FALSE se houver algum erro
+     * @param integer $id
+     * @return void
+     */
+    // verifica recebeu algum orçamento novo -> 
+    public function verifOrcan(): void    
+    {
+        if ($_SESSION['adms_access_level_id'] > 2){
+
+             if ($_SESSION['adms_access_level_id'] == 4){
+                $verifOrcan = new \App\adms\Models\helper\AdmsRead();
+                $verifOrcan->fullRead("SELECT COUNT(id) AS qnt_cham, empresa_id, status_id FROM adms_orcam
+                                    WHERE status_id= :status_id and empresa_id = :empresa", 
+                                    "status_id=1&empresa={$_SESSION['emp_user']}");
+
+                $this->resultBd = $verifOrcan->getResult();
+
+                if ($this->resultBd) {
+                    $this->result = true;
+                } else {
+                    $this->result = false;
+                }
+             }
+            } else {
+
+                    if ($_SESSION['adms_access_level_id'] == 4){
+                    $verifOrcan = new \App\adms\Models\helper\AdmsRead();
+                    $verifOrcan->fullRead("SELECT COUNT(id) AS qnt_cham, FROM adms_orcam WHERE status_id= :status_id",  "status_id=1");
+
+                    $this->resultBd = $verifOrcan->getResult();
+
+                    if ($this->resultBd) {
+                        $this->result = true;
+                    } else {
+                        $this->result = false;
+                    }
+            }
+        }
+    }
     /**
      * Metodo retornar dados para o dashboard
      * Retorna FALSE se houver algum erro

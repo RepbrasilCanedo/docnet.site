@@ -9,7 +9,9 @@ if (isset($this->data['form'])) {
     $valorForm = $this->data['form'];
 }
 unset($_SESSION["status_chamado"]);
+
 ?>
+
 
 <!-- Inicio dos box do dashboard -->
 <div class="wrapper">
@@ -21,20 +23,37 @@ unset($_SESSION["status_chamado"]);
 
     <div class="row">
         <?php  if (($_SESSION['adms_access_level_id'] < 2) or ($_SESSION['adms_access_level_id'] == 4) or  ($_SESSION['adms_access_level_id'] == 12)){?>
-        <div class="box">            
-            <h6>Tickets Sla Vencido</h6>
-            <span>
-                <?php
-                if (!empty($this->data['verifSlaTicket'])) { ?>
-                    <h5><?= $this->data['verifSlaTicket'][0]['qnt_cham'] ?></h5>
+            <div class="box">            
+                <h6>Tickets Sla Vencido</h6>
+                <span>
+                    <?php
+                    if (!empty($this->data['verifSlaTicket'])) { ?>
+                        <h5><?= $this->data['verifSlaTicket'][0]['qnt_cham'] ?></h5>
+                    <?php } ?>
+                </span>
+                <?php if (($this->data['verifSlaTicket'][0]['qnt_cham'] > 0) and ($this->data['verifSlaTicket'][0]['status_id'] == 2)) { ?>
+                        <h6><a href="<?php echo URLADM; ?>list-cham/index?status_ticket=2">Primeira Resposta</a></h6>
+                <?php } else {?>
+                    <h6>Primeira Resposta</h6>
                 <?php } ?>
-            </span>
-            <?php if (($this->data['verifSlaTicket'][0]['qnt_cham'] > 0) and ($this->data['verifSlaTicket'][0]['status_id'] == 2)) { ?>
-                    <h6><a href="<?php echo URLADM; ?>list-cham/index?status_ticket=2">Primeira Resposta</a></h6>
-            <?php } else {?>
-                <h6>Primeira Resposta</h6>
-            <?php } ?>
-        </div>
+            </div>
+        <?php } ?>
+
+        <?php  if ($_SESSION['adms_access_level_id'] == 4){?>
+            <div class="box">            
+                <h6>Orçamentos Recebidos</h6>
+                <span>
+                    <?php
+                    if (!empty($this->data['verifOrcan'])) { ?>
+                        <h5><?= $this->data['verifOrcan'][0]['qnt_cham'] ?></h5>
+                    <?php } ?>
+                </span>
+                <?php if (($this->data['verifOrcan'][0]['qnt_cham'] == 1) and ($this->data['verifOrcan'][0]['status_id'] == 1)) { ?>
+                        <h6><a href="<?php echo URLADM; ?>list-orcam/index?status_ticket=1">Orçamento Recebido</a></h6>
+                <?php } else if (($this->data['verifOrcan'][0]['qnt_cham'] > 1) and ($this->data['verifOrcan'][0]['status_id'] == 1)){?>
+                    <h6><a href="<?php echo URLADM; ?>list-orcam/index?status_ticket=1">Orçamentos Recebidos</a></h6>
+                <?php } ?>
+            </div>
         <?php } ?>
 
         <div class="box">

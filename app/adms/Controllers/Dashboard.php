@@ -75,6 +75,15 @@ class Dashboard
         } else {
             $this->data['verifSlaTicket'] = false;
         }
+        //verifica recebeu algum orçamento novo
+        $verifOrcan = new \App\adms\Models\AdmsDashboard();
+        $verifOrcan->verifOrcan();
+
+        if ($verifOrcan->getResult()) {
+            $this->data['verifOrcan'] = $verifOrcan->getResultBd();
+        } else {
+            $this->data['verifOrcan'] = false;
+        }
         
         $countCham = new \App\adms\Models\AdmsDashboard();
         $countCham->countChamAber();
