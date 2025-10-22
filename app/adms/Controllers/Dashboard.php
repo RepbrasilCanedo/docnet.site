@@ -66,6 +66,15 @@ class Dashboard
         } else {
             $this->data['countEquipVenc'] = false;
         }
+        //verifica se sla esta vencido na primeira resposta
+        $verifSlaTicket = new \App\adms\Models\AdmsDashboard();
+        $verifSlaTicket->verifSlaTicket();
+
+        if ($countEquipVenc->getResult()) {
+            $this->data['verifSlaTicket'] = $verifSlaTicket->getResultBd();
+        } else {
+            $this->data['verifSlaTicket'] = false;
+        }
         
         $countCham = new \App\adms\Models\AdmsDashboard();
         $countCham->countChamAber();

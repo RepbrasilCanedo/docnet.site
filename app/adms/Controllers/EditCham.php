@@ -215,7 +215,7 @@ class EditCham
                 $this->viewEditCham();
             }
 
-         //xxxxxxxxxxxxxxxxx Pausar para aguarda cliente
+        //xxxxxxxxxxxxxxxxx Pausar para aguarda cliente
         } elseif (empty($this->dataForm['SendInicCham']) and (empty($this->dataForm['SendReagCham'])) and  (empty($this->dataForm['SendPausCham'])) and (empty($this->dataForm['SendPausCom'])) and (!empty($this->dataForm['SendPendCham'])) and (empty($this->dataForm['SendAguarCham'])) and (empty($this->dataForm['SendFinaCham']))) {
             unset($this->dataForm['SendPendCham']);
 
@@ -247,8 +247,8 @@ class EditCham
 
         //xxxxxxxxxxxxxxxxx Finalizar o chamado
         } elseif (empty($this->dataForm['SendInicCham']) and (empty($this->dataForm['SendReagCham'])) and  (empty($this->dataForm['SendPausCham'])) and (empty($this->dataForm['SendPausCom'])) and (empty($this->dataForm['SendPendCham'])) and (empty($this->dataForm['SendAguarCham'])) and (!empty($this->dataForm['SendFinaCham']))) {
-            unset($this->dataForm['SendFinaCham']);
-            
+           
+              unset($this->dataForm['SendFinaCham']);            
 
             $editCham = new \App\adms\Models\AdmsEditCham();
             $editCham->updateFinal($this->dataForm);
@@ -257,8 +257,6 @@ class EditCham
                 $_SESSION['set_status'] = 'Finalizado';
                 $urlRedirect = URLADM . "add-hist-cham/index/" . $this->dataForm['id'];
                 header("Location: $urlRedirect");
-                //$urlRedirect = URLADM . "edit-cham/index/" . $this->dataForm['id'];
-                //header("Location: $urlRedirect");
             } else {
                 $this->data['form'] = $this->dataForm;
                 $this->viewEditCham();

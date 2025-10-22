@@ -418,8 +418,10 @@ if (isset($this->data['form'])) {
 
                                             }
                                         }
+                                    }
                                         if ($this->data['button']['edit_cham']) {
-                                            echo "<a href='" . URLADM . "edit-cham/index/$id'>Atender</a>";
+                                            if ((($name_sta == 'Aguardando Comercial') and ($_SESSION['adms_access_level_id'] == 4)) or (($name_sta <> 'Aguardando Comercial') and $_SESSION['adms_access_level_id'] == 12) ) {                                            
+                                                echo "<a href='" . URLADM . "edit-cham/index/$id'>Atender</a>";
                                         }
                                     }
                                     ?>

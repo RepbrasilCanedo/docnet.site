@@ -20,6 +20,23 @@ unset($_SESSION["status_chamado"]);
     </div>
 
     <div class="row">
+        <?php  if (($_SESSION['adms_access_level_id'] < 2) or ($_SESSION['adms_access_level_id'] == 4) or  ($_SESSION['adms_access_level_id'] == 12)){?>
+        <div class="box">            
+            <h6>Tickets Sla Vencido</h6>
+            <span>
+                <?php
+                if (!empty($this->data['verifSlaTicket'])) { ?>
+                    <h5><?= $this->data['verifSlaTicket'][0]['qnt_cham'] ?></h5>
+                <?php } ?>
+            </span>
+            <?php if (($this->data['verifSlaTicket'][0]['qnt_cham'] > 0) and ($this->data['verifSlaTicket'][0]['status_id'] == 2)) { ?>
+                    <h6><a href="<?php echo URLADM; ?>list-cham/index?status_ticket=2">Primeira Resposta</a></h6>
+            <?php } else {?>
+                <h6>Primeira Resposta</h6>
+            <?php } ?>
+        </div>
+        <?php } ?>
+
         <div class="box">
             <h6>Tickets</h6>
             <span>

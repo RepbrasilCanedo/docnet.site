@@ -83,9 +83,11 @@ if (isset($this->data['form'][0])) {
                         }
                         ?>
 
-                    <?php } elseif ($name_sta == 'Aguardando Comercial') { ?>
+                    <?php } elseif (($name_sta == 'Aguardando Comercial') and ($_SESSION['adms_access_level_id'] <> 4)){ ?>
+                        
                         <!--Modal para inserir a data do reagendamento do ticket -->
                         <button type="button" class="btn btn-dark btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">Reagendar Ticket</button>
+                       
                         <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                             <div class="modal-dialog modal-dialog-centered">
                                 <div class="modal-content">
@@ -125,6 +127,20 @@ if (isset($this->data['form'][0])) {
                                 </div>
                             </div>
                         </div>
+                       
+                        
+                        <?php
+                        if ($this->data['button']['list_cham']) {
+                            unset($_SESSION['set_status']);
+                            $_SESSION['set_status'] = 'Aguardando Comercial';
+                            echo "<a href='" . URLADM . "add-hist-cham/index/" . $_SESSION['set_cham'] . "' class='btn btn-success btn-sm'>Cadastrar Histórico</a><br><br>";
+                        }
+                        ?>
+                   
+                    <?php } elseif (($name_sta == 'Aguardando Comercial') and ($_SESSION['adms_access_level_id'] == 4)){
+                            unset($_SESSION['set_status']);
+                            $_SESSION['set_status'] = 'Finalizado'; ?>
+                            <button type="submit" name="SendFinaCham" value="Finalizar" class="btn btn-primary btn-sm"><span class=" me-2"></span>Finalizar Atendimento</button>
 
                         <?php
                         if ($this->data['button']['list_cham']) {
@@ -343,6 +359,7 @@ if (isset($this->data['form'][0])) {
                             </div>
                         </div>
                     </div>
+
                     <div class="col-md-6">
                         <div class="card">
                             <div class="card-body border-top border-info border-5 input-group-sm">

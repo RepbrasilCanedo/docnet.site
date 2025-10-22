@@ -93,6 +93,47 @@ class AdmsDashboard
             $this->result = false;
         }
     }
+    
+    /**
+     * Metodo retornar dados para o dashboard
+     * Retorna FALSE se houver algum erro
+     * @param integer $id
+     * @return void
+     */
+    // Verifica se existe tickets abertos com sla vencido -> 2
+    public function verifSlaTicket(): void    
+    {
+        if ($_SESSION['adms_access_level_id'] > 2){
+
+             if (($_SESSION['adms_access_level_id'] == 4) or  ($_SESSION['adms_access_level_id'] == 12)){
+                $verifSlaTicket = new \App\adms\Models\helper\AdmsRead();
+                $verifSlaTicket->fullRead("SELECT COUNT(cham.id) AS qnt_cham, cham.empresa_id, cham.status_id, cham.sla_id, cham.dt_cham FROM adms_cham as cham
+                                    WHERE status_id= :status_id and empresa_id = :empresa and TIMESTAMPDIFF(SECOND, cham.dt_cham, NOW()) > 1800;", 
+                                    "status_id=2&empresa={$_SESSION['emp_user']}");
+
+                $this->resultBd = $verifSlaTicket->getResult();
+
+                if ($this->resultBd) {
+                    $this->result = true;
+                } else {
+                    $this->result = false;
+                }
+            }
+        } else {
+
+                $verifSlaTicket = new \App\adms\Models\helper\AdmsRead();
+                $verifSlaTicket->fullRead("SELECT COUNT(cham.id) AS qnt_cham, cham.empresa_id, cham.status_id, cham.sla_id, cham.dt_cham FROM adms_cham as cham
+                                    WHERE status_id= :status_id and TIMESTAMPDIFF(SECOND, cham.dt_cham, NOW()) > 1800;", 
+                                    "status_id=2");
+
+                $this->resultBd = $verifSlaTicket->getResult();
+                if ($this->resultBd) {
+                    $this->result = true;
+                } else {
+                    $this->result = false;
+                }
+        }
+    }
     /**
      * Metodo retornar dados para o dashboard
      * Retorna FALSE se houver algum erro
