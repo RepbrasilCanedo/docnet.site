@@ -11,7 +11,7 @@ if (isset($this->data['form'])) {
 //var_dump($this->data['select']['texto'][0]);
 ?>
 <div class="row wrapper-row">
-    <div class="col-md-5 info">
+    <div class="col-12 col-md-5 info mb-0 mb-md-0">
         <div>
             <img src="<?php echo URLADM; ?>app/adms/assets/image/logo/logo_repbrasil_1.png" width="200px" alt="Docnet" class="info">
          <?php            
@@ -28,7 +28,7 @@ if (isset($this->data['form'])) {
         </div>
     </div>
 
-    <div class="col-md-7">
+    <div class="col-12 col-md-7">
         <div class="container-login">
             <div class="wrapper-login">
                 <div class="logo">
