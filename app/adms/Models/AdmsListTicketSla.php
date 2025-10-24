@@ -121,16 +121,16 @@ class AdmsListTicketSla
         $this->resultPg = $pagination->getResult();
 
         $listTicketSla = new \App\adms\Models\helper\AdmsRead();
-        $listTicketSla->fullRead("SELECT sla_hist.id AS id_sla_hist, sla_hist.empresa_id, clie.nome_fantasia AS nome_fantasia_clie, sla_hist.id_ticket AS id_ticket_sla_hist, sla_hist.dt_abert_ticket as dt_abert_ticket, 
+        $listTicketSla->fullRead("SELECT sla_hist.id AS id_sla_hist, sla_hist.empresa_id, clie.nome_fantasia AS nome_fantasia_clie, sla_hist.id_ticket AS id_ticket_sla_hist, sla_hist.dt_status as dt_status, 
                             sla.name as name_sla, sla_hist.tempo_sla_prim AS tempo_sla_prim, sla_hist.tempo_sla_fin AS tempo_sla_fin, sta_ant.name AS name_status_id_ant, 
-                            sla_hist.dt_status_ant, sta_atu.name AS name_sta_atu, sla_hist.dt_status, user.name  AS name_user, sla_hist.tempo_sla AS tempo_sla
+                            sla_hist.dt_status_ant AS dt_status_ant, sta_atu.name AS name_sta_atu, sla_hist.dt_status AS dt_status, user.name  AS name_user, sla_hist.tempo_sla AS tempo_sla
                             FROM adms_sla_hist AS sla_hist
                             INNER JOIN adms_clientes AS clie ON clie.id = sla_hist.cliente_id 
                             INNER JOIN adms_sla AS sla ON sla.id = sla_hist.id_sla 
                             INNER JOIN adms_cham_status AS sta_ant ON sta_ant.id = sla_hist.status_id_ant
                             INNER JOIN adms_cham_status AS sta_atu ON sta_atu.id = sla_hist.status_id
                             INNER JOIN adms_users AS user ON user.id = sla_hist.suporte_id 
-                            ORDER BY sla_hist.dt_abert_ticket DESC LIMIT :limit OFFSET :offset", "limit={$this->limitResult}&offset={$pagination->getOffset()}");
+                            ORDER BY sla_hist.dt_status DESC LIMIT :limit OFFSET :offset", "limit={$this->limitResult}&offset={$pagination->getOffset()}");
 
         $this->resultBd = $listTicketSla->getResult();        
         if($this->resultBd){
@@ -232,7 +232,7 @@ class AdmsListTicketSla
                 $this->resultPg = $pagination->getResult();
                 
                 $listTicketSla = new \App\adms\Models\helper\AdmsRead();
-                $listTicketSla->fullRead("SELECT sla_hist.id AS id_sla_hist, sla_hist.empresa_id, clie.nome_fantasia AS nome_fantasia_clie, sla_hist.id_ticket AS id_ticket_sla_hist, sla_hist.dt_abert_ticket as dt_abert_ticket, 
+                $listTicketSla->fullRead("SELECT sla_hist.id AS id_sla_hist, sla_hist.empresa_id, clie.nome_fantasia AS nome_fantasia_clie, sla_hist.id_ticket AS id_ticket_sla_hist, sla_hist.dt_status as dt_status, 
                             sla.name as name_sla, sla_hist.tempo_sla_prim AS tempo_sla_prim, sla_hist.tempo_sla_fin AS tempo_sla_fin, sta_ant.name AS name_status_id_ant, 
                             sla_hist.dt_status_ant, sta_atu.name AS name_sta_atu, sla_hist.dt_status, user.name  AS name_user, sla_hist.tempo_sla AS tempo_sla
                             FROM adms_sla_hist AS sla_hist
@@ -261,7 +261,7 @@ class AdmsListTicketSla
                 $this->resultPg = $pagination->getResult();
                 
                 $listTicketSla = new \App\adms\Models\helper\AdmsRead();
-                $listTicketSla->fullRead("SELECT sla_hist.id AS id_sla_hist, sla_hist.empresa_id, clie.nome_fantasia AS nome_fantasia_clie, sla_hist.id_ticket AS id_ticket_sla_hist, sla_hist.dt_abert_ticket as dt_abert_ticket, 
+                $listTicketSla->fullRead("SELECT sla_hist.id AS id_sla_hist, sla_hist.empresa_id, clie.nome_fantasia AS nome_fantasia_clie, sla_hist.id_ticket AS id_ticket_sla_hist, sla_hist.dt_status as dt_status, 
                             sla.name as name_sla, sla_hist.tempo_sla_prim AS tempo_sla_prim, sla_hist.tempo_sla_fin AS tempo_sla_fin, sta_ant.name AS name_status_id_ant, 
                             sla_hist.dt_status_ant, sta_atu.name AS name_sta_atu, sla_hist.dt_status, user.name  AS name_user, sla_hist.tempo_sla AS tempo_sla
                             FROM adms_sla_hist AS sla_hist
@@ -302,7 +302,7 @@ class AdmsListTicketSla
                 $this->resultPg = $pagination->getResult();
                 
                 $listTicketSla = new \App\adms\Models\helper\AdmsRead();
-                $listTicketSla->fullRead("SELECT sla_hist.id AS id_sla_hist, sla_hist.empresa_id, clie.nome_fantasia AS nome_fantasia_clie, sla_hist.id_ticket AS id_ticket_sla_hist, sla_hist.dt_abert_ticket as dt_abert_ticket, 
+                $listTicketSla->fullRead("SELECT sla_hist.id AS id_sla_hist, sla_hist.empresa_id, clie.nome_fantasia AS nome_fantasia_clie, sla_hist.id_ticket AS id_ticket_sla_hist, sla_hist.dt_status as dt_status, 
                             sla.name as name_sla, sla_hist.tempo_sla_prim AS tempo_sla_prim, sla_hist.tempo_sla_fin AS tempo_sla_fin, sta_ant.name AS name_status_id_ant, 
                             sla_hist.dt_status_ant, sta_atu.name AS name_sta_atu, sla_hist.dt_status, user.name  AS name_user, sla_hist.tempo_sla AS tempo_sla
                             FROM adms_sla_hist AS sla_hist
@@ -311,7 +311,7 @@ class AdmsListTicketSla
                             INNER JOIN adms_cham_status AS sta_ant ON sta_ant.id = sla_hist.status_id_ant
                             INNER JOIN adms_cham_status AS sta_atu ON sta_atu.id = sla_hist.status_id
                             INNER JOIN adms_users AS user ON user.id = sla_hist.suporte_id 
-                            WHERE (sla_hist.empresa_id= :empresa_id) and (sla_hist.cliente_id = :cliente_id) ORDER BY sla_hist.dt_abert_ticket DESC LIMIT :limit OFFSET :offset",
+                            WHERE (sla_hist.empresa_id= :empresa_id) and (sla_hist.cliente_id = :cliente_id) ORDER BY sla_hist.dt_status DESC LIMIT :limit OFFSET :offset",
                             "empresa_id={$_SESSION['emp_user']}&cliente_id={$this->searchEmpresaValue}&limit={$this->limitResult}&offset={$pagination->getOffset()}");
 
 
@@ -332,7 +332,7 @@ class AdmsListTicketSla
                 $this->resultPg = $pagination->getResult();
                 
                 $listTicketSla = new \App\adms\Models\helper\AdmsRead();
-                $listTicketSla->fullRead("SELECT sla_hist.id AS id_sla_hist, sla_hist.empresa_id, clie.nome_fantasia AS nome_fantasia_clie, sla_hist.id_ticket AS id_ticket_sla_hist, sla_hist.dt_abert_ticket as dt_abert_ticket, 
+                $listTicketSla->fullRead("SELECT sla_hist.id AS id_sla_hist, sla_hist.empresa_id, clie.nome_fantasia AS nome_fantasia_clie, sla_hist.id_ticket AS id_ticket_sla_hist, sla_hist.dt_status as dt_status, 
                             sla.name as name_sla, sla_hist.tempo_sla_prim AS tempo_sla_prim, sla_hist.tempo_sla_fin AS tempo_sla_fin, sta_ant.name AS name_status_id_ant, 
                             sla_hist.dt_status_ant, sta_atu.name AS name_sta_atu, sla_hist.dt_status, user.name  AS name_user, sla_hist.tempo_sla AS tempo_sla
                             FROM adms_sla_hist AS sla_hist
@@ -341,7 +341,7 @@ class AdmsListTicketSla
                             INNER JOIN adms_cham_status AS sta_ant ON sta_ant.id = sla_hist.status_id_ant
                             INNER JOIN adms_cham_status AS sta_atu ON sta_atu.id = sla_hist.status_id
                             INNER JOIN adms_users AS user ON user.id = sla_hist.suporte_id 
-                            WHERE (sla_hist.cliente_id = :cliente_id) ORDER BY sla_hist.dt_abert_ticket DESC LIMIT :limit OFFSET :offset",
+                            WHERE (sla_hist.cliente_id = :cliente_id) ORDER BY sla_hist.dt_status DESC LIMIT :limit OFFSET :offset",
                             "empresa_id={$_SESSION['emp_user']}&cliente_id={$this->searchEmpresaValue}&limit={$this->limitResult}&offset={$pagination->getOffset()}");
 
 
@@ -373,7 +373,7 @@ class AdmsListTicketSla
                 $this->resultPg = $pagination->getResult();
                 
                 $listTicketSla = new \App\adms\Models\helper\AdmsRead();
-                $listTicketSla->fullRead("SELECT sla_hist.id AS id_sla_hist, sla_hist.empresa_id, sla_hist.suporte_id, clie.nome_fantasia AS nome_fantasia_clie, sla_hist.id_ticket AS id_ticket_sla_hist, sla_hist.dt_abert_ticket as dt_abert_ticket, 
+                $listTicketSla->fullRead("SELECT sla_hist.id AS id_sla_hist, sla_hist.empresa_id, sla_hist.suporte_id, clie.nome_fantasia AS nome_fantasia_clie, sla_hist.id_ticket AS id_ticket_sla_hist, sla_hist.dt_status as dt_status, 
                             sla.name as name_sla, sla_hist.tempo_sla_prim AS tempo_sla_prim, sla_hist.tempo_sla_fin AS tempo_sla_fin, sta_ant.name AS name_status_id_ant, 
                             sla_hist.dt_status_ant, sta_atu.name AS name_sta_atu, sla_hist.dt_status, user.name  AS name_user, sla_hist.tempo_sla AS tempo_sla
                             FROM adms_sla_hist AS sla_hist
@@ -382,7 +382,7 @@ class AdmsListTicketSla
                             INNER JOIN adms_cham_status AS sta_ant ON sta_ant.id = sla_hist.status_id_ant
                             INNER JOIN adms_cham_status AS sta_atu ON sta_atu.id = sla_hist.status_id
                             INNER JOIN adms_users AS user ON user.id = sla_hist.suporte_id 
-                            WHERE (sla_hist.empresa_id= :empresa_id) and (sla_hist.suporte_id = :suporte_id) ORDER BY sla_hist.dt_abert_ticket DESC LIMIT :limit OFFSET :offset",
+                            WHERE (sla_hist.empresa_id= :empresa_id) and (sla_hist.suporte_id = :suporte_id) ORDER BY sla_hist.dt_status DESC LIMIT :limit OFFSET :offset",
                             "empresa_id={$_SESSION['emp_user']}&suporte_id={$this->searchSuporteValue}&limit={$this->limitResult}&offset={$pagination->getOffset()}");
 
 
@@ -403,7 +403,7 @@ class AdmsListTicketSla
                 $this->resultPg = $pagination->getResult();
                 
                 $listTicketSla = new \App\adms\Models\helper\AdmsRead();
-                $listTicketSla->fullRead("SELECT sla_hist.id AS id_sla_hist, sla_hist.empresa_id, clie.nome_fantasia AS nome_fantasia_clie, sla_hist.id_ticket AS id_ticket_sla_hist, sla_hist.dt_abert_ticket as dt_abert_ticket, 
+                $listTicketSla->fullRead("SELECT sla_hist.id AS id_sla_hist, sla_hist.empresa_id, clie.nome_fantasia AS nome_fantasia_clie, sla_hist.id_ticket AS id_ticket_sla_hist, sla_hist.dt_status as dt_status, 
                             sla.name as name_sla, sla_hist.tempo_sla_prim AS tempo_sla_prim, sla_hist.tempo_sla_fin AS tempo_sla_fin, sta_ant.name AS name_status_id_ant, 
                             sla_hist.dt_status_ant, sta_atu.name AS name_sta_atu, sla_hist.dt_status, user.name  AS name_user, sla_hist.tempo_sla AS tempo_sla
                             FROM adms_sla_hist AS sla_hist
@@ -412,7 +412,7 @@ class AdmsListTicketSla
                             INNER JOIN adms_cham_status AS sta_ant ON sta_ant.id = sla_hist.status_id_ant
                             INNER JOIN adms_cham_status AS sta_atu ON sta_atu.id = sla_hist.status_id
                             INNER JOIN adms_users AS user ON user.id = sla_hist.suporte_id 
-                            WHERE (sla_hist.cliente_id = :cliente_id) ORDER BY sla_hist.dt_abert_ticket DESC LIMIT :limit OFFSET :offset",
+                            WHERE (sla_hist.cliente_id = :cliente_id) ORDER BY sla_hist.dt_status DESC LIMIT :limit OFFSET :offset",
                             "empresa_id={$_SESSION['emp_user']}&cliente_id={$this->searchEmpresaValue}&limit={$this->limitResult}&offset={$pagination->getOffset()}");
 
 
@@ -444,7 +444,7 @@ class AdmsListTicketSla
                 $this->resultPg = $pagination->getResult();
                 
                 $listTicketSla = new \App\adms\Models\helper\AdmsRead();
-                $listTicketSla->fullRead("SELECT sla_hist.id AS id_sla_hist, sla_hist.empresa_id, sla_hist.suporte_id, sla_hist.id_sla, clie.nome_fantasia AS nome_fantasia_clie, sla_hist.id_ticket AS id_ticket_sla_hist, sla_hist.dt_abert_ticket as dt_abert_ticket, 
+                $listTicketSla->fullRead("SELECT sla_hist.id AS id_sla_hist, sla_hist.empresa_id, sla_hist.suporte_id, sla_hist.id_sla, clie.nome_fantasia AS nome_fantasia_clie, sla_hist.id_ticket AS id_ticket_sla_hist, sla_hist.dt_status as dt_status, 
                             sla.name as name_sla, sla_hist.tempo_sla_prim AS tempo_sla_prim, sla_hist.tempo_sla_fin AS tempo_sla_fin, sta_ant.name AS name_status_id_ant, 
                             sla_hist.dt_status_ant, sta_atu.name AS name_sta_atu, sla_hist.dt_status, user.name  AS name_user, sla_hist.tempo_sla AS tempo_sla
                             FROM adms_sla_hist AS sla_hist
@@ -453,7 +453,7 @@ class AdmsListTicketSla
                             INNER JOIN adms_cham_status AS sta_ant ON sta_ant.id = sla_hist.status_id_ant
                             INNER JOIN adms_cham_status AS sta_atu ON sta_atu.id = sla_hist.status_id
                             INNER JOIN adms_users AS user ON user.id = sla_hist.suporte_id 
-                            WHERE (sla_hist.empresa_id= :empresa_id) and (sla_hist.id_sla= :id_sla) ORDER BY sla_hist.dt_abert_ticket DESC LIMIT :limit OFFSET :offset",
+                            WHERE (sla_hist.empresa_id= :empresa_id) and (sla_hist.id_sla= :id_sla) ORDER BY sla_hist.dt_status DESC LIMIT :limit OFFSET :offset",
                             "empresa_id={$_SESSION['emp_user']}&id_sla={$this->searchTipoValue}&limit={$this->limitResult}&offset={$pagination->getOffset()}");
 
 
@@ -474,7 +474,7 @@ class AdmsListTicketSla
                 $this->resultPg = $pagination->getResult();
                 
                 $listTicketSla = new \App\adms\Models\helper\AdmsRead();
-                $listTicketSla->fullRead("SELECT sla_hist.id AS id_sla_hist, sla_hist.empresa_id, clie.nome_fantasia AS nome_fantasia_clie, sla_hist.id_ticket AS id_ticket_sla_hist, sla_hist.dt_abert_ticket as dt_abert_ticket, 
+                $listTicketSla->fullRead("SELECT sla_hist.id AS id_sla_hist, sla_hist.empresa_id, clie.nome_fantasia AS nome_fantasia_clie, sla_hist.id_ticket AS id_ticket_sla_hist, sla_hist.dt_status as dt_status, 
                             sla.name as name_sla, sla_hist.tempo_sla_prim AS tempo_sla_prim, sla_hist.tempo_sla_fin AS tempo_sla_fin, sta_ant.name AS name_status_id_ant, 
                             sla_hist.dt_status_ant, sta_atu.name AS name_sta_atu, sla_hist.dt_status, user.name  AS name_user, sla_hist.tempo_sla AS tempo_sla
                             FROM adms_sla_hist AS sla_hist
@@ -483,7 +483,7 @@ class AdmsListTicketSla
                             INNER JOIN adms_cham_status AS sta_ant ON sta_ant.id = sla_hist.status_id_ant
                             INNER JOIN adms_cham_status AS sta_atu ON sta_atu.id = sla_hist.status_id
                             INNER JOIN adms_users AS user ON user.id = sla_hist.suporte_id 
-                            WHERE (sla_hist.cliente_id = :cliente_id) ORDER BY sla_hist.dt_abert_ticket DESC LIMIT :limit OFFSET :offset",
+                            WHERE (sla_hist.cliente_id = :cliente_id) ORDER BY sla_hist.dt_status DESC LIMIT :limit OFFSET :offset",
                             "empresa_id={$_SESSION['emp_user']}&cliente_id={$this->searchEmpresaValue}&limit={$this->limitResult}&offset={$pagination->getOffset()}");
 
 
@@ -511,12 +511,12 @@ class AdmsListTicketSla
 
                 $pagination = new \App\adms\Models\helper\AdmsPagination(URLADM . 'list-ticket-sla/index');
                 $pagination->condition($this->page, $this->limitResult);
-                $pagination->pagination("SELECT COUNT(id_ticket) AS num_result FROM adms_sla_hist WHERE (empresa_id= :empresa_id) AND (dt_abert_ticket BETWEEN :search_date_start AND :search_date_end)", 
+                $pagination->pagination("SELECT COUNT(id_ticket) AS num_result FROM adms_sla_hist WHERE (empresa_id= :empresa_id) AND (dt_status BETWEEN :search_date_start AND :search_date_end)", 
                 "empresa_id={$_SESSION['emp_user']}&search_date_start={$this->searchDateStart}&search_date_end={$this->searchDateEnd}");
                 $this->resultPg = $pagination->getResult();
                 
                 $listTicketSla = new \App\adms\Models\helper\AdmsRead();
-                $listTicketSla->fullRead("SELECT sla_hist.id AS id_sla_hist, sla_hist.empresa_id, sla_hist.suporte_id, sla_hist.id_sla, clie.nome_fantasia AS nome_fantasia_clie, sla_hist.id_ticket AS id_ticket_sla_hist, sla_hist.dt_abert_ticket as dt_abert_ticket, 
+                $listTicketSla->fullRead("SELECT sla_hist.id AS id_sla_hist, sla_hist.empresa_id, sla_hist.suporte_id, sla_hist.id_sla, clie.nome_fantasia AS nome_fantasia_clie, sla_hist.id_ticket AS id_ticket_sla_hist, sla_hist.dt_status as dt_status, 
                             sla.name as name_sla, sla_hist.tempo_sla_prim AS tempo_sla_prim, sla_hist.tempo_sla_fin AS tempo_sla_fin, sta_ant.name AS name_status_id_ant, 
                             sla_hist.dt_status_ant, sta_atu.name AS name_sta_atu, sla_hist.dt_status, user.name  AS name_user, sla_hist.tempo_sla AS tempo_sla
                             FROM adms_sla_hist AS sla_hist
@@ -525,7 +525,7 @@ class AdmsListTicketSla
                             INNER JOIN adms_cham_status AS sta_ant ON sta_ant.id = sla_hist.status_id_ant
                             INNER JOIN adms_cham_status AS sta_atu ON sta_atu.id = sla_hist.status_id
                             INNER JOIN adms_users AS user ON user.id = sla_hist.suporte_id 
-                            WHERE (sla_hist.empresa_id= :empresa_id) AND (sla_hist.dt_abert_ticket BETWEEN :search_date_start AND :search_date_end) ORDER BY sla_hist.dt_abert_ticket DESC LIMIT :limit OFFSET :offset",
+                            WHERE (sla_hist.empresa_id= :empresa_id) AND (sla_hist.dt_status BETWEEN :search_date_start AND :search_date_end) ORDER BY sla_hist.dt_status DESC LIMIT :limit OFFSET :offset",
                             "empresa_id={$_SESSION['emp_user']}&search_date_start={$this->searchDateStart}&search_date_end={$this->searchDateEnd}&limit={$this->limitResult}&offset={$pagination->getOffset()}");
 
 
@@ -546,7 +546,7 @@ class AdmsListTicketSla
                 $this->resultPg = $pagination->getResult();
                 
                 $listTicketSla = new \App\adms\Models\helper\AdmsRead();
-                $listTicketSla->fullRead("SELECT sla_hist.id AS id_sla_hist, sla_hist.empresa_id, clie.nome_fantasia AS nome_fantasia_clie, sla_hist.id_ticket AS id_ticket_sla_hist, sla_hist.dt_abert_ticket as dt_abert_ticket, 
+                $listTicketSla->fullRead("SELECT sla_hist.id AS id_sla_hist, sla_hist.empresa_id, clie.nome_fantasia AS nome_fantasia_clie, sla_hist.id_ticket AS id_ticket_sla_hist, sla_hist.dt_status as dt_status, 
                             sla.name as name_sla, sla_hist.tempo_sla_prim AS tempo_sla_prim, sla_hist.tempo_sla_fin AS tempo_sla_fin, sta_ant.name AS name_status_id_ant, 
                             sla_hist.dt_status_ant, sta_atu.name AS name_sta_atu, sla_hist.dt_status, user.name  AS name_user, sla_hist.tempo_sla AS tempo_sla
                             FROM adms_sla_hist AS sla_hist
@@ -555,7 +555,7 @@ class AdmsListTicketSla
                             INNER JOIN adms_cham_status AS sta_ant ON sta_ant.id = sla_hist.status_id_ant
                             INNER JOIN adms_cham_status AS sta_atu ON sta_atu.id = sla_hist.status_id
                             INNER JOIN adms_users AS user ON user.id = sla_hist.suporte_id 
-                            WHERE (sla_hist.cliente_id = :cliente_id) ORDER BY sla_hist.dt_abert_ticket DESC LIMIT :limit OFFSET :offset",
+                            WHERE (sla_hist.cliente_id = :cliente_id) ORDER BY sla_hist.dt_status DESC LIMIT :limit OFFSET :offset",
                             "empresa_id={$_SESSION['emp_user']}&cliente_id={$this->searchEmpresaValue}&limit={$this->limitResult}&offset={$pagination->getOffset()}");
 
 
@@ -588,7 +588,7 @@ class AdmsListTicketSla
                 $this->resultPg = $pagination->getResult();
                 
                 $listTicketSla = new \App\adms\Models\helper\AdmsRead();
-                $listTicketSla->fullRead("SELECT sla_hist.id AS id_sla_hist, sla_hist.empresa_id, sla_hist.suporte_id, sla_hist.id_sla, clie.nome_fantasia AS nome_fantasia_clie, sla_hist.id_ticket AS id_ticket_sla_hist, sla_hist.dt_abert_ticket as dt_abert_ticket, 
+                $listTicketSla->fullRead("SELECT sla_hist.id AS id_sla_hist, sla_hist.empresa_id, sla_hist.suporte_id, sla_hist.id_sla, clie.nome_fantasia AS nome_fantasia_clie, sla_hist.id_ticket AS id_ticket_sla_hist, sla_hist.dt_status as dt_status, 
                             sla.name as name_sla, sla_hist.tempo_sla_prim AS tempo_sla_prim, sla_hist.tempo_sla_fin AS tempo_sla_fin, sta_ant.name AS name_status_id_ant, 
                             sla_hist.dt_status_ant, sta_atu.name AS name_sta_atu, sla_hist.dt_status, user.name  AS name_user, sla_hist.tempo_sla AS tempo_sla
                             FROM adms_sla_hist AS sla_hist
@@ -597,7 +597,7 @@ class AdmsListTicketSla
                             INNER JOIN adms_cham_status AS sta_ant ON sta_ant.id = sla_hist.status_id_ant
                             INNER JOIN adms_cham_status AS sta_atu ON sta_atu.id = sla_hist.status_id
                             INNER JOIN adms_users AS user ON user.id = sla_hist.suporte_id 
-                            WHERE (sla_hist.empresa_id= :empresa_id) AND (sla_hist.status_id = :status_id) ORDER BY sla_hist.dt_abert_ticket DESC LIMIT :limit OFFSET :offset",
+                            WHERE (sla_hist.empresa_id= :empresa_id) AND (sla_hist.status_id = :status_id) ORDER BY sla_hist.dt_status DESC LIMIT :limit OFFSET :offset",
                             "empresa_id={$_SESSION['emp_user']}&status_id={$this->searchStatusValue}&limit={$this->limitResult}&offset={$pagination->getOffset()}");
 
 
@@ -617,7 +617,7 @@ class AdmsListTicketSla
                 $this->resultPg = $pagination->getResult();
                 
                 $listTicketSla = new \App\adms\Models\helper\AdmsRead();
-                $listTicketSla->fullRead("SELECT sla_hist.id AS id_sla_hist, sla_hist.empresa_id, clie.nome_fantasia AS nome_fantasia_clie, sla_hist.id_ticket AS id_ticket_sla_hist, sla_hist.dt_abert_ticket as dt_abert_ticket, 
+                $listTicketSla->fullRead("SELECT sla_hist.id AS id_sla_hist, sla_hist.empresa_id, clie.nome_fantasia AS nome_fantasia_clie, sla_hist.id_ticket AS id_ticket_sla_hist, sla_hist.dt_status as dt_status, 
                             sla.name as name_sla, sla_hist.tempo_sla_prim AS tempo_sla_prim, sla_hist.tempo_sla_fin AS tempo_sla_fin, sta_ant.name AS name_status_id_ant, 
                             sla_hist.dt_status_ant, sta_atu.name AS name_sta_atu, sla_hist.dt_status, user.name  AS name_user, sla_hist.tempo_sla AS tempo_sla
                             FROM adms_sla_hist AS sla_hist
@@ -626,7 +626,7 @@ class AdmsListTicketSla
                             INNER JOIN adms_cham_status AS sta_ant ON sta_ant.id = sla_hist.status_id_ant
                             INNER JOIN adms_cham_status AS sta_atu ON sta_atu.id = sla_hist.status_id
                             INNER JOIN adms_users AS user ON user.id = sla_hist.suporte_id 
-                            WHERE (sla_hist.cliente_id = :cliente_id) ORDER BY sla_hist.dt_abert_ticket DESC LIMIT :limit OFFSET :offset",
+                            WHERE (sla_hist.cliente_id = :cliente_id) ORDER BY sla_hist.dt_status DESC LIMIT :limit OFFSET :offset",
                             "empresa_id={$_SESSION['emp_user']}&cliente_id={$this->searchEmpresaValue}&limit={$this->limitResult}&offset={$pagination->getOffset()}");
 
 
@@ -659,7 +659,7 @@ class AdmsListTicketSla
                 $this->resultPg = $pagination->getResult();
                 
                 $listTicketSla = new \App\adms\Models\helper\AdmsRead();
-                $listTicketSla->fullRead("SELECT sla_hist.id AS id_sla_hist, sla_hist.empresa_id, sla_hist.suporte_id, sla_hist.id_sla, clie.nome_fantasia AS nome_fantasia_clie, sla_hist.id_ticket AS id_ticket_sla_hist, sla_hist.dt_abert_ticket as dt_abert_ticket, 
+                $listTicketSla->fullRead("SELECT sla_hist.id AS id_sla_hist, sla_hist.empresa_id, sla_hist.suporte_id, sla_hist.id_sla, clie.nome_fantasia AS nome_fantasia_clie, sla_hist.id_ticket AS id_ticket_sla_hist, sla_hist.dt_status as dt_status, 
                             sla.name as name_sla, sla_hist.tempo_sla_prim AS tempo_sla_prim, sla_hist.tempo_sla_fin AS tempo_sla_fin, sta_ant.name AS name_status_id_ant, 
                             sla_hist.dt_status_ant, sta_atu.name AS name_sta_atu, sla_hist.dt_status, user.name  AS name_user, sla_hist.tempo_sla AS tempo_sla
                             FROM adms_sla_hist AS sla_hist
@@ -668,7 +668,7 @@ class AdmsListTicketSla
                             INNER JOIN adms_cham_status AS sta_ant ON sta_ant.id = sla_hist.status_id_ant
                             INNER JOIN adms_cham_status AS sta_atu ON sta_atu.id = sla_hist.status_id
                             INNER JOIN adms_users AS user ON user.id = sla_hist.suporte_id 
-                            WHERE (sla_hist.empresa_id= :empresa_id) AND (sla_hist.status_id_ant = :status_id_ant) ORDER BY sla_hist.dt_abert_ticket DESC LIMIT :limit OFFSET :offset",
+                            WHERE (sla_hist.empresa_id= :empresa_id) AND (sla_hist.status_id_ant = :status_id_ant) ORDER BY sla_hist.dt_status DESC LIMIT :limit OFFSET :offset",
                             "empresa_id={$_SESSION['emp_user']}&status_id_ant={$this->searchStatusAnteriorValue}&limit={$this->limitResult}&offset={$pagination->getOffset()}");
 
 
@@ -689,7 +689,7 @@ class AdmsListTicketSla
                 $this->resultPg = $pagination->getResult();
                 
                 $listTicketSla = new \App\adms\Models\helper\AdmsRead();
-                $listTicketSla->fullRead("SELECT sla_hist.id AS id_sla_hist, sla_hist.empresa_id, clie.nome_fantasia AS nome_fantasia_clie, sla_hist.id_ticket AS id_ticket_sla_hist, sla_hist.dt_abert_ticket as dt_abert_ticket, 
+                $listTicketSla->fullRead("SELECT sla_hist.id AS id_sla_hist, sla_hist.empresa_id, clie.nome_fantasia AS nome_fantasia_clie, sla_hist.id_ticket AS id_ticket_sla_hist, sla_hist.dt_status as dt_status, 
                             sla.name as name_sla, sla_hist.tempo_sla_prim AS tempo_sla_prim, sla_hist.tempo_sla_fin AS tempo_sla_fin, sta_ant.name AS name_status_id_ant, 
                             sla_hist.dt_status_ant, sta_atu.name AS name_sta_atu, sla_hist.dt_status, user.name  AS name_user, sla_hist.tempo_sla AS tempo_sla
                             FROM adms_sla_hist AS sla_hist
@@ -698,7 +698,7 @@ class AdmsListTicketSla
                             INNER JOIN adms_cham_status AS sta_ant ON sta_ant.id = sla_hist.status_id_ant
                             INNER JOIN adms_cham_status AS sta_atu ON sta_atu.id = sla_hist.status_id
                             INNER JOIN adms_users AS user ON user.id = sla_hist.suporte_id 
-                            WHERE (sla_hist.cliente_id = :cliente_id) ORDER BY sla_hist.dt_abert_ticket DESC LIMIT :limit OFFSET :offset",
+                            WHERE (sla_hist.cliente_id = :cliente_id) ORDER BY sla_hist.dt_status DESC LIMIT :limit OFFSET :offset",
                             "empresa_id={$_SESSION['emp_user']}&cliente_id={$this->searchEmpresaValue}&limit={$this->limitResult}&offset={$pagination->getOffset()}");
 
 
@@ -731,7 +731,7 @@ class AdmsListTicketSla
                 $this->resultPg = $pagination->getResult();
                 
                 $listTicketSla = new \App\adms\Models\helper\AdmsRead();
-                $listTicketSla->fullRead("SELECT sla_hist.id AS id_sla_hist, sla_hist.empresa_id, sla_hist.suporte_id, sla_hist.id_sla, clie.nome_fantasia AS nome_fantasia_clie, sla_hist.id_ticket AS id_ticket_sla_hist, sla_hist.dt_abert_ticket as dt_abert_ticket, 
+                $listTicketSla->fullRead("SELECT sla_hist.id AS id_sla_hist, sla_hist.empresa_id, sla_hist.suporte_id, sla_hist.id_sla, clie.nome_fantasia AS nome_fantasia_clie, sla_hist.id_ticket AS id_ticket_sla_hist, sla_hist.dt_status as dt_status, 
                             sla.name as name_sla, sla_hist.tempo_sla_prim AS tempo_sla_prim, sla_hist.tempo_sla_fin AS tempo_sla_fin, sta_ant.name AS name_status_id_ant, 
                             sla_hist.dt_status_ant, sta_atu.name AS name_sta_atu, sla_hist.dt_status, user.name  AS name_user, sla_hist.tempo_sla AS tempo_sla
                             FROM adms_sla_hist AS sla_hist
@@ -740,7 +740,7 @@ class AdmsListTicketSla
                             INNER JOIN adms_cham_status AS sta_ant ON sta_ant.id = sla_hist.status_id_ant
                             INNER JOIN adms_cham_status AS sta_atu ON sta_atu.id = sla_hist.status_id
                             INNER JOIN adms_users AS user ON user.id = sla_hist.suporte_id 
-                            WHERE (sla_hist.empresa_id= :empresa_id) AND (sla_hist.status_id_ant = :status_id_ant) AND (status_id= :status_id) ORDER BY sla_hist.dt_abert_ticket DESC LIMIT :limit OFFSET :offset",
+                            WHERE (sla_hist.empresa_id= :empresa_id) AND (sla_hist.status_id_ant = :status_id_ant) AND (status_id= :status_id) ORDER BY sla_hist.dt_status DESC LIMIT :limit OFFSET :offset",
                             "empresa_id={$_SESSION['emp_user']}&status_id_ant={$this->searchStatusAnteriorValue}&status_id={$this->searchStatusValue}&limit={$this->limitResult}&offset={$pagination->getOffset()}");
 
 
@@ -761,7 +761,7 @@ class AdmsListTicketSla
                 $this->resultPg = $pagination->getResult();
                 
                 $listTicketSla = new \App\adms\Models\helper\AdmsRead();
-                $listTicketSla->fullRead("SELECT sla_hist.id AS id_sla_hist, sla_hist.empresa_id, clie.nome_fantasia AS nome_fantasia_clie, sla_hist.id_ticket AS id_ticket_sla_hist, sla_hist.dt_abert_ticket as dt_abert_ticket, 
+                $listTicketSla->fullRead("SELECT sla_hist.id AS id_sla_hist, sla_hist.empresa_id, clie.nome_fantasia AS nome_fantasia_clie, sla_hist.id_ticket AS id_ticket_sla_hist, sla_hist.dt_status as dt_status, 
                             sla.name as name_sla, sla_hist.tempo_sla_prim AS tempo_sla_prim, sla_hist.tempo_sla_fin AS tempo_sla_fin, sta_ant.name AS name_status_id_ant, 
                             sla_hist.dt_status_ant, sta_atu.name AS name_sta_atu, sla_hist.dt_status, user.name  AS name_user, sla_hist.tempo_sla AS tempo_sla
                             FROM adms_sla_hist AS sla_hist
@@ -770,7 +770,7 @@ class AdmsListTicketSla
                             INNER JOIN adms_cham_status AS sta_ant ON sta_ant.id = sla_hist.status_id_ant
                             INNER JOIN adms_cham_status AS sta_atu ON sta_atu.id = sla_hist.status_id
                             INNER JOIN adms_users AS user ON user.id = sla_hist.suporte_id 
-                            WHERE (sla_hist.cliente_id = :cliente_id) ORDER BY sla_hist.dt_abert_ticket DESC LIMIT :limit OFFSET :offset",
+                            WHERE (sla_hist.cliente_id = :cliente_id) ORDER BY sla_hist.dt_status DESC LIMIT :limit OFFSET :offset",
                             "empresa_id={$_SESSION['emp_user']}&cliente_id={$this->searchEmpresaValue}&limit={$this->limitResult}&offset={$pagination->getOffset()}");
 
 
@@ -798,12 +798,12 @@ class AdmsListTicketSla
 
                 $pagination = new \App\adms\Models\helper\AdmsPagination(URLADM . 'list-ticket-sla/index');
                 $pagination->condition($this->page, $this->limitResult);
-                $pagination->pagination("SELECT COUNT(id_ticket) AS num_result FROM adms_sla_hist WHERE (empresa_id= :empresa_id) AND (cliente_id = :cliente_id) AND (dt_abert_ticket BETWEEN :search_date_start AND :search_date_end)", 
+                $pagination->pagination("SELECT COUNT(id_ticket) AS num_result FROM adms_sla_hist WHERE (empresa_id= :empresa_id) AND (cliente_id = :cliente_id) AND (dt_status BETWEEN :search_date_start AND :search_date_end)", 
                 "empresa_id={$_SESSION['emp_user']}&cliente_id={$this->searchEmpresaValue}&search_date_start={$this->searchDateStart}&search_date_end={$this->searchDateEnd}");
                 $this->resultPg = $pagination->getResult();
                 
                 $listTicketSla = new \App\adms\Models\helper\AdmsRead();
-                $listTicketSla->fullRead("SELECT sla_hist.id AS id_sla_hist, sla_hist.empresa_id, clie.nome_fantasia AS nome_fantasia_clie, sla_hist.id_ticket AS id_ticket_sla_hist, sla_hist.dt_abert_ticket as dt_abert_ticket, 
+                $listTicketSla->fullRead("SELECT sla_hist.id AS id_sla_hist, sla_hist.empresa_id, clie.nome_fantasia AS nome_fantasia_clie, sla_hist.id_ticket AS id_ticket_sla_hist, sla_hist.dt_status as dt_status, 
                             sla.name as name_sla, sla_hist.tempo_sla_prim AS tempo_sla_prim, sla_hist.tempo_sla_fin AS tempo_sla_fin, sta_ant.name AS name_status_id_ant, 
                             sla_hist.dt_status_ant, sta_atu.name AS name_sta_atu, sla_hist.dt_status, user.name  AS name_user, sla_hist.tempo_sla AS tempo_sla
                             FROM adms_sla_hist AS sla_hist
@@ -812,7 +812,7 @@ class AdmsListTicketSla
                             INNER JOIN adms_cham_status AS sta_ant ON sta_ant.id = sla_hist.status_id_ant
                             INNER JOIN adms_cham_status AS sta_atu ON sta_atu.id = sla_hist.status_id
                             INNER JOIN adms_users AS user ON user.id = sla_hist.suporte_id 
-                            WHERE (sla_hist.empresa_id= :empresa_id) AND (sla_hist.cliente_id = :cliente_id) AND (dt_abert_ticket BETWEEN :search_date_start AND :search_date_end) ORDER BY sla_hist.dt_abert_ticket DESC LIMIT :limit OFFSET :offset",
+                            WHERE (sla_hist.empresa_id= :empresa_id) AND (sla_hist.cliente_id = :cliente_id) AND (dt_status BETWEEN :search_date_start AND :search_date_end) ORDER BY sla_hist.dt_status DESC LIMIT :limit OFFSET :offset",
                             "empresa_id={$_SESSION['emp_user']}&cliente_id={$this->searchEmpresaValue}&search_date_start={$this->searchDateStart}&search_date_end={$this->searchDateEnd}&limit={$this->limitResult}&offset={$pagination->getOffset()}");
 
 
@@ -833,7 +833,7 @@ class AdmsListTicketSla
                 $this->resultPg = $pagination->getResult();
                 
                 $listTicketSla = new \App\adms\Models\helper\AdmsRead();
-                $listTicketSla->fullRead("SELECT sla_hist.id AS id_sla_hist, sla_hist.empresa_id, clie.nome_fantasia AS nome_fantasia_clie, sla_hist.id_ticket AS id_ticket_sla_hist, sla_hist.dt_abert_ticket as dt_abert_ticket, 
+                $listTicketSla->fullRead("SELECT sla_hist.id AS id_sla_hist, sla_hist.empresa_id, clie.nome_fantasia AS nome_fantasia_clie, sla_hist.id_ticket AS id_ticket_sla_hist, sla_hist.dt_status as dt_status, 
                             sla.name as name_sla, sla_hist.tempo_sla_prim AS tempo_sla_prim, sla_hist.tempo_sla_fin AS tempo_sla_fin, sta_ant.name AS name_status_id_ant, 
                             sla_hist.dt_status_ant, sta_atu.name AS name_sta_atu, sla_hist.dt_status, user.name  AS name_user, sla_hist.tempo_sla AS tempo_sla
                             FROM adms_sla_hist AS sla_hist
@@ -842,7 +842,7 @@ class AdmsListTicketSla
                             INNER JOIN adms_cham_status AS sta_ant ON sta_ant.id = sla_hist.status_id_ant
                             INNER JOIN adms_cham_status AS sta_atu ON sta_atu.id = sla_hist.status_id
                             INNER JOIN adms_users AS user ON user.id = sla_hist.suporte_id 
-                            WHERE (sla_hist.cliente_id = :cliente_id) ORDER BY sla_hist.dt_abert_ticket DESC LIMIT :limit OFFSET :offset",
+                            WHERE (sla_hist.cliente_id = :cliente_id) ORDER BY sla_hist.dt_status DESC LIMIT :limit OFFSET :offset",
                             "empresa_id={$_SESSION['emp_user']}&cliente_id={$this->searchEmpresaValue}&limit={$this->limitResult}&offset={$pagination->getOffset()}");
 
 
@@ -870,12 +870,12 @@ class AdmsListTicketSla
 
                 $pagination = new \App\adms\Models\helper\AdmsPagination(URLADM . 'list-ticket-sla/index');
                 $pagination->condition($this->page, $this->limitResult);
-                $pagination->pagination("SELECT COUNT(id_ticket) AS num_result FROM adms_sla_hist WHERE (empresa_id= :empresa_id) AND (suporte_id = :suporte_id) AND (dt_abert_ticket BETWEEN :search_date_start AND :search_date_end)", 
+                $pagination->pagination("SELECT COUNT(id_ticket) AS num_result FROM adms_sla_hist WHERE (empresa_id= :empresa_id) AND (suporte_id = :suporte_id) AND (dt_status BETWEEN :search_date_start AND :search_date_end)", 
                 "empresa_id={$_SESSION['emp_user']}&suporte_id={$this->searchSuporteValue}&search_date_start={$this->searchDateStart}&search_date_end={$this->searchDateEnd}");
                 $this->resultPg = $pagination->getResult();
                 
                 $listTicketSla = new \App\adms\Models\helper\AdmsRead();
-                $listTicketSla->fullRead("SELECT sla_hist.id AS id_sla_hist, sla_hist.empresa_id, clie.nome_fantasia AS nome_fantasia_clie, sla_hist.id_ticket AS id_ticket_sla_hist, sla_hist.dt_abert_ticket as dt_abert_ticket, 
+                $listTicketSla->fullRead("SELECT sla_hist.id AS id_sla_hist, sla_hist.empresa_id, clie.nome_fantasia AS nome_fantasia_clie, sla_hist.id_ticket AS id_ticket_sla_hist, sla_hist.dt_status as dt_status, 
                             sla.name as name_sla, sla_hist.tempo_sla_prim AS tempo_sla_prim, sla_hist.tempo_sla_fin AS tempo_sla_fin, sta_ant.name AS name_status_id_ant, 
                             sla_hist.dt_status_ant, sta_atu.name AS name_sta_atu, sla_hist.dt_status, user.name  AS name_user, sla_hist.tempo_sla AS tempo_sla
                             FROM adms_sla_hist AS sla_hist
@@ -884,7 +884,7 @@ class AdmsListTicketSla
                             INNER JOIN adms_cham_status AS sta_ant ON sta_ant.id = sla_hist.status_id_ant
                             INNER JOIN adms_cham_status AS sta_atu ON sta_atu.id = sla_hist.status_id
                             INNER JOIN adms_users AS user ON user.id = sla_hist.suporte_id 
-                            WHERE (sla_hist.empresa_id= :empresa_id) AND (sla_hist.suporte_id = :suporte_id) AND (dt_abert_ticket BETWEEN :search_date_start AND :search_date_end) ORDER BY sla_hist.dt_abert_ticket DESC LIMIT :limit OFFSET :offset",
+                            WHERE (sla_hist.empresa_id= :empresa_id) AND (sla_hist.suporte_id = :suporte_id) AND (dt_status BETWEEN :search_date_start AND :search_date_end) ORDER BY sla_hist.dt_status DESC LIMIT :limit OFFSET :offset",
                             "empresa_id={$_SESSION['emp_user']}&suporte_id={$this->searchSuporteValue}&search_date_start={$this->searchDateStart}&search_date_end={$this->searchDateEnd}&limit={$this->limitResult}&offset={$pagination->getOffset()}");
 
 
@@ -905,7 +905,7 @@ class AdmsListTicketSla
                 $this->resultPg = $pagination->getResult();
                 
                 $listTicketSla = new \App\adms\Models\helper\AdmsRead();
-                $listTicketSla->fullRead("SELECT sla_hist.id AS id_sla_hist, sla_hist.empresa_id, clie.nome_fantasia AS nome_fantasia_clie, sla_hist.id_ticket AS id_ticket_sla_hist, sla_hist.dt_abert_ticket as dt_abert_ticket, 
+                $listTicketSla->fullRead("SELECT sla_hist.id AS id_sla_hist, sla_hist.empresa_id, clie.nome_fantasia AS nome_fantasia_clie, sla_hist.id_ticket AS id_ticket_sla_hist, sla_hist.dt_status as dt_status, 
                             sla.name as name_sla, sla_hist.tempo_sla_prim AS tempo_sla_prim, sla_hist.tempo_sla_fin AS tempo_sla_fin, sta_ant.name AS name_status_id_ant, 
                             sla_hist.dt_status_ant, sta_atu.name AS name_sta_atu, sla_hist.dt_status, user.name  AS name_user, sla_hist.tempo_sla AS tempo_sla
                             FROM adms_sla_hist AS sla_hist
@@ -914,7 +914,7 @@ class AdmsListTicketSla
                             INNER JOIN adms_cham_status AS sta_ant ON sta_ant.id = sla_hist.status_id_ant
                             INNER JOIN adms_cham_status AS sta_atu ON sta_atu.id = sla_hist.status_id
                             INNER JOIN adms_users AS user ON user.id = sla_hist.suporte_id 
-                            WHERE (sla_hist.cliente_id = :cliente_id) ORDER BY sla_hist.dt_abert_ticket DESC LIMIT :limit OFFSET :offset",
+                            WHERE (sla_hist.cliente_id = :cliente_id) ORDER BY sla_hist.dt_status DESC LIMIT :limit OFFSET :offset",
                             "empresa_id={$_SESSION['emp_user']}&cliente_id={$this->searchEmpresaValue}&limit={$this->limitResult}&offset={$pagination->getOffset()}");
 
 
@@ -942,12 +942,12 @@ class AdmsListTicketSla
 
                 $pagination = new \App\adms\Models\helper\AdmsPagination(URLADM . 'list-ticket-sla/index');
                 $pagination->condition($this->page, $this->limitResult);
-                $pagination->pagination("SELECT COUNT(id_ticket) AS num_result FROM adms_sla_hist WHERE (empresa_id= :empresa_id) AND (status_id_ant= :status_id_ant) AND (dt_abert_ticket BETWEEN :search_date_start AND :search_date_end)", 
+                $pagination->pagination("SELECT COUNT(id_ticket) AS num_result FROM adms_sla_hist WHERE (empresa_id= :empresa_id) AND (status_id_ant= :status_id_ant) AND (dt_status BETWEEN :search_date_start AND :search_date_end)", 
                 "empresa_id={$_SESSION['emp_user']}&status_id_ant={$this->searchStatusAnteriorValue}&search_date_start={$this->searchDateStart}&search_date_end={$this->searchDateEnd}");
                 $this->resultPg = $pagination->getResult();
                 
                 $listTicketSla = new \App\adms\Models\helper\AdmsRead();
-                $listTicketSla->fullRead("SELECT sla_hist.id AS id_sla_hist, sla_hist.empresa_id, clie.nome_fantasia AS nome_fantasia_clie, sla_hist.id_ticket AS id_ticket_sla_hist, sla_hist.dt_abert_ticket as dt_abert_ticket, 
+                $listTicketSla->fullRead("SELECT sla_hist.id AS id_sla_hist, sla_hist.empresa_id, clie.nome_fantasia AS nome_fantasia_clie, sla_hist.id_ticket AS id_ticket_sla_hist, sla_hist.dt_status as dt_status, 
                             sla.name as name_sla, sla_hist.tempo_sla_prim AS tempo_sla_prim, sla_hist.tempo_sla_fin AS tempo_sla_fin, sta_ant.name AS name_status_id_ant, 
                             sla_hist.dt_status_ant, sta_atu.name AS name_sta_atu, sla_hist.dt_status, user.name  AS name_user, sla_hist.tempo_sla AS tempo_sla
                             FROM adms_sla_hist AS sla_hist
@@ -956,7 +956,7 @@ class AdmsListTicketSla
                             INNER JOIN adms_cham_status AS sta_ant ON sta_ant.id = sla_hist.status_id_ant
                             INNER JOIN adms_cham_status AS sta_atu ON sta_atu.id = sla_hist.status_id
                             INNER JOIN adms_users AS user ON user.id = sla_hist.suporte_id 
-                            WHERE (sla_hist.empresa_id= :empresa_id) AND (sla_hist.status_id_ant = :status_id_ant) AND (dt_abert_ticket BETWEEN :search_date_start AND :search_date_end) ORDER BY sla_hist.dt_abert_ticket DESC LIMIT :limit OFFSET :offset",
+                            WHERE (sla_hist.empresa_id= :empresa_id) AND (sla_hist.status_id_ant = :status_id_ant) AND (dt_status BETWEEN :search_date_start AND :search_date_end) ORDER BY sla_hist.dt_status DESC LIMIT :limit OFFSET :offset",
                             "empresa_id={$_SESSION['emp_user']}&status_id_ant={$this->searchStatusAnteriorValue}&search_date_start={$this->searchDateStart}&search_date_end={$this->searchDateEnd}&limit={$this->limitResult}&offset={$pagination->getOffset()}");
 
 
@@ -977,7 +977,7 @@ class AdmsListTicketSla
                 $this->resultPg = $pagination->getResult();
                 
                 $listTicketSla = new \App\adms\Models\helper\AdmsRead();
-                $listTicketSla->fullRead("SELECT sla_hist.id AS id_sla_hist, sla_hist.empresa_id, clie.nome_fantasia AS nome_fantasia_clie, sla_hist.id_ticket AS id_ticket_sla_hist, sla_hist.dt_abert_ticket as dt_abert_ticket, 
+                $listTicketSla->fullRead("SELECT sla_hist.id AS id_sla_hist, sla_hist.empresa_id, clie.nome_fantasia AS nome_fantasia_clie, sla_hist.id_ticket AS id_ticket_sla_hist, sla_hist.dt_status as dt_status, 
                             sla.name as name_sla, sla_hist.tempo_sla_prim AS tempo_sla_prim, sla_hist.tempo_sla_fin AS tempo_sla_fin, sta_ant.name AS name_status_id_ant, 
                             sla_hist.dt_status_ant, sta_atu.name AS name_sta_atu, sla_hist.dt_status, user.name  AS name_user, sla_hist.tempo_sla AS tempo_sla
                             FROM adms_sla_hist AS sla_hist
@@ -986,7 +986,7 @@ class AdmsListTicketSla
                             INNER JOIN adms_cham_status AS sta_ant ON sta_ant.id = sla_hist.status_id_ant
                             INNER JOIN adms_cham_status AS sta_atu ON sta_atu.id = sla_hist.status_id
                             INNER JOIN adms_users AS user ON user.id = sla_hist.suporte_id 
-                            WHERE (sla_hist.cliente_id = :cliente_id) ORDER BY sla_hist.dt_abert_ticket DESC LIMIT :limit OFFSET :offset",
+                            WHERE (sla_hist.cliente_id = :cliente_id) ORDER BY sla_hist.dt_status DESC LIMIT :limit OFFSET :offset",
                             "empresa_id={$_SESSION['emp_user']}&cliente_id={$this->searchEmpresaValue}&limit={$this->limitResult}&offset={$pagination->getOffset()}");
 
 
@@ -1014,12 +1014,12 @@ class AdmsListTicketSla
 
                 $pagination = new \App\adms\Models\helper\AdmsPagination(URLADM . 'list-ticket-sla/index');
                 $pagination->condition($this->page, $this->limitResult);
-                $pagination->pagination("SELECT COUNT(id_ticket) AS num_result FROM adms_sla_hist WHERE (empresa_id= :empresa_id) AND (status_id_ant= :status_id_ant) AND (status_id= :status_id) AND (dt_abert_ticket BETWEEN :search_date_start AND :search_date_end)", 
+                $pagination->pagination("SELECT COUNT(id_ticket) AS num_result FROM adms_sla_hist WHERE (empresa_id= :empresa_id) AND (status_id_ant= :status_id_ant) AND (status_id= :status_id) AND (dt_status BETWEEN :search_date_start AND :search_date_end)", 
                 "empresa_id={$_SESSION['emp_user']}&status_id_ant={$this->searchStatusAnteriorValue}&status_id={$this->searchStatusValue}&search_date_start={$this->searchDateStart}&search_date_end={$this->searchDateEnd}");
                 $this->resultPg = $pagination->getResult();
                 
                 $listTicketSla = new \App\adms\Models\helper\AdmsRead();
-                $listTicketSla->fullRead("SELECT sla_hist.id AS id_sla_hist, sla_hist.empresa_id, clie.nome_fantasia AS nome_fantasia_clie, sla_hist.id_ticket AS id_ticket_sla_hist, sla_hist.dt_abert_ticket as dt_abert_ticket, 
+                $listTicketSla->fullRead("SELECT sla_hist.id AS id_sla_hist, sla_hist.empresa_id, clie.nome_fantasia AS nome_fantasia_clie, sla_hist.id_ticket AS id_ticket_sla_hist, sla_hist.dt_status as dt_status, 
                             sla.name as name_sla, sla_hist.tempo_sla_prim AS tempo_sla_prim, sla_hist.tempo_sla_fin AS tempo_sla_fin, sta_ant.name AS name_status_id_ant, 
                             sla_hist.dt_status_ant, sta_atu.name AS name_sta_atu, sla_hist.dt_status, user.name  AS name_user, sla_hist.tempo_sla AS tempo_sla
                             FROM adms_sla_hist AS sla_hist
@@ -1028,7 +1028,7 @@ class AdmsListTicketSla
                             INNER JOIN adms_cham_status AS sta_ant ON sta_ant.id = sla_hist.status_id_ant
                             INNER JOIN adms_cham_status AS sta_atu ON sta_atu.id = sla_hist.status_id
                             INNER JOIN adms_users AS user ON user.id = sla_hist.suporte_id 
-                            WHERE (sla_hist.empresa_id= :empresa_id) AND (sla_hist.status_id_ant = :status_id_ant) AND (sla_hist.status_id= :status_id) AND (dt_abert_ticket BETWEEN :search_date_start AND :search_date_end) ORDER BY sla_hist.dt_abert_ticket DESC LIMIT :limit OFFSET :offset",
+                            WHERE (sla_hist.empresa_id= :empresa_id) AND (sla_hist.status_id_ant = :status_id_ant) AND (sla_hist.status_id= :status_id) AND (dt_status BETWEEN :search_date_start AND :search_date_end) ORDER BY sla_hist.dt_status DESC LIMIT :limit OFFSET :offset",
                             "empresa_id={$_SESSION['emp_user']}&status_id_ant={$this->searchStatusAnteriorValue}&status_id={$this->searchStatusValue}&search_date_start={$this->searchDateStart}&search_date_end={$this->searchDateEnd}&limit={$this->limitResult}&offset={$pagination->getOffset()}");
 
 
@@ -1049,7 +1049,7 @@ class AdmsListTicketSla
                 $this->resultPg = $pagination->getResult();
                 
                 $listTicketSla = new \App\adms\Models\helper\AdmsRead();
-                $listTicketSla->fullRead("SELECT sla_hist.id AS id_sla_hist, sla_hist.empresa_id, clie.nome_fantasia AS nome_fantasia_clie, sla_hist.id_ticket AS id_ticket_sla_hist, sla_hist.dt_abert_ticket as dt_abert_ticket, 
+                $listTicketSla->fullRead("SELECT sla_hist.id AS id_sla_hist, sla_hist.empresa_id, clie.nome_fantasia AS nome_fantasia_clie, sla_hist.id_ticket AS id_ticket_sla_hist, sla_hist.dt_status as dt_status, 
                             sla.name as name_sla, sla_hist.tempo_sla_prim AS tempo_sla_prim, sla_hist.tempo_sla_fin AS tempo_sla_fin, sta_ant.name AS name_status_id_ant, 
                             sla_hist.dt_status_ant, sta_atu.name AS name_sta_atu, sla_hist.dt_status, user.name  AS name_user, sla_hist.tempo_sla AS tempo_sla
                             FROM adms_sla_hist AS sla_hist
@@ -1058,7 +1058,7 @@ class AdmsListTicketSla
                             INNER JOIN adms_cham_status AS sta_ant ON sta_ant.id = sla_hist.status_id_ant
                             INNER JOIN adms_cham_status AS sta_atu ON sta_atu.id = sla_hist.status_id
                             INNER JOIN adms_users AS user ON user.id = sla_hist.suporte_id 
-                            WHERE (sla_hist.cliente_id = :cliente_id) ORDER BY sla_hist.dt_abert_ticket DESC LIMIT :limit OFFSET :offset",
+                            WHERE (sla_hist.cliente_id = :cliente_id) ORDER BY sla_hist.dt_status DESC LIMIT :limit OFFSET :offset",
                             "empresa_id={$_SESSION['emp_user']}&cliente_id={$this->searchEmpresaValue}&limit={$this->limitResult}&offset={$pagination->getOffset()}");
 
 
@@ -1086,12 +1086,12 @@ class AdmsListTicketSla
 
                 $pagination = new \App\adms\Models\helper\AdmsPagination(URLADM . 'list-ticket-sla/index');
                 $pagination->condition($this->page, $this->limitResult);
-                $pagination->pagination("SELECT COUNT(id_ticket) AS num_result FROM adms_sla_hist WHERE (empresa_id= :empresa_id) AND (id_sla= :id_sla) AND (dt_abert_ticket BETWEEN :search_date_start AND :search_date_end)", 
+                $pagination->pagination("SELECT COUNT(id_ticket) AS num_result FROM adms_sla_hist WHERE (empresa_id= :empresa_id) AND (id_sla= :id_sla) AND (dt_status BETWEEN :search_date_start AND :search_date_end)", 
                 "empresa_id={$_SESSION['emp_user']}&id_sla={$this->searchTipoValue}&search_date_start={$this->searchDateStart}&search_date_end={$this->searchDateEnd}");
                 $this->resultPg = $pagination->getResult();
                 
                 $listTicketSla = new \App\adms\Models\helper\AdmsRead();
-                $listTicketSla->fullRead("SELECT sla_hist.id AS id_sla_hist, sla_hist.empresa_id, clie.nome_fantasia AS nome_fantasia_clie, sla_hist.id_ticket AS id_ticket_sla_hist, sla_hist.dt_abert_ticket as dt_abert_ticket, 
+                $listTicketSla->fullRead("SELECT sla_hist.id AS id_sla_hist, sla_hist.empresa_id, clie.nome_fantasia AS nome_fantasia_clie, sla_hist.id_ticket AS id_ticket_sla_hist, sla_hist.dt_status as dt_status, 
                             sla.name as name_sla, sla_hist.tempo_sla_prim AS tempo_sla_prim, sla_hist.tempo_sla_fin AS tempo_sla_fin, sta_ant.name AS name_status_id_ant, 
                             sla_hist.dt_status_ant, sta_atu.name AS name_sta_atu, sla_hist.dt_status, user.name  AS name_user, sla_hist.tempo_sla AS tempo_sla
                             FROM adms_sla_hist AS sla_hist
@@ -1100,7 +1100,7 @@ class AdmsListTicketSla
                             INNER JOIN adms_cham_status AS sta_ant ON sta_ant.id = sla_hist.status_id_ant
                             INNER JOIN adms_cham_status AS sta_atu ON sta_atu.id = sla_hist.status_id
                             INNER JOIN adms_users AS user ON user.id = sla_hist.suporte_id 
-                            WHERE (sla_hist.empresa_id= :empresa_id) AND (sla_hist.id_sla = :id_sla) AND (dt_abert_ticket BETWEEN :search_date_start AND :search_date_end) ORDER BY sla_hist.dt_abert_ticket DESC LIMIT :limit OFFSET :offset",
+                            WHERE (sla_hist.empresa_id= :empresa_id) AND (sla_hist.id_sla = :id_sla) AND (dt_status BETWEEN :search_date_start AND :search_date_end) ORDER BY sla_hist.dt_status DESC LIMIT :limit OFFSET :offset",
                             "empresa_id={$_SESSION['emp_user']}&id_sla={$this->searchTipoValue}&search_date_start={$this->searchDateStart}&search_date_end={$this->searchDateEnd}&limit={$this->limitResult}&offset={$pagination->getOffset()}");
 
 
@@ -1121,7 +1121,7 @@ class AdmsListTicketSla
                 $this->resultPg = $pagination->getResult();
                 
                 $listTicketSla = new \App\adms\Models\helper\AdmsRead();
-                $listTicketSla->fullRead("SELECT sla_hist.id AS id_sla_hist, sla_hist.empresa_id, clie.nome_fantasia AS nome_fantasia_clie, sla_hist.id_ticket AS id_ticket_sla_hist, sla_hist.dt_abert_ticket as dt_abert_ticket, 
+                $listTicketSla->fullRead("SELECT sla_hist.id AS id_sla_hist, sla_hist.empresa_id, clie.nome_fantasia AS nome_fantasia_clie, sla_hist.id_ticket AS id_ticket_sla_hist, sla_hist.dt_status as dt_status, 
                             sla.name as name_sla, sla_hist.tempo_sla_prim AS tempo_sla_prim, sla_hist.tempo_sla_fin AS tempo_sla_fin, sta_ant.name AS name_status_id_ant, 
                             sla_hist.dt_status_ant, sta_atu.name AS name_sta_atu, sla_hist.dt_status, user.name  AS name_user, sla_hist.tempo_sla AS tempo_sla
                             FROM adms_sla_hist AS sla_hist
@@ -1130,7 +1130,7 @@ class AdmsListTicketSla
                             INNER JOIN adms_cham_status AS sta_ant ON sta_ant.id = sla_hist.status_id_ant
                             INNER JOIN adms_cham_status AS sta_atu ON sta_atu.id = sla_hist.status_id
                             INNER JOIN adms_users AS user ON user.id = sla_hist.suporte_id 
-                            WHERE (sla_hist.cliente_id = :cliente_id) ORDER BY sla_hist.dt_abert_ticket DESC LIMIT :limit OFFSET :offset",
+                            WHERE (sla_hist.cliente_id = :cliente_id) ORDER BY sla_hist.dt_status DESC LIMIT :limit OFFSET :offset",
                             "empresa_id={$_SESSION['emp_user']}&cliente_id={$this->searchEmpresaValue}&limit={$this->limitResult}&offset={$pagination->getOffset()}");
 
 

@@ -171,7 +171,9 @@ if (isset($this->data['form'])) {
                     <th class="list-head-content table-sm-none">Cliente</th>
                     <th class="list-head-content table-sm-none">Abertura Ticket</th>
                     <th class="list-head-content table-sm-none">Status Anter.</th>
+                    <th class="list-head-content table-sm-none">Data Sta. Anterior</th>
                     <th class="list-head-content">Status Atual</th>
+                    <th class="list-head-content table-sm-none">Data Sta. Atuaal</th>
                     <th class="list-head-content">Tempo SLA</th>
                     <th class="list-head-content table-sm-none">Tecnico</th>
 
@@ -187,9 +189,11 @@ if (isset($this->data['form'])) {
                         <td class="list-body-content"><?php echo $id_ticket_sla_hist; ?></td>
                         <td class="list-body-content table-sm-none"><?php echo $name_sla; ?></td>
                         <td class="list-body-content table-sm-none"><?php echo $nome_fantasia_clie; ?></td>
-                        <td class="list-body-content table-sm-none"><?php echo date('d/m/Y H:i:s', strtotime($dt_abert_ticket))?>
+                        <td class="list-body-content table-sm-none"><?php echo date('d/m/Y H:i:s', strtotime($dt_status))?>
                         <td class="list-body-content table-sm-none"><?php echo $name_status_id_ant; ?></td>
+                        <td class="list-body-content table-sm-none"><?php echo date('d/m/Y H:i:s', strtotime($dt_status_ant))?>
                         <td class="list-body-content"><?php echo $name_sta_atu; ?></td>
+                        <td class="list-body-content table-sm-none"><?php echo date('d/m/Y H:i:s', strtotime($dt_status))?>
                         <td class="list-body-content"><?php echo date('H:i:s', strtotime($tempo_sla))?>
                         <td class="list-body-content table-sm-none"><?php echo $name_user; ?></td>
                         
@@ -200,6 +204,9 @@ if (isset($this->data['form'])) {
                                     <?php
                                     if ($this->data['button']['view_ticket_sla']) {
                                         echo "<a href='" . URLADM . "view-ticket-sla/index/$id_sla_hist'>Visualizar</a>";
+                                    }
+                                    if ($this->data['button']['view_cham']) {
+                                        echo "<a href='" . URLADM . "view-cham/index/$id_ticket_sla_hist'>Visualizar Ticket: $id_ticket_sla_hist</a>";
                                     }
                                     ?>
                                 </div>

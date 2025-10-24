@@ -27,7 +27,7 @@ if (!defined('D0O8C0A3N1E9D6O1')) {
                     echo "<a href='" . URLADM . "list-orcam/index' class='btn-info aButton'>Listar</a> ";
                 }
 
-                if (($this->data['button']['view_profile_orcam']) and ($status_id <> 1) and ($status_id <> 4)) {
+                if (($this->data['button']['view_profile_orcam'])) {
                     echo "<a href='" . URLADM . "view-profile-orcam/index/$id_orcam' class='btn-warning aButton'>Anexar Orçamento</a> ";
                 }
                 ?>

@@ -49,10 +49,11 @@ class AdmsViewProfileOrcam
     public function viewProfileOrcam(int $id): void
     {
         $this->id = $id;
-        $viewOrcam = new \App\adms\Models\helper\AdmsRead();
-        $viewOrcam->fullRead("SELECT id, prod_serv, info_prod_serv, image FROM  adms_Orcam WHERE id=:id LIMIT :limit", "id={$this->id}&limit=1");
+        $viewProfileOrcam = new \App\adms\Models\helper\AdmsRead();
+        $viewProfileOrcam->fullRead("SELECT id, empresa_id, status_id, prod_serv, info_prod_serv, image FROM  adms_Orcam WHERE id= :id_orcam", "id_orcam={$this->id}");
 
-        $this->resultBd = $viewOrcam->getResult();
+        $this->resultBd = $viewProfileOrcam->getResult();
+
         if ($this->resultBd) {
             $this->result = true;
         } else {

@@ -33,7 +33,6 @@ class ViewProfileOrcam
     public function index(int|string|null $id = null): void
     {
         $this->dataForm = filter_input_array(INPUT_POST, FILTER_DEFAULT);
-        
         if (!empty($id)) {
             $this->id = (int) $id;
             $viewProfileOrcam = new \App\adms\Models\AdmsViewProfileOrcam();
@@ -43,7 +42,7 @@ class ViewProfileOrcam
                 $this->data['viewProfileOrcam'] = $viewProfileOrcam->getResultBd();
                 $this->loadViewProfileOrcam();
             } else {
-                $urlRedirect = URLADM . "login/index";
+                $urlRedirect = URLADM . "list-orcam/index";
                 header("Location: $urlRedirect");
             }
         }

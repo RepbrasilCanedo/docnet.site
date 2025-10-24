@@ -52,7 +52,7 @@ if (!defined('D0O8C0A3N1E9D6O1')) {
 
                 <div class="view-det-adm">
                     <span class="view-adm-title">Data Abertura do Ticket: </span>
-                    <span class="view-adm-info"><?php echo date('d/m/Y H:i:s', strtotime($dt_abert_ticket))?></span>
+                    <span class="view-adm-info"><?php echo date('d/m/Y H:i:s', strtotime($dt_status))?></span>
                 </div>
 
                 <div class="view-det-adm">

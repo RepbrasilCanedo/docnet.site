@@ -167,7 +167,7 @@ class ListTicketSla
             $this->data['pagination'] = "";
         }
 
-        $button = ['view_ticket_sla' => ['menu_controller' => 'view-ticket-sla', 'menu_metodo' => 'index']];
+        $button = ['view_ticket_sla' => ['menu_controller' => 'view-ticket-sla', 'menu_metodo' => 'index'], 'view_cham' => ['menu_controller' => 'view-cham', 'menu_metodo' => 'index']];
 
         $listBotton = new \App\adms\Models\helper\AdmsButton();
         $this->data['button'] = $listBotton->buttonPermission($button);
