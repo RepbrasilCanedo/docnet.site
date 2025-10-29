@@ -54,7 +54,7 @@ class EditProfileImageCham
                 $this->data['form'] = $viewProfImgCham->getResultBd();
                 $this->viewEditProfImagemCham();
             } else {
-                $urlRedirect = URLADM . "login/index";
+                $urlRedirect = URLADM . "list-orcam/index";
                 header("Location: $urlRedirect");
             }
         }

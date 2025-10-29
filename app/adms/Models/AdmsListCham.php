@@ -144,7 +144,7 @@ class AdmsListCham
                         $this->result = true;
                         unset($_SESSION['status_ticket']);
                     } else {
-                        $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum Ticket encontrado para a empresa do usuario!</p>";
+                        $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum Ticket encontrado para a empresa do usuario 55555!</p>";
                         $this->result = false;
                     }
 

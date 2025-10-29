@@ -1,6 +1,6 @@
 <?php
 
-namespace App\adms\Models;
+namespace app\adms\Models;
 
 if(!defined('D0O8C0A3N1E9D6O1')){
     header("Location: /");
@@ -48,8 +48,8 @@ class AdmsEditProfileImageOrcam
      */
     public function viewProfileOrcam(): bool
     {       
-        $viewOrcam = new \App\adms\Models\helper\AdmsRead();
-        $viewOrcam->fullRead("SELECT id, image, status_id, modified FROM  adms_orcam  WHERE id=:id LIMIT :limit", "id=" . $_SESSION['set_orcam'] . "&limit=1"
+        $viewOrcam = new \app\adms\Models\helper\AdmsRead();
+        $viewOrcam->fullRead("SELECT id, image, status_id, modified FROM  adms_orcam  WHERE id=:id", "id={$_SESSION['set_orcam']}"
         );
 
         $this->resultBd = $viewOrcam->getResult();
@@ -84,7 +84,6 @@ class AdmsEditProfileImageOrcam
         $valEmptyField->valField($this->data);
 
         if ($valEmptyField->getResult()) {
-
             if (!empty($this->dataImagem['name'])) {
                 $this->valInput();
             } else {
@@ -102,12 +101,12 @@ class AdmsEditProfileImageOrcam
      * 
      * @return void
      */
-    private function valInput(): void    {
+    private function valInput(): void    
+    {
         
         $valExtImgOrcam = new \App\adms\Models\helper\AdmsValExtPdf();        
         $valExtImgOrcam->validateExtOrcam($this->dataImagem['type']);
 
-        
         if (($this->viewProfileOrcam()) and ($valExtImgOrcam->getResult())) {
             $this->upload();
         } else {
@@ -125,8 +124,9 @@ class AdmsEditProfileImageOrcam
     {       
         $slugImgCham = new \App\adms\Models\helper\AdmsSlug();
         $this->nameImg = $slugImgCham->slug($this->dataImagem['name']);
-        $this->directory = "app/adms/assets/image/orcamentos/" . $_SESSION['set_orcam'] . "/";
+        $this->directory = "app/adms/assets/image/orcamentos/".$_SESSION['set_orcam']."/";
 
+        
         $uploadImgRes = new \App\adms\Models\helper\AdmsUploadPdfOrcam();
         $uploadImgRes->upload($this->dataImagem, $this->directory, $this->nameImg);        
 
@@ -145,7 +145,7 @@ class AdmsEditProfileImageOrcam
      */
     private function edit(): void
     {
-        
+        date_default_timezone_set('America/Bahia');
 
         $this->data['image'] = $this->nameImg;
 
@@ -158,7 +158,7 @@ class AdmsEditProfileImageOrcam
         $this->data['modified'] = date("Y-m-d H:i:s");
 
         $upOrcam = new \App\adms\Models\helper\AdmsUpdate();
-        $upOrcam->exeUpdate("adms_orcam", $this->data, "WHERE id=:id", "id=" . $_SESSION['set_orcam']);
+        $upOrcam->exeUpdate("adms_orcam", $this->data, "WHERE id=:id", "id={$_SESSION['set_orcam']}");
 
         if ($upOrcam->getResult()) {
             $_SESSION['user_image'] = $this->nameImg;
@@ -176,7 +176,7 @@ class AdmsEditProfileImageOrcam
     private function deleteImage(): void
     {
         if (((!empty($this->resultBd[0]['image'])) or ($this->resultBd[0]['image'] != null)) and ($this->resultBd[0]['image'] != $this->nameImg)) {
-            $this->delImgOrcam = "app/adms/assets/image/orcamentos/" . $_SESSION['set_orcam'] . "/" . $this->resultBd[0]['image'];
+            $this->delImgOrcam = "app/adms/assets/image/orcamentos/".$_SESSION['set_orcam']."/".$this->resultBd[0]['image'];
             if (file_exists($this->delImgOrcam)) {
                 unlink($this->delImgOrcam);
             }

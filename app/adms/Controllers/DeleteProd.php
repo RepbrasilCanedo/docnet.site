@@ -8,7 +8,7 @@ if(!defined('D0O8C0A3N1E9D6O1')){
 }
 
 /**
- * Controller apagar Equipamento
+ * Controller apagar usuário
  * @author Daniel Canedo - docan2006@gmail.com
  */
 class DeleteProd
@@ -18,12 +18,12 @@ class DeleteProd
     private int|string|null $id;
     
     /**
-     * Método apagar equipamento
+     * Método apagar usuário
      * Se existir o ID na URL instancia a MODELS para excluir o registro no banco de dados
      * Senão criar a mensagem de erro
-     * Redireciona para a página listar Produto
+     * Redireciona para a página listar usuários
      *
-     * @param integer|string|null|null $id Receber o id do registro que deve ser excluido
+     * @param integer|string|null|null $id
      * @return void
      */
     public function index(int|string|null $id = null): void
@@ -34,7 +34,7 @@ class DeleteProd
             $deleteProd = new \App\adms\Models\AdmsDeleteProd();
             $deleteProd->deleteProd($this->id);            
         } else {
-            $_SESSION['msg'] = "<p class='alert-danger'>Erro: Necessário selecionar um Produto!</p>";
+            $_SESSION['msg'] = "<p class='alert-danger'>Erro: Necessário selecionar um equipamento!</p>";
         }
 
         $urlRedirect = URLADM . "list-prod/index";

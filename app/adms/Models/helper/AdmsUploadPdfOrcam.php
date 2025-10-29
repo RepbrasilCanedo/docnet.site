@@ -17,26 +17,13 @@ class AdmsUploadPdfOrcam
     /** @var array $imageData Recebe a informação da imagem*/
     private array $imageData;
     /** @var string $directory Recebe o caminho do diretorio*/
-    private string $directory;
-
-    /** @var string $directory Recebe o caminho do diretorio*/
-    private string $filename;
-
-        /** @var string $directory Recebe o caminho do diretorio*/
-    private string $destination;  
-    
+    private string $directory;    
     /** @var string $name Recebe o nome da imagem*/
     private string $name;
-    /** @var integer $width Recebe a largura da imagem*/
-    private int $width;
-    /** @var integer $height Recebe a altura da imagem*/
-    private int $height;
     /** @var [type] $newImage Recebe o nome temporario da imagem*/
     private $newImage;
     /** @var boolean $result Recebe o resultado TRUE ou FALSE*/
     private bool $result;
-    /** @var [type] $imgResize Recebe a informação da imagem redimensionada*/
-    private $imgResize;
 
     /** @return boolean Recebe o resultado TRUE ou FALSE*/
     function getResult(): bool
@@ -45,7 +32,7 @@ class AdmsUploadPdfOrcam
     }
 
     /**
-     * Recebe as informações para fazer o upload da imagem
+     * Recebe as informações para fazer o upload do pdf
      * Chama o metodo valDirectory para validar o diretorio
      * @param array $imageData
      * @param string $directory
@@ -90,7 +77,7 @@ class AdmsUploadPdfOrcam
      */
     private function createDir(): void
     {
-        mkdir($this->directory, 0755);
+        mkdir($this->directory, 0755, true);
         if (!file_exists($this->directory)) {
             $_SESSION['msg'] = "<p class='alert-danger'>Erro: Upload da imagem em PDF não realizada com sucesso. Tente novamente!</p>";
             $this->result = false;

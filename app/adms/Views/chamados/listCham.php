@@ -227,6 +227,7 @@ if (isset($this->data['form'])) {
                                 <label class="title-input-search">Data Final: </label>
                                 <input type="date" name="search_date_end" id="search_date_end" class="input-search" value="<?php echo $search_date_end; ?>">
                             </div>
+                            </div>
 
                         <?php } ?>
 
@@ -287,6 +288,17 @@ if (isset($this->data['form'])) {
                                 <option value="Apresentacao">Apresentação Negócios</option>
                                 <option value="Outros">Outros</option>
                             </select>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header">
+                                Featured
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">Special title treatment</h5>
+                                <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                                <a href="#" class="btn btn-primary">Go somewhere</a>
+                            </div>
                         </div>
 
                         <div class="column">

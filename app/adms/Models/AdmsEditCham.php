@@ -474,8 +474,9 @@ class AdmsEditCham
 
         $viewTicket = new \App\adms\Models\helper\AdmsRead();
         $viewTicket->fullRead("SELECT cham.id as id_cham, cham.empresa_id as empresa_id_cham,  cham.cliente_id as cliente_id_cham, cham.sla_id, sla.prim_resp as prim_resp_sla, sla.final_resp as final_resp_sla, 
-                            cham.suporte_id, cham.status_id, cham.dt_cham as dt_cham, cham.dt_status 
+                            cham.suporte_id, cham.status_id, cham.dt_cham as dt_cham, cham.dt_status, cham.type_cham
                             FROM adms_cham  AS cham
+                            INNER JOIN adms_sla AS sla ON sla.id = cham.sla_id 
                             INNER JOIN adms_sla AS sla ON sla.id = cham.sla_id 
                             WHERE cham.id= :cham_id","cham_id={$_SESSION['set_cham']}");
 
@@ -491,7 +492,8 @@ class AdmsEditCham
         $this->dataSla['suporte_id'] = $_SESSION['user_id'];
         $this->dataSla['status_id'] = $_SESSION['status_cham'];
         $this->dataSla['dt_status'] = date("Y-m-d H:i:s");
-        $this->dataSla['dt_abert_ticket'] = $this->resultBd[0]['dt_cham'];        
+        $this->dataSla['dt_abert_ticket'] = $this->resultBd[0]['dt_cham'];          
+        $this->dataSla['typo_cham'] = $this->resultBd[0]['type_cham'];        
         $this->dataSla['status_id_ant'] = $_SESSION['status_id_ant'];//Status anterior do ticket
         $this->dataSla['dt_status_ant'] = $_SESSION['dt_status_ant'];//Status anterior do ticket 
 

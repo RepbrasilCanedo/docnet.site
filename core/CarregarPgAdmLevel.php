@@ -6,7 +6,6 @@ if (!defined('D0O8C0A3N1E9D6O1')) {
     header("Location: /");
     die("Erro: Página não encontrada<br>");
 }
-
 /**
  * Verificar se o nivel de acesso do usuario tem permissao de acessa a pagina.
  * Carregar a CONTROLLER
@@ -91,7 +90,7 @@ class CarregarPgAdmLevel
     }
 
     /**
-     * Verificar se o usuário está logado e carregar a pagina
+     * Verificar se o usuário está logado e carrega a pagina
      *
      * @return void
      */

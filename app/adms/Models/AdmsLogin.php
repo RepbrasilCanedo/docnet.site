@@ -62,7 +62,7 @@ class AdmsLogin
 
         $this->resultBd = $viewUser->getResult();
         if ($this->resultBd) {
-           $this->valPassword();
+            $this->valPassword();
         } else {
             //Verifica e valida na tabela usuario final
             $viewUser = new \App\adms\Models\helper\AdmsRead();
@@ -74,7 +74,7 @@ class AdmsLogin
                             LIMIT :limit", "user={$this->data['user']}&email={$this->data['user']}&limit=1");
 
             $this->resultBd = $viewUser->getResult();
-        
+
 
             if ($this->resultBd) {
                 $this->valPassword();
@@ -83,36 +83,7 @@ class AdmsLogin
                 $this->result = false;
             }
         }
-        
     }
-
-    /**
-     * Metodo valida a situação do usuário
-     * Se a situação for 1, chama chama a função valPassword para validar a senha
-     * Se a situação for 3, retorna falso, pois, o usuario precisar confirmar o e-mail.
-     * Se a situação for 5, retorna falso, pois, o e-mail do usuário foi descadastrado.
-     * Se a situação for 2, retorna falso, pois, o e-mail esta inativo
-     * @return void
-     */
-    private function valEmailPerm(): void
-    {
-        if ($this->resultBd[0]['adms_sits_user_id'] == 1) {
-            $this->valPassword();
-        } elseif ($this->resultBd[0]['adms_sits_user_id'] == 3) {
-            $_SESSION['msg'] = "<p class='alert-danger'>Erro: Necessário confirmar o e-mail, solicite novo link <a href='" . URLADM . "new-conf-email/index'>Clique aqui</a>!</p>";
-            $this->result = false;
-        } elseif ($this->resultBd[0]['adms_sits_user_id'] == 5) {
-            $_SESSION['msg'] = "<p class='alert-danger'>Erro: E-mail descadastrado, entre em contato com a empresa!</p>";
-            $this->result = false;
-        } elseif ($this->resultBd[0]['adms_sits_user_id'] == 2) {
-            $_SESSION['msg'] = "<p class='alert-danger'>Erro: E-mail inativo, entre em contato com a empresa!</p>";
-            $this->result = false;
-        } else {
-            $_SESSION['msg'] = "<p class='alert-danger'>Erro: E-mail inativo, entre em contato com a empresa!</p>";
-            $this->result = false;
-        }
-    }
-
 
     /** 
      * Compara a senha enviado pelo usuário com a senha que está salva no banco de dados
@@ -124,9 +95,6 @@ class AdmsLogin
     private function valPassword(): void
     {
 
-
-
-      
         if (password_verify($this->data['password'], $this->resultBd[0]['password'])) {
             $_SESSION['user_id'] = $this->resultBd[0]['id'];
             $_SESSION['user_name'] = $this->resultBd[0]['name'];
@@ -150,10 +118,9 @@ class AdmsLogin
             $_SESSION['msg'] = "<p class='alert-danger'>Erro: Usuário ou a senha incorreta!</p>";
             $this->result = false;
         }
-            
     }
 
-    
+
 
     /**
      * Metodo para pesquisar as informações que serão usadas no dropdown do formulário
@@ -166,10 +133,10 @@ class AdmsLogin
 
         $list->fullRead("SELECT id, name, texto, tit_aviso, aviso FROM adms_info_login");
         $registry['texto'] = $list->getResult();
-                
 
-        $this->listRegistryAdd = ['texto' => $registry['texto']];        
-        
+
+        $this->listRegistryAdd = ['texto' => $registry['texto']];
+
 
         return $this->listRegistryAdd;
     }

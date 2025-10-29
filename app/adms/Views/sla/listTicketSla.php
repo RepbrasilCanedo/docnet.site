@@ -163,6 +163,12 @@ if (isset($this->data['form'])) {
             }
             ?>
         </div>
+        <?php
+        if (isset($_SESSION['resultado'])) {
+            echo "Total de Slas: " . $_SESSION['resultado'];
+            unset($_SESSION['resultado']);
+        }
+        ?>
         <table class="table table-hover table-list">
             <thead class="list-head">
                 <tr>
@@ -171,6 +177,7 @@ if (isset($this->data['form'])) {
                     <th class="list-head-content table-sm-none">Cliente</th>
                     <th class="list-head-content table-sm-none">Abertura Ticket</th>
                     <th class="list-head-content table-sm-none">Status Anter.</th>
+                    <th class="list-head-content table-sm-none">Tipo Cham.</th>
                     <th class="list-head-content table-sm-none">Data Sta. Anterior</th>
                     <th class="list-head-content">Status Atual</th>
                     <th class="list-head-content table-sm-none">Data Sta. Atuaal</th>
@@ -189,8 +196,9 @@ if (isset($this->data['form'])) {
                         <td class="list-body-content"><?php echo $id_ticket_sla_hist; ?></td>
                         <td class="list-body-content table-sm-none"><?php echo $name_sla; ?></td>
                         <td class="list-body-content table-sm-none"><?php echo $nome_fantasia_clie; ?></td>
-                        <td class="list-body-content table-sm-none"><?php echo date('d/m/Y H:i:s', strtotime($dt_status))?>
+                        <td class="list-body-content table-sm-none"><?php echo date('d/m/Y H:i:s', strtotime($dt_abert_ticket))?>
                         <td class="list-body-content table-sm-none"><?php echo $name_status_id_ant; ?></td>
+                        <td class="list-body-content table-sm-none"><?php echo $type_cham; ?></td>
                         <td class="list-body-content table-sm-none"><?php echo date('d/m/Y H:i:s', strtotime($dt_status_ant))?>
                         <td class="list-body-content"><?php echo $name_sta_atu; ?></td>
                         <td class="list-body-content table-sm-none"><?php echo date('d/m/Y H:i:s', strtotime($dt_status))?>

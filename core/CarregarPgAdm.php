@@ -6,7 +6,6 @@ if(!defined('D0O8C0A3N1E9D6O1')){
     header("Location: /");
     die("Erro: Página não encontrada<br>");
 }
-
 /**
  * Verificar se existe a classe
  * Carregar a CONTROLLER
@@ -87,7 +86,7 @@ class CarregarPgAdm
         $this->listPgPublic = ["Login", "Erro", "Logout", "NewUser", "ConfEmail", "NewConfEmail", "RecoverPassword", "UpdatePassword"];
 
         if (in_array($this->urlController, $this->listPgPublic)) {
-            $this->classLoad = "\\App\\adms\\Controllers\\" . $this->urlController;
+            $this->classLoad = "\\app\\adms\\Controllers\\" . $this->urlController;
         } else {
             $this->pgPrivate();
         }
@@ -117,7 +116,7 @@ class CarregarPgAdm
     private function verifyLogin(): void
     {
         if((isset($_SESSION['user_id'])) and (isset($_SESSION['user_name']))  and (isset($_SESSION['user_email'])) ){
-            $this->classLoad = "\\App\\adms\\Controllers\\" . $this->urlController;
+            $this->classLoad = "\\app\\adms\\Controllers\\" . $this->urlController;
         }else{
             $_SESSION['msg'] = "<p class='alert-danger'>Erro: Para acessar a página realize o login!</p>";
             $urlRedirect = URLADM . "login/index";

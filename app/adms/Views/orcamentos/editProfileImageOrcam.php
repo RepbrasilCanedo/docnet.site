@@ -12,7 +12,7 @@ if (isset($this->data['form'])) {
 if (isset($this->data['form'][0])) {
     $valorForm = $this->data['form'][0];
 }
- //var_dump($valorForm);
+//var_dump($this->data['form']);
 ?>
 <!-- Inicio do conteudo do administrativo -->
 <div class="wrapper">
@@ -54,7 +54,7 @@ if (isset($this->data['form'][0])) {
                 
                 <div class="view-det-adm">
                     <?php
-                     if ((!empty($image)) and (file_exists("app/adms/assets/image/orcamentos" . "/$id"))) {?>
+                     if ((!empty($image)) and (file_exists("app/adms/assets/image/orcamentos/" . "$id"))) {?>
                         <a href="<?php echo URLADM; ?>app/adms/assets/image/orcamentos/<?php echo $id ?>/<?php echo $image ?>"  target="_blank">Clique aqui para Visualizar orçamento em PDF.</a>
                     <?php }  ?>
                 </div>

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\adms\Controllers;
+namespace app\adms\Controllers;
 
 if(!defined('D0O8C0A3N1E9D6O1')){
     header("Location: /");
@@ -39,9 +39,10 @@ class EditProfileImageOrcam
     {
        
 
-        $this->dataForm = filter_input_array(INPUT_POST, FILTER_DEFAULT);
+        $this->dataForm = filter_input_array(INPUT_POST,FILTER_DEFAULT);
         $this->id = (int) $id;
 
+        $_SESSION['set_orcam']='';
         $_SESSION['set_orcam'] = $this->id;
 
         if (!empty($this->dataForm['SendEditProfImageOrcam'])) {
@@ -54,7 +55,7 @@ class EditProfileImageOrcam
                 $this->data['form'] = $viewProfImgOrcam->getResultBd();
                 $this->viewEditProfImagemOrcam();
             } else {
-                $urlRedirect = URLADM . "listOrcam/index";
+                $urlRedirect = URLADM . "list-orcam/index";
                 header("Location: $urlRedirect");
             }
         }
@@ -91,13 +92,13 @@ class EditProfileImageOrcam
         if (!empty($this->dataForm['SendEditProfImageOrcam'])) {
             unset($this->dataForm['SendEditProfImageOrcam']);
 
-            $this->dataForm['new_image_orcam'] = $_FILES['new_image_orcam'] ? $_FILES['new_image_orcam'] : null;
-
+            $this->dataForm['new_image_orcam']=$_FILES['new_image_orcam']?$_FILES['new_image_orcam']:null;
+            
             $editProfImgOrcam = new \App\adms\Models\AdmsEditProfileImageOrcam();
             $editProfImgOrcam->update($this->dataForm);
 
             if ($editProfImgOrcam->getResult()) {
-                $urlRedirect = URLADM . "view-orcam/index/". $_SESSION['set_orcam'];
+                $urlRedirect = URLADM . "view-orcam/index/".$_SESSION['set_orcam'];
                 header("Location: $urlRedirect");
             } else {
                 $this->data['form'] = $this->dataForm;
@@ -105,8 +106,9 @@ class EditProfileImageOrcam
             }
         } else {
             $_SESSION['msg'] = "<p class='alert-danger'>Erro: Orçamento não encontrado!</p>";
-            $urlRedirect = URLADM . "listOrcam/index";
+            $urlRedirect = URLADM . "list-orcam/index";
             header("Location: $urlRedirect");
         }
+            
     }
 }

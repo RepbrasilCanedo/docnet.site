@@ -77,7 +77,10 @@ class ViewOrcam
             $listBotton = new \App\adms\Models\helper\AdmsButton();
             $this->data['button'] = $listBotton->buttonPermission($button);
         }
-        
+        /*
+        $listTable = new \App\adms\Models\AdmsViewOrcam();
+        $this->data['list_table'] = $listTable->listTable();
+        */
         $listMenu = new \App\adms\Models\helper\AdmsMenu();
         $this->data['menu'] = $listMenu->itemMenu(); 
         

@@ -50,15 +50,15 @@ class AdmsViewProfileOrcam
     {
         $this->id = $id;
         $viewProfileOrcam = new \App\adms\Models\helper\AdmsRead();
-        $viewProfileOrcam->fullRead("SELECT id, empresa_id, status_id, prod_serv, info_prod_serv, image FROM  adms_Orcam WHERE id= :id_orcam", "id_orcam={$this->id}");
+        $viewProfileOrcam->fullRead("SELECT id, empresa_id, status_id, prod_serv, info_prod_serv, image FROM  adms_orcam WHERE id= :id_orcam", "id_orcam={$this->id}");
 
         $this->resultBd = $viewProfileOrcam->getResult();
 
         if ($this->resultBd) {
             $this->result = true;
         } else {
-            $_SESSION['msg'] = "<p class='alert-danger'>Erro: Orçamento não encontrado!</p>";
-            $this->result = false;
+            $_SESSION['msg'] = "<p class='alert-danger'>Erro: Orçamento não encontrado.</p>";
+            //$this->result = false;
         }
     }
 }

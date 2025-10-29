@@ -46,7 +46,7 @@ class AdmsValExtPdf
                 $this->result = true;
                 break;
             default:
-                $_SESSION['msg'] = "<p class='alert-danger'>Erro: Necessário selecionar imagem em PDF!</p>";
+                $_SESSION['msg'] = "<p class='alert-danger'>Erro: Necessário selecionar imagem em PDF mime tipe!</p>";
                 $this->result = false;
         }
     }

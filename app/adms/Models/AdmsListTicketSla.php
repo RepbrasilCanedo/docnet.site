@@ -121,7 +121,7 @@ class AdmsListTicketSla
         $this->resultPg = $pagination->getResult();
 
         $listTicketSla = new \App\adms\Models\helper\AdmsRead();
-        $listTicketSla->fullRead("SELECT sla_hist.id AS id_sla_hist, sla_hist.empresa_id, clie.nome_fantasia AS nome_fantasia_clie, sla_hist.id_ticket AS id_ticket_sla_hist, sla_hist.dt_status as dt_status, 
+        $listTicketSla->fullRead("SELECT sla_hist.id AS id_sla_hist, sla_hist.empresa_id, clie.nome_fantasia AS nome_fantasia_clie, sla_hist.id_ticket AS id_ticket_sla_hist, sla_hist.dt_abert_ticket as dt_abert_ticket, sla_hist.type_cham, 
                             sla.name as name_sla, sla_hist.tempo_sla_prim AS tempo_sla_prim, sla_hist.tempo_sla_fin AS tempo_sla_fin, sta_ant.name AS name_status_id_ant, 
                             sla_hist.dt_status_ant AS dt_status_ant, sta_atu.name AS name_sta_atu, sla_hist.dt_status AS dt_status, user.name  AS name_user, sla_hist.tempo_sla AS tempo_sla
                             FROM adms_sla_hist AS sla_hist
@@ -200,7 +200,7 @@ class AdmsListTicketSla
                 $this->searchStatusAntPeriodo(); //Pesquisa pelo periodo do atendimento e status anterior
             } else if ((empty($this->searchEmpresa)) and (!empty($this->searchStatus)) and (!empty($this->searchStatusAnterior)) and (empty($this->searchTipo)) and (!empty($this->searchDateStart)) and (!empty($this->searchDateEnd)) and (empty($this->searchSuporte))) {
                 $this->searchStatusAmbosPeriodo(); //Pesquisa pelo periodo do atendimento ambos os status
-            } else if ((empty($this->searchEmpresa)) and (empty($this->searchStatus)) and (!empty($this->searchStatusAnterior)) and (!empty($this->searchTipo)) and (!empty($this->searchDateStart)) and (!empty($this->searchDateEnd)) and (empty($this->searchSuporte))) {
+            } else if ((empty($this->searchEmpresa)) and (empty($this->searchStatus)) and (empty($this->searchStatusAnterior)) and (!empty($this->searchTipo)) and (!empty($this->searchDateStart)) and (!empty($this->searchDateEnd)) and (empty($this->searchSuporte))) {
                 $this->searchTipoPeriodo(); //Pesquisa pelo periodo do atendimento e o tipo do sla
 
 
@@ -232,15 +232,15 @@ class AdmsListTicketSla
                 $this->resultPg = $pagination->getResult();
                 
                 $listTicketSla = new \App\adms\Models\helper\AdmsRead();
-                $listTicketSla->fullRead("SELECT sla_hist.id AS id_sla_hist, sla_hist.empresa_id, clie.nome_fantasia AS nome_fantasia_clie, sla_hist.id_ticket AS id_ticket_sla_hist, sla_hist.dt_status as dt_status, 
+                $listTicketSla->fullRead("SELECT sla_hist.id AS id_sla_hist, sla_hist.empresa_id, clie.nome_fantasia AS nome_fantasia_clie, sla_hist.id_ticket AS id_ticket_sla_hist, sla_hist.dt_abert_ticket as dt_abert_ticket, sla_hist.type_cham, 
                             sla.name as name_sla, sla_hist.tempo_sla_prim AS tempo_sla_prim, sla_hist.tempo_sla_fin AS tempo_sla_fin, sta_ant.name AS name_status_id_ant, 
-                            sla_hist.dt_status_ant, sta_atu.name AS name_sta_atu, sla_hist.dt_status, user.name  AS name_user, sla_hist.tempo_sla AS tempo_sla
+                            sla_hist.dt_status_ant AS dt_status_ant, sta_atu.name AS name_sta_atu, sla_hist.dt_status AS dt_status, user.name  AS name_user, sla_hist.tempo_sla AS tempo_sla
                             FROM adms_sla_hist AS sla_hist
                             INNER JOIN adms_clientes AS clie ON clie.id = sla_hist.cliente_id 
                             INNER JOIN adms_sla AS sla ON sla.id = sla_hist.id_sla 
                             INNER JOIN adms_cham_status AS sta_ant ON sta_ant.id = sla_hist.status_id_ant
                             INNER JOIN adms_cham_status AS sta_atu ON sta_atu.id = sla_hist.status_id
-                            INNER JOIN adms_users AS user ON user.id = sla_hist.suporte_id 
+                            INNER JOIN adms_users AS user ON user.id = sla_hist.suporte_id
                             WHERE (sla_hist.empresa_id= :empresa_id) and (sla_hist.id_ticket= :cham_id) LIMIT :limit OFFSET :offset",
                             "empresa_id={$_SESSION['emp_user']}&cham_id={$this->searchTicketValue}&limit={$this->limitResult}&offset={$pagination->getOffset()}");
 
@@ -248,7 +248,7 @@ class AdmsListTicketSla
                 $this->resultBd = $listTicketSla->getResult();
 
                if ($this->resultBd) {
- $this->result = true;
+            $this->result = true;
                 } else {
                     $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhum Ticket encontrado com essa numeração!</p>";
                     $this->result = false;
@@ -261,15 +261,15 @@ class AdmsListTicketSla
                 $this->resultPg = $pagination->getResult();
                 
                 $listTicketSla = new \App\adms\Models\helper\AdmsRead();
-                $listTicketSla->fullRead("SELECT sla_hist.id AS id_sla_hist, sla_hist.empresa_id, clie.nome_fantasia AS nome_fantasia_clie, sla_hist.id_ticket AS id_ticket_sla_hist, sla_hist.dt_status as dt_status, 
+                $listTicketSla->fullRead("SELECT sla_hist.id AS id_sla_hist, sla_hist.empresa_id, clie.nome_fantasia AS nome_fantasia_clie, sla_hist.id_ticket AS id_ticket_sla_hist, sla_hist.dt_abert_ticket as dt_abert_ticket, sla_hist.type_cham, 
                             sla.name as name_sla, sla_hist.tempo_sla_prim AS tempo_sla_prim, sla_hist.tempo_sla_fin AS tempo_sla_fin, sta_ant.name AS name_status_id_ant, 
-                            sla_hist.dt_status_ant, sta_atu.name AS name_sta_atu, sla_hist.dt_status, user.name  AS name_user, sla_hist.tempo_sla AS tempo_sla
+                            sla_hist.dt_status_ant AS dt_status_ant, sta_atu.name AS name_sta_atu, sla_hist.dt_status AS dt_status, user.name  AS name_user, sla_hist.tempo_sla AS tempo_sla
                             FROM adms_sla_hist AS sla_hist
                             INNER JOIN adms_clientes AS clie ON clie.id = sla_hist.cliente_id 
                             INNER JOIN adms_sla AS sla ON sla.id = sla_hist.id_sla 
                             INNER JOIN adms_cham_status AS sta_ant ON sta_ant.id = sla_hist.status_id_ant
                             INNER JOIN adms_cham_status AS sta_atu ON sta_atu.id = sla_hist.status_id
-                            INNER JOIN adms_users AS user ON user.id = sla_hist.suporte_id 
+                            INNER JOIN adms_users AS user ON user.id = sla_hist.suporte_id
                             WHERE (sla_hist.id_ticket= :cham_id) LIMIT :limit OFFSET :offset",
                             "cham_id={$this->searchTicketValue}&limit={$this->limitResult}&offset={$pagination->getOffset()}");
 
@@ -302,16 +302,16 @@ class AdmsListTicketSla
                 $this->resultPg = $pagination->getResult();
                 
                 $listTicketSla = new \App\adms\Models\helper\AdmsRead();
-                $listTicketSla->fullRead("SELECT sla_hist.id AS id_sla_hist, sla_hist.empresa_id, clie.nome_fantasia AS nome_fantasia_clie, sla_hist.id_ticket AS id_ticket_sla_hist, sla_hist.dt_status as dt_status, 
+                $listTicketSla->fullRead("SELECT sla_hist.id AS id_sla_hist, sla_hist.empresa_id, clie.nome_fantasia AS nome_fantasia_clie, sla_hist.id_ticket AS id_ticket_sla_hist, sla_hist.dt_abert_ticket as dt_abert_ticket, sla_hist.type_cham, 
                             sla.name as name_sla, sla_hist.tempo_sla_prim AS tempo_sla_prim, sla_hist.tempo_sla_fin AS tempo_sla_fin, sta_ant.name AS name_status_id_ant, 
-                            sla_hist.dt_status_ant, sta_atu.name AS name_sta_atu, sla_hist.dt_status, user.name  AS name_user, sla_hist.tempo_sla AS tempo_sla
+                            sla_hist.dt_status_ant AS dt_status_ant, sta_atu.name AS name_sta_atu, sla_hist.dt_status AS dt_status, user.name  AS name_user, sla_hist.tempo_sla AS tempo_sla
                             FROM adms_sla_hist AS sla_hist
                             INNER JOIN adms_clientes AS clie ON clie.id = sla_hist.cliente_id 
                             INNER JOIN adms_sla AS sla ON sla.id = sla_hist.id_sla 
                             INNER JOIN adms_cham_status AS sta_ant ON sta_ant.id = sla_hist.status_id_ant
                             INNER JOIN adms_cham_status AS sta_atu ON sta_atu.id = sla_hist.status_id
-                            INNER JOIN adms_users AS user ON user.id = sla_hist.suporte_id 
-                            WHERE (sla_hist.empresa_id= :empresa_id) and (sla_hist.cliente_id = :cliente_id) ORDER BY sla_hist.dt_status DESC LIMIT :limit OFFSET :offset",
+                            INNER JOIN adms_users AS user ON user.id = sla_hist.suporte_id
+                            WHERE (sla_hist.empresa_id= :empresa_id) and (sla_hist.cliente_id = :cliente_id) ORDER BY sla_hist.dt_status LIMIT :limit OFFSET :offset",
                             "empresa_id={$_SESSION['emp_user']}&cliente_id={$this->searchEmpresaValue}&limit={$this->limitResult}&offset={$pagination->getOffset()}");
 
 
@@ -332,15 +332,15 @@ class AdmsListTicketSla
                 $this->resultPg = $pagination->getResult();
                 
                 $listTicketSla = new \App\adms\Models\helper\AdmsRead();
-                $listTicketSla->fullRead("SELECT sla_hist.id AS id_sla_hist, sla_hist.empresa_id, clie.nome_fantasia AS nome_fantasia_clie, sla_hist.id_ticket AS id_ticket_sla_hist, sla_hist.dt_status as dt_status, 
+                $listTicketSla->fullRead("SELECT sla_hist.id AS id_sla_hist, sla_hist.empresa_id, clie.nome_fantasia AS nome_fantasia_clie, sla_hist.id_ticket AS id_ticket_sla_hist, sla_hist.dt_abert_ticket as dt_abert_ticket, sla_hist.type_cham, 
                             sla.name as name_sla, sla_hist.tempo_sla_prim AS tempo_sla_prim, sla_hist.tempo_sla_fin AS tempo_sla_fin, sta_ant.name AS name_status_id_ant, 
-                            sla_hist.dt_status_ant, sta_atu.name AS name_sta_atu, sla_hist.dt_status, user.name  AS name_user, sla_hist.tempo_sla AS tempo_sla
+                            sla_hist.dt_status_ant AS dt_status_ant, sta_atu.name AS name_sta_atu, sla_hist.dt_status AS dt_status, user.name  AS name_user, sla_hist.tempo_sla AS tempo_sla
                             FROM adms_sla_hist AS sla_hist
                             INNER JOIN adms_clientes AS clie ON clie.id = sla_hist.cliente_id 
                             INNER JOIN adms_sla AS sla ON sla.id = sla_hist.id_sla 
                             INNER JOIN adms_cham_status AS sta_ant ON sta_ant.id = sla_hist.status_id_ant
                             INNER JOIN adms_cham_status AS sta_atu ON sta_atu.id = sla_hist.status_id
-                            INNER JOIN adms_users AS user ON user.id = sla_hist.suporte_id 
+                            INNER JOIN adms_users AS user ON user.id = sla_hist.suporte_id
                             WHERE (sla_hist.cliente_id = :cliente_id) ORDER BY sla_hist.dt_status DESC LIMIT :limit OFFSET :offset",
                             "empresa_id={$_SESSION['emp_user']}&cliente_id={$this->searchEmpresaValue}&limit={$this->limitResult}&offset={$pagination->getOffset()}");
 
@@ -373,7 +373,7 @@ class AdmsListTicketSla
                 $this->resultPg = $pagination->getResult();
                 
                 $listTicketSla = new \App\adms\Models\helper\AdmsRead();
-                $listTicketSla->fullRead("SELECT sla_hist.id AS id_sla_hist, sla_hist.empresa_id, sla_hist.suporte_id, clie.nome_fantasia AS nome_fantasia_clie, sla_hist.id_ticket AS id_ticket_sla_hist, sla_hist.dt_status as dt_status, 
+                $listTicketSla->fullRead("SELECT sla_hist.id AS id_sla_hist, sla_hist.empresa_id, sla_hist.suporte_id, clie.nome_fantasia AS nome_fantasia_clie, sla_hist.id_ticket AS id_ticket_sla_hist, sla_hist.dt_abert_ticket as dt_abert_ticket, sla_hist.type_cham, sla_hist.dt_status as dt_status, 
                             sla.name as name_sla, sla_hist.tempo_sla_prim AS tempo_sla_prim, sla_hist.tempo_sla_fin AS tempo_sla_fin, sta_ant.name AS name_status_id_ant, 
                             sla_hist.dt_status_ant, sta_atu.name AS name_sta_atu, sla_hist.dt_status, user.name  AS name_user, sla_hist.tempo_sla AS tempo_sla
                             FROM adms_sla_hist AS sla_hist
@@ -403,7 +403,7 @@ class AdmsListTicketSla
                 $this->resultPg = $pagination->getResult();
                 
                 $listTicketSla = new \App\adms\Models\helper\AdmsRead();
-                $listTicketSla->fullRead("SELECT sla_hist.id AS id_sla_hist, sla_hist.empresa_id, clie.nome_fantasia AS nome_fantasia_clie, sla_hist.id_ticket AS id_ticket_sla_hist, sla_hist.dt_status as dt_status, 
+                $listTicketSla->fullRead("SELECT sla_hist.id AS id_sla_hist, sla_hist.empresa_id, clie.nome_fantasia AS nome_fantasia_clie, sla_hist.id_ticket AS id_ticket_sla_hist, sla_hist.dt_abert_ticket as dt_abert_ticket, sla_hist.type_cham, sla_hist.dt_status as dt_status, 
                             sla.name as name_sla, sla_hist.tempo_sla_prim AS tempo_sla_prim, sla_hist.tempo_sla_fin AS tempo_sla_fin, sta_ant.name AS name_status_id_ant, 
                             sla_hist.dt_status_ant, sta_atu.name AS name_sta_atu, sla_hist.dt_status, user.name  AS name_user, sla_hist.tempo_sla AS tempo_sla
                             FROM adms_sla_hist AS sla_hist
@@ -444,7 +444,7 @@ class AdmsListTicketSla
                 $this->resultPg = $pagination->getResult();
                 
                 $listTicketSla = new \App\adms\Models\helper\AdmsRead();
-                $listTicketSla->fullRead("SELECT sla_hist.id AS id_sla_hist, sla_hist.empresa_id, sla_hist.suporte_id, sla_hist.id_sla, clie.nome_fantasia AS nome_fantasia_clie, sla_hist.id_ticket AS id_ticket_sla_hist, sla_hist.dt_status as dt_status, 
+                $listTicketSla->fullRead("SELECT sla_hist.id AS id_sla_hist, sla_hist.empresa_id, sla_hist.suporte_id, sla_hist.id_sla, clie.nome_fantasia AS nome_fantasia_clie, sla_hist.id_ticket AS id_ticket_sla_hist, sla_hist.dt_abert_ticket as dt_abert_ticket, sla_hist.type_cham, sla_hist.dt_status as dt_status, 
                             sla.name as name_sla, sla_hist.tempo_sla_prim AS tempo_sla_prim, sla_hist.tempo_sla_fin AS tempo_sla_fin, sta_ant.name AS name_status_id_ant, 
                             sla_hist.dt_status_ant, sta_atu.name AS name_sta_atu, sla_hist.dt_status, user.name  AS name_user, sla_hist.tempo_sla AS tempo_sla
                             FROM adms_sla_hist AS sla_hist
@@ -474,7 +474,7 @@ class AdmsListTicketSla
                 $this->resultPg = $pagination->getResult();
                 
                 $listTicketSla = new \App\adms\Models\helper\AdmsRead();
-                $listTicketSla->fullRead("SELECT sla_hist.id AS id_sla_hist, sla_hist.empresa_id, clie.nome_fantasia AS nome_fantasia_clie, sla_hist.id_ticket AS id_ticket_sla_hist, sla_hist.dt_status as dt_status, 
+                $listTicketSla->fullRead("SELECT sla_hist.id AS id_sla_hist, sla_hist.empresa_id, clie.nome_fantasia AS nome_fantasia_clie, sla_hist.id_ticket AS id_ticket_sla_hist, sla_hist.dt_abert_ticket as dt_abert_ticket, sla_hist.type_cham, sla_hist.dt_status as dt_status, 
                             sla.name as name_sla, sla_hist.tempo_sla_prim AS tempo_sla_prim, sla_hist.tempo_sla_fin AS tempo_sla_fin, sta_ant.name AS name_status_id_ant, 
                             sla_hist.dt_status_ant, sta_atu.name AS name_sta_atu, sla_hist.dt_status, user.name  AS name_user, sla_hist.tempo_sla AS tempo_sla
                             FROM adms_sla_hist AS sla_hist
@@ -516,7 +516,7 @@ class AdmsListTicketSla
                 $this->resultPg = $pagination->getResult();
                 
                 $listTicketSla = new \App\adms\Models\helper\AdmsRead();
-                $listTicketSla->fullRead("SELECT sla_hist.id AS id_sla_hist, sla_hist.empresa_id, sla_hist.suporte_id, sla_hist.id_sla, clie.nome_fantasia AS nome_fantasia_clie, sla_hist.id_ticket AS id_ticket_sla_hist, sla_hist.dt_status as dt_status, 
+                $listTicketSla->fullRead("SELECT sla_hist.id AS id_sla_hist, sla_hist.empresa_id, sla_hist.suporte_id, sla_hist.id_sla, clie.nome_fantasia AS nome_fantasia_clie, sla_hist.id_ticket AS id_ticket_sla_hist, sla_hist.dt_abert_ticket as dt_abert_ticket, sla_hist.type_cham, sla_hist.dt_status as dt_status, 
                             sla.name as name_sla, sla_hist.tempo_sla_prim AS tempo_sla_prim, sla_hist.tempo_sla_fin AS tempo_sla_fin, sta_ant.name AS name_status_id_ant, 
                             sla_hist.dt_status_ant, sta_atu.name AS name_sta_atu, sla_hist.dt_status, user.name  AS name_user, sla_hist.tempo_sla AS tempo_sla
                             FROM adms_sla_hist AS sla_hist
@@ -546,7 +546,7 @@ class AdmsListTicketSla
                 $this->resultPg = $pagination->getResult();
                 
                 $listTicketSla = new \App\adms\Models\helper\AdmsRead();
-                $listTicketSla->fullRead("SELECT sla_hist.id AS id_sla_hist, sla_hist.empresa_id, clie.nome_fantasia AS nome_fantasia_clie, sla_hist.id_ticket AS id_ticket_sla_hist, sla_hist.dt_status as dt_status, 
+                $listTicketSla->fullRead("SELECT sla_hist.id AS id_sla_hist, sla_hist.empresa_id, clie.nome_fantasia AS nome_fantasia_clie, sla_hist.id_ticket AS id_ticket_sla_hist, sla_hist.dt_abert_ticket as dt_abert_ticket, sla_hist.type_cham, sla_hist.dt_status as dt_status, 
                             sla.name as name_sla, sla_hist.tempo_sla_prim AS tempo_sla_prim, sla_hist.tempo_sla_fin AS tempo_sla_fin, sta_ant.name AS name_status_id_ant, 
                             sla_hist.dt_status_ant, sta_atu.name AS name_sta_atu, sla_hist.dt_status, user.name  AS name_user, sla_hist.tempo_sla AS tempo_sla
                             FROM adms_sla_hist AS sla_hist
@@ -588,7 +588,7 @@ class AdmsListTicketSla
                 $this->resultPg = $pagination->getResult();
                 
                 $listTicketSla = new \App\adms\Models\helper\AdmsRead();
-                $listTicketSla->fullRead("SELECT sla_hist.id AS id_sla_hist, sla_hist.empresa_id, sla_hist.suporte_id, sla_hist.id_sla, clie.nome_fantasia AS nome_fantasia_clie, sla_hist.id_ticket AS id_ticket_sla_hist, sla_hist.dt_status as dt_status, 
+                $listTicketSla->fullRead("SELECT sla_hist.id AS id_sla_hist, sla_hist.empresa_id, sla_hist.suporte_id, sla_hist.id_sla, clie.nome_fantasia AS nome_fantasia_clie, sla_hist.id_ticket AS id_ticket_sla_hist, sla_hist.dt_abert_ticket as dt_abert_ticket, sla_hist.type_cham, sla_hist.dt_status as dt_status, 
                             sla.name as name_sla, sla_hist.tempo_sla_prim AS tempo_sla_prim, sla_hist.tempo_sla_fin AS tempo_sla_fin, sta_ant.name AS name_status_id_ant, 
                             sla_hist.dt_status_ant, sta_atu.name AS name_sta_atu, sla_hist.dt_status, user.name  AS name_user, sla_hist.tempo_sla AS tempo_sla
                             FROM adms_sla_hist AS sla_hist
@@ -617,7 +617,7 @@ class AdmsListTicketSla
                 $this->resultPg = $pagination->getResult();
                 
                 $listTicketSla = new \App\adms\Models\helper\AdmsRead();
-                $listTicketSla->fullRead("SELECT sla_hist.id AS id_sla_hist, sla_hist.empresa_id, clie.nome_fantasia AS nome_fantasia_clie, sla_hist.id_ticket AS id_ticket_sla_hist, sla_hist.dt_status as dt_status, 
+                $listTicketSla->fullRead("SELECT sla_hist.id AS id_sla_hist, sla_hist.empresa_id, clie.nome_fantasia AS nome_fantasia_clie, sla_hist.id_ticket AS id_ticket_sla_hist, sla_hist.dt_abert_ticket as dt_abert_ticket, sla_hist.type_cham, sla_hist.dt_status as dt_status, 
                             sla.name as name_sla, sla_hist.tempo_sla_prim AS tempo_sla_prim, sla_hist.tempo_sla_fin AS tempo_sla_fin, sta_ant.name AS name_status_id_ant, 
                             sla_hist.dt_status_ant, sta_atu.name AS name_sta_atu, sla_hist.dt_status, user.name  AS name_user, sla_hist.tempo_sla AS tempo_sla
                             FROM adms_sla_hist AS sla_hist
@@ -659,7 +659,7 @@ class AdmsListTicketSla
                 $this->resultPg = $pagination->getResult();
                 
                 $listTicketSla = new \App\adms\Models\helper\AdmsRead();
-                $listTicketSla->fullRead("SELECT sla_hist.id AS id_sla_hist, sla_hist.empresa_id, sla_hist.suporte_id, sla_hist.id_sla, clie.nome_fantasia AS nome_fantasia_clie, sla_hist.id_ticket AS id_ticket_sla_hist, sla_hist.dt_status as dt_status, 
+                $listTicketSla->fullRead("SELECT sla_hist.id AS id_sla_hist, sla_hist.empresa_id, sla_hist.suporte_id, sla_hist.id_sla, clie.nome_fantasia AS nome_fantasia_clie, sla_hist.id_ticket AS id_ticket_sla_hist, sla_hist.dt_abert_ticket as dt_abert_ticket, sla_hist.type_cham, sla_hist.dt_status as dt_status, 
                             sla.name as name_sla, sla_hist.tempo_sla_prim AS tempo_sla_prim, sla_hist.tempo_sla_fin AS tempo_sla_fin, sta_ant.name AS name_status_id_ant, 
                             sla_hist.dt_status_ant, sta_atu.name AS name_sta_atu, sla_hist.dt_status, user.name  AS name_user, sla_hist.tempo_sla AS tempo_sla
                             FROM adms_sla_hist AS sla_hist
@@ -689,7 +689,7 @@ class AdmsListTicketSla
                 $this->resultPg = $pagination->getResult();
                 
                 $listTicketSla = new \App\adms\Models\helper\AdmsRead();
-                $listTicketSla->fullRead("SELECT sla_hist.id AS id_sla_hist, sla_hist.empresa_id, clie.nome_fantasia AS nome_fantasia_clie, sla_hist.id_ticket AS id_ticket_sla_hist, sla_hist.dt_status as dt_status, 
+                $listTicketSla->fullRead("SELECT sla_hist.id AS id_sla_hist, sla_hist.empresa_id, clie.nome_fantasia AS nome_fantasia_clie, sla_hist.id_ticket AS id_ticket_sla_hist, sla_hist.dt_abert_ticket as dt_abert_ticket, sla_hist.type_cham, sla_hist.dt_status as dt_status, 
                             sla.name as name_sla, sla_hist.tempo_sla_prim AS tempo_sla_prim, sla_hist.tempo_sla_fin AS tempo_sla_fin, sta_ant.name AS name_status_id_ant, 
                             sla_hist.dt_status_ant, sta_atu.name AS name_sta_atu, sla_hist.dt_status, user.name  AS name_user, sla_hist.tempo_sla AS tempo_sla
                             FROM adms_sla_hist AS sla_hist
@@ -731,7 +731,7 @@ class AdmsListTicketSla
                 $this->resultPg = $pagination->getResult();
                 
                 $listTicketSla = new \App\adms\Models\helper\AdmsRead();
-                $listTicketSla->fullRead("SELECT sla_hist.id AS id_sla_hist, sla_hist.empresa_id, sla_hist.suporte_id, sla_hist.id_sla, clie.nome_fantasia AS nome_fantasia_clie, sla_hist.id_ticket AS id_ticket_sla_hist, sla_hist.dt_status as dt_status, 
+                $listTicketSla->fullRead("SELECT sla_hist.id AS id_sla_hist, sla_hist.empresa_id, sla_hist.suporte_id, sla_hist.id_sla, clie.nome_fantasia AS nome_fantasia_clie, sla_hist.id_ticket AS id_ticket_sla_hist, sla_hist.dt_abert_ticket as dt_abert_ticket, sla_hist.type_cham, sla_hist.dt_status as dt_status, 
                             sla.name as name_sla, sla_hist.tempo_sla_prim AS tempo_sla_prim, sla_hist.tempo_sla_fin AS tempo_sla_fin, sta_ant.name AS name_status_id_ant, 
                             sla_hist.dt_status_ant, sta_atu.name AS name_sta_atu, sla_hist.dt_status, user.name  AS name_user, sla_hist.tempo_sla AS tempo_sla
                             FROM adms_sla_hist AS sla_hist
@@ -761,7 +761,7 @@ class AdmsListTicketSla
                 $this->resultPg = $pagination->getResult();
                 
                 $listTicketSla = new \App\adms\Models\helper\AdmsRead();
-                $listTicketSla->fullRead("SELECT sla_hist.id AS id_sla_hist, sla_hist.empresa_id, clie.nome_fantasia AS nome_fantasia_clie, sla_hist.id_ticket AS id_ticket_sla_hist, sla_hist.dt_status as dt_status, 
+                $listTicketSla->fullRead("SELECT sla_hist.id AS id_sla_hist, sla_hist.empresa_id, clie.nome_fantasia AS nome_fantasia_clie, sla_hist.id_ticket AS id_ticket_sla_hist, sla_hist.dt_abert_ticket as dt_abert_ticket, sla_hist.type_cham, sla_hist.dt_status as dt_status, 
                             sla.name as name_sla, sla_hist.tempo_sla_prim AS tempo_sla_prim, sla_hist.tempo_sla_fin AS tempo_sla_fin, sta_ant.name AS name_status_id_ant, 
                             sla_hist.dt_status_ant, sta_atu.name AS name_sta_atu, sla_hist.dt_status, user.name  AS name_user, sla_hist.tempo_sla AS tempo_sla
                             FROM adms_sla_hist AS sla_hist
@@ -803,7 +803,7 @@ class AdmsListTicketSla
                 $this->resultPg = $pagination->getResult();
                 
                 $listTicketSla = new \App\adms\Models\helper\AdmsRead();
-                $listTicketSla->fullRead("SELECT sla_hist.id AS id_sla_hist, sla_hist.empresa_id, clie.nome_fantasia AS nome_fantasia_clie, sla_hist.id_ticket AS id_ticket_sla_hist, sla_hist.dt_status as dt_status, 
+                $listTicketSla->fullRead("SELECT sla_hist.id AS id_sla_hist, sla_hist.empresa_id, clie.nome_fantasia AS nome_fantasia_clie, sla_hist.id_ticket AS id_ticket_sla_hist, sla_hist.dt_abert_ticket as dt_abert_ticket, sla_hist.type_cham, sla_hist.dt_status as dt_status, 
                             sla.name as name_sla, sla_hist.tempo_sla_prim AS tempo_sla_prim, sla_hist.tempo_sla_fin AS tempo_sla_fin, sta_ant.name AS name_status_id_ant, 
                             sla_hist.dt_status_ant, sta_atu.name AS name_sta_atu, sla_hist.dt_status, user.name  AS name_user, sla_hist.tempo_sla AS tempo_sla
                             FROM adms_sla_hist AS sla_hist
@@ -833,7 +833,7 @@ class AdmsListTicketSla
                 $this->resultPg = $pagination->getResult();
                 
                 $listTicketSla = new \App\adms\Models\helper\AdmsRead();
-                $listTicketSla->fullRead("SELECT sla_hist.id AS id_sla_hist, sla_hist.empresa_id, clie.nome_fantasia AS nome_fantasia_clie, sla_hist.id_ticket AS id_ticket_sla_hist, sla_hist.dt_status as dt_status, 
+                $listTicketSla->fullRead("SELECT sla_hist.id AS id_sla_hist, sla_hist.empresa_id, clie.nome_fantasia AS nome_fantasia_clie, sla_hist.id_ticket AS id_ticket_sla_hist, sla_hist.dt_abert_ticket as dt_abert_ticket, sla_hist.type_cham, sla_hist.dt_status as dt_status, 
                             sla.name as name_sla, sla_hist.tempo_sla_prim AS tempo_sla_prim, sla_hist.tempo_sla_fin AS tempo_sla_fin, sta_ant.name AS name_status_id_ant, 
                             sla_hist.dt_status_ant, sta_atu.name AS name_sta_atu, sla_hist.dt_status, user.name  AS name_user, sla_hist.tempo_sla AS tempo_sla
                             FROM adms_sla_hist AS sla_hist
@@ -875,7 +875,7 @@ class AdmsListTicketSla
                 $this->resultPg = $pagination->getResult();
                 
                 $listTicketSla = new \App\adms\Models\helper\AdmsRead();
-                $listTicketSla->fullRead("SELECT sla_hist.id AS id_sla_hist, sla_hist.empresa_id, clie.nome_fantasia AS nome_fantasia_clie, sla_hist.id_ticket AS id_ticket_sla_hist, sla_hist.dt_status as dt_status, 
+                $listTicketSla->fullRead("SELECT sla_hist.id AS id_sla_hist, sla_hist.empresa_id, clie.nome_fantasia AS nome_fantasia_clie, sla_hist.id_ticket AS id_ticket_sla_hist, sla_hist.dt_abert_ticket as dt_abert_ticket, sla_hist.type_cham, sla_hist.dt_status as dt_status, 
                             sla.name as name_sla, sla_hist.tempo_sla_prim AS tempo_sla_prim, sla_hist.tempo_sla_fin AS tempo_sla_fin, sta_ant.name AS name_status_id_ant, 
                             sla_hist.dt_status_ant, sta_atu.name AS name_sta_atu, sla_hist.dt_status, user.name  AS name_user, sla_hist.tempo_sla AS tempo_sla
                             FROM adms_sla_hist AS sla_hist
@@ -905,7 +905,7 @@ class AdmsListTicketSla
                 $this->resultPg = $pagination->getResult();
                 
                 $listTicketSla = new \App\adms\Models\helper\AdmsRead();
-                $listTicketSla->fullRead("SELECT sla_hist.id AS id_sla_hist, sla_hist.empresa_id, clie.nome_fantasia AS nome_fantasia_clie, sla_hist.id_ticket AS id_ticket_sla_hist, sla_hist.dt_status as dt_status, 
+                $listTicketSla->fullRead("SELECT sla_hist.id AS id_sla_hist, sla_hist.empresa_id, clie.nome_fantasia AS nome_fantasia_clie, sla_hist.id_ticket AS id_ticket_sla_hist, sla_hist.dt_abert_ticket as dt_abert_ticket, sla_hist.type_cham, sla_hist.dt_status as dt_status, 
                             sla.name as name_sla, sla_hist.tempo_sla_prim AS tempo_sla_prim, sla_hist.tempo_sla_fin AS tempo_sla_fin, sta_ant.name AS name_status_id_ant, 
                             sla_hist.dt_status_ant, sta_atu.name AS name_sta_atu, sla_hist.dt_status, user.name  AS name_user, sla_hist.tempo_sla AS tempo_sla
                             FROM adms_sla_hist AS sla_hist
@@ -947,7 +947,7 @@ class AdmsListTicketSla
                 $this->resultPg = $pagination->getResult();
                 
                 $listTicketSla = new \App\adms\Models\helper\AdmsRead();
-                $listTicketSla->fullRead("SELECT sla_hist.id AS id_sla_hist, sla_hist.empresa_id, clie.nome_fantasia AS nome_fantasia_clie, sla_hist.id_ticket AS id_ticket_sla_hist, sla_hist.dt_status as dt_status, 
+                $listTicketSla->fullRead("SELECT sla_hist.id AS id_sla_hist, sla_hist.empresa_id, clie.nome_fantasia AS nome_fantasia_clie, sla_hist.id_ticket AS id_ticket_sla_hist, sla_hist.dt_abert_ticket as dt_abert_ticket, sla_hist.type_cham, sla_hist.dt_status as dt_status, 
                             sla.name as name_sla, sla_hist.tempo_sla_prim AS tempo_sla_prim, sla_hist.tempo_sla_fin AS tempo_sla_fin, sta_ant.name AS name_status_id_ant, 
                             sla_hist.dt_status_ant, sta_atu.name AS name_sta_atu, sla_hist.dt_status, user.name  AS name_user, sla_hist.tempo_sla AS tempo_sla
                             FROM adms_sla_hist AS sla_hist
@@ -977,7 +977,7 @@ class AdmsListTicketSla
                 $this->resultPg = $pagination->getResult();
                 
                 $listTicketSla = new \App\adms\Models\helper\AdmsRead();
-                $listTicketSla->fullRead("SELECT sla_hist.id AS id_sla_hist, sla_hist.empresa_id, clie.nome_fantasia AS nome_fantasia_clie, sla_hist.id_ticket AS id_ticket_sla_hist, sla_hist.dt_status as dt_status, 
+                $listTicketSla->fullRead("SELECT sla_hist.id AS id_sla_hist, sla_hist.empresa_id, clie.nome_fantasia AS nome_fantasia_clie, sla_hist.id_ticket AS id_ticket_sla_hist, sla_hist.dt_abert_ticket as dt_abert_ticket, sla_hist.type_cham, sla_hist.dt_status as dt_status, 
                             sla.name as name_sla, sla_hist.tempo_sla_prim AS tempo_sla_prim, sla_hist.tempo_sla_fin AS tempo_sla_fin, sta_ant.name AS name_status_id_ant, 
                             sla_hist.dt_status_ant, sta_atu.name AS name_sta_atu, sla_hist.dt_status, user.name  AS name_user, sla_hist.tempo_sla AS tempo_sla
                             FROM adms_sla_hist AS sla_hist
@@ -1019,7 +1019,7 @@ class AdmsListTicketSla
                 $this->resultPg = $pagination->getResult();
                 
                 $listTicketSla = new \App\adms\Models\helper\AdmsRead();
-                $listTicketSla->fullRead("SELECT sla_hist.id AS id_sla_hist, sla_hist.empresa_id, clie.nome_fantasia AS nome_fantasia_clie, sla_hist.id_ticket AS id_ticket_sla_hist, sla_hist.dt_status as dt_status, 
+                $listTicketSla->fullRead("SELECT sla_hist.id AS id_sla_hist, sla_hist.empresa_id, clie.nome_fantasia AS nome_fantasia_clie, sla_hist.id_ticket AS id_ticket_sla_hist, sla_hist.dt_abert_ticket as dt_abert_ticket, sla_hist.type_cham, sla_hist.dt_status as dt_status, 
                             sla.name as name_sla, sla_hist.tempo_sla_prim AS tempo_sla_prim, sla_hist.tempo_sla_fin AS tempo_sla_fin, sta_ant.name AS name_status_id_ant, 
                             sla_hist.dt_status_ant, sta_atu.name AS name_sta_atu, sla_hist.dt_status, user.name  AS name_user, sla_hist.tempo_sla AS tempo_sla
                             FROM adms_sla_hist AS sla_hist
@@ -1049,7 +1049,7 @@ class AdmsListTicketSla
                 $this->resultPg = $pagination->getResult();
                 
                 $listTicketSla = new \App\adms\Models\helper\AdmsRead();
-                $listTicketSla->fullRead("SELECT sla_hist.id AS id_sla_hist, sla_hist.empresa_id, clie.nome_fantasia AS nome_fantasia_clie, sla_hist.id_ticket AS id_ticket_sla_hist, sla_hist.dt_status as dt_status, 
+                $listTicketSla->fullRead("SELECT sla_hist.id AS id_sla_hist, sla_hist.empresa_id, clie.nome_fantasia AS nome_fantasia_clie, sla_hist.id_ticket AS id_ticket_sla_hist, sla_hist.dt_abert_ticket as dt_abert_ticket, sla_hist.type_cham, sla_hist.dt_status as dt_status, 
                             sla.name as name_sla, sla_hist.tempo_sla_prim AS tempo_sla_prim, sla_hist.tempo_sla_fin AS tempo_sla_fin, sta_ant.name AS name_status_id_ant, 
                             sla_hist.dt_status_ant, sta_atu.name AS name_sta_atu, sla_hist.dt_status, user.name  AS name_user, sla_hist.tempo_sla AS tempo_sla
                             FROM adms_sla_hist AS sla_hist
@@ -1091,7 +1091,7 @@ class AdmsListTicketSla
                 $this->resultPg = $pagination->getResult();
                 
                 $listTicketSla = new \App\adms\Models\helper\AdmsRead();
-                $listTicketSla->fullRead("SELECT sla_hist.id AS id_sla_hist, sla_hist.empresa_id, clie.nome_fantasia AS nome_fantasia_clie, sla_hist.id_ticket AS id_ticket_sla_hist, sla_hist.dt_status as dt_status, 
+                $listTicketSla->fullRead("SELECT sla_hist.id AS id_sla_hist, sla_hist.empresa_id, clie.nome_fantasia AS nome_fantasia_clie, sla_hist.id_ticket AS id_ticket_sla_hist, sla_hist.dt_abert_ticket as dt_abert_ticket, sla_hist.type_cham, sla_hist.dt_status as dt_status, 
                             sla.name as name_sla, sla_hist.tempo_sla_prim AS tempo_sla_prim, sla_hist.tempo_sla_fin AS tempo_sla_fin, sta_ant.name AS name_status_id_ant, 
                             sla_hist.dt_status_ant, sta_atu.name AS name_sta_atu, sla_hist.dt_status, user.name  AS name_user, sla_hist.tempo_sla AS tempo_sla
                             FROM adms_sla_hist AS sla_hist
@@ -1121,7 +1121,7 @@ class AdmsListTicketSla
                 $this->resultPg = $pagination->getResult();
                 
                 $listTicketSla = new \App\adms\Models\helper\AdmsRead();
-                $listTicketSla->fullRead("SELECT sla_hist.id AS id_sla_hist, sla_hist.empresa_id, clie.nome_fantasia AS nome_fantasia_clie, sla_hist.id_ticket AS id_ticket_sla_hist, sla_hist.dt_status as dt_status, 
+                $listTicketSla->fullRead("SELECT sla_hist.id AS id_sla_hist, sla_hist.empresa_id, clie.nome_fantasia AS nome_fantasia_clie, sla_hist.id_ticket AS id_ticket_sla_hist, sla_hist.dt_abert_ticket as dt_abert_ticket, sla_hist.type_cham, sla_hist.dt_status as dt_status, 
                             sla.name as name_sla, sla_hist.tempo_sla_prim AS tempo_sla_prim, sla_hist.tempo_sla_fin AS tempo_sla_fin, sta_ant.name AS name_status_id_ant, 
                             sla_hist.dt_status_ant, sta_atu.name AS name_sta_atu, sla_hist.dt_status, user.name  AS name_user, sla_hist.tempo_sla AS tempo_sla
                             FROM adms_sla_hist AS sla_hist
