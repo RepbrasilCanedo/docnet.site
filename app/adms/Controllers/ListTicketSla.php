@@ -140,11 +140,19 @@ class ListTicketSla
             $this->data['form']['search_status_anterior'] = $this->searchStatusAnterior;
 
         // Busca pela data ou periodo e status anterior do Ticket
+        } elseif ((empty($this->searchEmpresa)) or (empty($this->searchStatus)) or (!empty($this->searchStatusAnterior)) or (empty($this->searchTipo)) or (!empty($this->searchDateStart)) or (!empty($this->searchDateEnd)) or (!empty($this->searchSuporte))) {
+            $listTicketSla->listSearchCham($this->page, $this->searchTicket, $this->searchEmpresa, $this->searchStatus, $this->searchStatusAnterior, $this->searchTipo, $this->searchDateStart, $this->searchDateEnd, $this->searchSuporte);
+            $this->data['form']['search_date_start'] = $this->searchDateStart;
+            $this->data['form']['search_date_end'] = $this->searchDateEnd;
+            $this->data['form']['search_status'] = $this->searchStatus;
+
+        // Busca pelo suporte, data, status anterior do Ticket
         } elseif ((empty($this->searchEmpresa)) or (!empty($this->searchStatus)) or (empty($this->searchStatusAnterior)) or (empty($this->searchTipo)) or (!empty($this->searchDateStart)) or (!empty($this->searchDateEnd)) or (empty($this->searchSuporte))) {
             $listTicketSla->listSearchCham($this->page, $this->searchTicket, $this->searchEmpresa, $this->searchStatus, $this->searchStatusAnterior, $this->searchTipo, $this->searchDateStart, $this->searchDateEnd, $this->searchSuporte);
             $this->data['form']['search_date_start'] = $this->searchDateStart;
             $this->data['form']['search_date_end'] = $this->searchDateEnd;
             $this->data['form']['search_status'] = $this->searchStatus;
+            $this->data['form']['search_suporte'] = $this->searchSuporte;
 
         // Busca pela data ou periodo e tipo de sla do Ticket
         } elseif ((empty($this->searchEmpresa)) or (empty($this->searchStatus)) or (empty($this->searchStatusAnterior)) or (!empty($this->searchTipo)) or (!empty($this->searchDateStart)) or (!empty($this->searchDateEnd)) or (empty($this->searchSuporte))) {

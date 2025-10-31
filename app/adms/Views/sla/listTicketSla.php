@@ -177,10 +177,8 @@ if (isset($this->data['form'])) {
                     <th class="list-head-content table-sm-none">Cliente</th>
                     <th class="list-head-content table-sm-none">Abertura Ticket</th>
                     <th class="list-head-content table-sm-none">Status Anter.</th>
-                    <th class="list-head-content table-sm-none">Tipo Cham.</th>
-                    <th class="list-head-content table-sm-none">Data Sta. Anterior</th>
-                    <th class="list-head-content">Status Atual</th>
-                    <th class="list-head-content table-sm-none">Data Sta. Atuaal</th>
+                    <th class="list-head-content table-sm-none">Status Atual</th>
+                    <th class="list-head-content table-sm-none">Sla Max.</th>
                     <th class="list-head-content">Tempo SLA</th>
                     <th class="list-head-content table-sm-none">Tecnico</th>
 
@@ -191,19 +189,27 @@ if (isset($this->data['form'])) {
                 <?php
                 foreach ($this->data['listTicketSla'] as $sla) {
                     extract($sla);
+                    $_SESSION['tempo_sla']=date('H:i:s', strtotime($tempo_sla));
                 ?>
                     <tr>
                         <td class="list-body-content"><?php echo $id_ticket_sla_hist; ?></td>
                         <td class="list-body-content table-sm-none"><?php echo $name_sla; ?></td>
                         <td class="list-body-content table-sm-none"><?php echo $nome_fantasia_clie; ?></td>
                         <td class="list-body-content table-sm-none"><?php echo date('d/m/Y H:i:s', strtotime($dt_abert_ticket))?>
-                        <td class="list-body-content table-sm-none"><?php echo $name_status_id_ant; ?></td>
-                        <td class="list-body-content table-sm-none"><?php echo $type_cham; ?></td>
-                        <td class="list-body-content table-sm-none"><?php echo date('d/m/Y H:i:s', strtotime($dt_status_ant))?>
-                        <td class="list-body-content"><?php echo $name_sta_atu; ?></td>
-                        <td class="list-body-content table-sm-none"><?php echo date('d/m/Y H:i:s', strtotime($dt_status))?>
-                        <td class="list-body-content"><?php echo date('H:i:s', strtotime($tempo_sla))?>
-                        <td class="list-body-content table-sm-none"><?php echo $name_user; ?></td>
+                        <td class="list-body-content table-sm-none"><?php echo $name_status_id_ant; ?> - <?php echo date('d/m/Y H:i:s', strtotime($dt_status_ant))?></td>
+                        <td class="list-body-content table-sm-none"><?php echo $name_sta_atu; ?> - <?php echo date('d/m/Y H:i:s', strtotime($dt_status))?></td>
+                        <td class="list-body-content table-sm-none"><?php echo date('H:i:s', strtotime($tempo_sla_fin))?>
+                        <td class="list-body-content"><b>
+                            <?php 
+                                if($_SESSION['tempo_sla'] < $tempo_sla_fin){
+                                    echo "<span style='color: #008000'>{$_SESSION['tempo_sla']}</span>"; 
+                                }else{
+                                    echo "<span style='color: #ff0000'>{$_SESSION['tempo_sla']}</span>"; 
+                                }
+                                
+                            ?></b>
+                        </td>
+                        <td class="list-body-content"><?php echo $name_user; ?></td>
                         
                         <td class="list-body-content">
                             <div class="dropdown-action">
