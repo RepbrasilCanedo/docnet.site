@@ -233,16 +233,15 @@ class AdmsDashboard
      */
     // Verifica a quantidade de Equipamentos com contrato de suporte ou garantia vencidos -> 2
     public function countEquipVenc(): void
-    {
-        $dataAtual=date('Y-m-d H:i:s');        
+    {   
 
         if (($_SESSION['adms_access_level_id'] > 2)) {
             //Se for 4 - Cliente Administrativo
             if (($_SESSION['adms_access_level_id'] == 4) or  ($_SESSION['adms_access_level_id'] == 12)){
                 $countEquipVenc = new \App\adms\Models\helper\AdmsRead();
                 $countEquipVenc->fullRead("SELECT COUNT(id) AS qnt_equip, sit_id, venc_contr, empresa_id FROM adms_produtos 
-                                        WHERE (empresa_id = :empresa and sit_id= :sit_id ) and venc_contr <= :data_atual", 
-                                        "empresa={$_SESSION['emp_user']}&sit_id=1&data_atual={$dataAtual}");
+                                        WHERE (empresa_id = :empresa and sit_id= :sit_id) and venc_contr < CURDATE()", 
+                                        "empresa={$_SESSION['emp_user']}&sit_id=1");
 
                 $this->resultBd = $countEquipVenc->getResult();
 
@@ -251,13 +250,12 @@ class AdmsDashboard
                 } else {
                     $this->result = false;
                 }
-                //Se for 14 - Usuario final
             }
         } else {
                 $countEquipVenc = new \App\adms\Models\helper\AdmsRead();
                 $countEquipVenc->fullRead("SELECT COUNT(id) AS qnt_equip, sit_id, venc_contr, empresa_id FROM adms_produtos 
-                                        WHERE sit_id= :sit_id and venc_contr <= :data_atual", 
-                                        "sit_id=1&data_atual={$dataAtual}");
+                                        WHERE  sit_id= :sit_id and venc_contr < CURDATE()", 
+                                        "sit_id=1");
 
                 $this->resultBd = $countEquipVenc->getResult();
 

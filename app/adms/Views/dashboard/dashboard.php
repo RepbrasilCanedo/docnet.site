@@ -291,7 +291,7 @@ unset($_SESSION["status_chamado"]);
     </div>
 
 
-    <!--  inicio do carroussel de marketink -->
+    <!--  inicio do carroussel de marketink 
     <section class="top-carr">
          <?php
               // Acessa o IF quando encontrou algum registro no banco de dados
@@ -388,7 +388,7 @@ unset($_SESSION["status_chamado"]);
          <?php } ?>
 
     </section>
-    <!--  final do carroussel da assistencia tecnica -->
+final do carroussel da assistencia tecnica -->
 
 
 
