@@ -567,7 +567,7 @@ function inputFileValImgOrcam() {
 
     if (!allowedExtensions.exec(filePath)) {
         new_image_orcam.value = '';
-        document.getElementById("msg").innerHTML = "<p class='alert-danger'>Erro: Necessário selecionar uma imagem em PDF!</p>";
+        document.getElementById("msg").innerHTML = "<p class='alert-danger'>Erro: Necessário selecionar um arquivo em PDF!</p>";
         return;
     } else {
         previewImageOrcam(new_image_orcam);
@@ -575,8 +575,34 @@ function inputFileValImgOrcam() {
         return;
     }
 }
+function previewPdfOrcam(new_image_orcam) {
+    if ((new_image_orcam.files) && (new_image_orcam.files[0])) {
+        // 1. FileReader() - ler o conteúdo do arquivo
+        var readerOrcam = new FileReader();
+        
+        // 2. Definir o que acontece ao carregar o arquivo
+        readerOrcam.onload = function (e) {
+            
+            // 3. ATUALIZAÇÃO: Usar a tag <iframe> para exibir o PDF
+            // A tag <iframe> ou <embed> usa a URL de dados (base64) para incorporar o PDF.
+            // Isso permite que o visualizador de PDF nativo do navegador faça o trabalho.
+            document.getElementById('preview-img-orcam').innerHTML = 
+                "<iframe src='" + e.target.result + "' style='width: 100%; height: 500px; border: 1px solid #ccc;' frameborder='0'></iframe>";
+                
+            // Ou você pode usar a tag <embed>:
+            /*
+            document.getElementById('preview-img-orcam').innerHTML = 
+                "<embed src='" + e.target.result + "' type='application/pdf' style='width: 100%; height: 500px;'>";
+            */
+        }
+    }
 
+    // readAsDataURL - Retorna os dados do formato blob como uma URL de dados
+    readerOrcam.readAsDataURL(new_image_orcam.files[0]);
+}
+/*
 function previewImageOrcam(new_image_orcam) {
+
     if ((new_image_orcam.files) && (new_image_orcam.files[0])) {
         // FileReader() - ler o conteúdo dos arquivos
         var readerOrcam = new FileReader();
@@ -587,8 +613,9 @@ function previewImageOrcam(new_image_orcam) {
     }
 
     // readAsDataURL - Retorna os dados do formato blob como uma URL de dados - Blob representa um arquivo
-    readerCham.readAsDataURL(new_image_orcam.files[0]);
+    readerOrcam.readAsDataURL(new_image_orcam.files[0]);
 }
+*/
 
 const formEditSitUser = document.getElementById("form-add-sit-user");
 if (formEditSitUser) {

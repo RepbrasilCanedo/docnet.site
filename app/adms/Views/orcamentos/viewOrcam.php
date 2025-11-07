@@ -111,14 +111,16 @@ if (!defined('D0O8C0A3N1E9D6O1')) {
                     </div>
                 </div>                   
                 
-                <div class="view-det-adm">
+                <div class= "row view-det-adm">
                     <?php
                      if ((!empty($image)) and (file_exists("app/adms/assets/image/orcamentos" . "/$id_orcam"))) {?>
-                        <a href="<?php echo URLADM; ?>app/adms/assets/image/orcamentos/<?php echo $id_orcam ?>/<?php echo $image ?>"  target="_blank">Clique aqui para Visualizar seu Orçamento em PDF.</a>
+                        <!--<a href="<?php echo URLADM; ?>app/adms/assets/image/orcamentos/<?php echo $id_orcam ?>/<?php echo $image ?>"  target="_blank">Clique aqui para Visualizar seu Orçamento em PDF.</a>-->
+                        <embed  src="<?php echo URLADM; ?>app/adms/assets/image/orcamentos/<?php echo $id_orcam ?>/<?php echo $image ?>" type="application/pdf" width="1200" height="1200" />
                     <?php } else { ?>
                         <h5 class="title-content m-3">Não há Proposta de Orçamento Recebida</h5>
                    <?php } ?>
                 </div>
+
 
             <?php } ?>
         </div>
