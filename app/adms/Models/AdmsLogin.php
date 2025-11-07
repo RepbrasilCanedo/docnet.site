@@ -56,9 +56,9 @@ class AdmsLogin
                             FROM adms_users AS usr
                             INNER JOIN adms_access_levels AS lev ON lev.id=usr.adms_access_level_id
                             INNER JOIN adms_emp_principal AS emp_pri ON emp_pri.id=usr.empresa_id
-                            WHERE usr.user =:user 
-                            OR usr.email =:email 
-                            LIMIT :limit", "user={$this->data['user']}&email={$this->data['user']}&limit=1");
+                            WHERE (adms_sits_user_id= :situacao) and  (usr.user =:user 
+                            OR usr.email =:email )
+                            LIMIT :limit", "situacao=1&user={$this->data['user']}&email={$this->data['user']}&limit=1");
 
         $this->resultBd = $viewUser->getResult();
         if ($this->resultBd) {
@@ -70,8 +70,8 @@ class AdmsLogin
                             lev.order_levels, usr.empresa_id, usr.cliente_id
                             FROM adms_users_final AS usr
                             INNER JOIN adms_access_levels AS lev ON lev.id=usr.adms_access_level_id
-                            WHERE usr.user=:user OR usr.email =:email 
-                            LIMIT :limit", "user={$this->data['user']}&email={$this->data['user']}&limit=1");
+                            WHERE (adms_sits_user_id= :situacao) and (usr.user=:user OR usr.email =:email)
+                            LIMIT :limit", "situacao=1&user={$this->data['user']}&email={$this->data['user']}&limit=1");
 
             $this->resultBd = $viewUser->getResult();
 
@@ -79,7 +79,7 @@ class AdmsLogin
             if ($this->resultBd) {
                 $this->valPassword();
             } else {
-                $_SESSION['msg'] = "<p class='alert-danger'>Erro: Usuário ou a senha incorreta!</p>";
+                $_SESSION['msg'] = "<p class='alert-danger'>Erro: Usuário Inativo ou a senha esta incorreta!</p>";
                 $this->result = false;
             }
         }

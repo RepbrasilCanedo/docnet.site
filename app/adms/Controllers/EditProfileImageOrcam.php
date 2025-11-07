@@ -93,7 +93,7 @@ class EditProfileImageOrcam
             unset($this->dataForm['SendEditProfImageOrcam']);
 
             $this->dataForm['new_image_orcam']=$_FILES['new_image_orcam']?$_FILES['new_image_orcam']:null;
-            
+        
             $editProfImgOrcam = new \App\adms\Models\AdmsEditProfileImageOrcam();
             $editProfImgOrcam->update($this->dataForm);
 
@@ -110,5 +110,6 @@ class EditProfileImageOrcam
             header("Location: $urlRedirect");
         }
             
-    }
+    
+        }
 }

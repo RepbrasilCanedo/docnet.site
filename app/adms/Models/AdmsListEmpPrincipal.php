@@ -103,6 +103,27 @@ class AdmsListEmpPrincipal
                 $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhuma Empresa encontrada!</p>";
                 $this->result = false;
             }
+        } else {
+            $pagination = new \App\adms\Models\helper\AdmsPagination(URLADM . 'list-emp-principal/index');
+            $pagination->condition($this->page, $this->limitResult);
+            $pagination->pagination("SELECT COUNT(emp.id) AS num_result FROM adms_emp_principal AS emp WHERE emp.id= :empresa_id","empresa_id={$_SESSION['emp_user']}");
+            $this->resultPg = $pagination->getResult();
+
+            $listEmpresas = new \App\adms\Models\helper\AdmsRead();
+            $listEmpresas->fullRead("SELECT emp.id, emp.razao_social, emp.nome_fantasia, emp.cnpj, emp.cep, emp.logradouro, emp.bairro, 
+                            emp.cidade, emp.uf, emp.contato, emp.telefone, emp.email, sit.name as name_sit
+                            FROM adms_emp_principal as emp
+                            INNER JOIN adms_sits_empr_unid AS sit ON sit.id=emp.situacao 
+                            WHERE emp.id= :empresa_id 
+                            LIMIT :limit OFFSET :offset", "empresa_id={$_SESSION['emp_user']}&limit={$this->limitResult}&offset={$pagination->getOffset()}");
+
+            $this->resultBd = $listEmpresas->getResult();
+            if ($this->resultBd) {
+                $this->result = true;
+            } else {
+                $_SESSION['msg'] = "<p class='alert-danger'>Erro: Nenhuma Empresa encontrada!</p>";
+                $this->result = false;
+            }
         }
     }
 

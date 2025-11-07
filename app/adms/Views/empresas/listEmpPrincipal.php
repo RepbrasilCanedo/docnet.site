@@ -18,15 +18,18 @@ if (isset($this->data['form'])) {
             <span class="title-content">Listar Empresas</span>
             <div class="top-list-right">
                 <?php
-                if ($this->data['button']['add_emp_principal']) {
-                    echo "<a href='" . URLADM . "add-emp-principal/index' class='btn-success'>Cadastrar</a>";
-                }else if ($this->data['button']['edit_profile_logo']) {
-                    echo "<a href='" . URLADM . "edit-profile-logo/index' class='btn-warning'>Inserir Logo</a>";
-                }               
+                if (($_SESSION['adms_access_level_id'] == 1) or ($_SESSION['adms_access_level_id'] == 2)) {
+                    if ($this->data['button']['add_emp_principal']) {
+                        echo "<a href='" . URLADM . "add-emp-principal/index' class='btn-success'>Cadastrar</a>";
+                    } else if ($this->data['button']['edit_profile_logo']) {
+                        echo "<a href='" . URLADM . "edit-profile-logo/index' class='btn-warning'>Inserir Logo</a>";
+                    }  
+                }             
                 ?>
             </div>
         </div>
-
+        <?php if (($_SESSION['adms_access_level_id'] == 1) or ($_SESSION['adms_access_level_id'] == 2)) {?>
+            
         <div class="top-list">
             <form method="POST" action="">
                 <div class="row-input-search">
@@ -68,7 +71,10 @@ if (isset($this->data['form'])) {
                     </div>
                 </div>
             </form>
+
         </div>
+
+        <?php } ?>
 
         <div class="content-adm-alert">
             <?php
@@ -78,12 +84,14 @@ if (isset($this->data['form'])) {
             }
             ?>
         </div>
-        <?php echo $this->data['pagination']; ?>
         <?php 
-        if (isset($_SESSION['resultado'])) {
-            echo "Total de Empresas Cadastradas:  " . $_SESSION['resultado'];
-        }
-        ?>
+        if (($_SESSION['adms_access_level_id'] == 1) or ($_SESSION['adms_access_level_id'] == 2)) {
+            echo $this->data['pagination']; 
+            if (isset($_SESSION['resultado'])) {
+                echo "Total de Empresas Cadastradas:  " . $_SESSION['resultado'];
+            }
+        } ?>
+
         
         <table class="table table-hover table-list">
             <thead class="list-head">
@@ -138,13 +146,14 @@ if (isset($this->data['form'])) {
             </tbody>
         </table>
 
-        <?php echo $this->data['pagination']; ?>
+        
         <?php 
-        if (isset($_SESSION['resultado'])) {
-            echo "Total de Empresas Cadastradas:  " . $_SESSION['resultado'];
-            unset($_SESSION['resultado']);
-        }
-        ?>
+        if (($_SESSION['adms_access_level_id'] == 1) or ($_SESSION['adms_access_level_id'] == 2)) {
+            echo $this->data['pagination']; 
+            if (isset($_SESSION['resultado'])) {
+                echo "Total de Empresas Cadastradas:  " . $_SESSION['resultado'];
+            }
+        } ?>
     </div>
 </div>
 <!-- Fim do conteudo do administrativo -->

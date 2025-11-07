@@ -47,8 +47,8 @@ class AdmsEditProfileImageOrcam
      * @return boolean
      */
     public function viewProfileOrcam(): bool
-    {       
-        $viewOrcam = new \app\adms\Models\helper\AdmsRead();
+    {   
+        $viewOrcam = new \App\adms\Models\helper\AdmsRead();
         $viewOrcam->fullRead("SELECT id, image, status_id, modified FROM  adms_orcam  WHERE id=:id", "id={$_SESSION['set_orcam']}"
         );
 

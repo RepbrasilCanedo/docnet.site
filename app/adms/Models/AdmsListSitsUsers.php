@@ -66,7 +66,7 @@ class AdmsListSitsUsers
      * @param integer|null $page
      * @return void
      */
-    public function listSitsUsers(int $page = null):void
+    public function listSitsUsers(int $page):void
     {
         $this->page = (int) $page ? $page : 1;
 
@@ -100,7 +100,7 @@ class AdmsListSitsUsers
      * @param string|null $search_name
      * @return void
      */
-    public function listSearchSitsUsers(int $page = null, string|null $search_name):void
+    public function listSearchSitsUsers(int $page, string|null $search_name):void
     {
         $this->page = (int) $page ? $page : 1;
         $this->searchName = trim($search_name);
